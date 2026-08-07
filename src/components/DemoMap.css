@@ -1,6 +1,6 @@
 /* Global Map Section - Integrated into Page */
 .global-map-section {
-  background: linear-gradient(180deg, #0f1420 0%, #1a1a2e 100%);
+  background: #000000;
   padding: clamp(4rem, 8vw, 6rem) 0;
   position: relative;
   overflow: hidden;
@@ -102,11 +102,13 @@
 /* Map Visualization */
 .map-visualization {
   position: relative;
-  background: radial-gradient(ellipse at 50% 40%, #1f2937 0%, #111827 70%);
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   aspect-ratio: 900 / 460;
   width: 100%;
 }
@@ -132,8 +134,9 @@
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(26, 26, 26, 0.98);
-  backdrop-filter: blur(10px);
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 107, 53, 0.4);
   border-radius: 12px;
   padding: 1.25rem;
@@ -223,8 +226,10 @@
 
 /* Info Panel (Right Side) */
 .map-info-panel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: clamp(1.25rem, 2.5vw, 2rem);
   height: 100%;
@@ -332,7 +337,7 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  background: linear-gradient(180deg, #0f1420 0%, #1a1a2e 100%);
+  background: #000000;
   color: rgba(255, 255, 255, 0.5);
   font-size: 1.1rem;
 }
