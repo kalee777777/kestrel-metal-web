@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { MapPin, ExternalLink, Building2 } from 'lucide-react';
 import './GlobalProjectMap.css';
-
-const geoUrl = "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
 
 const GlobalProjectMap = () => {
   const [activeProject, setActiveProject] = useState(null);
@@ -12,23 +9,20 @@ const GlobalProjectMap = () => {
   const [autoPlayIndex, setAutoPlayIndex] = useState(0);
   const autoPlayRef = useRef(null);
 
-  // 真实的项目案例数据（非办事处）
+  // 真实的项目案例数据（22个，非办事处）
   const projects = [
-    // 总部
     {
       id: 0,
       name: 'Kestrel Metal Headquarters',
       location: 'Changsha, China',
       type: 'Corporate HQ & R&D Center',
-      description: 'Global headquarters managing all international projects and operations',
+      description: 'Global headquarters managing all international projects and operations since 2004',
       capacity: '-',
       year: 2004,
-      coordinates: [112.94, 28.23],
-      isHQ: true,
-      region: 'asia'
+      x: 75.5,
+      y: 42.5,
+      isHQ: true
     },
-
-    // 中国项目 (6个)
     {
       id: 1,
       name: 'Shanghai WEEE Copper Recycling Plant',
@@ -37,9 +31,9 @@ const GlobalProjectMap = () => {
       description: 'Advanced copper recovery from electronic waste using hydrometallurgical process',
       capacity: '5,000 tpa',
       year: 2015,
-      coordinates: [121.47, 31.23],
-      isHQ: false,
-      region: 'asia'
+      x: 81.5,
+      y: 43.5,
+      isHQ: false
     },
     {
       id: 2,
@@ -49,9 +43,9 @@ const GlobalProjectMap = () => {
       description: 'Large-scale cathode copper production with solvent extraction-electrowinning technology',
       capacity: '240,000 tpa',
       year: 2018,
-      coordinates: [102.83, 25.04],
-      isHQ: false,
-      region: 'asia'
+      x: 73.5,
+      y: 47.5,
+      isHQ: false
     },
     {
       id: 3,
@@ -61,33 +55,33 @@ const GlobalProjectMap = () => {
       description: 'Complete upgrade of existing smelter with advanced process control systems',
       capacity: '3,000 tpa',
       year: 2020,
-      coordinates: [108.32, 22.82],
-      isHQ: false,
-      region: 'asia'
+      x: 76.5,
+      y: 50.5,
+      isHQ: false
     },
     {
       id: 4,
-      name: 'Zijin Mining Copper Smelter',
+      name: 'Zijin Mining Copper Smelter EPC',
       location: 'Longyan, Fujian, China',
       type: 'EPC Turnkey Project',
       description: 'Design, procurement, construction of integrated copper smelting facility',
       capacity: '300,000 tpa',
       year: 2019,
-      coordinates: [117.03, 25.09],
-      isHQ: false,
-      region: 'asia'
+      x: 80.5,
+      y: 45.5,
+      isHQ: false
     },
     {
       id: 5,
-      name: 'Jiangxi Copper Cathode Plant',
+      name: 'Jiangxi Copper Cathode Technology',
       location: 'Nanchang, Jiangxi, China',
-      type: 'Permanent Cathode Technology',
+      type: 'Permanent Cathode Supply',
       description: 'Supply of stainless steel permanent cathode plates for copper electrowinning',
       capacity: '400,000 tpa',
       year: 2021,
-      coordinates: [115.89, 28.68],
-      isHQ: false,
-      region: 'asia'
+      x: 78.5,
+      y: 44.5,
+      isHQ: false
     },
     {
       id: 6,
@@ -97,12 +91,10 @@ const GlobalProjectMap = () => {
       description: 'Comprehensive engineering design for zinc-lead smelting operations',
       capacity: '150,000 tpa',
       year: 2017,
-      coordinates: [111.75, 40.84],
-      isHQ: false,
-      region: 'asia'
+      x: 83.5,
+      y: 38.5,
+      isHQ: false
     },
-
-    // 亚洲其他地区 (4个)
     {
       id: 7,
       name: 'Mumbai Cathode Copper Facility',
@@ -111,9 +103,9 @@ const GlobalProjectMap = () => {
       description: 'Full EPC delivery of cathode copper production plant for Indian client',
       capacity: '6,000 tpa',
       year: 2019,
-      coordinates: [72.87, 19.07],
-      isHQ: false,
-      region: 'asia'
+      x: 66.5,
+      y: 46.5,
+      isHQ: false
     },
     {
       id: 8,
@@ -123,9 +115,9 @@ const GlobalProjectMap = () => {
       description: 'Capacity expansion project including furnace upgrade and automation system',
       capacity: '100,000 tpa',
       year: 2021,
-      coordinates: [106.84, -6.21],
-      isHQ: false,
-      region: 'asia'
+      x: 82.5,
+      y: 58.5,
+      isHQ: false
     },
     {
       id: 9,
@@ -135,9 +127,9 @@ const GlobalProjectMap = () => {
       description: 'Process optimization and technology transfer for copper refining operations',
       capacity: '20,000 tpa',
       year: 2022,
-      coordinates: [106.70, 10.76],
-      isHQ: false,
-      region: 'asia'
+      x: 80.5,
+      y: 54.5,
+      isHQ: false
     },
     {
       id: 10,
@@ -147,12 +139,10 @@ const GlobalProjectMap = () => {
       description: 'Supply chain management for mining and metallurgical equipment to Central Asia',
       capacity: '-',
       year: 2017,
-      coordinates: [76.85, 43.22],
-      isHQ: false,
-      region: 'asia'
+      x: 68.5,
+      y: 36.5,
+      isHQ: false
     },
-
-    // 欧洲项目 (5个)
     {
       id: 11,
       name: 'Hamburg European Operations Center',
@@ -161,9 +151,9 @@ const GlobalProjectMap = () => {
       description: 'European base for technical support, spare parts distribution, and client relations',
       capacity: '-',
       year: 2012,
-      coordinates: [10.00, 53.55],
-      isHQ: false,
-      region: 'europe'
+      x: 49.5,
+      y: 29.5,
+      isHQ: false
     },
     {
       id: 12,
@@ -173,9 +163,9 @@ const GlobalProjectMap = () => {
       description: 'Licensed proprietary copper recycling technology to Polish environmental company',
       capacity: '2,000 tpa',
       year: 2016,
-      coordinates: [21.01, 52.23],
-      isHQ: false,
-      region: 'europe'
+      x: 53.5,
+      y: 31.5,
+      isHQ: false
     },
     {
       id: 13,
@@ -185,9 +175,9 @@ const GlobalProjectMap = () => {
       description: 'Detailed engineering design for non-ferrous metals processing facility',
       capacity: '-',
       year: 2018,
-      coordinates: [37.61, 55.75],
-      isHQ: false,
-      region: 'europe'
+      x: 70.5,
+      y: 27.5,
+      isHQ: false
     },
     {
       id: 14,
@@ -197,9 +187,9 @@ const GlobalProjectMap = () => {
       description: 'Strategic sourcing and quality inspection services for metallurgical equipment',
       capacity: '-',
       year: 2020,
-      coordinates: [28.97, 41.01],
-      isHQ: false,
-      region: 'europe'
+      x: 55.5,
+      y: 37.5,
+      isHQ: false
     },
     {
       id: 15,
@@ -209,12 +199,10 @@ const GlobalProjectMap = () => {
       description: 'Complete modernization of legacy copper smelter with modern environmental controls',
       capacity: '80,000 tpa',
       year: 2021,
-      coordinates: [20.46, 44.79],
-      isHQ: false,
-      region: 'europe'
+      x: 52.5,
+      y: 35.5,
+      isHQ: false
     },
-
-    // 美洲项目 (4个)
     {
       id: 16,
       name: 'Santiago South America Support Center',
@@ -223,9 +211,9 @@ const GlobalProjectMap = () => {
       description: 'South American hub for mining projects support and local client management',
       capacity: '-',
       year: 2013,
-      coordinates: [-70.65, -33.45],
-      isHQ: false,
-      region: 'americas'
+      x: 26.5,
+      y: 68.5,
+      isHQ: false
     },
     {
       id: 17,
@@ -235,9 +223,9 @@ const GlobalProjectMap = () => {
       description: 'Integrated concentrator and SX-EW facility for copper oxide ore processing',
       capacity: '50,000 tpa',
       year: 2017,
-      coordinates: [-77.03, -12.05],
-      isHQ: false,
-      region: 'americas'
+      x: 25.5,
+      y: 65.5,
+      isHQ: false
     },
     {
       id: 18,
@@ -247,9 +235,9 @@ const GlobalProjectMap = () => {
       description: 'Turnkey e-waste recycling plant with precious metals recovery capability',
       capacity: '8,000 tpa',
       year: 2019,
-      coordinates: [-46.63, -23.55],
-      isHQ: false,
-      region: 'americas'
+      x: 33.5,
+      y: 63.5,
+      isHQ: false
     },
     {
       id: 19,
@@ -259,12 +247,10 @@ const GlobalProjectMap = () => {
       description: 'Joint research program on advanced hydrometallurgical processes with Canadian university',
       capacity: '-',
       year: 2020,
-      coordinates: [-79.38, 43.65],
-      isHQ: false,
-      region: 'americas'
+      x: 23.5,
+      y: 33.5,
+      isHQ: false
     },
-
-    // 非洲 & 大洋洲 (3个)
     {
       id: 20,
       name: 'Lubumbashi Cu-Co Hydrometallurgy Plant',
@@ -273,9 +259,9 @@ const GlobalProjectMap = () => {
       description: 'Copper-cobalt hydrometallurgical processing plant design and startup support',
       capacity: '40,000 tpa',
       year: 2016,
-      coordinates: [27.49, -11.66],
-      isHQ: false,
-      region: 'africa'
+      x: 55.5,
+      y: 59.5,
+      isHQ: false
     },
     {
       id: 21,
@@ -285,9 +271,9 @@ const GlobalProjectMap = () => {
       description: 'EPC management for new copper smelter construction in Zambian Copperbelt',
       capacity: '120,000 tpa',
       year: 2018,
-      coordinates: [28.20, -12.81],
-      isHQ: false,
-      region: 'africa'
+      x: 54.5,
+      y: 57.5,
+      isHQ: false
     },
     {
       id: 22,
@@ -297,9 +283,9 @@ const GlobalProjectMap = () => {
       description: 'High-pressure acid leaching (HPAL) technology license for laterite nickel processing',
       capacity: '-',
       year: 2021,
-      coordinates: [115.86, -31.95],
-      isHQ: false,
-      region: 'oceania'
+      x: 87.5,
+      y: 73.5,
+      isHQ: false
     }
   ];
 
@@ -338,36 +324,64 @@ const GlobalProjectMap = () => {
   return (
     <div className="global-project-map">
       <div className="map-container">
-        <ComposableMap
-          projection="geoEqualEarth"
-          className="react-simple-map"
-        >
-          <Geographies geography={geoUrl}>
-            {({ geographies }) =>
-              geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#2a2a2a"
-                  stroke="#3a3a3a"
-                  strokeWidth={0.5}
-                  style={{
-                    hover: { fill: "#3a3a3a" }
-                  }}
-                />
-              ))
-            }
-          </Geographies>
+        <svg viewBox="0 0 100 80" className="world-map-svg" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="mapBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2a2a2a" />
+              <stop offset="100%" stopColor="#1f1f1f" />
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="0.4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* World map continents - detailed paths */}
+          <g className="continents" fill="url(#mapBg)" stroke="#3a3a3a" strokeWidth={0.15}>
+            {/* North America */}
+            <path d="M5,22 Q10,18 18,19 L28,17 Q38,16 48,18 L52,24 Q50,30 45,34 L38,36 Q32,35 28,37 L22,36 Q16,33 12,30 L6,28 Q3,25 5,22Z" />
+            
+            {/* South America */}
+            <path d="M28,42 Q32,40 36,41 L42,44 Q46,48 44,53 L40,57 Q36,60 32,58 L28,56 Q24,52 26,48 L28,42Z" />
+            
+            {/* Europe */}
+            <path d="M46,22 Q50,20 56,21 L64,20 Q72,22 76,26 L78,32 Q76,36 72,39 L65,41 Q58,40 52,38 L48,34 Q46,28 46,22Z" />
+            
+            {/* Africa */}
+            <path d="M48,42 Q54,40 62,41 L70,44 Q76,48 74,54 L70,60 Q64,64 56,62 L50,60 Q46,54 48,48 L48,42Z" />
+            
+            {/* Asia */}
+            <path d="M62,18 Q72,16 84,18 L92,22 Q98,28 96,36 L90,42 Q84,40 78,42 L72,40 Q66,36 64,32 L62,26 Q60,22 62,18Z" />
+            
+            {/* Australia */}
+            <path d="M82,62 Q86,60 92,61 L96,65 Q98,70 94,74 L88,76 Q82,74 80,70 L82,62Z" />
+          </g>
+
+          {/* Grid lines for visual reference */}
+          <g className="grid-lines" stroke="#333" strokeWidth={0.05} opacity={0.3}>
+            <line x1="0" y1="20" x2="100" y2="20" />
+            <line x1="0" y1="40" x2="100" y2="40" />
+            <line x1="0" y1="60" x2="100" y2="60" />
+            <line x1="25" y1="0" x2="25" y2="80" />
+            <line x1="50" y1="0" x2="50" y2="80" />
+            <line x1="75" y1="0" x2="75" y2="80" />
+          </g>
 
           {/* Connection line from HQ to active project */}
           {currentProject && !currentProject.isHQ && (
-            <path
-              d={`M ${projects[0].coordinates[0]} ${projects[0].coordinates[1]} Q ${(projects[0].coordinates[0] + currentProject.coordinates[0]) / 2} ${(projects[0].coordinates[1] + currentProject.coordinates[1]) / 2 - 8} ${currentProject.coordinates[0]} ${currentProject.coordinates[1]}`}
+            <motion.path
+              d={`M ${projects[0].x} ${projects[0].y} Q ${(projects[0].x + currentProject.x) / 2} ${Math.min(projects[0].y, currentProject.y) - 6} ${currentProject.x} ${currentProject.y}`}
               fill="none"
               stroke="#ff6b35"
-              strokeWidth={1}
-              strokeDasharray="4,4"
-              opacity={0.4}
+              strokeWidth={0.25}
+              strokeDasharray="1.5,1.5"
+              opacity={0.5}
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
               className="connection-line"
             />
           )}
@@ -379,81 +393,79 @@ const GlobalProjectMap = () => {
 
             return (
               <g key={project.id}>
+                {/* Pulse ring for active/hovered/HQ */}
                 {(isActive || isAutoPlaying || project.isHQ) && (
                   <>
-                    <circle
-                      cx={project.coordinates[0]}
-                      cy={project.coordinates[1]}
-                      r={isActive ? 18 : (project.isHQ ? 16 : 14)}
+                    <motion.circle
+                      cx={project.x}
+                      cy={project.y}
+                      r={isActive ? 2 : (project.isHQ ? 1.8 : 1.5)}
                       fill="none"
                       stroke="#ff6b35"
-                      strokeWidth={1.5}
-                      opacity={0.3}
-                    >
-                      <animate
-                        attributeName="r"
-                        from={isActive ? 8 : (project.isHQ ? 7 : 6)}
-                        to={isActive ? 24 : (project.isHQ ? 22 : 20)}
-                        dur="2s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        from="0.6"
-                        to="0"
-                        dur="2s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
+                      strokeWidth={0.2}
+                      opacity={0.4}
+                      animate={{
+                        r: [isActive ? 1 : (project.isHQ ? 0.9 : 0.75), isActive ? 3 : (project.isHQ ? 2.8 : 2.3)],
+                        opacity: [0.6, 0]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeOut"
+                      }}
+                    />
                   </>
                 )}
 
-                <g
+                {/* Main marker dot */}
+                <motion.g
                   onClick={() => handleMarkerClick(project)}
                   onMouseEnter={() => handleMarkerHover(project)}
                   onMouseLeave={handleMarkerLeave}
                   style={{ cursor: 'pointer' }}
+                  whileHover={{ scale: 1.3 }}
                 >
                   <circle
-                    cx={project.coordinates[0]}
-                    cy={project.coordinates[1]}
-                    r={project.isHQ ? 6 : (isActive ? 5 : 3.5)}
+                    cx={project.x}
+                    cy={project.y}
+                    r={project.isHQ ? 0.9 : (isActive ? 0.75 : 0.55)}
                     fill={project.isHQ ? '#ffffff' : '#ff6b35'}
                     stroke={project.isHQ ? '#ff6b35' : 'none'}
-                    strokeWidth={project.isHQ ? 2 : 0}
+                    strokeWidth={project.isHQ ? 0.25 : 0}
                     style={{
-                      filter: isActive ? 'drop-shadow(0 0 8px rgba(255, 107, 53, 0.9))' : 'none'
+                      filter: isActive ? 'url(#glow)' : 'none'
                     }}
                   >
                     {isAutoPlaying && !hoveredProject && (
                       <animate
                         attributeName="r"
-                        values="3.5;5;3.5"
+                        values={`${project.isHQ ? 0.9 : 0.55};${project.isHQ ? 1.1 : 0.7};${project.isHQ ? 0.9 : 0.55}`}
                         dur="1.5s"
                         repeatCount="indefinite"
                       />
                     )}
                   </circle>
 
+                  {/* HQ label */}
                   {project.isHQ && (
                     <text
-                      x={project.coordinates[0]}
-                      y={project.coordinates[1] - 12}
+                      x={project.x}
+                      y={project.y - 1.8}
                       textAnchor="middle"
                       className="hq-label"
                       fill="#ffffff"
-                      fontSize="10"
+                      fontSize="1.4"
                       fontWeight="700"
                       fontFamily="Arial, sans-serif"
                     >
                       HQ
                     </text>
                   )}
-                </g>
+                </motion.g>
               </g>
             );
           })}
-        </ComposableMap>
+        </svg>
 
         {/* Tooltip */}
         <AnimatePresence>
@@ -482,7 +494,10 @@ const GlobalProjectMap = () => {
                   <span className="detail-value">{hoveredProject.year}</span>
                 </div>
               </div>
-              <button className="tooltip-action" onClick={() => handleMarkerClick(hoveredProject)}>
+              <button 
+                className="tooltip-action" 
+                onClick={() => handleMarkerClick(hoveredProject)}
+              >
                 View Details <ExternalLink size={14} />
               </button>
             </motion.div>
