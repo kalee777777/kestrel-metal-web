@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FlaskConical, Wrench, Truck, Cog, Building2, Settings, ArrowRight, MapPin } from 'lucide-react';
-import GlobalProjectMap from './GlobalProjectMap';
 import './ProjectManagement.css';
 
 const ProjectManagement = () => {
@@ -140,8 +139,6 @@ const ProjectManagement = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <GlobalProjectMap />
-
           <div className="global-stats">
             <p className="stats-intro">
               KESTREL METAL: Five System Solution Provider for Nonferrous Metallurgy
