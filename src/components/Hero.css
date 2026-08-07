@@ -41,63 +41,64 @@
   width: 100%;
 }
 
-.hero-text {
-  max-width: 800px;
-  margin-bottom: 4rem;
+.hero-main {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.hero-left {
+  max-width: 700px;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: fit-content;
 }
 
 .hero-title {
-  font-size: clamp(2rem, 7vw, 5.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   color: var(--color-white);
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
+  line-height: 1.05;
+  margin-bottom: 1.75rem;
   letter-spacing: 0.02em;
+  font-weight: 400;
 }
 
 .hero-title .highlight {
-  color: var(--color-orange-primary);
-  display: inline-block;
-  position: relative;
-}
-
-.hero-title .highlight::after {
-  content: '';
-  position: absolute;
-  bottom: 0.1em;
-  left: 0;
-  right: 0;
-  height: 0.15em;
-  background: var(--color-orange-secondary);
-  opacity: 0.5;
+  color: var(--color-white);
+  display: block;
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.8;
-  margin-bottom: 2.5rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.75;
   font-weight: 300;
-}
-
-.hero-cta {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  max-width: 600px;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(0.75rem, 1.8vw, 0.9rem) clamp(2rem, 3.5vw, 2.75rem);
   border-radius: 4px;
   font-weight: 700;
-  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-size: clamp(0.85rem, 1.3vw, 0.95rem);
   letter-spacing: 0.03em;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.6rem;
   transition: all var(--transition-fast);
   cursor: pointer;
   border: none;
+  white-space: nowrap;
+  min-width: 160px;
 }
 
 .btn-primary {
@@ -109,7 +110,7 @@
 .btn-secondary {
   background: transparent;
   color: var(--color-white);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .btn-secondary:hover {
@@ -119,40 +120,26 @@
 
 .hero-projects {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 2rem 3rem;
-  max-width: 1100px;
+  flex-wrap: wrap;
+  gap: 2.5rem 3rem;
   padding-top: 3rem;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .project-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.project-bullet {
-  color: var(--color-white);
-  font-size: 1.2rem;
-  opacity: 0.6;
-}
-
-.project-text {
   font-size: clamp(0.8rem, 1.2vw, 0.95rem);
   color: rgba(255, 255, 255, 0.85);
   white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 .project-more {
-  margin-left: auto;
-  padding-left: 2rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
-  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
   color: var(--color-white);
   font-weight: 700;
-  opacity: 0.8;
+  opacity: 0.9;
+  margin-left: auto;
 }
 
 .scroll-indicator {
@@ -179,14 +166,42 @@
   border-radius: 50%;
 }
 
+@media (max-width: 1024px) {
+  .hero-main {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .hero-right {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    min-width: auto;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
     padding: 8rem 0 4rem;
   }
 
-  .hero-text {
-    margin-bottom: 3rem;
+  .hero-main {
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-right {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
   }
 
   .hero-projects {
@@ -198,21 +213,8 @@
 
   .project-more {
     margin-left: 0;
-    padding-left: 0;
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
     padding-top: 1rem;
-    margin-top: 0.5rem;
-  }
-
-  .hero-cta {
-    flex-direction: column;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -221,7 +223,11 @@
     gap: 0.8rem;
   }
 
-  .project-text {
+  .project-item {
     font-size: 0.75rem;
+  }
+
+  .project-more {
+    font-size: 0.85rem;
   }
 }

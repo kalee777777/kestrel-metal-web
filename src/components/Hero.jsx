@@ -18,58 +18,44 @@ const Hero = () => {
 
       <div className="hero-content">
         <motion.div
-          className="hero-text"
+          className="hero-main"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          <motion.h1
-            className="hero-title"
+          <motion.div
+            className="hero-left"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            LET'S MAKE SOME
-            <br />
-            <span className="highlight">REAL CHANGES</span>
-          </motion.h1>
+            <h1 className="hero-title">
+              LET'S MAKE SOME<br/>
+              <span className="highlight">REAL CHANGES</span>
+            </h1>
 
-          <motion.p
-            className="hero-subtitle"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            We are committed to understanding and addressing the unique challenges
-            <br />
-            and needs of each client, fostering enduring partnerships built on trust,
-            <br />
-            dependability, and shared success.
-          </motion.p>
+            <p className="hero-subtitle">
+              We are committed to understanding and addressing the unique challenges
+              and needs of each client, fostering enduring partnerships built on trust,
+              dependability, and shared success.
+            </p>
+          </motion.div>
 
           <motion.div
-            className="hero-cta"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            className="hero-right"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <motion.button
-              className="btn-primary"
-              whileHover={{ scale: 1.05, boxShadow: '0 15px 40px rgba(255, 107, 53, 0.5)' }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <button className="btn-primary">
               Read more
-              <ChevronRight size={20} />
-            </motion.button>
+              <ChevronRight size={18} />
+            </button>
 
-            <motion.button
-              className="btn-secondary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Play size={18} />
+            <button className="btn-secondary">
               Play the video
-            </motion.button>
+              <Play size={16} />
+            </button>
           </motion.div>
         </motion.div>
 
@@ -80,16 +66,15 @@ const Hero = () => {
           transition={{ duration: 1, delay: 1 }}
         >
           {projects.map((project, index) => (
-            <motion.div
+            <motion.span
               key={index}
               className="project-item"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 + index * 0.1 }}
             >
-              <span className="project-bullet">•</span>
-              <span className="project-text">{project}</span>
-            </motion.div>
+              • {project}
+            </motion.span>
           ))}
           <motion.span
             className="project-more"
