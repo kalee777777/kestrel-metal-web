@@ -68,3 +68,30 @@ a {
 ul, ol {
   list-style: none;
 }
+
+/* Demo FAB Button */
+.demo-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
+  color: var(--color-white);
+  padding: 1rem 1.75rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.3s ease;
+  border: none;
+  white-space: nowrap;
+}
+
+.demo-fab:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.7);
+}
