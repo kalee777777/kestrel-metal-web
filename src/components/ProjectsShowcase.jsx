@@ -32,7 +32,7 @@ const ProjectsShowcase = () => {
   ];
 
   return (
-    <section className="projects-showcase" ref={ref}>
+    <section id="projects" className="projects-showcase" ref={ref}>
       <div className="ps-container">
         <motion.div
           className="ps-header"

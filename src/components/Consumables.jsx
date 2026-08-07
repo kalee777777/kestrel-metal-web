@@ -35,7 +35,7 @@ const Consumables = () => {
   ];
 
   return (
-    <section className="consumables" ref={ref}>
+    <section id="consumables" className="consumables" ref={ref}>
       <div className="consumables-container">
         <motion.div
           className="consumables-header"

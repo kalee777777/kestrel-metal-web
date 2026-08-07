@@ -61,7 +61,7 @@ const ProjectManagement = () => {
 
 
   return (
-    <section className="project-management" ref={ref}>
+    <section id="management" className="project-management" ref={ref}>
       <div className="pm-container">
         <motion.div
           className="pm-header"

@@ -75,7 +75,7 @@ const DemoMap = () => {
   const projectToXY = (coords) => projection(coords);
 
   return (
-    <section className="global-map-section">
+    <section id="global" className="global-map-section">
       <div className="global-map-container">
         <div className="global-map-header">
           <div className="global-map-title">
