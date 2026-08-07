@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FlaskConical, Wrench, Truck, Cog, Building2, Settings, ArrowRight, MapPin } from 'lucide-react';
+import GlobalProjectMap from './GlobalProjectMap';
 import './ProjectManagement.css';
 
 const ProjectManagement = () => {
@@ -57,14 +58,6 @@ const ProjectManagement = () => {
       icon: <Settings size={64} />
     }
   };
-
-  const offices = [
-    { name: 'Changsha HQ Office', x: '75%', y: '45%' },
-    { name: 'Eastern Europe Agent', x: '48%', y: '28%' },
-    { name: 'North Asia Agent', x: '82%', y: '25%' },
-    { name: 'South Asia Agent', x: '68%', y: '52%' },
-    { name: 'India Agent', x: '62%', y: '48%' }
-  ];
 
   const stats = [
     { number: '20', label: 'Years' },
@@ -147,36 +140,7 @@ const ProjectManagement = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <div className="world-map">
-            <svg viewBox="0 0 800 400" className="map-svg">
-              <path
-                d="M150,200 Q200,150 300,180 T500,170 T700,200"
-                stroke="rgba(255,107,53,0.3)"
-                strokeWidth="2"
-                fill="none"
-                strokeDasharray="5,5"
-              />
-              {offices.map((office, index) => (
-                <g key={index}>
-                  <circle
-                    cx={office.x}
-                    cy={office.y}
-                    r="6"
-                    fill="#ff6b35"
-                    className="office-dot"
-                  />
-                  <text
-                    x={office.x}
-                    y={parseInt(office.y) + 20}
-                    textAnchor="middle"
-                    className="office-label"
-                  >
-                    {office.name}
-                  </text>
-                </g>
-              ))}
-            </svg>
-          </div>
+          <GlobalProjectMap />
 
           <div className="global-stats">
             <p className="stats-intro">
