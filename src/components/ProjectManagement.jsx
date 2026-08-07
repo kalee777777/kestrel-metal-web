@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FlaskConical, Wrench, Truck, Cog, Building2, Settings, ArrowRight, MapPin } from 'lucide-react';
+import { FlaskConical, Wrench, Truck, Cog, Building2, Settings, ArrowRight } from 'lucide-react';
 import './ProjectManagement.css';
 
 const ProjectManagement = () => {
@@ -58,13 +58,7 @@ const ProjectManagement = () => {
     }
   };
 
-  const stats = [
-    { number: '20', label: 'Years' },
-    { number: '60', label: 'Projects' },
-    { number: '40', label: 'Patents' },
-    { number: '50', label: 'Countries' },
-    { number: '4', label: 'Subsidiaries' }
-  ];
+
 
   return (
     <section className="project-management" ref={ref}>
@@ -128,27 +122,6 @@ const ProjectManagement = () => {
                   {tab.icon}
                   <span>{tab.label}</span>
                 </button>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="pm-global"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <div className="global-stats">
-            <p className="stats-intro">
-              KESTREL METAL: Five System Solution Provider for Nonferrous Metallurgy
-            </p>
-            <div className="stats-grid">
-              {stats.map((stat, index) => (
-                <div key={index} className="stat-box">
-                  <div className="stat-num">{stat.number}</div>
-                  <div className="stat-lbl">{stat.label}</div>
-                </div>
               ))}
             </div>
           </div>
