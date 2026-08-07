@@ -117,33 +117,42 @@
   background: rgba(255, 107, 53, 0.1);
 }
 
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 3rem;
-  max-width: 900px;
+.hero-projects {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem 3rem;
+  max-width: 1100px;
   padding-top: 3rem;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.stat-item {
-  text-align: center;
+.project-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.stat-number {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 4vw, 3rem);
-  color: var(--color-orange-primary);
-  line-height: 1;
-  margin-bottom: 0.5rem;
+.project-bullet {
+  color: var(--color-white);
+  font-size: 1.2rem;
+  opacity: 0.6;
 }
 
-.stat-label {
-  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
+.project-text {
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.project-more {
+  margin-left: auto;
+  padding-left: 2rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  color: var(--color-white);
+  font-weight: 700;
+  opacity: 0.8;
 }
 
 .scroll-indicator {
@@ -180,10 +189,20 @@
     margin-bottom: 3rem;
   }
 
-  .hero-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+  .hero-projects {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
     padding-top: 2rem;
+  }
+
+  .project-more {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
   }
 
   .hero-cta {
@@ -198,16 +217,11 @@
 }
 
 @media (max-width: 480px) {
-  .hero-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+  .hero-projects {
+    gap: 0.8rem;
   }
 
-  .stat-number {
-    font-size: 1.75rem;
-  }
-
-  .stat-label {
-    font-size: 0.65rem;
+  .project-text {
+    font-size: 0.75rem;
   }
 }

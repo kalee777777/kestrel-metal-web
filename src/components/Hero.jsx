@@ -3,11 +3,11 @@ import { ChevronRight, Play } from 'lucide-react';
 import './Hero.css';
 
 const Hero = () => {
-  const stats = [
-    { number: '20+', label: 'Years of Experience' },
-    { number: '50+', label: 'Countries Served' },
-    { number: '1000+', label: 'Successful Projects' },
-    { number: '60+', label: 'Technical Experts' }
+  const projects = [
+    '5,000tpa Copper Recycling From WEEE',
+    '240,000tpa Cathode Copper Project',
+    '3,000tpa Copper EW Project',
+    '6,000tpa Cathode Copper Project'
   ];
 
   return (
@@ -29,9 +29,9 @@ const Hero = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            FORGING THE FUTURE
+            LET'S MAKE SOME
             <br />
-            <span className="highlight">OF METAL</span>
+            <span className="highlight">REAL CHANGES</span>
           </motion.h1>
 
           <motion.p
@@ -40,9 +40,11 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            We are committed to providing innovative solutions for the global metallurgy industry,
+            We are committed to understanding and addressing the unique challenges
             <br />
-            shaping the future of metal industry with excellent technology and reliable quality
+            and needs of each client, fostering enduring partnerships built on trust,
+            <br />
+            dependability, and shared success.
           </motion.p>
 
           <motion.div
@@ -56,7 +58,7 @@ const Hero = () => {
               whileHover={{ scale: 1.05, boxShadow: '0 15px 40px rgba(255, 107, 53, 0.5)' }}
               whileTap={{ scale: 0.95 }}
             >
-              Explore Products
+              Read more
               <ChevronRight size={20} />
             </motion.button>
 
@@ -66,29 +68,37 @@ const Hero = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Play size={18} />
-              Watch Video
+              Play the video
             </motion.button>
           </motion.div>
         </motion.div>
 
         <motion.div
-          className="hero-stats"
-          initial={{ opacity: 0, y: 50 }}
+          className="hero-projects"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
         >
-          {stats.map((stat, index) => (
+          {projects.map((project, index) => (
             <motion.div
               key={index}
-              className="stat-item"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              className="project-item"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.2 + index * 0.1 }}
             >
-              <div className="stat-number">{stat.number}</div>
-              <div className="stat-label">{stat.label}</div>
+              <span className="project-bullet">•</span>
+              <span className="project-text">{project}</span>
             </motion.div>
           ))}
+          <motion.span
+            className="project-more"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.6 }}
+          >
+            + 50+
+          </motion.span>
         </motion.div>
       </div>
 
