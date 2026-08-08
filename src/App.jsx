@@ -4,7 +4,7 @@ import Hero from './components/Hero';
 import GlobalMapSection from './components/DemoMap';
 import ProjectManagement from './components/ProjectManagement';
 import ProjectsShowcase from './components/ProjectsShowcase';
-import Solutions from './components/Solutions';
+import MetalProducts from './components/MetalProducts';
 import Products from './components/Products';
 import Evidence from './components/Evidence';
 import CompanyOverview from './components/CompanyOverview';
@@ -19,7 +19,7 @@ function App() {
       </Suspense>
       <ProjectManagement />
       <ProjectsShowcase />
-      <Solutions />
+      <MetalProducts />
       <Products />
       <Evidence />
       <CompanyOverview />

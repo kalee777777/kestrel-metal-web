@@ -4,6 +4,20 @@
   position: relative;
 }
 
+.products .section-label {
+  color: var(--color-gray);
+  padding-left: 0;
+}
+
+.products .section-label::before {
+  display: none;
+}
+
+.products .section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+}
+
 .products-container {
   max-width: 1400px;
   margin: 0 auto;
