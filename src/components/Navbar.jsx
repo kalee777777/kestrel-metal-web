@@ -86,8 +86,10 @@ const Navbar = () => {
           whileTap={{ scale: 0.95 }}
         >
           <img src={kestrelLogo} alt="Kestrel Metal" className="logo-image" />
-          <span className="logo-text">KESTREL</span>
-          <span className="logo-subtext">METAL</span>
+          <div className="logo-text-group">
+            <span className="logo-text">KESTREL</span>
+            <span className="logo-subtext">METAL</span>
+          </div>
         </motion.a>
 
         <div className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>

@@ -33,12 +33,21 @@
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
+  height: 40px;
 }
 
 .logo-image {
   width: 40px;
   height: 40px;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+.logo-text-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 .logo-text {
@@ -55,6 +64,7 @@
   color: var(--color-orange-primary);
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  line-height: 1;
 }
 
 .nav-menu {
