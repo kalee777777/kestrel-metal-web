@@ -1,60 +1,162 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useInView } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import './Products.css';
+
+const categories = [
+  { id: 'all', label: 'ALL PRODUCTS' },
+  { id: 'fence', label: 'FENCE PRODUCTS' },
+  { id: 'woven', label: 'WOVEN WIRE MESH' },
+  { id: 'welded', label: 'WELDED WIRE MESH' },
+  { id: 'wire', label: 'WIRE PRODUCTS' },
+];
+
+const products = [
+  {
+    id: 1,
+    category: 'fence',
+    name: '3D Wire Panel Fence',
+    description: 'Cold-formed V-shaped panels with no weld points, smooth surface, excellent weather and corrosion resistance. Ideal for schools, parks, residential communities and industrial zones.',
+    specs: 'Height: 630-2230mm | Wire: 3.0-5.0mm',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop',
+    featured: true,
+  },
+  {
+    id: 2,
+    category: 'fence',
+    name: 'Chain Link Fence',
+    description: 'Versatile diamond-mesh woven fencing with galvanized or PVC coated surface. Cost-effective solution for residential, commercial and sports facilities.',
+    specs: 'Mesh: 50-75mm | Height: 3ft-12ft',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop',
+  },
+  {
+    id: 3,
+    category: 'fence',
+    name: 'Security Fence',
+    description: 'High-security fencing systems including 358 mesh, Y-post airport fence, V-mesh and welded mesh. Used for prisons, military bases and critical infrastructure.',
+    specs: 'Panel: 955-2400mm | Mesh Types: 358/3D/V-Mesh',
+    image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=600&h=400&fit=crop',
+  },
+  {
+    id: 4,
+    category: 'fence',
+    name: 'Farm Fence',
+    description: 'Agricultural fencing solutions with hinge joint, S-knot and fixed knot designs. Designed for livestock management and farmland protection.',
+    specs: 'Height: 39"-96" | Tensile: ≥550 MPa',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop',
+  },
+  {
+    id: 5,
+    category: 'fence',
+    name: 'Fence Posts',
+    description: 'Durable round, square and rectangular steel posts with hot-dip galvanized finish. Available in multiple heights and wall thicknesses.',
+    specs: 'Ø48-89mm | Thickness: 1.5-5.0mm',
+    image: 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop',
+  },
+  {
+    id: 6,
+    category: 'fence',
+    name: 'Fence Accessories',
+    description: 'Complete range of post caps, clamps, tension bands, fasteners and hardware. Hot-dip galvanized or PVC coated for lasting protection.',
+    specs: 'Sizes: 40-80mm | Material: Galvanized/PVC',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop',
+  },
+  {
+    id: 7,
+    category: 'woven',
+    name: 'Hexagonal Wire Netting',
+    description: 'Machine-woven hexagonal mesh for gabion walls, poultry cages and agricultural fencing. Available in various mesh sizes and wire gauges.',
+    specs: 'Mesh: 3/8"-3" | Wire: 20-23 Gauge',
+    image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=600&h=400&fit=crop',
+  },
+  {
+    id: 8,
+    category: 'woven',
+    name: 'Stainless Screen Mesh',
+    description: 'Durable insect-proof mesh for residential and commercial buildings. Made from premium stainless steel with fine mesh openings.',
+    specs: 'Mesh: 1"x1" to 80/100+ | SS304/SS316',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop',
+  },
+  {
+    id: 9,
+    category: 'woven',
+    name: 'Woven Gabion Box',
+    description: 'Double-twisted woven gabion baskets for erosion control and retaining walls. Flexible structure conforms to ground movement.',
+    specs: 'Mesh: 60×80-100×120mm | Wire: 2.2-3.7mm',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop',
+  },
+  {
+    id: 10,
+    category: 'welded',
+    name: 'Welded Wire Mesh Panel',
+    description: 'Prefabricated rigid welded mesh panels for construction reinforcement, fencing and barriers. Precision welding ensures consistent quality.',
+    specs: 'Panel: 1×2m to 2×4m | Wire: 3.0-8.0mm',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop',
+  },
+  {
+    id: 11,
+    category: 'welded',
+    name: 'Welded Wire Mesh Roll',
+    description: 'Flexible welded mesh rolls for fencing, enclosures and agricultural applications. Easy to install with various surface treatments available.',
+    specs: 'Mesh: 1/4"×1/4" to 4"×4" | Width: 3-4ft',
+    image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=600&h=400&fit=crop',
+  },
+  {
+    id: 12,
+    category: 'welded',
+    name: 'Welded Gabion Box',
+    description: 'Welded wire mesh baskets filled with stone for retaining walls, erosion control and landscape decoration. Superior structural integrity.',
+    specs: 'Mesh: 50×50-100×100mm | Wire: 2.4-5.0mm',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop',
+  },
+  {
+    id: 13,
+    category: 'wire',
+    name: 'Barbed Wire',
+    description: 'Traditional double-twist barbed wire for agricultural fencing, livestock boundaries and security perimeters. Available in galvanized and PVC coated.',
+    specs: 'Gauge: 12-18ga | Barb Spacing: 75-150mm',
+    image: 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop',
+  },
+  {
+    id: 14,
+    category: 'wire',
+    name: 'Razor Wire',
+    description: 'High-security concertina razor wire and coils for military, prison and border applications. Made from galvanized steel or stainless steel.',
+    specs: 'Blade: BTO/CBT 22-65mm | Core: 2.5-3.0mm',
+    image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=600&h=400&fit=crop',
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
+};
 
 const Products = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [currentProduct, setCurrentProduct] = useState(0);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [activeCategory, setActiveCategory] = useState('all');
 
-  const products = [
-    {
-      id: 1,
-      category: 'FENCE PRODUCTS',
-      name: '3D Wire Panel Fence',
-      subtitle: 'Security & Perimeter Fencing',
-      description: 'High-quality 3D curved wire panel fence with excellent anti-climb performance. Powder-coated galvanized steel for superior corrosion resistance, ideal for security applications.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=3d%20wire%20panel%20fence%20security%20perimeter%20galvanized%20steel%20outdoor%20installation%20professional&image_size=landscape_16_9',
-      features: ['Anti-Climb Design', 'Powder Coated', 'Galvanized Steel', 'Easy Installation']
-    },
-    {
-      id: 2,
-      category: 'WIRE MESH',
-      name: 'Welded Wire Mesh',
-      subtitle: 'Construction & Industrial',
-      description: 'Premium welded wire mesh panels and rolls for construction reinforcement, concrete pouring, and industrial filtration applications. Various sizes and coatings available.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=welded%20wire%20mesh%20panel%20construction%20reinforcement%20galvanized%20steel%20grid%20industrial&image_size=landscape_16_9',
-      features: ['High Tensile Strength', 'Galvanized Finish', 'Precision Welding', 'Custom Sizes']
-    },
-    {
-      id: 3,
-      category: 'WIRE PRODUCTS',
-      name: 'Razor Wire & Barbed Wire',
-      subtitle: 'High-Security Perimeter',
-      description: ' Concertina razor wire and double-twist barbed wire for maximum security perimeter protection. Available in various materials and coatings for military, prison, and border applications.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=razor%20wire%20barbed%20wire%20security%20perimeter%20military%20prison%20fencing%20galvanized&image_size=landscape_16_9',
-      features: ['High Security', 'Galvanized Material', 'Various Coils', 'Long Service Life']
-    },
-    {
-      id: 4,
-      category: 'GABION',
-      name: 'Gabion Boxes & Mattresses',
-      subtitle: 'Erosion Control & Landscaping',
-      description: 'Welded and hexagonal gabion baskets, mattresses and erosion control solutions for retaining walls, riverbank protection, landscaping, and architectural decoration.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=gabion%20box%20basket%20stone%20retaining%20wall%20erosion%20control%20riverbank%20protection%20landscaping&image_size=landscape_16_9',
-      features: ['High Durability', 'Flexible Structure', 'Eco-Friendly', 'Cost Effective']
-    }
-  ];
+  const filteredProducts =
+    activeCategory === 'all'
+      ? products
+      : products.filter((p) => p.category === activeCategory);
 
-  const nextProduct = () => {
-    setCurrentProduct((prev) => (prev + 1) % products.length);
-  };
-
-  const prevProduct = () => {
-    setCurrentProduct((prev) => (prev - 1 + products.length) % products.length);
+  const categoryLabels = {
+    fence: 'Fence Products',
+    woven: 'Woven Wire Mesh',
+    welded: 'Welded Wire Mesh',
+    wire: 'Wire Products',
   };
 
   return (
@@ -74,70 +176,71 @@ const Products = () => {
           </p>
         </motion.div>
 
-        <div className="product-showcase">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentProduct}
-              className="product-content"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
+        <motion.div
+          className="category-filter"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              className={`filter-btn ${activeCategory === cat.id ? 'active' : ''}`}
+              onClick={() => setActiveCategory(cat.id)}
             >
-              <div className="product-image">
-                <img src={products[currentProduct].image} alt={products[currentProduct].name} />
-                <div className="image-overlay"></div>
-              </div>
+              {cat.label}
+            </button>
+          ))}
+        </motion.div>
 
-              <div className="product-info">
-                <span className="product-category">{products[currentProduct].category}</span>
-                <h3 className="product-name">{products[currentProduct].name}</h3>
-                <p className="product-subtitle">{products[currentProduct].subtitle}</p>
-                <p className="product-description">{products[currentProduct].description}</p>
-
-                <ul className="product-features">
-                  {products[currentProduct].features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-
-                <button className="product-cta">
-                  Learn More Details <ArrowRight size={18} />
-                </button>
-              </div>
-            </motion.div>
+        <motion.div
+          className="products-grid"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          key={activeCategory}
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredProducts.map((product) => (
+              <motion.div
+                key={product.id}
+                className={`product-card ${product.featured ? 'featured' : ''}`}
+                variants={cardVariants}
+                layout
+                whileHover={{ y: -8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="card-image">
+                  <img src={product.image} alt={product.name} loading="lazy" />
+                  <div className="card-overlay">
+                    <span className="card-category-tag">
+                      {categoryLabels[product.category]}
+                    </span>
+                  </div>
+                </div>
+                <div className="card-content">
+                  <h3 className="card-title">{product.name}</h3>
+                  <p className="card-description">{product.description}</p>
+                  <div className="card-specs">{product.specs}</div>
+                  <a href="#" className="card-link">
+                    View Details <ArrowRight size={16} />
+                  </a>
+                </div>
+              </motion.div>
+            ))}
           </AnimatePresence>
+        </motion.div>
 
-          <div className="product-navigation">
-            <motion.button
-              className="nav-button"
-              onClick={prevProduct}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <ChevronLeft size={24} />
-            </motion.button>
-
-            <div className="product-dots">
-              {products.map((_, index) => (
-                <button
-                  key={index}
-                  className={`dot ${index === currentProduct ? 'active' : ''}`}
-                  onClick={() => setCurrentProduct(index)}
-                />
-              ))}
-            </div>
-
-            <motion.button
-              className="nav-button"
-              onClick={nextProduct}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <ChevronRight size={24} />
-            </motion.button>
-          </div>
-        </div>
+        <motion.div
+          className="products-cta"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          <a href="#" className="cta-button">
+            VIEW ALL PRODUCTS <ChevronRight size={18} />
+          </a>
+        </motion.div>
       </div>
     </section>
   );
