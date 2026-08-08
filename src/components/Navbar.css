@@ -245,7 +245,7 @@
 
 .dropdown-menu a:hover {
   color: var(--color-white);
-  background: rgba(255, 107, 53, 0.1);
+  background: rgba(255, 107, 0, 0.1);
   padding-left: 1.5rem;
 }
 

@@ -168,7 +168,7 @@ const DemoMap = () => {
                   <path
                     d={`M ${hqXY[0]} ${hqXY[1]} Q ${midX} ${midY} ${targetXY[0]} ${targetXY[1]}`}
                     fill="none"
-                    stroke="#ff6b35"
+                    stroke="#FF6B00"
                     strokeWidth={1.5}
                     strokeDasharray="6,4"
                     opacity={0.7}
@@ -191,7 +191,7 @@ const DemoMap = () => {
                         cy={cy}
                         r={isActive ? 14 : (project.isHQ ? 12 : 0)}
                         fill="none"
-                        stroke="#ff6b35"
+                        stroke="#FF6B00"
                         strokeWidth={1.5}
                         opacity={0.6}
                       >
@@ -219,8 +219,8 @@ const DemoMap = () => {
                         cx={cx}
                         cy={cy}
                         r={r}
-                        fill={project.isHQ ? '#ffffff' : '#ff6b35'}
-                        stroke={project.isHQ ? '#ff6b35' : 'none'}
+                        fill={project.isHQ ? '#ffffff' : '#FF6B00'}
+                        stroke={project.isHQ ? '#FF6B00' : 'none'}
                         strokeWidth={project.isHQ ? 2 : 0}
                         filter={isActive ? 'url(#glow)' : 'none'}
                       />

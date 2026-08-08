@@ -138,7 +138,7 @@
 }
 
 .product-cta:hover {
-  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5);
+  box-shadow: 0 10px 30px rgba(255, 107, 0, 0.5);
   transform: translateY(-2px);
 }
 

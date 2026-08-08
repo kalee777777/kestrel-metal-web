@@ -90,7 +90,7 @@
   background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
   color: var(--color-white);
   transform: scale(1.05);
-  box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3);
 }
 
 .solution-card.featured .card-number,

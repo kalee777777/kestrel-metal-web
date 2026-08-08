@@ -163,7 +163,7 @@
 .tab.active {
   background: var(--color-orange-primary);
   color: var(--color-white);
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
 }
 
 .tab svg {

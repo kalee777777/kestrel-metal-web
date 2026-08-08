@@ -45,8 +45,8 @@
   text-transform: uppercase;
   margin-bottom: 0.75rem;
   padding: 0.35rem 0.75rem;
-  background: rgba(255, 107, 53, 0.1);
-  border: 1px solid rgba(255, 107, 53, 0.3);
+  background: rgba(255, 107, 0, 0.1);
+  border: 1px solid rgba(255, 107, 0, 0.3);
   border-radius: 4px;
 }
 
@@ -137,7 +137,7 @@
   background: rgba(20, 20, 20, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 107, 53, 0.4);
+  border: 1px solid rgba(255, 107, 0, 0.4);
   border-radius: 12px;
   padding: 1.25rem;
   min-width: 320px;
@@ -221,7 +221,7 @@
 
 .action-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.45);
+  box-shadow: 0 8px 24px rgba(255, 107, 0, 0.45);
 }
 
 /* Info Panel (Right Side) */
@@ -328,7 +328,7 @@
 }
 
 .legend-dot.active {
-  box-shadow: 0 0 10px rgba(255, 107, 53, 0.9);
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.9);
 }
 
 /* Loading State */

@@ -105,7 +105,7 @@
 .btn-primary {
   background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
   color: var(--color-white);
-  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
 }
 
 .btn-secondary {
@@ -116,7 +116,7 @@
 
 .btn-secondary:hover {
   border-color: var(--color-orange-primary);
-  background: rgba(255, 107, 53, 0.1);
+  background: rgba(255, 107, 0, 0.1);
 }
 
 .hero-projects {

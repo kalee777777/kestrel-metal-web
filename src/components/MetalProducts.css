@@ -75,7 +75,7 @@
 }
 
 .product-item.active .product-dot {
-  background: #FF6B00;
+  background: var(--color-orange-primary);
 }
 
 .metal-products .product-name {
@@ -88,12 +88,12 @@
 }
 
 .metal-products .product-item.active .product-name {
-  color: #FF6B00 !important;
+  color: var(--color-orange-primary) !important;
   font-weight: 600 !important;
 }
 
 .metal-products .product-item:hover .product-name {
-  color: #FF6B00 !important;
+  color: var(--color-orange-primary) !important;
 }
 
 .metal-products-right {
@@ -175,7 +175,7 @@
   content: '•';
   position: absolute;
   left: 0;
-  color: #FF6B00;
+  color: var(--color-orange-primary);
 }
 
 .info-footer {
@@ -271,12 +271,12 @@
   }
 
   .product-item:hover {
-    border-color: #FF6B00;
+    border-color: var(--color-orange-primary);
   }
 
   .product-item.active {
-    background: #FF6B00;
-    border-color: #FF6B00;
+    background: var(--color-orange-primary);
+    border-color: var(--color-orange-primary);
   }
 
   .product-item.active .product-name {

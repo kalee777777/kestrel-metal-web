@@ -24,7 +24,7 @@
 }
 
 .overview-title .highlight {
-  color: #FF6B00;
+  color: var(--color-orange-primary);
 }
 
 .overview-subtitle {
@@ -57,11 +57,11 @@
 
 .overview-card:hover {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  border-color: #FF6B00;
+  border-color: var(--color-orange-primary);
 }
 
 .overview-card.featured {
-  background: linear-gradient(135deg, #FF6B00 0%, #FF4500 50%, #E53935 100%);
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   border: none;
   min-height: 420px;
 }
@@ -115,7 +115,7 @@
   gap: 0.5rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #FF6B00;
+  color: var(--color-orange-primary);
   text-decoration: none;
   transition: all 0.3s ease;
   align-self: flex-start;
@@ -123,7 +123,7 @@
 
 .card-link:hover {
   gap: 0.75rem;
-  color: #FF4500;
+  color: var(--color-orange-dark);
 }
 
 .overview-card.featured .card-link {

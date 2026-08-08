@@ -12,7 +12,7 @@ const Consumables = () => {
       id: 1,
       name: 'Fence Posts',
       image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=metal%20fence%20posts%20galvanized%20steel%20square%20tube%20construction%20hardware&image_size=square_hd',
-      color: '#ff6b35'
+      color: '#FF6B00'
     },
     {
       id: 2,
