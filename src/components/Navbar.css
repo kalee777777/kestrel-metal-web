@@ -30,13 +30,20 @@
 
 .logo {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 .logo-text {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   color: var(--color-white);
   letter-spacing: 0.1em;
   line-height: 1;
@@ -44,11 +51,10 @@
 
 .logo-subtext {
   font-family: var(--font-body);
-  font-size: clamp(0.55rem, 1vw, 0.7rem);
+  font-size: clamp(0.5rem, 0.8vw, 0.65rem);
   color: var(--color-orange-primary);
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-weight: 600;
 }
 
 .nav-menu {
@@ -372,5 +378,18 @@
 
   .mobile-toggle {
     display: block;
+  }
+
+  .logo-image {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  .logo-subtext {
+    font-size: 0.45rem;
   }
 }

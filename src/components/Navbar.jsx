@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, ChevronDown, Building2, LayoutGrid, Grid3X3, Cable, FileText, BookOpen, Briefcase, HardHat } from 'lucide-react';
+import kestrelLogo from '../assets/kestrelmetal.png';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -84,6 +85,7 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
+          <img src={kestrelLogo} alt="Kestrel Metal" className="logo-image" />
           <span className="logo-text">KESTREL</span>
           <span className="logo-subtext">METAL</span>
         </motion.a>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import kestrelLogo from '../assets/kestrelmetal.png';
 import './Footer.css';
 
 const Footer = () => {
@@ -50,8 +51,11 @@ const Footer = () => {
               transition={{ duration: 0.6, delay: 0.15 }}
             >
               <a href="#home" className="footer-logo">
-                <span className="logo-text">KESTREL</span>
-                <span className="logo-subtext">METAL</span>
+                <img src={kestrelLogo} alt="Kestrel Metal" className="footer-logo-image" />
+                <div className="footer-logo-text">
+                  <span className="logo-text">KESTREL</span>
+                  <span className="logo-subtext">METAL</span>
+                </div>
               </a>
               <span className="footer-tagline">Professional Metal Products Manufacturer</span>
               <div className="footer-stats">
