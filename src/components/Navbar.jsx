@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, Building2, LayoutGrid, Grid3X3, Cable, FileText, BookOpen, Briefcase, HardHat } from 'lucide-react';
 import kestrelLogo from '../assets/kestrelmetal.png';
 import './Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const navbarRef = useRef(null);
   const closeTimer = useRef(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,6 +35,22 @@ const Navbar = () => {
   const handleNavClick = (href) => {
     setIsMobileMenuOpen(false);
     setMobileProductsOpen(false);
+    if (href.startsWith('/')) {
+      navigate(href);
+    } else if (href === '#home') {
+      if (location.pathname !== '/') {
+        navigate('/');
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else if (href.startsWith('#')) {
+      if (location.pathname !== '/') {
+        navigate('/' + href);
+      } else {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   };
 
   const openMegaMenu = (menu) => {
@@ -84,6 +103,7 @@ const Navbar = () => {
           className="logo"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={(e) => { e.preventDefault(); handleNavClick('#home'); }}
         >
           <img src={kestrelLogo} alt="Kestrel Metal" className="logo-image" />
           <div className="logo-text-group">
@@ -112,7 +132,7 @@ const Navbar = () => {
             onMouseEnter={() => openMegaMenu('products')}
             onMouseLeave={closeMegaMenu}
           >
-            <a href="#products" className="nav-link nav-link-toggle">
+            <a href="/products" className="nav-link nav-link-toggle" onClick={(e) => { e.preventDefault(); handleNavClick('/products'); }}>
               Products
               <ChevronDown size={14} className="chevron-icon" />
             </a>
@@ -130,52 +150,52 @@ const Navbar = () => {
                   <div className="mega-menu-col">
                     <div className="mega-menu-col-title">
                       <Building2 size={16} />
-                      <a href="#products">Fence Products</a>
+                      <a href="/products">Fence Products</a>
                     </div>
                     <ul className="mega-menu-links">
-                      <li><a href="#products">3D Wire Panel Fence</a></li>
-                      <li><a href="#products">Chain Link Fence</a></li>
-                      <li><a href="#products">Security Fence</a></li>
-                      <li><a href="#products">Farm Fence</a></li>
-                      <li><a href="#products">Fence Posts</a></li>
-                      <li><a href="#products">Accessories</a></li>
+                      <li><a href="/products">3D Wire Panel Fence</a></li>
+                      <li><a href="/products">Chain Link Fence</a></li>
+                      <li><a href="/products">Security Fence</a></li>
+                      <li><a href="/products">Farm Fence</a></li>
+                      <li><a href="/products">Fence Posts</a></li>
+                      <li><a href="/products">Accessories</a></li>
                     </ul>
                   </div>
                   <div className="mega-menu-col">
                     <div className="mega-menu-col-title">
                       <LayoutGrid size={16} />
-                      <a href="#products">Woven Wire Mesh</a>
+                      <a href="/products">Woven Wire Mesh</a>
                     </div>
                     <ul className="mega-menu-links">
-                      <li><a href="#products">Hexagonal Wire Netting</a></li>
-                      <li><a href="#products">Stainless Screen Mesh</a></li>
-                      <li><a href="#products">Woven Gabion Mesh</a></li>
+                      <li><a href="/products">Hexagonal Wire Netting</a></li>
+                      <li><a href="/products">Stainless Screen Mesh</a></li>
+                      <li><a href="/products">Woven Gabion Mesh</a></li>
                     </ul>
                   </div>
                   <div className="mega-menu-col">
                     <div className="mega-menu-col-title">
                       <Grid3X3 size={16} />
-                      <a href="#products">Welded Wire Mesh</a>
+                      <a href="/products">Welded Wire Mesh</a>
                     </div>
                     <ul className="mega-menu-links">
-                      <li><a href="#products">Welded Wire Mesh Roll</a></li>
-                      <li><a href="#products">Welded Wire Mesh Panel</a></li>
-                      <li><a href="#products">Welded Gabion Box</a></li>
+                      <li><a href="/products">Welded Wire Mesh Roll</a></li>
+                      <li><a href="/products">Welded Wire Mesh Panel</a></li>
+                      <li><a href="/products">Welded Gabion Box</a></li>
                     </ul>
                   </div>
                   <div className="mega-menu-col">
                     <div className="mega-menu-col-title">
                       <Cable size={16} />
-                      <a href="#products">Wire Products</a>
+                      <a href="/products">Wire Products</a>
                     </div>
                     <ul className="mega-menu-links">
-                      <li><a href="#products">Barbed Wire</a></li>
-                      <li><a href="#products">Razor Wire</a></li>
+                      <li><a href="/products">Barbed Wire</a></li>
+                      <li><a href="/products">Razor Wire</a></li>
                     </ul>
                   </div>
                 </div>
                 <div className="mega-menu-footer">
-                  <a href="#products">View All Products →</a>
+                  <a href="/products">View All Products →</a>
                   <a href="#contact">Get a Quote →</a>
                 </div>
               </motion.div>
@@ -317,20 +337,20 @@ const Navbar = () => {
         </div>
         {mobileProductsOpen && (
           <div className="mobile-submenu">
-            <a href="#products" style={{ paddingLeft: '1.5rem' }}>Fence Products</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>3D Wire Panel Fence</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Chain Link Fence</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Security Fence</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Farm Fence</a>
-            <a href="#products" style={{ paddingLeft: '1.5rem' }}>Woven Wire Mesh</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Hexagonal Wire Netting</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Stainless Screen Mesh</a>
-            <a href="#products" style={{ paddingLeft: '1.5rem' }}>Welded Wire Mesh</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Welded Wire Mesh Roll</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Welded Wire Mesh Panel</a>
-            <a href="#products" style={{ paddingLeft: '1.5rem' }}>Wire Products</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Barbed Wire</a>
-            <a href="#products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Razor Wire</a>
+            <a href="/products" style={{ paddingLeft: '1.5rem' }}>Fence Products</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>3D Wire Panel Fence</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Chain Link Fence</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Security Fence</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Farm Fence</a>
+            <a href="/products" style={{ paddingLeft: '1.5rem' }}>Woven Wire Mesh</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Hexagonal Wire Netting</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Stainless Screen Mesh</a>
+            <a href="/products" style={{ paddingLeft: '1.5rem' }}>Welded Wire Mesh</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Welded Wire Mesh Roll</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Welded Wire Mesh Panel</a>
+            <a href="/products" style={{ paddingLeft: '1.5rem' }}>Wire Products</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Barbed Wire</a>
+            <a href="/products" style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}>Razor Wire</a>
           </div>
         )}
         
