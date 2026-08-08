@@ -34,10 +34,10 @@ const Footer = () => {
             >
               <h4 className="footer-col-title">Products</h4>
               <ul className="footer-links">
-                <li><a href="#products">Anode Plates</a></li>
-                <li><a href="#products">Cathode Plates</a></li>
-                <li><a href="#products">Electrolysis Systems</a></li>
-                <li><a href="#products">Automation Equipment</a></li>
+                <li><a href="#products">Fence Products</a></li>
+                <li><a href="#products">Woven Wire Mesh</a></li>
+                <li><a href="#products">Welded Wire Mesh</a></li>
+                <li><a href="#products">Wire Products</a></li>
                 <li><a href="#products">All Products</a></li>
               </ul>
             </motion.div>
@@ -53,7 +53,7 @@ const Footer = () => {
                 <span className="logo-text">KESTREL</span>
                 <span className="logo-subtext">METAL</span>
               </a>
-              <span className="footer-tagline">Professional Metallurgical Solutions Provider</span>
+              <span className="footer-tagline">Professional Metal Products Manufacturer</span>
               <div className="footer-stats">
                 <div className="stat-item">
                   <span className="stat-value">20+</span>

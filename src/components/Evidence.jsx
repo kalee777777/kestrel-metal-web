@@ -10,38 +10,38 @@ const Evidence = () => {
   const evidenceData = [
     {
       id: '01',
-      number: '20',
-      unit: 'Years',
-      label: 'Industry Experience',
-      description: 'Deeply rooted in the metallurgical industry for 20 years, accumulating rich project experience and technical expertise'
+      number: '10',
+      unit: '+',
+      label: 'Years of Excellence',
+      description: 'Since 2014 in metal manufacturing, specializing in fencing systems and wire mesh products'
     },
     {
       id: '02',
-      number: '60+',
-      unit: '',
-      label: 'Technical Experts',
-      description: 'A team of over 60 senior engineers and technical experts'
+      number: '30',
+      unit: '+',
+      label: 'Countries Served',
+      description: 'Global export network covering more than 30 countries and regions worldwide'
     },
     {
       id: '03',
-      number: '40+',
-      unit: '',
-      label: 'Patents',
-      description: 'Holding over 40 national patents and core technology intellectual property rights'
+      number: '200',
+      unit: '+',
+      label: 'Partner Projects',
+      description: 'Long-term industrial partnerships with clients across diverse industries'
     },
     {
       id: '04',
-      number: '50+',
-      unit: '',
-      label: 'Countries Served',
-      description: 'Business covering more than 50 countries and regions worldwide'
+      number: '20000',
+      unit: ' sqm',
+      label: 'Production Facility',
+      description: 'Modern production campus with automated manufacturing lines'
     },
     {
       id: '05',
-      number: '4',
+      number: 'ISO',
       unit: '',
-      label: 'Subsidiaries',
-      description: 'Establishing 4 subsidiaries globally to build a comprehensive global service system'
+      label: 'Certified Quality',
+      description: 'ISO 9001 certified production with rigorous QC at every stage'
     }
   ];
 
@@ -58,13 +58,13 @@ const Evidence = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="evidence-title">EVIDENCE</h2>
+          <h2 className="evidence-title">OUR STRENGTH</h2>
           <p className="evidence-subtitle">
-            20 years of professional accumulation, 60+ technical experts, 40+ core patents,
+            Over 10 years of manufacturing excellence, exporting to 30+ countries,
             <br />
-            global presence in 50+ countries, and 4 strategic subsidiaries,
+            with 200+ successful partner projects and a 20,000 sqm modern facility,
             <br />
-            together building trusted international delivery capability
+            Kestrel Metal is your trusted metal products partner
           </p>
         </motion.div>
 
@@ -112,7 +112,7 @@ const Evidence = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.8 }}
         >
-          <p>True professionalism ultimately comes down to corporate evidence</p>
+          <p>Your Trusted Metal Products Partner Since 2014</p>
         </motion.div>
       </div>
     </section>

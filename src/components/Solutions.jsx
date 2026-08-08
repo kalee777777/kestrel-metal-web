@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FlaskConical, Wrench, Truck, Cog, ArrowRight } from 'lucide-react';
+import { Settings, Shield, Globe, Headphones, ArrowRight } from 'lucide-react';
 import './Solutions.css';
 
 const Solutions = () => {
@@ -11,49 +11,49 @@ const Solutions = () => {
   const solutions = [
     {
       id: '01',
-      title: 'R&D Services',
-      icon: <FlaskConical size={48} />,
+      title: 'Custom Manufacturing',
+      icon: <Settings size={48} />,
       items: [
-        'Feasibility Study',
-        'Conceptual Design',
-        'Laboratory Testing',
-        'Pilot Test Validation'
+        'Tailored Dimensions',
+        'Custom Materials',
+        'Special Finishes',
+        'OEM & ODM Services'
       ],
       featured: false
     },
     {
       id: '02',
-      title: 'Engineering',
-      icon: <Wrench size={48} />,
+      title: 'Quality Assurance',
+      icon: <Shield size={48} />,
       items: [
-        'Basic Design (FEED)',
-        'Detailed Design (2D & 3D)',
-        'Process Optimization',
-        'Equipment Selection'
+        'ISO Certified',
+        'Rigorous QC Testing',
+        'Multi-Stage Inspection',
+        'Quality Documentation'
       ],
       featured: true
     },
     {
       id: '03',
-      title: 'Procurement',
-      icon: <Truck size={48} />,
+      title: 'Global Logistics',
+      icon: <Globe size={48} />,
       items: [
-        'Global Supply Chain Management',
-        'Quality Control Inspection',
-        'Logistics Coordination',
-        'Cost Optimization'
+        '30+ Countries Exported',
+        'Trade Documentation',
+        'Customs Clearance',
+        'Worldwide Shipping'
       ],
       featured: false
     },
     {
       id: '04',
-      title: 'Operations Support',
-      icon: <Cog size={48} />,
+      title: 'Technical Support',
+      icon: <Headphones size={48} />,
       items: [
-        'Installation & Commissioning',
-        'Operator Training',
-        'Maintenance Services',
-        'Technical Support'
+        'Engineering Consultation',
+        'Sample Provision',
+        'Installation Guidance',
+        'After-Sales Service'
       ],
       featured: false
     }
@@ -68,12 +68,11 @@ const Solutions = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <span className="section-label">SOLUTIONS</span>
-          <h2 className="section-title">Comprehensive Metallurgical Solutions</h2>
+          <span className="section-label">OUR CAPABILITIES</span>
+          <h2 className="section-title">Whatever Your Project Demands</h2>
           <p className="section-description">
-            From concept to delivery, we provide complete metallurgical engineering services,
-            <br />
-            helping your projects succeed
+            From standard specifications to fully customized solutions, we deliver metal products
+            engineered for your exact requirements — on time, on budget, worldwide
           </p>
         </motion.div>
 
@@ -111,7 +110,7 @@ const Solutions = () => {
           transition={{ delay: 0.8 }}
         >
           <a href="#" className="view-all-link">
-            View All Solutions <ArrowRight size={20} />
+            View All Capabilities <ArrowRight size={20} />
           </a>
         </motion.div>
       </div>

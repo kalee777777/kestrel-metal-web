@@ -13,30 +13,39 @@ const Products = () => {
   const products = [
     {
       id: 1,
-      category: 'EQUIPMENT',
-      name: 'Pb-Sn Anode Plate',
-      subtitle: 'For Copper Electrowinning',
-      description: 'Advanced Pb-Sn alloy anode plates with excellent corrosion resistance and conductivity, widely used in copper electrowinning processes with a service life of over 10 years.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=industrial%20metal%20anode%20plate%20equipment%20copper%20electrorefining%20modern%20manufacturing%20high%20quality&image_size=landscape_16_9',
-      features: ['High Corrosion Resistance', 'Excellent Conductivity', 'Long Life Design', 'Precision Manufacturing']
+      category: 'FENCE PRODUCTS',
+      name: '3D Wire Panel Fence',
+      subtitle: 'Security & Perimeter Fencing',
+      description: 'High-quality 3D curved wire panel fence with excellent anti-climb performance. Powder-coated galvanized steel for superior corrosion resistance, ideal for security applications.',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=3d%20wire%20panel%20fence%20security%20perimeter%20galvanized%20steel%20outdoor%20installation%20professional&image_size=landscape_16_9',
+      features: ['Anti-Climb Design', 'Powder Coated', 'Galvanized Steel', 'Easy Installation']
     },
     {
       id: 2,
-      category: 'EQUIPMENT',
-      name: 'Stainless Steel Cathode',
-      subtitle: 'Permanent Cathode Technology',
-      description: '316L stainless steel permanent cathode plates with specially treated surfaces to ensure easy copper stripping, significantly improving production efficiency and product quality.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stainless%20steel%20cathode%20plate%20industrial%20equipment%20metallic%20surface%20modern%20technology&image_size=landscape_16_9',
-      features: ['Permanent Design', 'Easy-Strip Coating', 'High Flatness', 'Low Maintenance Cost']
+      category: 'WIRE MESH',
+      name: 'Welded Wire Mesh',
+      subtitle: 'Construction & Industrial',
+      description: 'Premium welded wire mesh panels and rolls for construction reinforcement, concrete pouring, and industrial filtration applications. Various sizes and coatings available.',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=welded%20wire%20mesh%20panel%20construction%20reinforcement%20galvanized%20steel%20grid%20industrial&image_size=landscape_16_9',
+      features: ['High Tensile Strength', 'Galvanized Finish', 'Precision Welding', 'Custom Sizes']
     },
     {
       id: 3,
-      category: 'SYSTEM',
-      name: 'Smart Electrolysis System',
-      subtitle: 'Automated Control Solution',
-      description: 'Integrated advanced PLC control and monitoring system for intelligent electrolysis process management, including current density control, temperature monitoring, and level regulation.',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=industrial%20control%20system%20electrolysis%20automation%20digital%20dashboard%20modern%20technology&image_size=landscape_16_9',
-      features: ['Smart Control', 'Real-time Monitoring', 'Data Analysis', 'Remote Operation']
+      category: 'WIRE PRODUCTS',
+      name: 'Razor Wire & Barbed Wire',
+      subtitle: 'High-Security Perimeter',
+      description: ' Concertina razor wire and double-twist barbed wire for maximum security perimeter protection. Available in various materials and coatings for military, prison, and border applications.',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=razor%20wire%20barbed%20wire%20security%20perimeter%20military%20prison%20fencing%20galvanized&image_size=landscape_16_9',
+      features: ['High Security', 'Galvanized Material', 'Various Coils', 'Long Service Life']
+    },
+    {
+      id: 4,
+      category: 'GABION',
+      name: 'Gabion Boxes & Mattresses',
+      subtitle: 'Erosion Control & Landscaping',
+      description: 'Welded and hexagonal gabion baskets, mattresses and erosion control solutions for retaining walls, riverbank protection, landscaping, and architectural decoration.',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=gabion%20box%20basket%20stone%20retaining%20wall%20erosion%20control%20riverbank%20protection%20landscaping&image_size=landscape_16_9',
+      features: ['High Durability', 'Flexible Structure', 'Eco-Friendly', 'Cost Effective']
     }
   ];
 
@@ -57,10 +66,11 @@ const Products = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <span className="section-label">PRODUCTS</span>
-          <h2 className="section-title">Core Products & Equipment</h2>
+          <span className="section-label">OUR PRODUCTS</span>
+          <h2 className="section-title">Product Categories</h2>
           <p className="section-description">
-            Advanced metallurgical equipment with superior process performance
+            Comprehensive range of metal products designed for security, construction,
+            agriculture and industrial filtration applications
           </p>
         </motion.div>
 

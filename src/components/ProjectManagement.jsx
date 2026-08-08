@@ -2,63 +2,61 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FlaskConical, Wrench, Truck, Cog, Building2, Settings, ArrowRight } from 'lucide-react';
+import { MessageSquare, FileText, Truck, Wrench, CheckCircle, Headphones } from 'lucide-react';
 import './ProjectManagement.css';
 
 const ProjectManagement = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [activeTab, setActiveTab] = useState('research');
+  const [activeTab, setActiveTab] = useState('consultation');
 
   const tabs = [
-    { id: 'research', label: 'Research', icon: <FlaskConical size={20} /> },
-    { id: 'engineering', label: 'Engineering', icon: <Wrench size={20} /> },
-    { id: 'procurement', label: 'Procurement', icon: <Truck size={20} /> },
-    { id: 'construction', label: 'Construction', icon: <Building2 size={20} /> },
-    { id: 'commissioning', label: 'Commissioning', icon: <Cog size={20} /> },
-    { id: 'operations', label: 'Operations&M...', icon: <Settings size={20} /> }
+    { id: 'consultation', label: 'Consultation', icon: <MessageSquare size={20} /> },
+    { id: 'design', label: 'Design', icon: <FileText size={20} /> },
+    { id: 'production', label: 'Production', icon: <Wrench size={20} /> },
+    { id: 'quality', label: 'QC Inspection', icon: <CheckCircle size={20} /> },
+    { id: 'logistics', label: 'Logistics', icon: <Truck size={20} /> },
+    { id: 'support', label: 'Support', icon: <Headphones size={20} /> }
   ];
 
   const tabContent = {
-    research: {
-      title: 'Research',
-      description: 'Feasibility Study & Conceptual Design',
-      details: ['Lab Test', 'Pilot Test'],
-      icon: <FlaskConical size={64} />
+    consultation: {
+      title: 'Consultation',
+      description: 'Project discussion & requirement analysis',
+      details: ['Technical consultation', 'Requirement analysis', 'Product recommendation'],
+      icon: <MessageSquare size={64} />
     },
-    engineering: {
-      title: 'Engineering',
-      description: 'Basic Design (FEED) & Detailed Design (2D & 3D)',
-      details: ['Process Optimization', 'Equipment Selection'],
+    design: {
+      title: 'Design',
+      description: 'Custom drawings & solution design',
+      details: ['CAD drawings', 'Sample customization', 'Material selection'],
+      icon: <FileText size={64} />
+    },
+    production: {
+      title: 'Production',
+      description: 'Mass production with automated lines',
+      details: ['Automated welding', 'Powder coating', 'Galvanizing'],
       icon: <Wrench size={64} />
     },
-    procurement: {
-      title: 'Procurement',
-      description: 'Global Supply Chain Management & Quality Control',
-      details: ['Logistics Coordination', 'Cost Optimization'],
+    quality: {
+      title: 'QC Inspection',
+      description: 'Multi-stage quality control & testing',
+      details: ['Raw material inspection', 'In-process QC', 'Pre-shipment testing'],
+      icon: <CheckCircle size={64} />
+    },
+    logistics: {
+      title: 'Logistics',
+      description: 'Global shipping & delivery coordination',
+      details: ['Packaging & labeling', 'Container loading', 'Shipping arrangement'],
       icon: <Truck size={64} />
     },
-    construction: {
-      title: 'Construction',
-      description: 'Project Implementation & Site Management',
-      details: ['Installation Supervision', 'Quality Assurance'],
-      icon: <Building2 size={64} />
-    },
-    commissioning: {
-      title: 'Commissioning',
-      description: 'System Startup & Performance Testing',
-      details: ['Operator Training', 'Documentation'],
-      icon: <Cog size={64} />
-    },
-    operations: {
-      title: 'Operations Support',
-      description: 'Maintenance Services & Technical Support',
-      details: ['Spare Parts Supply', 'Remote Monitoring'],
-      icon: <Settings size={64} />
+    support: {
+      title: 'After-Sales Support',
+      description: 'Installation guidance & technical support',
+      details: ['Installation manual', 'Technical guidance', 'Warranty service'],
+      icon: <Headphones size={64} />
     }
   };
-
-
 
   return (
     <section id="management" className="project-management" ref={ref}>
@@ -69,8 +67,8 @@ const ProjectManagement = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <span className="pm-label">Solutions</span>
-          <h2 className="pm-title">Project<br/>Management</h2>
+          <span className="pm-label">OUR PROCESS</span>
+          <h2 className="pm-title">Custom Manufacturing<br/>Workflow</h2>
         </motion.div>
 
         <motion.div
@@ -81,8 +79,8 @@ const ProjectManagement = () => {
         >
           <div className="pm-background">
             <img
-              src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=laboratory%20research%20scientists%20working%20microscope%20industrial%20metallurgy%20modern%20facility%20professional&image_size=landscape_16_9"
-              alt="Research Laboratory"
+              src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=wire%20mesh%20manufacturing%20factory%20production%20line%20automated%20welding%20galvanized%20steel%20industrial&image_size=landscape_16_9"
+              alt="Manufacturing Process"
             />
             <div className="pm-overlay"></div>
           </div>

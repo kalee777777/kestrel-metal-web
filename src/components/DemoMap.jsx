@@ -13,29 +13,29 @@ const DemoMap = () => {
   const autoPlayRef = useRef(null);
 
   const projects = [
-    { id: 0, name: 'Kestrel Metal Headquarters', location: 'Changsha, China', type: 'Corporate HQ & R&D Center', description: 'Global headquarters managing all international projects and operations since 2004', capacity: '-', year: 2004, coordinates: [112.94, 28.23], isHQ: true },
-    { id: 1, name: 'Shanghai WEEE Copper Recycling Plant', location: 'Shanghai, China', type: 'E-Waste Recycling Facility', description: 'Advanced copper recovery from electronic waste using hydrometallurgical process', capacity: '5,000 tpa', year: 2015, coordinates: [121.47, 31.23] },
-    { id: 2, name: 'Yunnan Copper Electrowinning Complex', location: 'Kunming, Yunnan, China', type: 'Copper EW Project', description: 'Large-scale cathode copper production with SX-EW technology', capacity: '240,000 tpa', year: 2018, coordinates: [102.83, 25.04] },
-    { id: 3, name: 'Guangxi Copper Refinery Upgrade', location: 'Nanning, Guangxi, China', type: 'Technology Modernization', description: 'Complete upgrade with advanced process control systems', capacity: '3,000 tpa', year: 2020, coordinates: [108.32, 22.82] },
-    { id: 4, name: 'Zijin Mining Copper Smelter EPC', location: 'Longyan, Fujian, China', type: 'EPC Turnkey Project', description: 'Design, procurement, construction of integrated smelting facility', capacity: '300,000 tpa', year: 2019, coordinates: [117.03, 25.09] },
-    { id: 5, name: 'Jiangxi Copper Cathode Technology', location: 'Nanchang, Jiangxi, China', type: 'Permanent Cathode Supply', description: 'Supply of stainless steel permanent cathode plates for electrowinning', capacity: '400,000 tpa', year: 2021, coordinates: [115.89, 28.68] },
-    { id: 6, name: 'Inner Mongolia Zinc-Lead Smelter', location: 'Hohhot, Inner Mongolia, China', type: 'Process Engineering', description: 'Comprehensive engineering design for zinc-lead smelting operations', capacity: '150,000 tpa', year: 2017, coordinates: [111.75, 40.84] },
-    { id: 7, name: 'Mumbai Cathode Copper Facility', location: 'Mumbai, India', type: 'EPC Contract', description: 'Full EPC delivery of cathode copper production plant for Indian client', capacity: '6,000 tpa', year: 2019, coordinates: [72.87, 19.07] },
-    { id: 8, name: 'Jakarta Copper Smelter Expansion', location: 'Jakarta, Indonesia', type: 'Engineering & Procurement', description: 'Capacity expansion including furnace upgrade and automation system', capacity: '100,000 tpa', year: 2021, coordinates: [106.84, -6.21] },
-    { id: 9, name: 'Ho Chi Minh City Copper Refinery', location: 'Ho Chi Minh City, Vietnam', type: 'Technical Consulting', description: 'Process optimization and technology transfer for refining operations', capacity: '20,000 tpa', year: 2022, coordinates: [106.70, 10.76] },
-    { id: 10, name: 'Almaty Mining Equipment Supply', location: 'Almaty, Kazakhstan', type: 'Equipment Procurement', description: 'Supply chain management for mining equipment to Central Asia', capacity: '-', year: 2017, coordinates: [76.85, 43.22] },
-    { id: 11, name: 'Hamburg European Operations Center', location: 'Hamburg, Germany', type: 'Regional Technical Hub', description: 'European base for technical support and client relations', capacity: '-', year: 2012, coordinates: [10.00, 53.55] },
-    { id: 12, name: 'Warsaw WEEE Processing Technology', location: 'Warsaw, Poland', type: 'Technology License', description: 'Licensed proprietary copper recycling technology to Polish company', capacity: '2,000 tpa', year: 2016, coordinates: [21.01, 52.23] },
-    { id: 13, name: 'Moscow Non-Ferrous Metallurgy Design', location: 'Moscow, Russia', type: 'Engineering Design', description: 'Detailed engineering design for non-ferrous metals processing facility', capacity: '-', year: 2018, coordinates: [37.61, 55.75] },
-    { id: 14, name: 'Istanbul Equipment Agency Services', location: 'Istanbul, Turkey', type: 'Procurement Agent', description: 'Strategic sourcing and quality inspection services for equipment', capacity: '-', year: 2020, coordinates: [28.97, 41.01] },
-    { id: 15, name: 'Belgrade Copper Smelter Modernization', location: 'Belgrade, Serbia', type: 'Plant Revamp Project', description: 'Complete modernization of legacy smelter with environmental controls', capacity: '80,000 tpa', year: 2021, coordinates: [20.46, 44.79] },
-    { id: 16, name: 'Santiago South America Support Center', location: 'Santiago, Chile', type: 'Regional Office & Projects', description: 'South American hub for mining projects support and management', capacity: '-', year: 2013, coordinates: [-70.65, -33.45] },
-    { id: 17, name: 'Lima Copper Concentrator Project', location: 'Lima, Peru', type: 'Mining-Metallurgical Integration', description: 'Integrated concentrator and SX-EW facility for copper oxide ore', capacity: '50,000 tpa', year: 2017, coordinates: [-77.03, -12.05] },
-    { id: 18, name: 'São Paulo Electronic Waste Recycling', location: 'São Paulo, Brazil', type: 'Full Plant Delivery', description: 'Turnkey e-waste recycling plant with precious metals recovery capability', capacity: '8,000 tpa', year: 2019, coordinates: [-46.63, -23.55] },
-    { id: 19, name: 'Toronto R&D Partnership Program', location: 'Toronto, Canada', type: 'Research Collaboration', description: 'Joint research program on advanced hydrometallurgical processes', capacity: '-', year: 2020, coordinates: [-79.38, 43.65] },
-    { id: 20, name: 'Lubumbashi Cu-Co Hydrometallurgy Plant', location: 'Lubumbashi, DRC', type: 'Process Design & Commissioning', description: 'Copper-cobalt hydrometallurgical processing plant design and startup', capacity: '40,000 tpa', year: 2016, coordinates: [27.49, -11.66] },
-    { id: 21, name: 'Kitwe Copper Smelter Construction', location: 'Kitwe, Zambia', type: 'EPC Project Management', description: 'EPC management for new copper smelter in Zambian Copperbelt', capacity: '120,000 tpa', year: 2018, coordinates: [28.20, -12.81] },
-    { id: 22, name: 'Perth Laterite Nickel Technology Transfer', location: 'Perth, Australia', type: 'Technology Licensing', description: 'HPAL technology license for laterite nickel processing', capacity: '-', year: 2021, coordinates: [115.86, -31.95] }
+    { id: 0, name: 'Kestrel Metal HQ', location: 'Anping, Hebei, China', type: 'Headquarters & Manufacturing', description: 'Global headquarters and main manufacturing campus in Anping - China\'s Wire Mesh Capital', capacity: '20,000 sqm', year: 2014, coordinates: [115.26, 38.22], isHQ: true },
+    { id: 1, name: 'Shanghai Distribution Center', location: 'Shanghai, China', type: 'Regional Warehouse', description: 'Eastern China distribution hub for quick order fulfillment and logistics', capacity: '5,000 sqm', year: 2017, coordinates: [121.47, 31.23] },
+    { id: 2, name: 'Guangzhou Export Terminal', location: 'Guangzhou, China', type: 'Export Shipping Hub', description: 'Southern China export terminal handling container shipments worldwide', capacity: '-', year: 2018, coordinates: [113.26, 23.13] },
+    { id: 3, name: 'Beijing Project Office', location: 'Beijing, China', type: 'Project Coordination', description: 'Northern China project management and engineering coordination office', capacity: '-', year: 2019, coordinates: [116.40, 39.90] },
+    { id: 4, name: 'Mumbai Fencing Supply', location: 'Mumbai, India', type: 'Fencing Supply Project', description: 'Large-scale security fencing supply for industrial and infrastructure projects', capacity: '50,000m', year: 2020, coordinates: [72.87, 19.07] },
+    { id: 5, name: 'Delhi Airport Perimeter', location: 'Delhi, India', type: 'Airport Security Fencing', description: 'Airport perimeter security fencing installation with 3D wire panels', capacity: '12,000m', year: 2021, coordinates: [77.21, 28.61] },
+    { id: 6, name: 'Dubai Industrial Fencing', location: 'Dubai, UAE', type: 'Industrial Fencing Project', description: 'Industrial facility perimeter fencing for manufacturing and logistics zones', capacity: '30,000m', year: 2019, coordinates: [55.27, 25.20] },
+    { id: 7, name: 'Saudi Arabia Security Project', location: 'Riyadh, Saudi Arabia', type: 'High-Security Fencing', description: 'High-security fencing with razor wire for critical infrastructure protection', capacity: '25,000m', year: 2020, coordinates: [46.68, 24.71] },
+    { id: 8, name: 'Istanbul Manufacturing Supply', location: 'Istanbul, Turkey', type: 'Wire Mesh Supply', description: 'Supply of welded wire mesh and chain link fencing for construction projects', capacity: '40,000m', year: 2018, coordinates: [28.97, 41.01] },
+    { id: 9, name: 'Germany Distribution Hub', location: 'Hamburg, Germany', type: 'European Distribution', description: 'European distribution hub serving customers across the EU region', capacity: '-', year: 2016, coordinates: [10.00, 53.55] },
+    { id: 10, name: 'UK Construction Supply', location: 'London, UK', type: 'Construction Wire Mesh', description: 'Construction reinforcement mesh supply for UK building projects', capacity: '15,000 tons', year: 2019, coordinates: [-0.13, 51.51] },
+    { id: 11, name: 'France Agricultural Fencing', location: 'Paris, France', type: 'Agricultural Fencing', description: 'Farm and agricultural fencing supply for livestock and crop protection', capacity: '20,000m', year: 2020, coordinates: [2.35, 48.85] },
+    { id: 12, name: 'Australia Farm Fencing', location: 'Sydney, Australia', type: 'Agricultural & Farm Fencing', description: 'Large-scale farm fencing for livestock protection in Australian rural areas', capacity: '100,000m', year: 2017, coordinates: [151.21, -33.87] },
+    { id: 13, name: 'New Zealand Wire Supply', location: 'Auckland, New Zealand', type: 'Wire Products Distribution', description: 'Wire products and fencing distribution across New Zealand', capacity: '-', year: 2019, coordinates: [174.76, -36.85] },
+    { id: 14, name: 'Brazil Construction Project', location: 'São Paulo, Brazil', type: 'Construction Mesh Supply', description: 'Construction wire mesh supply for Brazilian infrastructure projects', capacity: '25,000 tons', year: 2020, coordinates: [-46.63, -23.55] },
+    { id: 15, name: 'Argentina Agricultural Supply', location: 'Buenos Aires, Argentina', type: 'Agricultural Fencing', description: 'Agricultural and farm fencing for livestock production in Argentina', capacity: '60,000m', year: 2018, coordinates: [-58.38, -34.60] },
+    { id: 16, name: 'South Africa Mining Fencing', location: 'Johannesburg, South Africa', type: 'Mining Security Fencing', description: 'Mining site security fencing with anti-climb and razor wire systems', capacity: '35,000m', year: 2019, coordinates: [28.04, -26.20] },
+    { id: 17, name: 'Kenya Infrastructure', location: 'Nairobi, Kenya', type: 'Infrastructure Fencing', description: 'Infrastructure project fencing for construction and utilities', capacity: '18,000m', year: 2021, coordinates: [36.82, -1.29] },
+    { id: 18, name: 'Nigeria Perimeter Security', location: 'Lagos, Nigeria', type: 'Perimeter Security Fencing', description: 'Perimeter security fencing for commercial and industrial properties', capacity: '22,000m', year: 2020, coordinates: [3.38, 6.45] },
+    { id: 19, name: 'Russia Industrial Fencing', location: 'Moscow, Russia', type: 'Industrial Fencing', description: 'Industrial facility fencing and wire mesh supply for Russian market', capacity: '50,000m', year: 2017, coordinates: [37.61, 55.75] },
+    { id: 20, name: 'Canada Construction Mesh', location: 'Toronto, Canada', type: 'Construction Wire Mesh', description: 'Construction wire mesh and rebar products for Canadian building projects', capacity: '20,000 tons', year: 2019, coordinates: [-79.38, 43.65] },
+    { id: 21, name: 'USA Fencing Distribution', location: 'Los Angeles, USA', type: 'Fencing Distribution Center', description: 'US West Coast distribution center for fencing and wire mesh products', capacity: '-', year: 2018, coordinates: [-118.24, 34.05] },
+    { id: 22, name: 'Mexico Agricultural Supply', location: 'Mexico City, Mexico', type: 'Agricultural Fencing', description: 'Agricultural and livestock fencing supply for Mexican farms', capacity: '45,000m', year: 2021, coordinates: [-99.13, 19.43] }
   ];
 
   const width = 900;
@@ -81,20 +81,20 @@ const DemoMap = () => {
           <div className="global-map-title">
             <span className="section-tag">GLOBAL PRESENCE</span>
             <h2>Worldwide Project Network</h2>
-            <p>From our headquarters in Changsha, China, Kestrel Metal has successfully delivered 22 major metallurgical projects across 50+ countries worldwide.</p>
+            <p>From our headquarters in Anping, China, Kestrel Metal has successfully delivered fencing and wire mesh projects across 30+ countries worldwide.</p>
           </div>
           
           <div className="global-map-stats">
             <div className="stat-item">
-              <span className="stat-num">22</span>
+              <span className="stat-num">200+</span>
               <span className="stat-label">Projects</span>
             </div>
             <div className="stat-item">
-              <span className="stat-num">50+</span>
+              <span className="stat-num">30+</span>
               <span className="stat-label">Countries</span>
             </div>
             <div className="stat-item">
-              <span className="stat-num">20</span>
+              <span className="stat-num">10+</span>
               <span className="stat-label">Years</span>
             </div>
           </div>

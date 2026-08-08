@@ -4,10 +4,10 @@ import './Hero.css';
 
 const Hero = () => {
   const projects = [
-    '5,000tpa Copper Recycling From WEEE',
-    '240,000tpa Cathode Copper Project',
-    '3,000tpa Copper EW Project',
-    '6,000tpa Cathode Copper Project'
+    'Security Fencing Solutions',
+    'Chain Link & Perimeter Systems',
+    'Agricultural & Farm Fencing',
+    'Industrial Wire Mesh Products'
   ];
 
   return (
@@ -29,15 +29,15 @@ const Hero = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
+            <span className="hero-badge">METAL PRODUCTS MANUFACTURER</span>
             <h1 className="hero-title">
-              LET'S MAKE SOME<br/>
-              <span className="highlight">REAL CHANGES</span>
+              SECURITY FENCING<br/>
+              <span className="highlight">&amp; PERIMETER SOLUTIONS</span>
             </h1>
 
             <p className="hero-subtitle">
-              We are committed to understanding and addressing the unique challenges
-              and needs of each client, fostering enduring partnerships built on trust,
-              dependability, and shared success.
+              Complete range of fencing solutions including 3D panels, chain link, airport fence,
+              horse fence, farm fence and more for security, construction & agriculture.
             </p>
           </motion.div>
 
@@ -48,13 +48,13 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             <button className="btn-primary">
-              Read more
+              EXPLORE PRODUCTS
               <ChevronRight size={18} />
             </button>
 
             <button className="btn-secondary">
-              Play the video
-              <Play size={16} />
+              GET A QUOTE
+              <ChevronRight size={16} />
             </button>
           </motion.div>
         </motion.div>
@@ -82,7 +82,7 @@ const Hero = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.6 }}
           >
-            + 50+
+            + 30+ Countries
           </motion.span>
         </motion.div>
       </div>

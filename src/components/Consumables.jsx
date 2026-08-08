@@ -10,26 +10,26 @@ const Consumables = () => {
   const consumables = [
     {
       id: 1,
-      name: 'Electrolyte Additives',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=yellow%20chemical%20powder%20industrial%20additive%20circular%20container%20laboratory%20sample&image_size=square_hd',
+      name: 'Fence Posts',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=metal%20fence%20posts%20galvanized%20steel%20square%20tube%20construction%20hardware&image_size=square_hd',
       color: '#ff6b35'
     },
     {
       id: 2,
-      name: 'Anode Slime',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=brown%20granular%20material%20industrial%20mining%20byproduct%20circular%20sample%20texture&image_size=square_hd',
+      name: 'Tension Bands',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=metal%20tension%20bands%20fence%20hardware%20galvanized%20steel%20clamps%20construction&image_size=square_hd',
       color: '#d2691e'
     },
     {
       id: 3,
-      name: 'Copper Powder',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=copper%20powder%20metallic%20orange%20industrial%20material%20fine%20particles%20circular%20sample&image_size=square_hd',
+      name: 'Hog Rings & Clips',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hog%20rings%20metal%20clips%20fence%20hardware%20fasteners%20galvanized%20steel&image_size=square_hd',
       color: '#cd7f32'
     },
     {
       id: 4,
-      name: 'Refining Solvents',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=white%20crystalline%20powder%20chemical%20refining%20solvent%20industrial%20circular%20container&image_size=square_hd',
+      name: 'Gate Hardware',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fence%20gate%20hardware%20hinges%20latches%20locks%20metal%20construction%20accessories&image_size=square_hd',
       color: '#f5f5f5'
     }
   ];
@@ -44,8 +44,8 @@ const Consumables = () => {
           transition={{ duration: 0.8 }}
         >
           <div className="header-left">
-            <span className="section-label">CONSUMABLES</span>
-            <h2 className="section-title">Professional Consumables</h2>
+            <span className="section-label">ACCESSORIES</span>
+            <h2 className="section-title">Fence Accessories & Fittings</h2>
           </div>
 
           <motion.a

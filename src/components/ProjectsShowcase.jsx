@@ -10,24 +10,24 @@ const ProjectsShowcase = () => {
   const projects = [
     {
       id: 1,
-      title: 'Copper Recycling Plant',
-      location: 'WEEE Processing Facility',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=industrial%20copper%20recycling%20plant%20modern%20facility%20aerial%20view%20environmental%20friendly&image_size=landscape_16_9',
-      capacity: '5,000 tpa'
+      title: 'Airport Security Fencing',
+      location: 'International Airport',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=airport%20security%20fence%20perimeter%203d%20wire%20panel%20galvanized%20steel%20installatio&image_size=landscape_16_9',
+      capacity: 'High Security'
     },
     {
       id: 2,
-      title: 'Cathode Copper Project',
-      location: 'Large Scale Metallurgy Complex',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cathode%20copper%20production%20plant%20electrorefining%20industrial%20facility%20massive%20scale&image_size=landscape_16_9',
-      capacity: '240,000 tpa'
+      title: 'Industrial Chain Link Project',
+      location: 'Manufacturing Facility',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chain%20link%20fence%20industrial%20perimeter%20galvanized%20wire%20mesh%20factory%20boundary&image_size=landscape_16_9',
+      capacity: '2,000m Length'
     },
     {
       id: 3,
-      title: 'Electrowinning System',
-      location: 'Advanced EW Technology',
-      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=copper%20electrowinning%20system%20electrolytic%20cells%20modern%20technology%20industrial&image_size=landscape_16_9',
-      capacity: '3,000 tpa'
+      title: 'Agricultural Farm Fencing',
+      location: 'Livestock Farm',
+      image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=farm%20fence%20agricultural%20wire%20mesh%20livestock%20enclosure%20rural%20countryside&image_size=landscape_16_9',
+      capacity: '5,000m Coverage'
     }
   ];
 
@@ -41,8 +41,8 @@ const ProjectsShowcase = () => {
           transition={{ duration: 0.8 }}
         >
           <div className="header-left">
-            <span className="ps-label">Standard Projects</span>
-            <h2 className="ps-title">Projects</h2>
+            <span className="ps-label">OUR PROJECTS</span>
+            <h2 className="ps-title">Featured Projects</h2>
           </div>
 
           <motion.a
@@ -50,7 +50,7 @@ const ProjectsShowcase = () => {
             className="read-more-link"
             whileHover={{ x: 5 }}
           >
-            Read more <ArrowRight size={18} />
+            View All <ArrowRight size={18} />
           </motion.a>
         </motion.div>
 
