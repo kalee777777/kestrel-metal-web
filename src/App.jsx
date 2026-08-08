@@ -7,7 +7,8 @@ import ProjectsShowcase from './components/ProjectsShowcase';
 import Solutions from './components/Solutions';
 import Products from './components/Products';
 import Evidence from './components/Evidence';
-import Consumables from './components/Consumables';
+import CompanyOverview from './components/CompanyOverview';
+import VideoBanner from './components/VideoBanner';
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
       <Solutions />
       <Products />
       <Evidence />
-      <Consumables />
+      <CompanyOverview />
+      <VideoBanner />
     </Layout>
   );
 }
