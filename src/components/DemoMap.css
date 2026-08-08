@@ -205,7 +205,7 @@
 .action-btn {
   width: 100%;
   padding: 0.7rem 1rem;
-  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   color: var(--color-white);
   border: none;
   border-radius: 6px;

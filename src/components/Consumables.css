@@ -52,7 +52,7 @@
   font-weight: 700;
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   color: var(--color-white);
-  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   padding: clamp(0.75rem, 1.8vw, 0.9rem) clamp(1.5rem, 2.8vw, 2rem);
   border-radius: 4px;
   display: inline-flex;

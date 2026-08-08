@@ -76,7 +76,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-orange-primary), var(--color-orange-secondary));
+  background: linear-gradient(90deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--transition-medium);
@@ -87,7 +87,7 @@
 }
 
 .solution-card.featured {
-  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   color: var(--color-white);
   transform: scale(1.05);
   box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3);

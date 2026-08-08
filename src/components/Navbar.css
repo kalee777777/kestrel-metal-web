@@ -251,7 +251,7 @@
 
 /* CTA Button */
 .cta-button {
-  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   color: var(--color-white);
   padding: clamp(0.55rem, 1vw, 0.7rem) clamp(1rem, 2vw, 1.75rem);
   border-radius: 50px;
@@ -340,7 +340,7 @@
 .mobile-cta {
   margin-top: 1.5rem;
   text-align: center !important;
-  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   border-radius: 50px !important;
   padding: 0.85rem 1.5rem !important;
   border: none !important;
