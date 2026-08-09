@@ -251,7 +251,7 @@
 
 /* CTA Button */
 .cta-button {
-  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
+  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
   color: var(--color-white);
   padding: clamp(0.55rem, 1vw, 0.7rem) clamp(1rem, 2vw, 1.75rem);
   border-radius: 50px;
@@ -262,6 +262,9 @@
   border: none;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Mobile Menu */
@@ -340,7 +343,7 @@
 .mobile-cta {
   margin-top: 1.5rem;
   text-align: center !important;
-  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
+  background: linear-gradient(135deg, var(--color-orange-primary), var(--color-orange-secondary));
   border-radius: 50px !important;
   padding: 0.85rem 1.5rem !important;
   border: none !important;
@@ -360,11 +363,11 @@
   .nav-menu {
     gap: 1.25rem;
   }
-  
+
   .nav-link {
     font-size: 0.82rem;
   }
-  
+
   .mega-menu {
     width: 560px;
   }
@@ -377,7 +380,7 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
-  
+
   .navbar-container {
     background: transparent;
   }
