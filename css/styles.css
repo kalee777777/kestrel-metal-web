@@ -127,7 +127,7 @@ ul, ol {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background: var(--gradient-brand);
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   color: var(--color-white);
   padding: clamp(0.85rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
   border-radius: 4px;

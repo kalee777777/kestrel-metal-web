@@ -12,23 +12,469 @@
 
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
 
   <div id="navbar-placeholder"></div>
 
-  <!-- ========== Hero ========== -->
-  <header class="hero-placeholder">
-    <div class="container">
-      <h1>WELCOME TO KESTREL</h1>
-      <p>Professional Metal Products Manufacturer</p>
-      <a href="products.html" class="btn-primary">Explore Products</a>
-    </div>
-  </header>
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section id="home" class="hero">
+      <div class="hero-background">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-main">
+          <div class="hero-left">
+            <span class="hero-badge">METAL PRODUCTS MANUFACTURER</span>
+            <h1 class="hero-title">SECURITY FENCING<br><span class="highlight">&amp; PERIMETER SOLUTIONS</span></h1>
+            <p class="hero-subtitle">Complete range of fencing solutions including 3D panels, chain link,
+              airport fence, horse fence, farm fence and more for security, construction &amp; agriculture.</p>
+          </div>
+          <div class="hero-right">
+            <a href="products.html" class="btn-hero-primary">
+              EXPLORE PRODUCTS
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            <a href="contact.html" class="btn-hero-secondary">
+              GET A QUOTE
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-projects">
+          <span class="project-item">Security Fencing Solutions</span>
+          <span class="project-item">Chain Link &amp; Perimeter Systems</span>
+          <span class="project-item">Agricultural &amp; Farm Fencing</span>
+          <span class="project-item">Industrial Wire Mesh Products</span>
+          <span class="project-more">30+ Countries</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GLOBAL MAP ============ -->
+    <section id="global" class="global-map-section">
+      <div class="global-map-container">
+        <div class="global-map-header">
+          <div class="global-map-title">
+            <span class="section-tag">GLOBAL PRESENCE</span>
+            <h2>Worldwide Project Network</h2>
+            <p>From our headquarters in Anping, China, Kestrel Metal has successfully delivered fencing
+              and wire mesh projects across 30+ countries worldwide.</p>
+          </div>
+          <div class="global-map-stats">
+            <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Projects</span></div>
+            <div class="stat-item"><span class="stat-num">30+</span><span class="stat-label">Countries</span></div>
+            <div class="stat-item"><span class="stat-num">10+</span><span class="stat-label">Years</span></div>
+          </div>
+        </div>
+
+        <div class="global-map-content">
+          <div class="map-visualization">
+            <svg viewBox="0 0 900 460" class="world-map-svg" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="map-tooltip">
+              <div class="tooltip-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span></span>
+              </div>
+              <h3></h3>
+              <p class="type"></p>
+              <p class="desc"></p>
+              <div class="details">
+                <div class="row capacity"><span>Capacity</span><strong></strong></div>
+                <div class="row year"><span>Year</span><strong></strong></div>
+              </div>
+              <button class="action-btn">View Details
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="map-info-panel">
+            <div class="panel-header"><span class="panel-label">Currently Highlighting</span></div>
+            <div class="project-highlight">
+              <h3></h3>
+              <p class="project-location"></p>
+              <div class="project-meta">
+                <span class="meta-tag"></span>
+                <span class="meta-tag"></span>
+              </div>
+              <p class="project-desc"></p>
+            </div>
+            <div class="panel-legend">
+              <div class="legend-item"><span class="legend-dot hq"></span><span>Headquarters</span></div>
+              <div class="legend-item"><span class="legend-dot active"></span><span>Active Project</span></div>
+              <div class="legend-item"><span class="legend-dot"></span><span>Branch</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECT MANAGEMENT ============ -->
+    <section id="management" class="project-management">
+      <div class="pm-container">
+        <div class="pm-header" data-reveal>
+          <span class="pm-label">OUR PROCESS</span>
+          <h2 class="pm-title">Custom Manufacturing<br>Workflow</h2>
+        </div>
+
+        <div class="pm-showcase" data-reveal>
+          <div class="pm-background">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=wire%20mesh%20manufacturing%20factory%20production%20line%20automated%20welding%20galvanized%20steel%20industrial&image_size=landscape_16_9" alt="Manufacturing Process">
+            <div class="pm-overlay"></div>
+          </div>
+          <div class="pm-content">
+            <div class="pm-info" id="pm-info">
+              <div class="info-icon" id="pm-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </div>
+              <div class="info-text">
+                <h3 id="pm-title">Consultation</h3>
+                <p class="info-desc" id="pm-desc">Project discussion &amp; requirement analysis</p>
+                <ul class="info-details" id="pm-details">
+                  <li>Technical consultation</li>
+                  <li>Requirement analysis</li>
+                  <li>Product recommendation</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="pm-tabs">
+              <button class="tab active" data-target="consultation">Consultation</button>
+              <button class="tab" data-target="design">Design</button>
+              <button class="tab" data-target="production">Production</button>
+              <button class="tab" data-target="quality">QC Inspection</button>
+              <button class="tab" data-target="logistics">Logistics</button>
+              <button class="tab" data-target="support">Support</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS SHOWCASE ============ -->
+    <section id="projects" class="projects-showcase">
+      <div class="ps-container">
+        <div class="ps-header" data-reveal>
+          <div class="header-left">
+            <span class="ps-label">OUR PROJECTS</span>
+            <h2 class="ps-title">Featured Projects</h2>
+          </div>
+          <a href="#" class="read-more-link">View All
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="projects-grid">
+          <div class="project-card" data-reveal>
+            <div class="project-image">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=airport%20security%20fence%20perimeter%203d%20wire%20panel%20galvanized%20steel%20installation&image_size=landscape_16_9" alt="Airport Security Fencing">
+              <div class="image-overlay">
+                <div class="overlay-content">
+                  <h3>Airport Security Fencing</h3>
+                  <p>International Airport</p>
+                  <span class="capacity">High Security</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card" data-reveal>
+            <div class="project-image">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chain%20link%20fence%20industrial%20perimeter%20galvanized%20wire%20mesh%20factory%20boundary&image_size=landscape_16_9" alt="Industrial Chain Link Project">
+              <div class="image-overlay">
+                <div class="overlay-content">
+                  <h3>Industrial Chain Link Project</h3>
+                  <p>Manufacturing Facility</p>
+                  <span class="capacity">2,000m Length</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card" data-reveal>
+            <div class="project-image">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=farm%20fence%20agricultural%20wire%20mesh%20livestock%20enclosure%20rural%20countryside&image_size=landscape_16_9" alt="Agricultural Farm Fencing">
+              <div class="image-overlay">
+                <div class="overlay-content">
+                  <h3>Agricultural Farm Fencing</h3>
+                  <p>Livestock Farm</p>
+                  <span class="capacity">5,000m Coverage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ METAL PRODUCTS ============ -->
+    <section class="metal-products">
+      <div class="metal-products-container">
+        <div class="metal-products-left">
+          <div class="products-header" data-reveal>
+            <h2 class="products-title">Metal Products</h2>
+            <p class="products-subtitle">Premium fencing &amp; wire mesh solutions</p>
+          </div>
+
+          <div class="products-list">
+            <button class="product-item active"
+              data-number="01" data-symbol="3D" data-material="Galvanized Steel"
+              data-specs="Height: 1.73m - 2.4m"
+              data-image="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop"
+              data-name="3D Wire Panel"
+              data-features="Anti-Climb Design|Powder Coated|High Security|Easy Installation">
+              <span class="product-dot"></span><span class="product-name">3D Wire Panel</span>
+            </button>
+            <button class="product-item"
+              data-number="02" data-symbol="CL" data-material="Galvanized / PVC Coated"
+              data-specs="Mesh: 50mm x 50mm"
+              data-image="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop"
+              data-name="Chain Link"
+              data-features="Flexible Installation|Corrosion Resistant|Various Mesh Sizes|Cost Effective">
+              <span class="product-dot"></span><span class="product-name">Chain Link</span>
+            </button>
+            <button class="product-item"
+              data-number="03" data-symbol="WM" data-material="Low Carbon Steel"
+              data-specs="Wire: 3mm - 6mm"
+              data-image="https://images.unsplash.com/photo-1513828583688-c52646db42da?w=600&h=400&fit=crop"
+              data-name="Welded Mesh"
+              data-features="Rigid Structure|Precise Spacing|Strong Welding|Multiple Coatings">
+              <span class="product-dot"></span><span class="product-name">Welded Mesh</span>
+            </button>
+            <button class="product-item"
+              data-number="04" data-symbol="HF" data-material="Galvanized Steel"
+              data-specs="Height: 1.2m - 1.6m"
+              data-image="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop"
+              data-name="Horse Fence"
+              data-features="Animal Safe Design|Smooth Edges|Durable Coating|Easy Assembly">
+              <span class="product-dot"></span><span class="product-name">Horse Fence</span>
+            </button>
+            <button class="product-item"
+              data-number="05" data-symbol="FF" data-material="Hot-Dip Galvanized"
+              data-specs="Height: 0.9m - 1.8m"
+              data-image="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop"
+              data-name="Farm Fence"
+              data-features="Livestock Containment|Weather Resistant|Long Lifespan|Low Maintenance">
+              <span class="product-dot"></span><span class="product-name">Farm Fence</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="metal-products-right">
+          <div class="products-display">
+            <div class="info-card">
+              <div class="info-header">
+                <span class="product-number">01</span>
+                <div class="symbol-badge">3D</div>
+              </div>
+              <div class="info-content">
+                <h3 class="material-title">Galvanized Steel</h3>
+                <ul class="feature-list">
+                  <li>Anti-Climb Design</li>
+                  <li>Powder Coated</li>
+                  <li>High Security</li>
+                  <li>Easy Installation</li>
+                </ul>
+              </div>
+              <div class="info-footer">
+                <div class="price-display"><span class="price-value">Height: 1.73m - 2.4m</span></div>
+              </div>
+            </div>
+
+            <div class="image-card">
+              <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop" alt="3D Wire Panel">
+              <div class="image-overlay">
+                <span class="overlay-symbol">3D</span>
+                <span class="overlay-name">3D Wire Panel</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EVIDENCE ============ -->
+    <section id="about" class="evidence">
+      <div class="evidence-container">
+        <div class="evidence-header">
+          <div class="evidence-title-wrapper">
+            <h2 class="evidence-title">evidence</h2>
+            <p class="evidence-description">20 years of expertise, 60+ specialists, 40+ patents,
+              presence in 50+ countries, and 4 subsidiaries build trusted global delivery capability.</p>
+          </div>
+        </div>
+
+        <div class="evidence-cards-container">
+          <div class="evidence-card main" id="evidence-main">
+            <div class="card-inner">
+              <div class="card-number-row"><span class="card-number">01</span>
+                <span class="card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"></path></svg>
+                </span>
+              </div>
+              <div class="card-content">
+                <h3 class="card-heading">REAL INDUSTRIAL IMPACT MUST END IN COMPANY EVIDENCE</h3>
+                <p class="card-text">20 years, 60+ experts, 40+ patents, 50+ countries, 4 subsidiaries,
+                  plus talent resources and global project distribution, together establish confidence in international delivery.</p>
+              </div>
+              <div class="card-vertical-text">
+                <span>REAL</span><span>INDUSTRIAL</span><span>IMPACT</span>
+              </div>
+              <div class="card-hover-content">
+                <h3 class="card-heading">REAL INDUSTRIAL IMPACT MUST END IN COMPANY EVIDENCE</h3>
+                <p class="card-text">20 years, 60+ experts, 40+ patents, 50+ countries, 4 subsidiaries,
+                  plus talent resources and global project distribution, together establish confidence in international delivery.</p>
+              </div>
+              <div class="card-dot"></div>
+            </div>
+          </div>
+
+          <div class="evidence-card stat" data-reveal>
+            <div class="card-inner">
+              <div class="card-number-row"><span class="card-number">02</span>
+                <span class="card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </span>
+              </div>
+              <div class="card-vertical-text"><span>20</span><span>YEARS</span><span>EXCELLENCE</span></div>
+              <div class="card-hover-content">
+                <h3 class="card-heading">20 YEARS OF INDUSTRY EXCELLENCE AND TRUSTED DELIVERY</h3>
+                <p class="card-text">Two decades of dedicated service in the wire mesh and fencing industry,
+                  building deep expertise and long-term trust with clients across 30+ countries worldwide.</p>
+              </div>
+              <div class="card-dot"></div>
+            </div>
+          </div>
+
+          <div class="evidence-card stat" data-reveal>
+            <div class="card-inner">
+              <div class="card-number-row"><span class="card-number">03</span>
+                <span class="card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </span>
+              </div>
+              <div class="card-vertical-text"><span>60+</span><span>EXPERTS</span></div>
+              <div class="card-hover-content">
+                <h3 class="card-heading">60+ INDUSTRY EXPERTS DELIVERING ENGINEERING EXCELLENCE</h3>
+                <p class="card-text">A dedicated team of over 60 industry specialists including mechanical
+                  engineers, quality inspectors, certified welders, and project managers.</p>
+              </div>
+              <div class="card-dot"></div>
+            </div>
+          </div>
+
+          <div class="evidence-card stat" data-reveal>
+            <div class="card-inner">
+              <div class="card-number-row"><span class="card-number">04</span>
+                <span class="card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </span>
+              </div>
+              <div class="card-vertical-text"><span>40+</span><span>PATENTS</span></div>
+              <div class="card-hover-content">
+                <h3 class="card-heading">40+ TECHNICAL PATENTS INNOVATING MANUFACTURING PROCESSES</h3>
+                <p class="card-text">More than 40 technical patents covering innovative manufacturing processes,
+                  advanced product designs, and proprietary quality control methodologies.</p>
+              </div>
+              <div class="card-dot"></div>
+            </div>
+          </div>
+
+          <div class="evidence-card stat" data-reveal>
+            <div class="card-inner">
+              <div class="card-number-row"><span class="card-number">05</span>
+                <span class="card-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </span>
+              </div>
+              <div class="card-vertical-text"><span>50+</span><span>COUNTRIES</span><span>4</span><span>SUBSIDIARIES</span></div>
+              <div class="card-hover-content">
+                <h3 class="card-heading">GLOBAL PRESENCE 50+ COUNTRIES 4 OVERSEAS SUBSIDIARIES</h3>
+                <p class="card-text">Trusted global presence with sales in 50+ countries and 4 overseas subsidiaries
+                  strategically located to provide local support and faster delivery.</p>
+              </div>
+              <div class="card-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPANY OVERVIEW ============ -->
+    <section class="company-overview">
+      <div class="company-overview-container">
+        <div class="company-overview-header" data-reveal>
+          <h2 class="overview-title">Welcome to <span class="highlight">KESTREL</span></h2>
+          <p class="overview-subtitle">a premier leader at the forefront of metallurgical engineering
+            and technological innovation.</p>
+        </div>
+
+        <div class="overview-cards-grid">
+          <div class="overview-card featured" data-reveal>
+            <div class="card-number">01</div>
+            <h3 class="card-title">Who we are</h3>
+            <p class="card-description">Kestrel Metal is a premier manufacturer of wire mesh and fencing products
+              with 20 years of industry expertise, delivering quality solutions to clients in 50+ countries worldwide.</p>
+            <a href="#" class="card-link">Read more
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+
+          <div class="overview-card" data-reveal>
+            <div class="card-number">02</div>
+            <h3 class="card-title">Insight</h3>
+            <p class="card-description">At the forefront of metallurgical engineering and technological innovation,
+              we continuously advance manufacturing processes and product development to meet evolving market demands.</p>
+            <a href="#" class="card-link">Read more
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+
+          <div class="overview-card" data-reveal>
+            <div class="card-number">03</div>
+            <h3 class="card-title">ESG</h3>
+            <p class="card-description">We recognize that our operations have a profound impact on the environment,
+              society, and the economy. Our commitment to sustainable practices drives every decision we make.</p>
+            <a href="#" class="card-link">Read more
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIDEO BANNER ============ -->
+    <section class="video-banner">
+      <div class="video-banner-bg"></div>
+      <div class="video-banner-overlay"></div>
+      <div class="video-banner-content">
+        <div class="video-banner-text">
+          <h2 class="video-banner-title">Your professional solution provider</h2>
+          <p class="video-banner-subtitle">Partner with us and benefit from our unparalleled expertise<br>
+            and commitment to excellence</p>
+        </div>
+        <button class="video-play-btn">
+          <span class="play-icon-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+          </span>
+          <span class="play-text">Play the video</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
 
   <div id="footer-placeholder"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  <script src="js/home-data.js"></script>
   <script src="js/includes.js"></script>
+  <script src="js/home.js"></script>
 </body>
 </html>
