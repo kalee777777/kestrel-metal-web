@@ -1,155 +1,189 @@
 /* =============================================
    PRODUCTS PAGE STYLES
-   Theme: dark / orange brand (#FF6B00)
+   与首页 (home.css) 设计语言保持一致：
+   - 深色 Hero + 浅色交替内容区
+   - 使用全局 CSS 变量
+   - 容器宽度 1400px
+   - Bebas Neue 标题 + Source Sans Pro 正文
 ============================================= */
 
-/* ---------- Page Hero ---------- */
+/* ---------- Page Hero（深色，对齐 home .hero） ---------- */
 .products-hero {
   position: relative;
-  min-height: 460px;
+  min-height: 520px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   overflow: hidden;
-  padding: 120px 0 70px;
-  background: #0a0a0a;
+  padding: 120px 0 4rem;
+  background: var(--color-black);
 }
 
 .products-hero-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
+  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%20steel%20wire%20mesh%20fence%20panels%20stacked%20warehouse%20industrial%20orange%20tone%20dramatic%20lighting&image_size=landscape_16_9');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .products-hero-overlay {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.90) 100%),
-    radial-gradient(ellipse at 20% 40%, rgba(255,107,0,0.20) 0%, transparent 60%);
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.75) 0%,
+    rgba(10, 10, 10, 0.90) 100%
+  );
 }
 
 .products-hero-content {
   position: relative;
-  z-index: 1;
-  max-width: 1280px;
+  z-index: 2;
+  max-width: var(--container-max);
   width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--container-gap);
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #888;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.85rem;
   margin-bottom: 1.5rem;
   letter-spacing: 0.04em;
 }
 
 .breadcrumb a {
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
-  transition: color 0.3s ease;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color var(--transition-fast);
 }
 
 .breadcrumb a:hover {
-  color: #FF6B00;
+  color: var(--color-orange-primary);
 }
 
-.breadcrumb svg {
-  color: rgba(255,255,255,0.35);
+.breadcrumb-sep {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 400;
 }
 
 .breadcrumb .current {
-  color: #FF6B00;
+  color: var(--color-orange-primary);
+  font-weight: 600;
 }
 
 .products-hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 6vw, 5rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 400;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   line-height: 1.05;
-  color: #ffffff;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  color: var(--color-white);
+  margin-bottom: 1.75rem;
 }
 
 .products-hero-title .highlight {
-  color: #FF6B00;
+  color: var(--color-orange-primary);
 }
 
 .products-hero-description {
   max-width: 720px;
-  color: rgba(255,255,255,0.85);
-  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
   line-height: 1.75;
   font-weight: 300;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
-/* ---------- Page Sections ---------- */
+/* ---------- Breadcrumb Bar（hero 下方独立条） ---------- */
+.breadcrumb-bar {
+  background: var(--color-white);
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0.75rem 0;
+}
+
+.breadcrumb-bar-inner {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+}
+
+/* ---------- Page Sections（浅色交替，对齐 home 内容区） ---------- */
 .products-section {
-  padding: 5rem 0;
-  background: #0a0a0a;
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background: var(--color-white);
 }
 
 .products-section-alt {
-  background: #121212;
+  background: var(--color-gray-light);
 }
 
-.container {
-  max-width: 1280px;
+.products-section .container {
+  max-width: var(--container-max);
   width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--container-gap);
 }
 
-/* ---------- Category Header ---------- */
+/* ---------- Category Header（对齐 home .ps-header） ---------- */
 .category-header {
-  margin-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-bottom: clamp(2rem, 5vw, 3rem);
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.10);
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.products-section-alt .category-header {
+  border-bottom-color: #d9d9d9;
+}
+
+.category-header-left {
+  flex: 1;
 }
 
 .category-tag {
   display: inline-block;
-  font-size: 0.78rem;
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #FF6B00;
-  background: rgba(255,107,0,0.12);
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  margin-bottom: 0.9rem;
+  color: var(--color-gray);
+  margin-bottom: 1rem;
 }
 
 .category-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
-  letter-spacing: 0.04em;
-  color: #ffffff;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
+  letter-spacing: 0.02em;
+  color: var(--color-black);
+  line-height: 1.1;
 }
 
 .category-desc {
-  color: rgba(255,255,255,0.65);
-  font-size: 1rem;
+  color: var(--color-gray);
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
   line-height: 1.7;
-  max-width: 720px;
+  max-width: 420px;
   font-weight: 300;
+  text-align: right;
 }
 
-/* ---------- Products Grid ---------- */
+/* ---------- Products Grid（对齐 home .projects-grid） ---------- */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.75rem;
+  gap: 2rem;
 }
 
 .products-grid-2col {
@@ -157,188 +191,292 @@
   max-width: 860px;
 }
 
+/* ---------- Product Card（对齐 home .project-card / .overview-card） ---------- */
 .product-card {
   position: relative;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 16px;
+  background: var(--color-white);
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
-              box-shadow 0.4s ease,
-              background 0.4s ease;
+  transition: transform var(--transition-medium),
+              box-shadow var(--transition-medium),
+              border-color var(--transition-medium);
+}
+
+.products-section-alt .product-card {
+  background: var(--color-white);
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,107,0,0.4);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  border-color: var(--color-orange-primary);
 }
 
 .product-card.featured {
-  grid-column: span 2;
-  grid-row: span 2;
-  background: linear-gradient(160deg, rgba(255,107,0,0.09) 0%, rgba(255,255,255,0.04) 60%);
-  border-color: rgba(255,107,0,0.35);
+  border: none;
+  background: linear-gradient(160deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
 }
 
-.product-card.featured .product-card-visual {
-  min-height: 260px;
+.product-card.featured:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(255, 107, 0, 0.3);
 }
 
 /* ---------- Card Visual ---------- */
 .product-card-visual {
   position: relative;
-  min-height: 200px;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: rgba(255,255,255,0.04);
+  background: var(--color-gray-light);
 }
 
 .product-card-visual img {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
-}
-
-.product-card.featured .product-card-visual img {
-  height: 260px;
+  transition: transform var(--transition-slow);
 }
 
 .product-card:hover .product-card-visual img {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .product-badge {
   position: absolute;
-  top: 0.9rem;
-  left: 0.9rem;
+  top: 1rem;
+  left: 1rem;
   z-index: 2;
-  background: linear-gradient(135deg, #FF6B00 0%, #FF4500 50%, #E53935 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
+  color: var(--color-white);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
+  padding: 0.35rem 0.85rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
 }
 
 /* ---------- Card Content ---------- */
 .product-card-content {
-  padding: 1.4rem 1.4rem 1.6rem;
+  padding: 1.5rem 1.5rem 1.75rem;
   display: flex;
   flex-direction: column;
-  flex: 1;
 }
 
 .product-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
   font-weight: 400;
-  letter-spacing: 0.04em;
-  color: #ffffff;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-black);
   margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+
+.product-card.featured .product-name {
+  color: var(--color-white);
 }
 
 .product-desc {
-  color: rgba(255,255,255,0.70);
-  font-size: 0.92rem;
-  line-height: 1.6;
+  color: var(--color-gray);
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  line-height: 1.7;
   font-weight: 300;
-  margin-bottom: 1rem;
-  flex-grow: 1;
+  margin-bottom: 1.25rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card.featured .product-desc {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .product-specs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-bottom: 1.2rem;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  max-height: 80px;
+  overflow: hidden;
 }
 
 .spec-tag {
   font-size: 0.76rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.8);
-  background: rgba(255,107,0,0.14);
-  border: 1px solid rgba(255,107,0,0.25);
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
+  color: var(--color-gray-dark);
+  background: var(--color-gray-light);
+  border: 1px solid #e5e5e5;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
   letter-spacing: 0.02em;
+}
+
+.product-card.featured .spec-tag {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .product-card-link {
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  color: #FF6B00;
+  gap: 0.5rem;
+  color: var(--color-orange-primary);
   font-size: 0.88rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  text-decoration: none;
-  transition: color 0.3s ease, gap 0.3s ease;
+  transition: color var(--transition-fast), gap var(--transition-fast);
 }
 
 .product-card-link span {
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-fast);
 }
 
 .product-card-link:hover {
-  color: #FF8C42;
-  gap: 0.65rem;
+  color: var(--color-orange-dark);
+  gap: 0.75rem;
 }
 
 .product-card-link:hover span {
   transform: translateX(3px);
 }
 
-/* ---------- CTA ---------- */
-.products-cta {
-  padding: 5.5rem 2rem;
-  background:
-    radial-gradient(ellipse at 85% 10%, rgba(255,107,0,0.18) 0%, transparent 55%),
-    #0a0a0a;
-  border-top: 1px solid rgba(255,255,255,0.08);
+.product-card.featured .product-card-link {
+  color: var(--color-white);
 }
 
-.products-cta-inner {
-  max-width: 720px;
+.product-card.featured .product-card-link:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- CTA（与首页 VideoBanner 一致） ---------- */
+.products-cta {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 4rem 2rem;
+}
+
+.products-cta-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography%20close%20up&image_size=landscape_16_9');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.products-cta-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to right,
+    rgba(10, 10, 10, 0.85) 0%,
+    rgba(10, 10, 10, 0.6) 50%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
+}
+
+.products-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  gap: 2rem;
 }
 
 .products-cta-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--color-white);
   font-weight: 400;
-  letter-spacing: 0.04em;
-  color: #ffffff;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
 }
 
 .products-cta-desc {
-  color: rgba(255,255,255,0.7);
-  font-size: 1.02rem;
-  line-height: 1.7;
-  margin-bottom: 2rem;
+  max-width: 700px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  line-height: 1.6;
   font-weight: 300;
 }
 
 .products-cta-buttons {
   display: flex;
-  gap: 1rem;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.products-cta .btn-hero-primary,
+.products-cta .btn-hero-secondary {
+  padding: clamp(0.75rem, 1.8vw, 0.9rem) clamp(2rem, 3.5vw, 2.75rem);
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: clamp(0.85rem, 1.3vw, 0.95rem);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  white-space: nowrap;
+  min-width: 160px;
+}
+
+.products-cta .btn-hero-primary {
+  background: transparent;
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+}
+
+.products-cta .btn-hero-primary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-white);
+  box-shadow: none;
+}
+
+.products-cta .btn-hero-secondary {
+  background: transparent;
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.products-cta .btn-hero-secondary:hover {
+  border-color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ---------- Scroll Progress ---------- */
@@ -356,7 +494,7 @@
   display: block;
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, #FF6B00 0%, #FF4500 50%, #E53935 100%);
+  background: linear-gradient(90deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
   transition: width 0.1s linear;
 }
 
@@ -369,8 +507,8 @@
   height: 46px;
   border: none;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF6B00 0%, #FF4500 50%, #E53935 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -378,8 +516,8 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-  box-shadow: 0 8px 24px rgba(255,107,0,0.4);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  box-shadow: 0 8px 24px rgba(255, 107, 0, 0.4);
   z-index: 90;
 }
 
@@ -389,10 +527,15 @@
   transform: translateY(0);
 }
 
-/* ---------- Fade-in Animation ---------- */
+.back-to-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(255, 107, 0, 0.5);
+}
+
+/* ---------- Fade-in / Reveal Animation（对齐 home） ---------- */
 .fade-in {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(30px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
@@ -401,49 +544,71 @@
   transform: translateY(0);
 }
 
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* =============================================
    RESPONSIVE
 ============================================= */
 
-/* ---------- Tablet (<= 1024px): 2 columns ---------- */
+/* ---------- Tablet (<= 1024px) ---------- */
 @media (max-width: 1024px) {
   .products-hero {
-    min-height: 420px;
-    padding: 110px 0 60px;
+    min-height: 460px;
+    padding: 110px 0 3.5rem;
   }
 
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
-  .product-card.featured {
-    grid-column: span 2;
-    grid-row: auto;
+  .category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
   }
 
-  .product-card.featured .product-card-visual img {
-    height: 260px;
-  }
-
-  .products-section {
-    padding: 4rem 0;
+  .category-desc {
+    text-align: left;
+    max-width: 100%;
   }
 }
 
-/* ---------- Mobile (<= 768px): 2 columns small ---------- */
+/* ---------- Mobile (<= 768px) ---------- */
 @media (max-width: 768px) {
   .products-hero {
-    min-height: 380px;
-    padding: 100px 0 50px;
+    min-height: 400px;
+    padding: 100px 0 3rem;
   }
 
   .products-hero-content,
-  .container {
+  .products-section .container {
     padding: 0 1.25rem;
   }
 
   .products-hero-description {
     font-size: 0.98rem;
+  }
+
+  .products-section {
+    padding: 4rem 0;
   }
 
   .category-header {
@@ -460,20 +625,12 @@
     max-width: 100%;
   }
 
-  .product-card.featured {
-    grid-column: 1 / -1;
-  }
-
-  .product-card.featured .product-card-visual img {
-    height: 220px;
-  }
-
-  .product-card-visual img {
-    height: 160px;
-  }
-
   .product-card-content {
-    padding: 1.1rem 1rem 1.3rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .product-card.featured .product-card-content {
+    padding: 1.5rem 1.5rem 1.75rem;
   }
 
   .product-name {
@@ -489,19 +646,39 @@
   }
 
   .products-cta {
-    padding: 4rem 1.25rem;
+    padding: 3rem 1.5rem;
+    min-height: 280px;
+  }
+
+  .products-cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .products-cta-buttons .btn-hero-primary,
+  .products-cta-buttons .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .back-to-top {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 42px;
+    height: 42px;
   }
 }
 
-/* ---------- Small Mobile (<= 480px): 1 column ---------- */
+/* ---------- Small Mobile (<= 480px) ---------- */
 @media (max-width: 480px) {
   .products-hero {
-    min-height: 340px;
-    padding: 90px 0 40px;
+    min-height: 360px;
+    padding: 90px 0 2.5rem;
   }
 
   .products-hero-title {
-    font-size: clamp(2.6rem, 12vw, 3.2rem);
+    font-size: clamp(2.2rem, 10vw, 3rem);
   }
 
   .products-hero-description {
@@ -513,7 +690,7 @@
   }
 
   .category-title {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
   }
 
   .category-desc {
@@ -527,25 +704,12 @@
     max-width: 100%;
   }
 
-  .product-card.featured {
-    grid-column: 1 / -1 !important;
-    grid-row: auto;
-  }
-
-  .product-card.featured .product-card-visual img {
-    height: 200px;
-  }
-
-  .product-card-visual img {
-    height: 180px;
-  }
-
   .product-card-content {
-    padding: 1.1rem 1rem 1.2rem;
+    padding: 1.1rem 1.1rem 1.35rem;
   }
 
   .product-name {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
@@ -555,19 +719,12 @@
   }
 
   .spec-tag {
-    font-size: 0.68rem;
-    padding: 0.25rem 0.55rem;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
   }
 
-  .products-cta-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .products-cta-buttons .btn-hero-primary,
-  .products-cta-buttons .btn-hero-secondary {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
+  .products-cta {
+    padding: 2.5rem 1rem;
+    min-height: 240px;
   }
 }

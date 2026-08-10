@@ -4,8 +4,30 @@
   document.addEventListener('DOMContentLoaded', function () {
     initScrollProgress();
     initFadeInAnimation();
+    initScrollReveal();
     initBackToTop();
   });
+
+  function initScrollReveal() {
+    var revealEls = document.querySelectorAll('[data-reveal]');
+    if (!revealEls.length) return;
+    if (!('IntersectionObserver' in window)) {
+      revealEls.forEach(function (el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealEls.forEach(function (el) { observer.observe(el); });
+  }
 
   function initScrollProgress() {
     var hero = document.querySelector('.products-hero');
