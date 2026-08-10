@@ -1,10 +1,10 @@
 /* =============================================
-   RESOURCES PAGE STYLES
-   与首页 (home.css) / products 页设计语言一致
+   INDUSTRIES PAGE STYLES
+   与首页/Products/Resources/Services 设计语言一致
 ============================================= */
 
 /* ---------- Hero ---------- */
-.resources-hero {
+.industries-hero {
   position: relative;
   min-height: 520px;
   display: flex;
@@ -14,23 +14,23 @@
   background: var(--color-black);
 }
 
-.resources-hero-bg {
+.industries-hero-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=wire%20mesh%20sample%20coils%20catalog%20documents%20engineer%20desk%20blueprint%20technical%20drawings%20steel%20grid%20close%20up%20industrial%20library%20dark%20ambiance%20warm%20desk%20lamp%20light%20orange%20accent&image_size=landscape_16_9');
+  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=industrial%20metal%20fencing%20wire%20mesh%20panels%20construction%20site%20agriculture%20farm%20energy%20infrastructure%20wide%20panorama%20blue%20hour%20dawn%20warm%20orange%20accent%20lights%20dramatic%20sky&image_size=landscape_16_9');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.resources-hero-overlay {
+.industries-hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom, rgba(10, 10, 10, 0.75), rgba(10, 10, 10, 0.90));
 }
 
-.resources-hero-content {
+.industries-hero-content {
   position: relative;
   z-index: 2;
   max-width: var(--container-max);
@@ -39,7 +39,7 @@
   padding: 0 var(--container-gap);
 }
 
-.resources-hero-title {
+.industries-hero-title {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 400;
@@ -49,11 +49,11 @@
   margin-bottom: 1.75rem;
 }
 
-.resources-hero-title .highlight {
+.industries-hero-title .highlight {
   color: var(--color-orange-primary);
 }
 
-.resources-hero-description {
+.industries-hero-description {
   max-width: 720px;
   color: rgba(255, 255, 255, 0.8);
   font-size: clamp(0.95rem, 1.6vw, 1.15rem);
@@ -61,7 +61,7 @@
   font-weight: 300;
 }
 
-/* ---------- Breadcrumb（复用 products） ---------- */
+/* ---------- Breadcrumb（复用 products/resources/services） ---------- */
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -91,17 +91,13 @@
   font-weight: 600;
 }
 
-/* ---------- Sections ---------- */
-.resources-section {
+/* ---------- Section ---------- */
+.industries-section {
   padding: clamp(4rem, 8vw, 6rem) 0;
   background: var(--color-white);
 }
 
-.resources-section-alt {
-  background: var(--color-gray-light);
-}
-
-.resources-section .container {
+.industries-section .container {
   max-width: var(--container-max);
   width: 100%;
   margin: 0 auto;
@@ -116,10 +112,6 @@
   margin-bottom: clamp(2rem, 5vw, 3rem);
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #e5e5e5;
-}
-
-.resources-section-alt .category-header {
-  border-bottom-color: #d9d9d9;
 }
 
 .category-header-left {
@@ -146,6 +138,10 @@
   line-height: 1.1;
 }
 
+.category-title .accent {
+  color: var(--color-orange-primary);
+}
+
 .category-desc {
   color: var(--color-gray);
   font-size: clamp(0.9rem, 1.3vw, 1rem);
@@ -155,181 +151,113 @@
   text-align: right;
 }
 
-/* ---------- Category Grid（7列 → 响应式） ---------- */
-.category-grid {
+/* ---------- Industries Grid（背景图卡片，2列） ---------- */
+.industries-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1.2rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
 }
 
-.category-card {
-  text-align: center;
-  padding: 1rem 0.75rem;
-  background: var(--color-white);
-  text-decoration: none;
-  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
-  border-radius: 12px;
-  display: block;
-  border: 1px solid transparent;
-}
-
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  border-color: var(--color-orange-primary);
-}
-
-.category-card-img {
-  width: 100%;
-  aspect-ratio: 1;
-  background: var(--color-gray-light);
-  border-radius: 12px;
-  margin-bottom: 0.75rem;
-  overflow: hidden;
-}
-
-.category-card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-slow);
-}
-
-.category-card:hover .category-card-img img {
-  transform: scale(1.08);
-}
-
-.category-card-title {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--color-black);
-  margin-bottom: 0.15rem;
-  letter-spacing: 0.02em;
-}
-
-.category-card-desc {
-  font-size: 0.75rem;
-  color: var(--color-gray);
-}
-
-/* ---------- Resources Grid（3列） ---------- */
-.resources-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-.resource-card {
-  background: var(--color-white);
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 2rem;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
+.industry-card {
   position: relative;
+  display: block;
+  height: 300px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: transform var(--transition-medium),
-              box-shadow var(--transition-medium),
-              border-color var(--transition-medium);
+  text-decoration: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s ease;
 }
 
-.resource-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-  border-color: var(--color-orange-primary);
+.industry-card:hover {
+  background-size: 110%;
 }
 
-.resource-card::after {
+.industry-card::before {
   content: '';
   position: absolute;
-  bottom: 0;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.05) 100%);
+  transition: background 0.3s ease;
+  z-index: 1;
+}
+
+.industry-card:hover::before {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+.industry-card-content {
+  position: absolute;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--color-orange-primary);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s ease;
+  bottom: 0;
+  padding: 1.5rem;
+  z-index: 2;
 }
 
-.resource-card:hover::after {
-  transform: scaleX(1);
-}
-
-.resource-card-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  background: var(--color-orange-bg-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.25rem;
-  transition: background var(--transition-fast);
-}
-
-.resource-card-icon svg {
-  width: 26px;
-  height: 26px;
-  color: var(--color-orange-primary);
+.industry-card-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--color-white);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
   transition: color var(--transition-fast);
 }
 
-.resource-card:hover .resource-card-icon {
-  background: var(--color-orange-primary);
+.industry-card:hover .industry-card-content h3 {
+  color: var(--color-orange-primary);
 }
 
-.resource-card:hover .resource-card-icon svg {
-  color: var(--color-white);
+.industry-card-desc {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin-bottom 0.4s ease;
 }
 
-.resource-card-body {
-  flex: 1;
+.industry-card:hover .industry-card-desc {
+  max-height: 120px;
+  opacity: 1;
+  margin-bottom: 1rem;
 }
 
-.resource-card-body h3 {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: var(--color-black);
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-}
-
-.resource-card-body p {
-  font-size: 0.88rem;
-  color: var(--color-gray);
-  line-height: 1.65;
-}
-
-.resource-card-arrow {
-  position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--color-orange-primary);
-  color: var(--color-white);
+.industry-card-learn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
+  color: var(--color-orange-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   opacity: 0;
-  transform: translateX(-8px);
+  transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.resource-card:hover .resource-card-arrow {
-  opacity: 1;
-  transform: translateX(0);
+.industry-card-learn svg {
+  transition: transform var(--transition-fast);
 }
 
-/* ---------- CTA（与首页 VideoBanner / products CTA 一致） ---------- */
-.resources-cta {
+.industry-card:hover .industry-card-learn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.industry-card:hover .industry-card-learn svg {
+  transform: translateX(4px);
+}
+
+/* ---------- CTA ---------- */
+.industries-cta {
   position: relative;
   width: 100%;
   min-height: 340px;
@@ -340,7 +268,7 @@
   padding: 4rem 2rem;
 }
 
-.resources-cta-bg {
+.industries-cta-bg {
   position: absolute;
   inset: 0;
   background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography%20close%20up&image_size=landscape_16_9');
@@ -349,13 +277,13 @@
   background-repeat: no-repeat;
 }
 
-.resources-cta-overlay {
+.industries-cta-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to right, rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.85));
 }
 
-.resources-cta-content {
+.industries-cta-content {
   position: relative;
   z-index: 2;
   max-width: 1400px;
@@ -369,7 +297,7 @@
   gap: 1.5rem;
 }
 
-.resources-cta-title {
+.industries-cta-title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 3.5rem);
   color: var(--color-white);
@@ -378,7 +306,7 @@
   line-height: 1.1;
 }
 
-.resources-cta-desc {
+.industries-cta-desc {
   max-width: 700px;
   color: rgba(255, 255, 255, 0.85);
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
@@ -386,7 +314,7 @@
   font-weight: 300;
 }
 
-.resources-cta-buttons {
+.industries-cta-buttons {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -394,8 +322,7 @@
   gap: 1.25rem;
 }
 
-.resources-cta .btn-hero-primary,
-.resources-cta .btn-hero-secondary {
+.industries-cta .btn-hero-primary {
   padding: clamp(0.75rem, 1.8vw, 0.9rem) clamp(2rem, 3.5vw, 2.75rem);
   border-radius: 4px;
   font-weight: 700;
@@ -409,30 +336,16 @@
   cursor: pointer;
   white-space: nowrap;
   min-width: 160px;
-}
-
-.resources-cta .btn-hero-primary {
   background: transparent;
   color: var(--color-white);
   border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: none;
 }
 
-.resources-cta .btn-hero-primary:hover {
+.industries-cta .btn-hero-primary:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: var(--color-white);
   box-shadow: none;
-}
-
-.resources-cta .btn-hero-secondary {
-  background: transparent;
-  color: var(--color-white);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-}
-
-.resources-cta .btn-hero-secondary:hover {
-  border-color: var(--color-white);
-  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ---------- Scroll / Reveal ---------- */
@@ -487,17 +400,6 @@
   box-shadow: 0 12px 30px rgba(255, 107, 0, 0.5);
 }
 
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 [data-reveal] {
   opacity: 0;
   transform: translateY(30px);
@@ -510,7 +412,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fade-in,
   [data-reveal] {
     opacity: 1;
     transform: none;
@@ -522,32 +423,28 @@
 ============================================= */
 
 @media (max-width: 1024px) {
-  .resources-hero {
+  .industries-hero {
     min-height: 460px;
     padding: 110px 0 3.5rem;
   }
 
-  .category-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  .resources-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .industry-card {
+    height: 280px;
   }
 }
 
 @media (max-width: 768px) {
-  .resources-hero {
+  .industries-hero {
     min-height: 400px;
     padding: 100px 0 3rem;
   }
 
-  .resources-hero-content,
-  .resources-section .container {
+  .industries-hero-content,
+  .industries-section .container {
     padding: 0 1.25rem;
   }
 
-  .resources-section {
+  .industries-section {
     padding: 4rem 0;
   }
 
@@ -562,42 +459,18 @@
     max-width: 100%;
   }
 
-  .category-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-  }
-
-  .category-card-title {
-    font-size: 0.82rem;
-  }
-
-  .category-card-desc {
-    font-size: 0.7rem;
-  }
-
-  .resources-grid {
+  .industries-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
 
-  .resource-card {
-    padding: 1.5rem;
+  .industry-card {
+    height: 260px;
   }
 
-  .resources-cta {
+  .industries-cta {
     padding: 3rem 1.5rem;
     min-height: 280px;
-  }
-
-  .resources-cta-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .resources-cta .btn-hero-primary,
-  .resources-cta .btn-hero-secondary {
-    width: 100%;
-    justify-content: center;
   }
 
   .back-to-top {
@@ -609,24 +482,20 @@
 }
 
 @media (max-width: 480px) {
-  .resources-hero {
+  .industries-hero {
     min-height: 360px;
     padding: 90px 0 2.5rem;
   }
 
-  .resources-hero-title {
+  .industries-hero-title {
     font-size: clamp(2.2rem, 10vw, 3rem);
   }
 
-  .resources-section {
+  .industries-section {
     padding: 3rem 0;
   }
 
-  .category-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .resources-cta {
+  .industries-cta {
     padding: 2.5rem 1rem;
     min-height: 240px;
   }

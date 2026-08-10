@@ -1,7 +1,7 @@
 # KESTREL METAL 官网开发进度
 
 > **最后更新**: 2026-08-10
-> **项目状态**: 🔄 阶段二进行中（Products ✅ / Resources ✅）
+> **项目状态**: 🔄 阶段二进行中（Products ✅ / Resources ✅ / Services ✅ / Industries ✅）
 > **静态站路径**: `Desktop/kestrel metal web 1/kestrel-site/`
 
 ---
@@ -13,7 +13,8 @@
 | 1 | 基础框架 + 首页 | ✅ 已完成 | 100% |
 | 2 | Products 产品总览页 | ✅ 已完成 | 100% |
 | 2 | Resources 资源中心页 | ✅ 已完成 | 100% |
-| 2 | 其他子页面（Industries/Services 等） | ⏳ 待开始 | 0% |
+| 2 | Services 服务中心页 | ✅ 已完成 | 100% |
+| 2 | Industries 行业应用页 | ✅ 已完成 | 100% |
 | 3 | 产品详情页 | ⏳ 待开始 | 0% |
 | 4 | SEO 优化 + 部署 | ⏳ 待开始 | 0% |
 
@@ -31,6 +32,8 @@ kestrel-site/
 ├── index.html                    # 首页（完整）
 ├── products.html                 # 产品总览页（已完成）
 ├── resources.html                # 资源中心页（已完成）
+├── services.html                 # 服务中心页（已完成）
+├── industries.html               # 行业应用页（已完成）
 ├── components/
 │   ├── navbar.html               # 导航栏组件（fetch 注入）
 │   └── footer.html               # 页脚组件（fetch 注入）
@@ -40,7 +43,9 @@ kestrel-site/
 │   ├── footer.css                # 页脚样式
 │   ├── home.css                  # 首页所有区块样式 + 响应式
 │   ├── products.css              # 产品总览页样式
-│   └── resources.css             # 资源中心页样式
+│   ├── resources.css             # 资源中心页样式
+│   ├── services.css              # 服务中心页样式
+│   └── industries.css            # 行业应用页样式
 ├── js/
 │   ├── includes.js               # 组件加载器（fetch navbar/footer）
 │   ├── navbar.js                 # 导航栏交互（滚动、移动端菜单、Products 手风琴）
@@ -48,14 +53,17 @@ kestrel-site/
 │   ├── home-data.js              # 首页数据（项目列表、地图坐标）
 │   ├── products.js               # 产品页交互（滚动动画/回到顶部）
 │   ├── products-data.js          # 产品数据（14 款产品）
-│   └── resources.js              # 资源页交互（滚动动画/回到顶部）
+│   ├── resources.js              # 资源页交互（滚动动画/回到顶部）
+│   ├── services.js               # 服务页交互（滚动动画/回到顶部）
+│   └── industries.js             # 行业页交互（滚动动画/回到顶部）
 ├── products/                     # 产品图片资源
 │   ├── fence/                    # 围栏类（产品图 + category 缩略图）
 │   └── wire/                     # 线材类（产品图 + category 缩略图）
 ├── images/
 │   ├── kestrelmetal.png          # Logo（Navbar + Footer 共用）
-│   └── logo.svg                  # SVG Logo
-└── （其他子页面待创建）
+│   ├── logo.svg                  # SVG Logo
+│   └── industry/                 # 行业卡片背景图（8 张旧项目迁移）
+└── PROJECT_PROGRESS.md            # 开发进度文档
 ```
 
 ### 1.2 已完成的首页区块
@@ -206,24 +214,92 @@ Resources 页面
 - [ ] Resources Cards 的 `href` 链接待替换为真实页面地址
 - [ ] 各子页面（Catalogs/Downloads/Blog/Case Studies/FAQ/Glossary）待开发
 
-### 2.3 其他子页面（按优先级排序）
+### 2.3 Services 服务中心页（已完成）
+
+> **完成日期**: 2026-08-10
+> **设计参考**: 旧项目 `lenke-metal-web/services.html`
+
+**页面结构**:
+```
+Services 页面
+├── Hero Banner（深色背景图 + breadcrumb + "OUR SERVICES"）
+├── Services Grid（3×2 网格 6 张服务卡片，浅灰底）
+│   ├── Fabrication Services（精密制造，30+年经验）
+│   ├── Metal Finishing（热镀锌、PVC、粉末喷涂）
+│   ├── Custom Solutions（定制围栏系统）
+│   ├── Designer Services（CAD/BIM 模型库）
+│   ├── Takeoffs & Drawings（材料算量、车间图，98%准确率）
+│   └── Packaging & Logistics（保护包装、全球运输，99.5%无损坏）
+└── CTA（深色图片背景 + 两个白色边框按钮）
+```
+
+**新增文件**:
+- `services.html` — 页面结构（复用 navbar/footer 组件）
+- `css/services.css` — 页面样式（对齐 products/resources 设计语言）
+- `js/services.js` — 交互逻辑（data-reveal 动画/回到顶部/滚动进度条）
+
+**设计特点**:
+- Hero + breadcrumb + category-header 标题格式对齐其他页面
+- 服务卡片：白底 + 边框 + hover 上浮 + 底部橙色条动画（与 Resources 卡片一致）
+- 卡片图标：橙色 SVG，hover 时图标背景变橙、图标变白
+- CTA 区：与 Products/Resources 完全一致
+
+**待完善**:
+- [ ] 6 张服务卡片的 `href="#"` 待替换为真实子页面地址
+- [ ] 6 个服务子页面（service-*.html）待开发
+
+### 2.4 Industries 行业应用页（已完成）
+
+> **完成日期**: 2026-08-10
+> **设计参考**: 旧项目 `lenke-metal-web/industries.html`
+
+**页面结构**:
+```
+Industries 页面
+├── Hero Banner（深色背景图 + breadcrumb + "INDUSTRIES WE SERVE"）
+├── Industries Grid（2 列网格 8 张背景图行业卡片，白底）
+│   ├── Construction → images/industry/industry-construction.jpg
+│   ├── Agriculture → images/industry/industry-agriculture.jpg
+│   ├── Mining & Quarry → images/industry/industry-mining.jpg
+│   ├── Oil & Gas → images/industry/industry-oilgas.jpg
+│   ├── Infrastructure → images/industry/industry-infrastructure.jpg
+│   ├── Energy & Power → images/industry/industry-energy.jpg
+│   ├── Residential → images/industry/industry-residential.jpg
+│   └── Aquaculture → images/industry/industry-aquaculture.jpg
+└── CTA（深色图片背景 + GET A QUOTE 按钮）
+```
+
+**新增文件**:
+- `industries.html` — 页面结构（复用 navbar/footer 组件）
+- `css/industries.css` — 页面样式（背景图卡片 hover 动画）
+- `js/industries.js` — 交互逻辑（data-reveal 动画/回到顶部/滚动进度条）
+- `images/industry/*.jpg` — 8 张行业背景图（旧项目迁移）
+
+**设计特点**:
+- 行业卡片为背景图卡片，复刻旧项目 hover 交互：
+  - 默认：底部标题 + 渐变遮罩压暗
+  - Hover：背景图放大、遮罩加深、标题变橙色、描述展开、Learn More 浮现
+- 桌面 2 列网格，移动端 1 列
+- Hero/CTA 背景图重新生成（金属围栏丝网主题 + 熔岩金属主题）
+
+**待完善**:
+- [ ] 8 张卡片的 `href="#"` 待替换为真实子页面地址
+- [ ] 8 个行业子页面（industry-*.html）待开发
+
+### 2.5 其他子页面（按优先级排序）
 
 | 优先级 | 页面 | 内容来源 | 说明 |
 |--------|------|----------|------|
-| P0 | Products 产品总览 | 旧项目 products.html | 14 款产品，4 大分类 |
 | P1 | About Us 关于我们 | 旧项目 about.html | 公司简介 + 发展历程 |
 | P1 | Contact 联系我们 | 旧项目 contact.html | 联系方式 + 表单 |
 | P1 | Request Quote 报价 | 旧项目 request-quote.html | 报价表单 |
-| P2 | Industries 行业应用 | 旧项目 industries.html | 8 个行业分类 |
-| P2 | Services 服务 | 旧项目 services.html | 6 个服务分类 |
-| P2 | Resources 资源中心 | 旧项目 resources.html | 博客/案例/下载 |
 | P3 | FAQ 常见问题 | 旧项目 faq.html | 可折叠问答 |
 | P3 | Glossary 术语表 | 旧项目 glossary.html | 产品术语 |
 | P3 | Privacy Policy | 旧项目 privacy-policy.html | 法律条款 |
 | P3 | Terms & Conditions | 旧项目 terms-conditions.html | 服务条款 |
 | P3 | 404 页面 | — | 自定义错误页 |
 
-### 2.3 每个子页面的通用模板
+### 2.6 每个子页面的通用模板
 
 ```html
 <!DOCTYPE html>
