@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KESTREL METAL Glossary - Comprehensive terminology for wire mesh, fencing, and filtration industry products and specifications.">
+  <title>KESTREL METAL - Glossary</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/glossary.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="glossary-hero">
+      <div class="glossary-hero-bg">
+        <div class="glossary-hero-overlay"></div>
+      </div>
+      <div class="glossary-hero-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="resources.html">Resources</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Glossary</span>
+        </nav>
+        <h1 class="glossary-hero-title">KESTREL METAL <span class="highlight">GLOSSARY</span></h1>
+        <p class="glossary-hero-description">
+          Navigate product details and technical terms with our comprehensive glossary of wire mesh, fencing, and filtration industry terminology.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ GLOSSARY CONTENT ============ -->
+    <section class="glossary-section">
+      <div class="container">
+
+        <div class="glossary-intro" data-reveal>
+          <h2>KESTREL METAL <span class="accent">Glossary</span></h2>
+          <p>The KESTREL METAL Glossary will help you navigate product and industry-specific terms on our website. Product attributes and the qualities associated with them are further defined. The Glossary also includes details related to relevant classifications, standards, methods of measurement, and more. While we believe you will find our Glossary helpful, we are also ready to assist should you have any questions. Our <a href="contact.html" class="glossary-link">Customer Support</a> page highlights various ways we are available to serve you!</p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="glossary-filter" data-reveal>
+          <div class="glossary-search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="glossarySearch" placeholder="Search glossary terms..." autocomplete="off">
+          </div>
+
+          <div class="glossary-filter-label">Filter by Alphabet</div>
+          <div class="glossary-alphabet" id="glossaryAlphabet">
+            <button class="glossary-alpha-btn active" type="button" data-letter="ALL">ALL</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="A">A</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="B">B</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="C">C</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="D">D</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="E">E</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="F">F</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="G">G</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="H">H</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="I">I</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="K">K</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="L">L</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="M">M</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="N">N</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="O">O</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="P">P</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="R">R</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="S">S</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="T">T</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="U">U</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="V">V</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="W">W</button>
+            <button class="glossary-alpha-btn" type="button" data-letter="Z">Z</button>
+          </div>
+
+          <div class="glossary-filter-label">Filter by Category</div>
+          <div class="glossary-category-filter" id="glossaryCatFilter">
+            <button class="glossary-cat-btn active" type="button" data-cat="all">Show All</button>
+            <button class="glossary-cat-btn" type="button" data-cat="fence">Fence Products</button>
+            <button class="glossary-cat-btn" type="button" data-cat="mesh">Wire Mesh Products</button>
+            <button class="glossary-cat-btn" type="button" data-cat="wire">Wire Products</button>
+            <button class="glossary-cat-btn" type="button" data-cat="material">Materials &amp; Coatings</button>
+            <button class="glossary-cat-btn" type="button" data-cat="spec">Technical Specifications</button>
+            <button class="glossary-cat-btn" type="button" data-cat="fitting">Fencing Components</button>
+            <button class="glossary-cat-btn" type="button" data-cat="process">Manufacturing Processes</button>
+            <button class="glossary-cat-btn" type="button" data-cat="standard">Standards &amp; Certifications</button>
+          </div>
+        </div>
+
+        <!-- No Result -->
+        <div id="glossaryNoResult" class="glossary-no-result" style="display:none;">
+          <p>No terms found matching your search.</p>
+        </div>
+
+        <!-- Content -->
+        <div id="glossaryContainer" class="glossary-list-wrap">
+
+          <!-- Fence -->
+          <div class="glossary-category open" data-category="fence" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 01</span>
+                <h2 class="glossary-category-title">Fence Products</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">3D Wire Panel Fence</span><span class="glossary-def">A security fencing system using V-profile cold-formed welded mesh panels with horizontal ribs for enhanced rigidity. Commonly used for industrial, military, and infrastructure perimeter protection.</span></li>
+                <li><span class="glossary-term">Chain Link Fence</span><span class="glossary-def">Also known as diamond mesh fence or cyclone fence. A woven wire fence made from galvanized or PVC-coated steel wire in a diamond pattern, offering versatility and cost-effectiveness for residential, commercial, and industrial applications.</span></li>
+                <li><span class="glossary-term">Airport Fence (Y-Post Security Fence)</span><span class="glossary-def">A high-security fencing system using Y-profile steel posts and welded mesh panels, designed specifically for airport perimeters and other high-security zones.</span></li>
+                <li><span class="glossary-term">Hinge Joint Fence (Field Fence)</span><span class="glossary-def">A traditional agricultural fence using a "live knot" (hinge joint) connection that provides excellent elasticity and impact resistance. Ideal for boundary fencing and livestock grazing enclosures per ASTM A116.</span></li>
+                <li><span class="glossary-term">S-Knot Fence</span><span class="glossary-def">A specialized fencing product featuring an S-shaped knot that provides smooth, safe surfaces for horse and livestock enclosures.</span></li>
+                <li><span class="glossary-term">Fixed Knot Fence</span><span class="glossary-def">A high-strength agricultural fence with fixed knots that lock horizontal and vertical wires securely, suitable for deer fencing and large animal containment.</span></li>
+                <li><span class="glossary-term">Temporary Fence / Crowd Control Barrier</span><span class="glossary-def">Interlocking steel panels with weighted bases for rapid deployment at construction sites, events, and public gatherings.</span></li>
+                <li><span class="glossary-term">Palisade Fencing</span><span class="glossary-def">A high-security fencing system with vertical steel pales and pointed tops, commonly used for industrial facilities and government installations.</span></li>
+                <li><span class="glossary-term">Welded Mesh Fence</span><span class="glossary-def">A fencing system using pre-fabricated welded wire mesh panels mounted on steel posts, offering quick installation and reliable perimeter security.</span></li>
+                <li><span class="glossary-term">Crimps</span><span class="glossary-def">Special wire deformations that allow the fence to expand and contract due to changing weather conditions. When installing Field Fence, pull the wire so that about half of the curve is pulled out of the wire.</span></li>
+                <li><span class="glossary-term">Graduated Spacing</span><span class="glossary-def">A fence design where vertical wires are spaced closer together at the bottom and gradually increase in spacing toward the top, keeping small animals out without wasting material.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Wire Mesh -->
+          <div class="glossary-category" data-category="mesh" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 02</span>
+                <h2 class="glossary-category-title">Wire Mesh Products</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">Welded Wire Mesh</span><span class="glossary-def">A metal grid made by spot-welding intersecting steel wires at right angles. Available in galvanized, PVC-coated, and stainless steel variants for fencing, construction, and industrial screening applications.</span></li>
+                <li><span class="glossary-term">Hexagonal Wire Netting (Chicken Wire)</span><span class="glossary-def">A lightweight, hexagonal-pattern woven wire mesh, commonly known as chicken wire. Used for poultry enclosures, garden protection, and stucco reinforcement.</span></li>
+                <li><span class="glossary-term">Window Screen</span><span class="glossary-def">Fine mesh made from stainless steel, fiberglass, or aluminum, designed to allow airflow while preventing insects from entering buildings.</span></li>
+                <li><span class="glossary-term">V-Profile Welded Mesh Panel</span><span class="glossary-def">A welded mesh panel with V-shaped ribs pressed into the horizontal wires, providing enhanced structural rigidity and anti-climb properties.</span></li>
+                <li><span class="glossary-term">Wedge Wire Screen</span><span class="glossary-def">A precision-engineered screen with V-shaped wire profiles welded to support rods, used for water intake screening, dewatering, and particle classification.</span></li>
+                <li><span class="glossary-term">Gabion Mesh</span><span class="glossary-def">Double-twisted hexagonal wire mesh used to create stone-filled baskets (gabions) for retaining walls, erosion control, and slope stabilization.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Wire -->
+          <div class="glossary-category" data-category="wire" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 03</span>
+                <h2 class="glossary-category-title">Wire Products</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">Barbed Wire</span><span class="glossary-def">A type of steel fencing wire with sharp barbs spaced at regular intervals. Available in single twist, double twist, and traditional twist configurations for agricultural and security fencing.</span></li>
+                <li><span class="glossary-term">Razor Wire</span><span class="glossary-def">Also known as barbed tape. A high-security product made of sharp steel blades formed into a helical coil around a core wire. Available in BTO, CBT, and concertina configurations.</span></li>
+                <li><span class="glossary-term">Concertina Razor Wire</span><span class="glossary-def">Razor wire formed into large-diameter coils that expand like a spring, creating an effective physical barrier for military, prison, and border security applications.</span></li>
+                <li><span class="glossary-term">BTC Barbed Tape Concertina (NATO-22)</span><span class="glossary-def">A military-grade razor wire product conforming to NATO-22 (MIL-AA-55522A) standard, featuring fish-hook blade profiles for maximum deterrence.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Materials -->
+          <div class="glossary-category" data-category="material" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 04</span>
+                <h2 class="glossary-category-title">Materials &amp; Coatings</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">Hot-Dip Galvanized (HDG)</span><span class="glossary-def">A corrosion protection process where steel is immersed in molten zinc, forming a metallurgically bonded zinc coating. Provides long-lasting protection per ASTM A123 and ISO 1461 standards.</span></li>
+                <li><span class="glossary-term">Electro-Galvanized</span><span class="glossary-def">A zinc coating applied by electroplating, producing a thinner and smoother finish compared to hot-dip galvanizing.</span></li>
+                <li><span class="glossary-term">PVC Coating</span><span class="glossary-def">A polyvinyl chloride plastic coating extruded over galvanized wire, providing additional corrosion resistance and color options for outdoor applications.</span></li>
+                <li><span class="glossary-term">PE Coating</span><span class="glossary-def">A polyethylene coating applied over galvanized wire for enhanced UV resistance and durability in agricultural and marine environments.</span></li>
+                <li><span class="glossary-term">Stainless Steel 304</span><span class="glossary-def">An austenitic stainless steel alloy containing 18% chromium and 8% nickel, offering good corrosion resistance for general-purpose applications.</span></li>
+                <li><span class="glossary-term">Stainless Steel 316 / 316L</span><span class="glossary-def">A molybdenum-bearing stainless steel alloy with superior chloride corrosion resistance, ideal for marine, chemical, and pharmaceutical applications.</span></li>
+                <li><span class="glossary-term">Powder Coating</span><span class="glossary-def">A dry finishing process where electrostatically charged powder is sprayed onto a surface and cured under heat, providing a durable and uniform protective layer.</span></li>
+                <li><span class="glossary-term">Copper Alloy</span><span class="glossary-def">A metal alloy (typically copper-zinc or copper-nickel) with natural anti-fouling properties, used in premium aquaculture mesh applications.</span></li>
+                <li><span class="glossary-term">Carbon Steel (Low Carbon Steel)</span><span class="glossary-def">A steel alloy with low carbon content (typically at most 0.22%), offering good weldability and formability for wire mesh and fencing products.</span></li>
+                <li><span class="glossary-term">Low Carbon Wire</span><span class="glossary-def">A type of wire that is thicker and more cost-effective, bending and flexing easily. Low carbon wire is ideal for temporary fencing or less demanding applications where flexibility is preferred over strength.</span></li>
+                <li><span class="glossary-term">High Tensile Wire</span><span class="glossary-def">A type of steel wire that is thin but strong and lightweight, with excellent tensile strength. Unlike low carbon wire, high tensile wire won't stretch out over time, making it ideal for permanent, long-lasting fence installations.</span></li>
+                <li><span class="glossary-term">Galvanization</span><span class="glossary-def">A corrosion protection process that coats steel with zinc to defend against rust. This protective layer helps reduce exposure to humidity, salt air, and other corrosive chemicals, extending the life of the fence.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Spec -->
+          <div class="glossary-category" data-category="spec" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 05</span>
+                <h2 class="glossary-category-title">Technical Specifications</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">Wire Diameter</span><span class="glossary-def">The thickness of individual wires in a mesh or fence product, measured in millimeters (mm) or gauge (ga). A key parameter determining product strength and weight.</span></li>
+                <li><span class="glossary-term">Mesh Size / Aperture</span><span class="glossary-def">The distance between adjacent parallel wires in a mesh, measured from center to center. Determines the mesh's filtering, screening, or containment capability.</span></li>
+                <li><span class="glossary-term">Mesh Count</span><span class="glossary-def">The number of openings per linear inch or per square inch. Higher mesh counts indicate finer mesh with smaller openings.</span></li>
+                <li><span class="glossary-term">Tensile Strength</span><span class="glossary-def">The maximum stress a material can withstand while being stretched before breaking, measured in MPa or psi. Critical for fencing and structural applications.</span></li>
+                <li><span class="glossary-term">Zinc Coating Weight</span><span class="glossary-def">The mass of zinc coating per unit area (g/m square), indicating the thickness and quality of galvanized protection. Higher values provide longer corrosion life.</span></li>
+                <li><span class="glossary-term">Porosity</span><span class="glossary-def">The percentage of open area in a mesh or porous material, determining flow rate and screening capability.</span></li>
+                <li><span class="glossary-term">Filtration Rating</span><span class="glossary-def">The nominal or absolute particle size (in microns) that a filter element can reliably capture, indicating filtration precision.</span></li>
+                <li><span class="glossary-term">Burst Pressure</span><span class="glossary-def">The maximum pressure differential a filter element can withstand before structural failure, a critical safety parameter for pressurized systems.</span></li>
+                <li><span class="glossary-term">Gauge</span><span class="glossary-def">The thickness of the wire. The higher the number, the smaller/thinner the wire. Low gauge refers to thicker wire, while high gauge wire refers to lighter weight wire.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Fittings -->
+          <div class="glossary-category" data-category="fitting" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 06</span>
+                <h2 class="glossary-category-title">Fencing Components &amp; Fittings</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">Loop Cap</span><span class="glossary-def">A metal fitting used to connect the top rail to line posts in chain link fence systems, providing a secure and clean connection point.</span></li>
+                <li><span class="glossary-term">Tension Band</span><span class="glossary-def">A galvanized steel band wrapped around terminal posts to distribute tension forces from the fence fabric evenly.</span></li>
+                <li><span class="glossary-term">Tension Bar</span><span class="glossary-def">A vertical bar woven through the chain link mesh end and attached to tension bands, used to stretch and secure the fence fabric.</span></li>
+                <li><span class="glossary-term">Barb Arm</span><span class="glossary-def">A metal bracket attached to fence posts for mounting barbed wire strands above the main fence line.</span></li>
+                <li><span class="glossary-term">End Post / Terminal Post</span><span class="glossary-def">A heavy-duty post installed at fence ends, corners, and gates, designed to withstand the full tension load of the fence fabric.</span></li>
+                <li><span class="glossary-term">Line Post</span><span class="glossary-def">An intermediate post installed between terminal posts to support the fence fabric at regular intervals.</span></li>
+                <li><span class="glossary-term">Corner Post</span><span class="glossary-def">A post installed at fence corners, typically braced to resist directional tension forces from both adjacent fence runs.</span></li>
+                <li><span class="glossary-term">Hog Rings</span><span class="glossary-def">Metal rings used to secure chain link fabric to the fence frame, providing a quick and reliable attachment method.</span></li>
+                <li><span class="glossary-term">Turnbuckle</span><span class="glossary-def">A threaded tensioning device used to adjust and maintain wire tension in fence systems.</span></li>
+                <li><span class="glossary-term">Post Cap / Dome Cap</span><span class="glossary-def">A decorative and protective cover fitted to the top of fence posts to prevent water ingress.</span></li>
+                <li><span class="glossary-term">Pull Out</span><span class="glossary-def">The distance between the last vertical wire and the next post, typically ranging from 6 to 16 inches. This spacing allows the fence to be stretched tight and secured properly to the post.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Processes -->
+          <div class="glossary-category" data-category="process" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 07</span>
+                <h2 class="glossary-category-title">Manufacturing Processes</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">MIG &amp; TIG Welding</span><span class="glossary-def">Metal Inert Gas and Tungsten Inert Gas welding processes used to join metal components with high precision and structural integrity.</span></li>
+                <li><span class="glossary-term">Wire Drawing</span><span class="glossary-def">A metalworking process that reduces wire diameter by pulling the wire through a series of progressively smaller dies.</span></li>
+                <li><span class="glossary-term">Hot-Dip Galvanizing</span><span class="glossary-def">The process of dipping fabricated steel products into a bath of molten zinc (typically 450 degrees Celsius) to form a corrosion-resistant zinc-iron alloy coating.</span></li>
+                <li><span class="glossary-term">PVC Extrusion Coating</span><span class="glossary-def">A process where molten PVC is extruded over galvanized wire through a die, forming a uniform plastic coating that bonds to the zinc surface.</span></li>
+                <li><span class="glossary-term">Sintering</span><span class="glossary-def">A high-temperature process that bonds metal particles or wire mesh layers together through diffusion, creating porous materials with controlled permeability.</span></li>
+                <li><span class="glossary-term">CNC Cutting</span><span class="glossary-def">Computer Numerical Controlled cutting using laser, plasma, or waterjet technology for precise metal component fabrication.</span></li>
+                <li><span class="glossary-term">Passivation</span><span class="glossary-def">A chemical treatment for stainless steel that removes free iron from the surface and enhances the natural chromium oxide layer for improved corrosion resistance.</span></li>
+                <li><span class="glossary-term">Powder Coating</span><span class="glossary-def">An electrostatic spray finishing process where dry powder is applied to a grounded metal surface and cured in an oven to form a hard, durable finish.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Standards -->
+          <div class="glossary-category" data-category="standard" data-reveal>
+            <div class="glossary-category-header">
+              <div class="glossary-header-group">
+                <span class="glossary-category-label">Category 08</span>
+                <h2 class="glossary-category-title">Standards &amp; Certifications</h2>
+              </div>
+              <svg width="20" height="20" class="glossary-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="glossary-category-body">
+              <ul class="glossary-list">
+                <li><span class="glossary-term">ASTM A123</span><span class="glossary-def">Standard specification for zinc (hot-dip galvanized) coatings on iron and steel products.</span></li>
+                <li><span class="glossary-term">ASTM A116</span><span class="glossary-def">Standard specification for steel wire, zinc-coated (galvanized), for agricultural field fence.</span></li>
+                <li><span class="glossary-term">BS EN 10244-2</span><span class="glossary-def">British/European standard for zinc or zinc alloy coatings on steel wire.</span></li>
+                <li><span class="glossary-term">ISO 9001</span><span class="glossary-def">International standard for quality management systems, certifying consistent manufacturing and quality control processes.</span></li>
+                <li><span class="glossary-term">ISO 1461</span><span class="glossary-def">International standard for hot dip galvanized coatings on fabricated iron and steel articles.</span></li>
+                <li><span class="glossary-term">NATO-22 (MIL-AA-55522A)</span><span class="glossary-def">North Atlantic Treaty Organization military specification for barbed tape concertina, defining blade dimensions and performance requirements.</span></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="glossary-cta">
+      <div class="glossary-cta-bg"></div>
+      <div class="glossary-cta-overlay"></div>
+      <div class="glossary-cta-content">
+        <h2 class="glossary-cta-title">Need More Clarification?</h2>
+        <p class="glossary-cta-desc">Contact our technical experts for detailed explanations of any terms, products, or specifications.</p>
+        <div class="glossary-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">CONTACT US
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/glossary.js"></script>
+</body>
+</html>
