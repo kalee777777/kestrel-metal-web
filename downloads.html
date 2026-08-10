@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KESTREL METAL Technical Downloads - Download technical datasheets, installation guides, CAD drawings, and certification documents for your engineering and procurement teams.">
+  <title>KESTREL METAL - Technical Downloads</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/downloads.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="downloads-hero">
+      <div class="downloads-hero-bg">
+        <div class="downloads-hero-overlay"></div>
+      </div>
+      <div class="downloads-hero-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="resources.html">Resources</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Technical Downloads</span>
+        </nav>
+        <h1 class="downloads-hero-title">Technical <span class="highlight">Downloads</span></h1>
+        <p class="downloads-hero-description">
+          Download technical datasheets, installation guides, CAD drawings, and certification documents for your engineering and procurement teams.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ SEARCH ============ -->
+    <section class="downloads-search-section">
+      <div class="container">
+        <div class="downloads-search-box" data-reveal>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="downloadSearch" placeholder="Search documents by keyword..." autocomplete="off">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DOWNLOADS CONTENT ============ -->
+    <section class="downloads-section">
+      <div class="container">
+        <div class="downloads-layout">
+
+          <!-- Sidebar Navigation -->
+          <aside class="downloads-sidebar" data-reveal>
+            <h3 class="downloads-sidebar-title">Document Types</h3>
+            <ul class="downloads-sidebar-links" id="downloadSidebarLinks">
+              <li><a href="#datasheets" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Technical Datasheets</a></li>
+              <li><a href="#guides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Installation Guides</a></li>
+              <li><a href="#cad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> CAD Drawings</a></li>
+              <li><a href="#certifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Certifications</a></li>
+            </ul>
+          </aside>
+
+          <!-- Downloads Content -->
+          <div class="downloads-content">
+            <div id="downloadNoResults" class="downloads-no-results" style="display:none;">
+              <p>No documents found matching your search.</p>
+            </div>
+            <div id="downloadsContainer">
+              <!-- Rendered by downloads.js -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="downloads-cta">
+      <div class="downloads-cta-bg"></div>
+      <div class="downloads-cta-overlay"></div>
+      <div class="downloads-cta-content">
+        <h2 class="downloads-cta-title">Need Different Documentation?</h2>
+        <p class="downloads-cta-desc">Our technical team can provide custom datasheets, test certificates, and engineering documents tailored to your certification requirements.</p>
+        <div class="downloads-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">CONTACT US
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/downloads.js"></script>
+</body>
+</html>
