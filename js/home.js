@@ -330,10 +330,10 @@
         }
 
         cardG.on('mouseenter', function () {
-          showTooltip(p, idx);
+          updateInfoPanelWith(p);
         });
         cardG.on('mouseleave', function () {
-          hideTooltip();
+          updateInfoPanel();
         });
       });
 
