@@ -19,18 +19,24 @@
   <link rel="stylesheet" href="css/faq.css">
 
   <style>
-    /* 仅作用于本页 Applications 版块：一行 3 列、两行展示 */
+    /* 仅作用于本页 Applications 版块：一行 3 列、两行展示，并缩短卡片高度 */
     .apps-grid {
       grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+    }
+    .apps-grid .app-tile {
+      aspect-ratio: 4 / 3;
     }
     @media (max-width: 1200px) {
       .apps-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 768px) {
       .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .apps-grid .app-tile { aspect-ratio: 3 / 2; }
     }
     @media (max-width: 480px) {
       .apps-grid { grid-template-columns: 1fr; }
+      .apps-grid .app-tile { aspect-ratio: 16 / 10; }
     }
   </style>
 
