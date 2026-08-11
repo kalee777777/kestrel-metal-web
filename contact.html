@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Kestrel Metal for product inquiries, technical support, and custom solutions. Reach us via phone, email, WhatsApp, or our online form.">
+  <title>Contact Us | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="contact-hero">
+      <div class="contact-hero-bg" style="background-image:url('images/sales-team-support.webp');"></div>
+      <div class="contact-hero-overlay"></div>
+      <div class="contact-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Contact</span>
+        </nav>
+        <span class="contact-hero-kicker">Get In Touch</span>
+        <h1 class="contact-hero-title">CONTACT <span style="color:var(--color-orange-primary);">KESTREL METAL</span></h1>
+        <p class="contact-hero-sub">Have a project in mind or need more information? Our team is ready to help. Reach out through any of the channels below and we will respond within 24 hours.</p>
+      </div>
+    </section>
+
+    <!-- ============ INFO CARDS ============ -->
+    <section class="contact-info-section">
+      <div class="contact-info-grid">
+        <div class="info-card" data-reveal>
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <h3>Email Us</h3>
+          <p>General inquiries:<br><a href="mailto:info@kestrelmetal.com">info@kestrelmetal.com</a></p>
+          <p>Sales:<br><a href="mailto:sales@kestrelmetal.com">sales@kestrelmetal.com</a></p>
+        </div>
+        <div class="info-card" data-reveal>
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <h3>Call Us</h3>
+          <p>Phone:<br><a href="tel:+8617832383339">+86 178 3238 3339</a></p>
+          <p>WhatsApp:<br><a href="https://wa.me/8617832383339" target="_blank" rel="noopener">+86 178 3238 3339</a></p>
+        </div>
+        <div class="info-card" data-reveal>
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <h3>Visit Us</h3>
+          <p>No. 888 Industrial Road,<br>Anping County, Hengshui,<br>Hebei Province, China</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FORM + OFFICE ============ -->
+    <section class="contact-main">
+      <div class="contact-grid">
+        <div class="contact-form-wrapper" data-reveal>
+          <h2>Send Us a Message</h2>
+          <p class="form-desc">Fill out the form below and we&rsquo;ll respond within 24 hours.</p>
+          <form id="contactForm" onsubmit="return handleContactSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" name="name" required placeholder="John Doe">
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="john@example.com">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 234 567 8900">
+              </div>
+              <div class="form-group">
+                <label for="company">Company</label>
+                <input type="text" id="company" name="company" placeholder="Your company name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="country">Country / Region</label>
+              <input type="text" id="country" name="country" placeholder="United States">
+            </div>
+            <div class="form-group">
+              <label for="product">Product Interest</label>
+              <select id="product" name="product">
+                <option value="">Select a product category</option>
+                <option value="fence">Fence Products</option>
+                <option value="chain-link">Chain Link Fence</option>
+                <option value="security">Security Fence</option>
+                <option value="woven">Woven Wire Mesh</option>
+                <option value="welded">Welded Wire Mesh</option>
+                <option value="gabion">Gabion Products</option>
+                <option value="wire">Wire Products</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" required placeholder="Tell us about your project requirements, specifications, and timeline..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message &rarr;</button>
+          </form>
+        </div>
+
+        <div class="office-info">
+          <div class="office-card" data-reveal>
+            <h3><span class="badge"></span>Head Office</h3>
+            <div class="office-item">
+              <div class="oi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="oi-content">
+                <div class="oi-label">Address</div>
+                <div class="oi-value">No. 888 Industrial Road, Anping County, Hengshui, Hebei Province, China 053600</div>
+              </div>
+            </div>
+            <div class="office-item">
+              <div class="oi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="oi-content">
+                <div class="oi-label">Business Hours</div>
+                <div class="oi-value">Mon &ndash; Fri: 9:00 AM &ndash; 6:00 PM (GMT+8)<br>Sat: 9:00 AM &ndash; 1:00 PM</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="office-card" data-reveal>
+            <h3><span class="badge"></span>Quick Contacts</h3>
+            <div class="office-item">
+              <div class="oi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div class="oi-content">
+                <div class="oi-label">Phone</div>
+                <div class="oi-value"><a href="tel:+8617832383339">+86 178 3238 3339</a></div>
+              </div>
+            </div>
+            <div class="office-item">
+              <div class="oi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div class="oi-content">
+                <div class="oi-label">Email</div>
+                <div class="oi-value"><a href="mailto:info@kestrelmetal.com">info@kestrelmetal.com</a></div>
+              </div>
+            </div>
+            <div class="office-item">
+              <div class="oi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              </div>
+              <div class="oi-content">
+                <div class="oi-label">WhatsApp</div>
+                <div class="oi-value"><a href="https://wa.me/8617832383339" target="_blank" rel="noopener">+86 178 3238 3339</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MAP ============ -->
+    <section class="map-section">
+      <div class="map-box">
+        <div class="map-box-inner" data-reveal>
+          <div class="map-center">
+            <span class="pin">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>
+            </span>
+            <h3>Kestrel Metal Headquarters</h3>
+            <p>Anping County, Hengshui, Hebei Province, China</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MINI FAQ ============ -->
+    <section class="mini-faq">
+      <div class="mini-faq-container">
+        <div class="mini-faq-header" data-reveal>
+          <h2>Frequently Asked <span>Questions</span></h2>
+          <p>Quick answers to common inquiries</p>
+        </div>
+        <div class="mini-faq-item" data-reveal>
+          <div class="mini-faq-question">How quickly will I get a response?</div>
+          <div class="mini-faq-answer">We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.</div>
+        </div>
+        <div class="mini-faq-item" data-reveal>
+          <div class="mini-faq-question">Do you offer free samples?</div>
+          <div class="mini-faq-answer">Yes, we can provide product samples for quality evaluation. Sample requests can be submitted through our contact form or by emailing sales@kestrelmetal.com.</div>
+        </div>
+        <div class="mini-faq-item" data-reveal>
+          <div class="mini-faq-question">What are your minimum order quantities?</div>
+          <div class="mini-faq-answer">MOQs vary by product. For standard items, MOQ starts from 100 pieces. Custom orders may have different requirements &mdash; contact us for details.</div>
+        </div>
+        <div class="mini-faq-item" data-reveal>
+          <div class="mini-faq-question">Do you ship internationally?</div>
+          <div class="mini-faq-answer">Yes! We ship worldwide and have experience delivering to 30+ countries. We offer FOB, CIF, and DDP shipping options.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/contact.js"></script>
+</body>
+</html>
