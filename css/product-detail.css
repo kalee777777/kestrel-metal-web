@@ -404,6 +404,37 @@
   box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15);
 }
 
+.specs-table-wrap {
+  margin-top: 1.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.specs-table th {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.7rem 1rem;
+}
+
+.specs-table td {
+  padding: 0.65rem 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.specs-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.04);
+}
+
 @media (max-width: 768px) {
   .spec-sim-stats {
     grid-template-columns: repeat(2, 1fr);
@@ -732,6 +763,120 @@
   font-size: 0.82rem;
   line-height: 1.5;
   font-weight: 300;
+}
+
+/* ---------- 相关文章（Related Articles） ---------- */
+.related-articles-grid {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+}
+
+.related-article-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.product-section-light-alt .related-article-card {
+  background: var(--color-white);
+}
+
+.related-article-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+  border-color: var(--color-orange-primary);
+}
+
+.related-article-media {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-gray-light);
+}
+
+.related-article-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.related-article-card:hover .related-article-media img {
+  transform: scale(1.06);
+}
+
+.related-article-body {
+  padding: 1.5rem 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.related-article-tag {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-white);
+  background: var(--color-orange-primary);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  margin-bottom: 0.85rem;
+}
+
+.related-article-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.25;
+  color: var(--color-black);
+  margin-bottom: 0.5rem;
+}
+
+.related-article-meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.related-article-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.related-article-link {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-orange-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.related-article-link span {
+  transition: transform 0.3s ease;
+}
+
+.related-article-card:hover .related-article-link span {
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .related-articles-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- 立柱类型网格（Post Types） ---------- */
