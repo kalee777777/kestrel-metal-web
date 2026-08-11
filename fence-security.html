@@ -787,6 +787,9 @@
         updateFeatureCarousel();
       });
       updateFeatureCarousel();
+      // Expose handlers for inline onclick buttons
+      window.moveCarousel = moveCarousel;
+      window.goToSlide = goToSlide;
     })();
   </script>
 
