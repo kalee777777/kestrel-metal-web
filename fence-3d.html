@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="3D wire panel fence manufacturer. V-profile panels welded from low-carbon steel wire, hot-dip galvanized or PVC coated. Heights 630-2430mm, wire dia 3.0-5.0mm, 7+ RAL colors. EN 10223-7 certified.">
+  <title>3D Wire Panel Fence | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/js/threejs/three.module.min.js",
+      "three/addons/": "/js/threejs/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%203d%20wire%20panel%20fence%20V-profile%20welded%20mesh%20industrial%20perimeter%20security%20orange%20sunset%20dramatic%20lighting%20professional%20photography&image_size=landscape_16_9');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="fence-products.html">Fence Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">3D Wire Panel Fence</span>
+        </nav>
+        <span class="article-hero-kicker">Security &amp; Perimeter Fencing</span>
+        <h1 class="article-hero-title">3D Wire Panel Fence</h1>
+        <div class="article-hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>V-Profile Reinforced</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>EN 10223-7 Certified</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Hebei, China</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT OVERVIEW ============ -->
+    <section class="product-overview">
+      <div class="product-overview-inner">
+        <div class="product-overview-image">
+          <span class="product-badge">Best Seller</span>
+          <img src="products/fence/3d-fence-panel-product.webp" alt="3D Wire Panel Fence with V-profile reinforcement" loading="lazy">
+        </div>
+        <div class="product-overview-text">
+          <span class="category-tag">Product Overview</span>
+          <h2>Engineered for Security,<br>Designed for Aesthetics</h2>
+          <p>The 3D wire panel fence is one of the most popular security fencing solutions worldwide, featuring cold-bend formed V-profile panels that provide exceptional structural rigidity without solder joints. Each panel is manufactured from high-quality low-carbon steel wire, welded at every intersection using automated precision equipment.</p>
+          <p>Available with hot-dip galvanization or dual-layer PVC coating for superior corrosion resistance, the unique 3D design enhances visual aesthetics while discouraging climbing &mdash; making it ideal for schools, parks, residential communities, industrial zones, and transportation infrastructure.</p>
+          <ul>
+            <li>V-profile bends for rigidity</li>
+            <li>Welded at every intersection</li>
+            <li>Anti-climb mesh options</li>
+            <li>Hot-dip galvanized + PVC coated</li>
+            <li>8 panel heights available</li>
+            <li>Custom RAL colors on request</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3D MODEL VIEWER ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">3D Model</span>
+        <h2>Interactive <span class="accent">3D</span> Product View</h2>
+        <p>Explore the 3D wire panel fence model from every angle. Drag to rotate, scroll to zoom, and use the controls below to switch between preset views.</p>
+      </div>
+      <div class="article-container" style="max-width:1200px;">
+        <div class="model-viewer-wrap" id="modelViewer">
+          <span class="model-hint">Drag to rotate &middot; Scroll to zoom</span>
+          <div class="model-loading" id="modelLoading">
+            <div class="model-loading-spinner"></div>
+            <div class="model-loading-text">Loading 3D Model...</div>
+          </div>
+          <div class="model-controls">
+            <button type="button" class="active" data-view="reset">Reset View</button>
+            <button type="button" data-view="front">Front</button>
+            <button type="button" data-view="side">Side</button>
+            <button type="button" data-view="top">Top</button>
+            <button type="button" class="active" data-view="rotate">Auto Rotate</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES STRIP ============ -->
+    <section class="product-features-strip">
+      <div class="product-features-strip-inner">
+        <div class="feature-stat">
+          <div class="feature-stat-num">8</div>
+          <div class="feature-stat-label">Panel Heights<br>630 &ndash; 2430 mm</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">5</div>
+          <div class="feature-stat-label">Wire Diameters<br>3.0 &ndash; 5.0 mm</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">7+</div>
+          <div class="feature-stat-label">RAL Colors<br>Standard Range</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">EN 10223-7</div>
+          <div class="feature-stat-label">Manufacturing<br>Standard</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COLOR CUSTOMIZER ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Color Options</span>
+        <h2>Choose Your <span class="accent">Color</span></h2>
+        <p>Our 3D wire panel fences are available in a range of standard RAL colors. Click a swatch below to preview how it looks on the panel design.</p>
+      </div>
+      <div class="color-customizer">
+        <div class="color-preview-card">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125.69 91.95" id="fenceSvg" aria-label="3D fence panel color preview">
+            <polyline class="fence-line" points="2.73 42.12 2.73 42.12 .33 45.13 2.92 47.72 3.1 82.05 .64 85.37 3.23 87.52"/>
+            <polyline class="fence-line" points="4.46 42.24 4.46 42.24 2.12 45.19 4.58 47.9 4.89 82.54 2.24 85.8 4.95 88.02 4.83 88.02"/>
+            <polyline class="fence-line" points="6.24 42.24 6.18 42.36 3.78 45.5 6.36 48.08 6.43 55.04 6.43 82.79 4.15 86.23 6.43 88.26"/>
+            <polyline class="fence-line" points="7.9 42.49 7.9 42.49 5.5 45.56 8.09 48.21 8.09 83.22 5.81 86.6 8.15 88.82"/>
+            <polyline class="fence-line" points="9.56 42.49 9.63 42.49 7.16 45.81 9.75 48.39 9.63 55.47 9.69 83.46 7.66 87.09 9.93 89.31 9.77 89.17"/>
+            <polyline class="fence-line" points="11.35 42.61 11.41 42.61 9.07 45.81 11.53 48.52 11.66 84.08 9.32 87.46 11.72 89.74"/>
+            <polyline class="fence-line" points="13.26 42.73 13.26 42.73 10.79 45.93 13.38 48.76 13.38 84.45 10.98 88.02 13.44 90.17"/>
+            <polyline class="fence-line" points="15.1 42.85 15.04 42.85 12.7 46.05 15.22 48.95 15.22 84.69 12.82 88.45 15.29 90.6"/>
+            <polyline class="fence-line" points="16.82 42.86 16.89 43.04 14.61 46.18 17.07 49.01 17.01 85.19 14.73 88.94 17.07 91.15"/>
+            <polyline class="fence-line" points="18.79 42.92 18.79 43.16 16.52 46.3 18.98 49.19 18.92 85.68 16.58 89.31 18.92 91.4"/>
+            <line class="fence-line" x1="2.73" y1="42.12" x2="19.78" y2="43.04"/>
+            <line class="fence-line" x1=".33" y1="45.13" x2="17.44" y2="46.49"/>
+            <line class="fence-line" x1="2.92" y1="47.72" x2="19.72" y2="49.13"/>
+            <line class="fence-line" x1="2.43" y1="54.55" x2="19.72" y2="56.64"/>
+            <line class="fence-line" x1="2.43" y1="61.44" x2="19.65" y2="63.96"/>
+            <line class="fence-line" x1="2.43" y1="68.33" x2="19.72" y2="71.4"/>
+            <line class="fence-line" x1="2.61" y1="75.1" x2="19.72" y2="78.54"/>
+            <line class="fence-line" x1="2.67" y1="81.8" x2="19.65" y2="85.74"/>
+            <line class="fence-line" x1=".64" y1="85.37" x2="17.56" y2="89.49"/>
+            <line class="fence-line" x1="3.23" y1="87.52" x2="19.65" y2="91.65"/>
+            <polyline class="fence-line" points="29.19 29.56 29.19 29.56 26.73 32.33 29.44 35.1 29.53 55.38 29.53 62.6 29.62 82.05 27.16 85.31 29.81 87.59"/>
+            <polyline class="fence-line" points="30.91 29.34 30.91 29.5 28.51 32.46 31.04 35.23 31.12 55.56 31.23 62.3 31.41 82.42 28.94 85.8 31.41 88.02"/>
+            <polyline class="fence-line" points="32.7 29.38 32.7 29.38 30.24 32.39 32.82 35.35 32.82 56.1 32.94 62.54 32.94 82.79 30.61 86.23 33.07 88.32"/>
+            <polyline class="fence-line" points="34.36 29.44 34.36 29.44 32.02 32.33 34.54 35.41 34.42 56.25 34.55 62.75 34.73 83.16 32.27 86.6 34.73 88.82"/>
+            <polyline class="fence-line" points="36.14 29.44 36.14 29.44 33.87 32.39 36.33 35.47 36.27 56.1 36.39 63.34 36.33 83.59 33.99 87.09 36.45 89.19"/>
+            <polyline class="fence-line" points="37.87 29.56 37.87 29.56 35.59 32.46 38.05 35.47 38.05 56.25 38.18 63.67 38.24 83.96 35.77 87.59 38.17 89.74"/>
+            <polyline class="fence-line" points="39.71 29.44 39.71 29.44 37.31 32.52 39.84 35.35 39.78 56.4 39.84 63.46 39.84 84.39 37.68 87.96 39.9 90.11"/>
+            <polyline class="fence-line" points="41.62 29.44 41.62 29.44 39.28 32.58 41.68 35.53 41.68 56.76 41.62 63.73 41.68 84.69 39.4 88.26 41.8 90.54"/>
+            <polyline class="fence-line" points="43.52 29.28 43.53 29.56 41.07 32.58 43.59 35.59 43.53 57.19 43.59 63.87 43.53 85.12 41.19 88.88 43.12 90.93"/>
+            <polyline class="fence-line" points="45.37 29.44 45.37 29.44 42.97 32.7 45.56 35.53 45.32 57.53 45.38 64.27 45.37 85.68 43.1 89.37 45.43 91.52"/>
+            <line class="fence-line" x1="28.75" y1="29.51" x2="46.11" y2="29.38"/>
+            <line class="fence-line" x1="26.73" y1="32.33" x2="43.77" y2="32.58"/>
+            <line class="fence-line" x1="28.88" y1="35.16" x2="46.11" y2="35.53"/>
+            <line class="fence-line" x1="28.88" y1="43.03" x2="46.17" y2="43.83"/>
+            <line class="fence-line" x1="28.88" y1="50.76" x2="46.36" y2="52.3"/>
+            <line class="fence-line" x1="28.75" y1="59.4" x2="46.11" y2="61.74"/>
+            <line class="fence-line" x1="29.13" y1="67.3" x2="46.11" y2="70.38"/>
+            <line class="fence-line" x1="29.13" y1="74.81" x2="46.42" y2="78.26"/>
+            <line class="fence-line" x1="29.19" y1="81.8" x2="46.3" y2="85.74"/>
+            <line class="fence-line" x1="27.16" y1="85.31" x2="43.9" y2="89.49"/>
+            <line class="fence-line" x1="29.81" y1="87.59" x2="46.23" y2="91.71"/>
+            <polyline class="fence-line" points="55.57 22.37 55.57 22.37 52.93 25.21 55.7 27.99 55.7 49.18 53.18 52.15 55.9 54.8 55.9 82.12 53.44 85.28 56.09 87.54"/>
+            <polyline class="fence-line" points="57.06 22.44 57.06 22.44 54.8 25.08 57.38 28.12 57.38 49.18 54.99 52.28 57.38 54.86 57.45 82.38 55.25 85.8 57.64 87.87"/>
+            <polyline class="fence-line" points="58.8 22.31 58.8 22.31 56.54 25.08 59.06 28.18 59.06 49.37 56.67 52.47 59.26 55.25 59.26 82.83 56.8 86.25 59.51 88.45"/>
+            <polyline class="fence-line" points="60.68 22.31 60.68 22.31 58.22 25.21 60.81 28.12 60.74 49.37 58.42 52.73 60.87 55.31 60.87 83.41 58.67 86.64 61.13 88.84"/>
+            <polyline class="fence-line" points="62.29 22.24 62.29 22.24 59.97 25.15 62.55 28.12 62.61 49.63 60.22 52.92 62.55 55.51 62.74 83.6 60.35 87.09 62.74 89.22"/>
+            <polyline class="fence-line" points="64.29 22.11 64.29 22.11 61.84 25.15 64.42 28.18 64.23 49.82 62.03 52.99 64.36 55.7 64.42 84.12 62.1 87.67 64.55 89.8"/>
+            <polyline class="fence-line" points="66.04 22.11 66.04 22.11 63.58 25.08 66.1 28.25 66.1 49.95 63.58 53.18 66.17 55.76 66.04 84.25 63.91 87.93 66.23 90.13"/>
+            <polyline class="fence-line" points="67.91 22.11 67.91 22.11 65.39 25.08 67.98 28.18 67.78 50.21 65.39 53.37 68.1 56.15 67.98 84.77 65.78 88.45 68.1 90.58"/>
+            <polyline class="fence-line" points="69.72 22.11 69.72 22.11 67.14 25.08 69.85 28.12 69.72 50.27 67.46 53.7 69.91 56.41 69.78 85.22 67.59 89.03 69.49 90.93 69.38 90.76"/>
+            <polyline class="fence-line" points="71.46 21.92 71.46 21.92 69.01 25.21 71.66 28.12 71.72 50.47 69.2 53.96 71.66 56.54 71.72 85.61 69.27 89.42 71.72 91.48"/>
+            <line class="fence-line" x1="55.06" y1="22.37" x2="72.43" y2="21.98"/>
+            <line class="fence-line" x1="52.93" y1="25.21" x2="70.04" y2="24.95"/>
+            <line class="fence-line" x1="55.19" y1="28.06" x2="72.5" y2="28.12"/>
+            <line class="fence-line" x1="55.19" y1="35.03" x2="72.37" y2="35.61"/>
+            <line class="fence-line" x1="55.19" y1="42.07" x2="72.5" y2="43.04"/>
+            <line class="fence-line" x1="55.25" y1="48.98" x2="72.56" y2="50.47"/>
+            <line class="fence-line" x1="53.18" y1="52.15" x2="70.04" y2="53.83"/>
+            <line class="fence-line" x1="55.9" y1="54.8" x2="72.56" y2="56.67"/>
+            <line class="fence-line" x1="55.38" y1="61.25" x2="72.37" y2="63.84"/>
+            <line class="fence-line" x1="55.45" y1="68.42" x2="72.56" y2="71.2"/>
+            <line class="fence-line" x1="55.38" y1="75.01" x2="72.5" y2="78.5"/>
+            <line class="fence-line" x1="55.45" y1="81.92" x2="72.56" y2="85.73"/>
+            <line class="fence-line" x1="53.44" y1="85.28" x2="70.04" y2="89.55"/>
+            <line class="fence-line" x1="56.09" y1="87.54" x2="72.17" y2="91.61"/>
+            <polyline class="fence-line" points="81.63 9.57 81.63 9.57 79 12.2 81.86 15.17 81.97 36.68 79.23 39.54 81.97 41.95 81.97 62.77 79.68 65.98 82.32 68.61 82.32 82.11 79.68 85.31 82.54 87.49"/>
+            <polyline class="fence-line" points="83.4 9.44 83.4 9.44 80.85 12.17 83.59 15.18 83.68 36.66 81.04 39.57 83.68 42.21 83.77 63.15 81.31 66.43 83.95 68.88 83.77 82.54 81.49 85.72 84.13 87.91"/>
+            <polyline class="fence-line" points="85.13 9.35 85.13 9.35 82.77 12.08 85.22 14.9 85.32 36.75 82.86 39.57 85.5 42.3 85.59 63.42 83.22 66.52 85.5 69.07 85.59 82.9 83.13 86.18 85.34 88.21"/>
+            <polyline class="fence-line" points="86.71 9.11 86.71 9.11 84.59 11.81 87.14 15.09 86.95 36.66 84.59 39.57 87.23 42.39 87.14 63.6 84.86 66.97 87.23 69.43 87.14 83.27 84.86 86.73 87.32 88.73"/>
+            <polyline class="fence-line" points="88.64 9 88.68 9.17 86.23 11.81 88.77 14.81 88.77 36.66 86.5 39.85 88.86 42.58 88.86 63.88 86.59 67.25 88.96 69.7 88.96 83.54 86.68 87.18 88.75 89.23"/>
+            <polyline class="fence-line" points="90.41 8.9 90.41 8.9 87.86 11.72 90.5 14.81 90.41 36.84 88.14 39.76 90.59 42.67 90.59 64.15 88.23 67.61 90.78 70.07 90.59 84.09 88.14 87.64 90.78 89.73"/>
+            <polyline class="fence-line" points="92.32 8.71 92.32 8.71 89.87 11.54 92.42 14.81 92.32 36.84 89.96 40.03 92.6 42.85 92.51 64.33 90.14 67.97 92.51 70.25 92.51 84.36 90.14 88.09 92.45 90.08"/>
+            <polyline class="fence-line" points="94.05 8.62 94.05 8.62 91.78 11.35 94.24 14.63 94.14 37.02 91.96 39.85 94.42 43.03 94.33 64.61 91.87 68.16 94.42 70.8 94.33 84.91 92.05 88.36 94.04 90.48"/>
+            <polyline class="fence-line" points="95.87 8.35 95.87 8.35 93.51 11.26 95.97 14.45 96.06 37.02 93.51 40.21 96.15 43.03 95.97 65.06 93.78 68.34 96.15 71.16 96.24 85.18 93.78 88.91 96.08 90.99"/>
+            <polyline class="fence-line" points="98.06 8.26 98.06 8.26 95.42 11.08 97.97 14.36 97.97 37.02 95.6 40.21 98.06 43.03 98.06 65.15 95.51 68.7 98.15 71.16 98.06 85.72 95.52 89.29 98.06 91.46"/>
+            <line class="fence-line" x1="81.63" y1="9.57" x2="98.79" y2="8.26"/>
+            <line class="fence-line" x1="79" y1="12.2" x2="96.42" y2="11.08"/>
+            <line class="fence-line" x1="81.86" y1="15.17" x2="98.7" y2="14.27"/>
+            <line class="fence-line" x1="81.31" y1="22.37" x2="98.88" y2="21.82"/>
+            <line class="fence-line" x1="81.49" y1="29.38" x2="98.79" y2="29.47"/>
+            <line class="fence-line" x1="81.31" y1="36.48" x2="98.79" y2="37.02"/>
+            <line class="fence-line" x1="79.23" y1="39.54" x2="96.51" y2="40.21"/>
+            <line class="fence-line" x1="81.97" y1="41.95" x2="98.88" y2="43.03"/>
+            <line class="fence-line" x1="81.58" y1="48.95" x2="98.79" y2="50.59"/>
+            <line class="fence-line" x1="81.49" y1="55.96" x2="98.97" y2="57.96"/>
+            <line class="fence-line" x1="81.97" y1="62.77" x2="98.97" y2="65.24"/>
+            <line class="fence-line" x1="79.68" y1="65.98" x2="96.42" y2="68.79"/>
+            <line class="fence-line" x1="81.76" y1="68.43" x2="99.06" y2="71.25"/>
+            <line class="fence-line" x1="81.86" y1="74.98" x2="98.79" y2="78.62"/>
+            <line class="fence-line" x1="81.76" y1="81.99" x2="98.88" y2="85.82"/>
+            <line class="fence-line" x1="79.68" y1="85.31" x2="96.6" y2="89.55"/>
+            <line class="fence-line" x1="82.54" y1="87.49" x2="98.79" y2="91.64"/>
+            <polyline class="fence-line" points="108.25 2.25 108.25 2.25 105.71 4.89 108.62 8.17 108.44 29.1 106.07 31.93 108.62 35.11 108.62 55.87 106.16 59.05 108.8 61.51 108.98 81.99 106.52 85.45 108.93 87.19"/>
+            <polyline class="fence-line" points="109.98 2.07 109.98 2.07 107.53 4.8 110.26 7.89 110.07 29.38 107.62 32.38 110.53 35.2 110.26 56.05 107.89 59.33 110.53 61.69 110.44 82.45 107.89 85.63 110.21 87.56"/>
+            <polyline class="fence-line" points="111.6 1.72 111.62 1.89 109.16 4.44 111.9 7.8 111.9 29.29 109.35 32.29 112.08 35.2 111.99 56.32 109.62 59.51 112.17 61.88 112.17 82.72 109.71 86.18 112.35 88.18"/>
+            <polyline class="fence-line" points="113.3 1.55 113.35 1.7 110.89 4.25 113.62 7.53 113.62 29.2 111.26 32.29 113.81 35.2 113.72 56.6 111.17 59.87 113.9 62.33 113.81 83.08 111.44 86.54 113.85 88.54"/>
+            <polyline class="fence-line" points="115.12 1.33 115.17 1.52 112.81 3.89 115.45 7.44 115.35 29.29 112.9 32.47 115.54 35.29 115.63 56.6 113.08 59.96 115.63 62.42 115.45 83.54 113.17 87 115.43 88.94"/>
+            <polyline class="fence-line" points="117.08 1.25 117.08 1.25 114.44 3.89 117.18 7.35 117.18 29.38 114.63 32.47 117.27 35.29 117.18 56.87 114.72 60.15 117.36 62.79 117.36 83.99 114.9 87.45 117.05 89.31 117.18 89.45"/>
+            <polyline class="fence-line" points="118.9 1.07 118.9 1.07 116.45 3.62 119 7.08 119.09 29.47 116.54 32.47 119.18 35.39 119.09 57.05 116.54 60.51 119.09 62.97 119.09 84.36 116.72 87.91 119.07 89.85"/>
+            <polyline class="fence-line" points="120.82 .79 120.82 .79 118.18 3.71 121 6.89 120.91 29.29 118.27 32.56 121 35.57 120.91 57.32 118.54 60.78 121.09 63.24 120.73 84.63 118.45 88.27 120.82 90.29 121 90.46"/>
+            <polyline class="fence-line" points="122.62 .53 122.64 .7 120.18 3.43 122.91 6.8 122.73 29.38 119.91 32.47 122.73 35.48 122.73 57.41 120.27 60.96 122.82 63.6 122.64 85 120.36 88.82 122.57 90.83"/>
+            <polyline class="fence-line" points="124.46 .43 124.46 .43 122 3.25 124.73 6.71 124.64 29.38 122.09 32.65 124.82 35.57 124.64 57.87 122 61.33 124.73 63.79 124.49 85.24 122.43 89.11 124.49 91.27"/>
+            <line class="fence-line" x1="107.62" y1="2.25" x2="125.37" y2=".25"/>
+            <line class="fence-line" x1="105.07" y1="4.71" x2="123.18" y2="2.89"/>
+            <line class="fence-line" x1="107.44" y1="7.99" x2="125.37" y2="6.44"/>
+            <line class="fence-line" x1="107.89" y1="15.18" x2="125.46" y2="14.18"/>
+            <line class="fence-line" x1="107.71" y1="22.28" x2="125.37" y2="21.82"/>
+            <line class="fence-line" x1="107.62" y1="29.01" x2="125.46" y2="29.29"/>
+            <line class="fence-line" x1="105.16" y1="32.11" x2="123.18" y2="32.65"/>
+            <line class="fence-line" x1="107.8" y1="35.11" x2="125.46" y2="35.39"/>
+            <line class="fence-line" x1="107.71" y1="41.94" x2="125.46" y2="42.76"/>
+            <line class="fence-line" x1="107.8" y1="48.86" x2="125.37" y2="50.31"/>
+            <line class="fence-line" x1="107.98" y1="55.69" x2="125.28" y2="57.6"/>
+            <line class="fence-line" x1="106.16" y1="59.05" x2="123.27" y2="61.33"/>
+            <line class="fence-line" x1="108.8" y1="61.51" x2="125.28" y2="63.7"/>
+            <line class="fence-line" x1="108.35" y1="68.06" x2="125.19" y2="71.25"/>
+            <line class="fence-line" x1="108.25" y1="74.89" x2="125.28" y2="78.35"/>
+            <line class="fence-line" x1="108.98" y1="81.99" x2="125.64" y2="85.54"/>
+            <line class="fence-line" x1="106.52" y1="85.45" x2="123.18" y2="89.27"/>
+            <line class="fence-line" x1="108.53" y1="87.09" x2="125.46" y2="91.55"/>
+          </svg>
+        </div>
+        <div class="color-controls">
+          <h3>Select a Color</h3>
+          <p>Click a swatch below to preview the color on the fence panel.</p>
+          <div class="color-swatches" id="colorSwatches">
+            <div class="color-swatch active" data-color="#386949">
+              <div class="color-swatch-block" style="background:#386949"></div>
+              <div class="color-swatch-name">Moss Green</div>
+              <div class="color-swatch-code">RAL 6005</div>
+            </div>
+            <div class="color-swatch" data-color="#D72638">
+              <div class="color-swatch-block" style="background:#D72638"></div>
+              <div class="color-swatch-name">Signal Red</div>
+              <div class="color-swatch-code">RAL 3001</div>
+            </div>
+            <div class="color-swatch" data-color="#1A1A1A">
+              <div class="color-swatch-block" style="background:#1A1A1A"></div>
+              <div class="color-swatch-name">Jet Black</div>
+              <div class="color-swatch-code">RAL 9005</div>
+            </div>
+            <div class="color-swatch" data-color="#4A4A4A">
+              <div class="color-swatch-block" style="background:#4A4A4A"></div>
+              <div class="color-swatch-name">Anthracite Grey</div>
+              <div class="color-swatch-code">RAL 7016</div>
+            </div>
+            <div class="color-swatch" data-color="#D4A96A">
+              <div class="color-swatch-block" style="background:#D4A96A"></div>
+              <div class="color-swatch-name">Lemon Yellow</div>
+              <div class="color-swatch-code">RAL 1012</div>
+            </div>
+            <div class="color-swatch" data-color="#FADA00">
+              <div class="color-swatch-block" style="background:#FADA00"></div>
+              <div class="color-swatch-name">Glossy Yellow</div>
+              <div class="color-swatch-code">RAL 1026</div>
+            </div>
+            <div class="color-swatch" data-color="#9EA4A8">
+              <div class="color-swatch-block" style="background:#9EA4A8"></div>
+              <div class="color-swatch-name">Siemens Grey</div>
+              <div class="color-swatch-code">RAL 7032</div>
+            </div>
+            <div class="color-swatch" data-color="#C8C8C8">
+              <div class="color-swatch-block" style="background:linear-gradient(135deg,#e5e7eb,#9ca3af)"></div>
+              <div class="color-swatch-name">+ 40 more</div>
+              <div class="color-swatch-code">Custom RAL</div>
+            </div>
+          </div>
+          <div class="color-customizer-hint">
+            <strong>Custom RAL colors</strong> available upon request &mdash; minimum order quantity applies.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SPECIFICATIONS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Specifications</span>
+        <h2>Technical <span class="accent">Parameters</span></h2>
+        <p>Complete manufacturing specifications for panels, posts, and accessories. Custom dimensions available for project requirements.</p>
+      </div>
+      <div class="article-container" style="max-width:1100px;">
+        <article class="article-content">
+
+          <h3>3D Wire Panel Specification</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Specifications</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Panel Height</strong></td>
+                <td>630mm / 1030mm / 1230mm / 1530mm / 1730mm / 1830mm / 2030mm / 2230mm / 2430mm</td>
+              </tr>
+              <tr>
+                <td><strong>Panel Length</strong></td>
+                <td>2000mm / 2200mm / 2500mm / 2900mm</td>
+              </tr>
+              <tr>
+                <td><strong>Wire Diameter</strong></td>
+                <td>3.0mm / 3.5mm / 4.0mm / 4.5mm / 5.0mm</td>
+              </tr>
+              <tr>
+                <td><strong>Mesh Opening</strong></td>
+                <td>50&times;100mm / 50&times;150mm / 50&times;200mm / 75&times;100mm / 75&times;200mm</td>
+              </tr>
+              <tr>
+                <td><strong>Material</strong></td>
+                <td>High-quality low-carbon steel wire Q235, Q195, S235J2</td>
+              </tr>
+              <tr>
+                <td><strong>Surface Treatment</strong></td>
+                <td>Pre hot-dip galvanized / Post hot-dip galvanized / Electro-galv + PVC coated / Hot-dip galv + PVC coated</td>
+              </tr>
+              <tr>
+                <td><strong>V-Profile Bends</strong></td>
+                <td>2, 3, or 4 longitudinal bends per panel (depending on height)</td>
+              </tr>
+              <tr>
+                <td><strong>Standard</strong></td>
+                <td>EN 10223-7 / ISO 9001</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Fence Post Specification</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Post Type</th>
+                <th>Dimensions</th>
+                <th>Thickness</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Round Post</strong></td>
+                <td>&Oslash;48mm / &Oslash;60mm</td>
+                <td>1.5mm / 2.0mm</td>
+              </tr>
+              <tr>
+                <td><strong>Square Post</strong></td>
+                <td>50&times;50mm / 60&times;60mm</td>
+                <td>1.5mm / 2.0mm</td>
+              </tr>
+              <tr>
+                <td><strong>Rectangular Post</strong></td>
+                <td>40&times;60mm / 40&times;80mm / 60&times;80mm / 80&times;100mm</td>
+                <td>1.5mm / 2.0mm</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Accessories &amp; Packaging</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Post Cap</strong></td>
+                <td>Metal cap / Anti-UV plastic cap</td>
+              </tr>
+              <tr>
+                <td><strong>Clamp / Fixing</strong></td>
+                <td>Metal clamp / Anti-UV plastic clamp / No clamp (for peach post)</td>
+              </tr>
+              <tr>
+                <td><strong>Packaging</strong></td>
+                <td>Plastic film wrapping + palletized for sea freight</td>
+              </tr>
+              <tr>
+                <td><strong>Place of Origin</strong></td>
+                <td>Hebei, China</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ POST TYPES ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Post Types</span>
+        <h2>Fence Post <span class="accent">Options</span></h2>
+        <p>Choose the right post type for your fencing project. Each post is available in galvanized or PVC coated finish to match your panels.</p>
+      </div>
+      <div class="posts-grid">
+        <div class="post-card">
+          <div class="post-card-image">
+            <div class="post-slider" id="roundPostSlider">
+              <div class="post-slider-track">
+                <img src="products/fence/posts/round-post-black.webp" alt="Round Post - Black PVC coated" loading="lazy">
+                <img src="products/fence/posts/round-post-galvanized.webp" alt="Round Post - Galvanized finish" loading="lazy">
+                <img src="products/fence/posts/round-post-colors.webp" alt="Round Post - Color options" loading="lazy">
+              </div>
+              <button class="post-slider-btn prev" type="button" aria-label="Previous image">&#8249;</button>
+              <button class="post-slider-btn next" type="button" aria-label="Next image">&#8250;</button>
+              <div class="post-slider-dots">
+                <span class="post-slider-dot active"></span>
+                <span class="post-slider-dot"></span>
+                <span class="post-slider-dot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="post-card-body">
+            <h4>Round Post</h4>
+            <span class="post-dims">&Oslash;48 / &Oslash;60 mm</span>
+            <p>The most common and economical choice for general fencing applications. Thickness 1.5mm or 2.0mm, available in galvanized or PVC coated finish to match panel color.</p>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-image">
+            <div class="post-slider" id="squarePostSlider">
+              <div class="post-slider-track">
+                <img src="products/fence/posts/square-post-black.webp" alt="Square Post - Black PVC coated" loading="lazy">
+                <img src="products/fence/posts/square-post-60x60.webp" alt="Square Post - 60x60mm" loading="lazy">
+                <img src="products/fence/posts/square-post-3inch.webp" alt="Square Post - 3 inch" loading="lazy">
+              </div>
+              <button class="post-slider-btn prev" type="button" aria-label="Previous image">&#8249;</button>
+              <button class="post-slider-btn next" type="button" aria-label="Next image">&#8250;</button>
+              <div class="post-slider-dots">
+                <span class="post-slider-dot active"></span>
+                <span class="post-slider-dot"></span>
+                <span class="post-slider-dot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="post-card-body">
+            <h4>Square Post</h4>
+            <span class="post-dims">50&times;50 / 60&times;60 mm</span>
+            <p>Clean modern appearance with excellent structural stability. Ideal for architectural and premium residential projects where aesthetics matter.</p>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-image">
+            <div class="post-slider" id="rectPostSlider">
+              <div class="post-slider-track">
+                <img src="products/fence/posts/rect-post-detail.webp" alt="Rectangular Post - Detail" loading="lazy">
+                <img src="products/fence/posts/rect-post-black-1.webp" alt="Rectangular Post - Black variant 1" loading="lazy">
+                <img src="products/fence/posts/rect-post-black-2.webp" alt="Rectangular Post - Black variant 2" loading="lazy">
+              </div>
+              <button class="post-slider-btn prev" type="button" aria-label="Previous image">&#8249;</button>
+              <button class="post-slider-btn next" type="button" aria-label="Next image">&#8250;</button>
+              <div class="post-slider-dots">
+                <span class="post-slider-dot active"></span>
+                <span class="post-slider-dot"></span>
+                <span class="post-slider-dot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="post-card-body">
+            <h4>Rectangular Post</h4>
+            <span class="post-dims">40&times;60 to 80&times;100 mm</span>
+            <p>Enhanced rigidity for high-security and heavy-duty applications. Larger cross-section provides superior wind resistance and impact resistance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATIONS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Applications</span>
+        <h2>Where <span class="accent">3D Panel Fences</span> Are Used</h2>
+        <p>From residential gardens to industrial perimeters and transportation infrastructure, the 3D wire panel fence is a versatile solution trusted across diverse industries.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="images/blog/app-residential.png" alt="3D panel fence for residential yard and garden" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Yard &amp; Garden</div>
+            <div class="app-tile-desc">Residential boundary fencing with aesthetic appeal</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/blog/app-perimeter-security.jpg" alt="3D panel fence for commercial building perimeter" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Building Perimeter</div>
+            <div class="app-tile-desc">Security fencing for commercial and residential buildings</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/industry/industry-construction.jpg" alt="3D panel fence at construction site" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Construction Sites</div>
+            <div class="app-tile-desc">Temporary or permanent site enclosure and safety barrier</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/industry/industry-agriculture.jpg" alt="3D panel fence for agricultural applications" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Agriculture</div>
+            <div class="app-tile-desc">Farmland enclosure and livestock management</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-warehouse.webp" alt="3D panel fence securing industrial warehouse" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Industry</div>
+            <div class="app-tile-desc">Security for factories, warehouses, and industrial zones</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/industry/industry-infrastructure.jpg" alt="3D panel fence along transportation infrastructure" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Transportation</div>
+            <div class="app-tile-desc">Barriers for highways, railways, and transit infrastructure</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/blog/app-cattle-livestock.png" alt="3D panel fence for cultivation and horticulture" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Cultivation</div>
+            <div class="app-tile-desc">Horticulture and cultivation area protection</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/industry/industry-energy.jpg" alt="3D panel fence for public and sports facilities" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Public &amp; Sports</div>
+            <div class="app-tile-desc">Schools, parks, sports fields, and utility perimeters</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STANDARDS STRIP ============ -->
+    <section class="standards-strip">
+      <div class="standards-strip-inner">
+        <h3>Manufactured to International Standards</h3>
+        <div class="standards-tags">
+          <span class="standard-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            EN 10223-7
+          </span>
+          <span class="standard-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            ISO 9001
+          </span>
+          <span class="standard-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            EN 10244-2
+          </span>
+          <span class="standard-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            ASTM A123
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INQUIRY CTA + SHARE ============ -->
+    <section class="article-body" style="padding-top:clamp(2.5rem,5vw,3.5rem);padding-bottom:clamp(2.5rem,5vw,3.5rem);">
+      <div class="article-container">
+        <div class="article-inquiry-cta">
+          <p>Need a custom 3D wire panel fence configuration for your project? Our engineering team will help you specify the right panel height, wire diameter, coating, and post type. <a class="inquiry-cta-link" href="contact.html">Request a Quote &rarr;</a></p>
+        </div>
+
+        <div class="share-section" data-page-url="https://www.kestrelmetal.com/fence-3d.html" data-page-title="3D Wire Panel Fence - Kestrel Metal">
+          <span class="share-label">Share</span>
+          <a href="#" class="share-btn" data-share="linkedin" title="Share on LinkedIn" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" class="share-btn" data-share="twitter" title="Share on Twitter" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#" class="share-btn" data-share="email" title="Share via Email"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        </div>
+
+        <div class="article-post-nav">
+          <a href="fence-products.html" class="prev">
+            <div class="nav-label">&larr; Back</div>
+            <div class="nav-title">All Fence Products</div>
+          </a>
+          <a href="contact.html" class="next">
+            <div class="nav-label">Next &rarr;</div>
+            <div class="nav-title">Request a Custom Quote</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20steel%20wire%20being%20drawn%20orange%20hot%20industrial%20furnace%20glowing%20metal%20manufacturing%20close%20up%20dramatic&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Start Your Fencing Project</h2>
+        <p class="article-cta-desc">Get a personalized quote within 24 hours. Tell us your panel height, length, wire diameter, color, and quantity &mdash; we handle the rest, from manufacturing to sea freight delivery.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="downloads.html" class="btn-hero-secondary">DOWNLOAD CATALOG</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script>
+    (function () {
+      var swatches = document.querySelectorAll('#colorSwatches .color-swatch');
+      var svg = document.getElementById('fenceSvg');
+      function applyColor(color) {
+        if (!svg) return;
+        var lines = svg.querySelectorAll('.fence-line');
+        for (var i = 0; i < lines.length; i++) {
+          lines[i].style.stroke = color;
+        }
+      }
+      for (var i = 0; i < swatches.length; i++) {
+        swatches[i].addEventListener('click', function () {
+          for (var j = 0; j < swatches.length; j++) {
+            swatches[j].classList.remove('active');
+          }
+          this.classList.add('active');
+          applyColor(this.getAttribute('data-color'));
+        });
+      }
+      var active = document.querySelector('#colorSwatches .color-swatch.active');
+      if (active) applyColor(active.getAttribute('data-color'));
+    })();
+
+    (function () {
+      var sliders = document.querySelectorAll('.post-slider');
+      for (var s = 0; s < sliders.length; s++) {
+        (function (slider) {
+          var track = slider.querySelector('.post-slider-track');
+          var dots = slider.querySelectorAll('.post-slider-dot');
+          var prevBtn = slider.querySelector('.post-slider-btn.prev');
+          var nextBtn = slider.querySelector('.post-slider-btn.next');
+          var total = track.children.length;
+
+          function update() {
+            var current = parseInt(track.dataset.index || 0, 10);
+            track.style.transform = 'translateX(-' + (current * 100) + '%)';
+            for (var d = 0; d < dots.length; d++) {
+              dots[d].classList.toggle('active', d === current);
+            }
+          }
+
+          function go(dir) {
+            var current = parseInt(track.dataset.index || 0, 10);
+            current = (current + dir + total) % total;
+            track.dataset.index = current;
+            update();
+          }
+
+          function goTo(idx) {
+            track.dataset.index = idx;
+            update();
+          }
+
+          if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); go(-1); });
+          if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); go(1); });
+          for (var d = 0; d < dots.length; d++) {
+            (function (idx) {
+              dots[d].addEventListener('click', function (e) { e.preventDefault(); goTo(idx); });
+            })(d);
+          }
+
+          var startX = 0;
+          var deltaX = 0;
+          var swiping = false;
+          track.addEventListener('touchstart', function (e) {
+            startX = e.touches[0].clientX;
+            deltaX = 0;
+            swiping = true;
+          }, { passive: true });
+          track.addEventListener('touchmove', function (e) {
+            if (!swiping) return;
+            deltaX = e.touches[0].clientX - startX;
+          }, { passive: true });
+          track.addEventListener('touchend', function () {
+            if (!swiping) return;
+            swiping = false;
+            if (Math.abs(deltaX) > 40) {
+              go(deltaX > 0 ? -1 : 1);
+            }
+          });
+        })(sliders[s]);
+      }
+    })();
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    var container = document.getElementById('modelViewer');
+    if (container) {
+      var scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xd8dcdf);
+
+      // 渐变天际线（水平渐变，模拟地平线场景）
+      var skyCanvas = document.createElement('canvas');
+      skyCanvas.width = 8;
+      skyCanvas.height = 512;
+      var skyCtx = skyCanvas.getContext('2d');
+      var skyGrad = skyCtx.createLinearGradient(0, 0, 0, 512);
+      skyGrad.addColorStop(0.0, '#c9d1d6');
+      skyGrad.addColorStop(0.6, '#e7ebee');
+      skyGrad.addColorStop(1.0, '#f7f9fa');
+      skyCtx.fillStyle = skyGrad;
+      skyCtx.fillRect(0, 0, 8, 512);
+      var skyTexture = new THREE.CanvasTexture(skyCanvas);
+      scene.background = skyTexture;
+
+      scene.fog = new THREE.Fog(0xf7f9fa, 60, 180);
+
+      var w = container.clientWidth;
+      var h = container.clientHeight || 540;
+      var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(30, 22, 45);
+
+      var renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.insertBefore(renderer.domElement, container.firstChild);
+
+      var controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.minDistance = 15;
+      controls.maxDistance = 90;
+      controls.target.set(0, 4, 0);
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+      var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(5, 10, 7);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      var fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+      fillLight.position.set(-5, 5, -5);
+      scene.add(fillLight);
+
+      var bottomLight = new THREE.DirectionalLight(0xffffff, 0.3);
+      bottomLight.position.set(0, -3, 5);
+      scene.add(bottomLight);
+
+      // 地平线网格（GridHelper）
+      var gridHelper = new THREE.GridHelper(200, 40, 0x9aa3ab, 0xc9d1d6);
+      gridHelper.position.y = 0;
+      scene.add(gridHelper);
+
+      var loadingEl = document.getElementById('modelLoading');
+      var fencePivot = null;
+      var autoRotate = true;
+
+      var loader = new GLTFLoader();
+      loader.load('models/3d-fence-panel-model.glb', function (gltf) {
+        var model = gltf.scene;
+        var pvcMaterial = new THREE.MeshStandardMaterial({
+          color: 0x2d5a3d,
+          metalness: 0.1,
+          roughness: 0.6
+        });
+        model.traverse(function (child) {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material = pvcMaterial;
+          }
+        });
+
+        var box = new THREE.Box3().setFromObject(model);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z);
+        var scale = 34 / maxDim;
+        model.scale.setScalar(scale);
+
+        fencePivot = new THREE.Group();
+        fencePivot.add(model);
+        model.position.sub(center.multiplyScalar(scale));
+        model.position.y += (size.y * scale) / 2;
+        scene.add(fencePivot);
+
+        if (loadingEl) loadingEl.classList.add('hidden');
+      }, function (progress) {
+        if (progress.total > 0 && loadingEl) {
+          var pct = Math.round(progress.loaded / progress.total * 100);
+          var txt = loadingEl.querySelector('.model-loading-text');
+          if (txt) txt.textContent = 'Loading 3D Model... ' + pct + '%';
+        }
+      }, function (error) {
+        console.error('3D model load error:', error);
+        if (loadingEl) {
+          loadingEl.innerHTML = '<div class="model-loading-text" style="color:#c00;">Unable to load 3D model.</div>';
+        }
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        if (autoRotate && fencePivot) {
+          fencePivot.rotation.y += 0.005;
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', function () {
+        var nw = container.clientWidth;
+        var nh = container.clientHeight;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
+      });
+
+      var viewBtns = container.querySelectorAll('.model-controls button');
+      function setActiveView(btn) {
+        for (var i = 0; i < viewBtns.length; i++) {
+          viewBtns[i].classList.remove('active');
+        }
+        if (btn) btn.classList.add('active');
+      }
+      function resetCamera() {
+        camera.position.set(30, 22, 45);
+        controls.target.set(0, 4, 0);
+        controls.update();
+      }
+      function setCameraAngle(angle) {
+        var dist = 50;
+        if (angle === 'front') camera.position.set(0, 16, dist);
+        else if (angle === 'side') camera.position.set(dist, 16, 0);
+        else if (angle === 'top') camera.position.set(0, dist, 0.01);
+        controls.target.set(0, 4, 0);
+        controls.update();
+      }
+
+      for (var i = 0; i < viewBtns.length; i++) {
+        viewBtns[i].addEventListener('click', function () {
+          var view = this.getAttribute('data-view');
+          if (view === 'reset') {
+            resetCamera();
+            autoRotate = true;
+            setActiveView(this);
+            var rotateBtn = container.querySelector('[data-view="rotate"]');
+            if (rotateBtn) rotateBtn.classList.add('active');
+          } else if (view === 'front') {
+            setCameraAngle('front');
+            autoRotate = false;
+            setActiveView(this);
+          } else if (view === 'side') {
+            setCameraAngle('side');
+            autoRotate = false;
+            setActiveView(this);
+          } else if (view === 'top') {
+            setCameraAngle('top');
+            autoRotate = false;
+            setActiveView(this);
+          } else if (view === 'rotate') {
+            autoRotate = !autoRotate;
+            this.classList.toggle('active', autoRotate);
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
