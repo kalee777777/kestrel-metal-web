@@ -17,6 +17,15 @@
   <link rel="stylesheet" href="css/product-detail.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/faq.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/js/threejs/three.module.min.js",
+      "three/addons/": "/js/threejs/"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -68,6 +77,31 @@
             <li>PVC colors: green, black, white, brown + custom</li>
             <li>Low maintenance with decades of service life</li>
           </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3D MODEL VIEWER ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">3D Model</span>
+        <h2>Interactive <span class="accent">3D</span> Product View</h2>
+        <p>Explore the chain link fence model from every angle. Drag to rotate, scroll to zoom, and use the controls below to switch between preset views.</p>
+      </div>
+      <div class="article-container" style="max-width:1200px;">
+        <div class="model-viewer-wrap" id="modelViewer">
+          <span class="model-hint">Drag to rotate &middot; Scroll to zoom</span>
+          <div class="model-loading" id="modelLoading">
+            <div class="model-loading-spinner"></div>
+            <div class="model-loading-text">Loading 3D Model...</div>
+          </div>
+          <div class="model-controls">
+            <button type="button" class="active" data-view="reset">Reset View</button>
+            <button type="button" data-view="front">Front</button>
+            <button type="button" data-view="side">Side</button>
+            <button type="button" data-view="top">Top</button>
+            <button type="button" class="active" data-view="rotate">Auto Rotate</button>
+          </div>
         </div>
       </div>
     </section>
@@ -704,6 +738,189 @@
       selectFinish.addEventListener('change', update);
       update();
     })();
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    var container = document.getElementById('modelViewer');
+    if (container) {
+      var scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xd8dcdf);
+
+      // 渐变天际线（垂直渐变，模拟地平线场景）
+      var skyCanvas = document.createElement('canvas');
+      skyCanvas.width = 8;
+      skyCanvas.height = 512;
+      var skyCtx = skyCanvas.getContext('2d');
+      var skyGrad = skyCtx.createLinearGradient(0, 0, 0, 512);
+      skyGrad.addColorStop(0.0, '#c9d1d6');
+      skyGrad.addColorStop(0.6, '#e7ebee');
+      skyGrad.addColorStop(1.0, '#f7f9fa');
+      skyCtx.fillStyle = skyGrad;
+      skyCtx.fillRect(0, 0, 8, 512);
+      var skyTexture = new THREE.CanvasTexture(skyCanvas);
+      scene.background = skyTexture;
+
+      scene.fog = new THREE.Fog(0xf7f9fa, 60, 180);
+
+      var w = container.clientWidth;
+      var h = container.clientHeight || 540;
+      var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(30, 22, 45);
+
+      var renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.insertBefore(renderer.domElement, container.firstChild);
+
+      var controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.minDistance = 15;
+      controls.maxDistance = 90;
+      controls.target.set(0, 4, 0);
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+      var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(5, 10, 7);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      var fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+      fillLight.position.set(-5, 5, -5);
+      scene.add(fillLight);
+
+      var bottomLight = new THREE.DirectionalLight(0xffffff, 0.3);
+      bottomLight.position.set(0, -3, 5);
+      scene.add(bottomLight);
+
+      // 地平线网格（GridHelper）
+      var gridHelper = new THREE.GridHelper(200, 40, 0x9aa3ab, 0xc9d1d6);
+      gridHelper.position.y = 0;
+      scene.add(gridHelper);
+
+      var loadingEl = document.getElementById('modelLoading');
+      var fencePivot = null;
+      var autoRotate = true;
+
+      var loader = new GLTFLoader();
+      loader.load('models/modular-chain-link-fence.glb', function (gltf) {
+        var model = gltf.scene;
+        var pvcMaterial = new THREE.MeshStandardMaterial({
+          color: 0x9ca3af,
+          metalness: 0.15,
+          roughness: 0.7
+        });
+        model.traverse(function (child) {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material = pvcMaterial;
+          }
+        });
+
+        var box = new THREE.Box3().setFromObject(model);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z);
+        var scale = 34 / maxDim;
+        model.scale.setScalar(scale);
+
+        fencePivot = new THREE.Group();
+        fencePivot.add(model);
+        model.position.sub(center.multiplyScalar(scale));
+        model.position.y += (size.y * scale) / 2;
+        scene.add(fencePivot);
+
+        if (loadingEl) loadingEl.classList.add('hidden');
+      }, function (progress) {
+        if (progress.total > 0 && loadingEl) {
+          var pct = Math.round(progress.loaded / progress.total * 100);
+          var txt = loadingEl.querySelector('.model-loading-text');
+          if (txt) txt.textContent = 'Loading 3D Model... ' + pct + '%';
+        }
+      }, function (error) {
+        console.error('3D model load error:', error);
+        if (loadingEl) {
+          loadingEl.innerHTML = '<div class="model-loading-text" style="color:#c00;">Unable to load 3D model.</div>';
+        }
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        if (autoRotate && fencePivot) {
+          fencePivot.rotation.y += 0.005;
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', function () {
+        var nw = container.clientWidth;
+        var nh = container.clientHeight;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
+      });
+
+      var viewBtns = container.querySelectorAll('.model-controls button');
+      function setActiveView(btn) {
+        for (var i = 0; i < viewBtns.length; i++) {
+          viewBtns[i].classList.remove('active');
+        }
+        if (btn) btn.classList.add('active');
+      }
+      function resetCamera() {
+        camera.position.set(30, 22, 45);
+        controls.target.set(0, 4, 0);
+        controls.update();
+      }
+      function setCameraAngle(angle) {
+        var dist = 50;
+        if (angle === 'front') camera.position.set(0, 16, dist);
+        else if (angle === 'side') camera.position.set(dist, 16, 0);
+        else if (angle === 'top') camera.position.set(0, dist, 0.01);
+        controls.target.set(0, 4, 0);
+        controls.update();
+      }
+
+      for (var i = 0; i < viewBtns.length; i++) {
+        viewBtns[i].addEventListener('click', function () {
+          var view = this.getAttribute('data-view');
+          if (view === 'reset') {
+            resetCamera();
+            autoRotate = true;
+            setActiveView(this);
+            var rotateBtn = container.querySelector('[data-view="rotate"]');
+            if (rotateBtn) rotateBtn.classList.add('active');
+          } else if (view === 'front') {
+            setCameraAngle('front');
+            autoRotate = false;
+            setActiveView(this);
+          } else if (view === 'side') {
+            setCameraAngle('side');
+            autoRotate = false;
+            setActiveView(this);
+          } else if (view === 'top') {
+            setCameraAngle('top');
+            autoRotate = false;
+            setActiveView(this);
+          } else if (view === 'rotate') {
+            autoRotate = !autoRotate;
+            this.classList.toggle('active', autoRotate);
+          }
+        });
+      }
+    }
   </script>
 </body>
 </html>
