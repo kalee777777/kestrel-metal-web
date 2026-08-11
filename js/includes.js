@@ -9,7 +9,7 @@
   } catch (e) {}
 
   function loadComponent(url) {
-    return fetch(BASE + url, { credentials: 'same-origin' })
+    return fetch(BASE + url, { credentials: 'same-origin', cache: 'no-cache' })
       .then(function (r) {
         if (!r.ok) throw new Error('Failed to load ' + url + ': ' + r.status);
         return r.text();
