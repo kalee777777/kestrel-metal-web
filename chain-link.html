@@ -814,16 +814,10 @@
       var loader = new GLTFLoader();
       loader.load('models/modular-chain-link-fence.glb', function (gltf) {
         var model = gltf.scene;
-        var pvcMaterial = new THREE.MeshStandardMaterial({
-          color: 0x9ca3af,
-          metalness: 0.15,
-          roughness: 0.7
-        });
         model.traverse(function (child) {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
-            child.material = pvcMaterial;
           }
         });
 
