@@ -240,6 +240,194 @@
   }
 }
 
+/* ---------- Spec Simulator 交互式规格模拟器 ---------- */
+.spec-sim-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.spec-sim-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spec-sim-stat {
+  padding: 1.1rem 1.25rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spec-sim-stat:last-child {
+  border-right: none;
+}
+
+.spec-sim-stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-orange-primary);
+  margin-bottom: 0.3rem;
+}
+
+.spec-sim-stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: #fff;
+}
+
+.spec-sim-visual {
+  position: relative;
+  height: 260px;
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.spec-sim-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.spec-sim-center-line {
+  width: 40px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.spec-sim-center-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 107, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+}
+
+.spec-sim-controls {
+  padding: 1.5rem 1.75rem 1.75rem;
+}
+
+.spec-sim-sliders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.spec-sim-slider-group label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.5rem;
+}
+
+.spec-sim-slider-group label span {
+  color: var(--color-orange-primary);
+}
+
+.spec-sim-slider-group input[type="range"] {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.spec-sim-slider-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-orange-primary);
+  box-shadow: 0 2px 6px rgba(255, 107, 0, 0.3);
+  cursor: pointer;
+}
+
+.spec-sim-hint {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.35rem;
+}
+
+.spec-sim-select-group {
+  margin-bottom: 1.25rem;
+}
+
+.spec-sim-select-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.45rem;
+}
+
+.spec-sim-select-group select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.88rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  outline: none;
+}
+
+.spec-sim-select-group select option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.spec-sim-select-group select:focus {
+  border-color: var(--color-orange-primary);
+  box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .spec-sim-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .spec-sim-stat:nth-child(2) {
+    border-right: none;
+  }
+
+  .spec-sim-stat:nth-child(1),
+  .spec-sim-stat:nth-child(2) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .spec-sim-visual {
+    height: 180px;
+  }
+
+  .spec-sim-sliders {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
 /* ---------- 关键特性指标条 ---------- */
 .product-features-strip {
   background: var(--color-black);
