@@ -40,10 +40,10 @@
     }
   
     /* Security Fence Features Carousel */
-    .carousel-container{position:relative;max-width:1100px;margin:0 auto;padding:0 64px}
+    .carousel-container{position:relative;max-width:1200px;margin:0 auto;padding:0 64px}
     .carousel-wrapper{width:100%;padding:6px 0;margin:-6px 0;overflow:hidden}
-    .carousel-track{display:flex;align-items:stretch;gap:0;transition:transform 0.5s ease-in-out}
-    .carousel-track .feature-card{flex:0 0 100%;box-sizing:border-box}
+    .carousel-track{display:flex;align-items:stretch;gap:20px;transition:transform 0.5s ease-in-out}
+    .carousel-track .feature-card{flex:0 0 calc((100% - 40px) / 3);box-sizing:border-box}
     .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:var(--color-white);border:1px solid #e5e7eb;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
     .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
     .carousel-prev{left:0}
@@ -52,12 +52,13 @@
     .carousel-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .3s ease}
     .carousel-dot.active{background:var(--color-orange-primary);width:24px;border-radius:5px}
     .carousel-dot:hover{background:var(--color-orange-bg-light)}
-    .feature-card{background:var(--color-white);border:1px solid #e5e7eb;border-radius:16px;padding:44px 40px;text-align:center;transition:all .3s ease;min-height:200px}
+    .feature-card{background:var(--color-white);border:1px solid #e5e7eb;border-radius:16px;padding:32px 24px;text-align:center;transition:all .3s ease}
     .feature-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.12);border-color:var(--color-orange-primary)}
     .feature-icon{width:64px;height:64px;margin:0 auto 16px;background:linear-gradient(135deg,#FFF8F0,#FFF0E0);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--color-orange-primary);font-size:1.5rem}
-    .feature-card h3{font-size:1.15rem;font-weight:600;color:var(--color-black);margin-bottom:10px}
-    .feature-card p{font-size:.95rem;color:#4b5563;line-height:1.65}
-    @media(max-width:768px){.carousel-container{padding:0 50px}.carousel-btn{width:40px;height:40px}}
+    .feature-card h3{font-size:1.05rem;font-weight:600;color:var(--color-black);margin-bottom:8px}
+    .feature-card p{font-size:.88rem;color:#4b5563;line-height:1.6}
+    @media(max-width:1024px){.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}}
+    @media(max-width:768px){.carousel-container{padding:0 50px}.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}.carousel-btn{width:40px;height:40px}}
 </style>
 
   <script type="importmap">
@@ -741,15 +742,19 @@
       var featureTotalCards = 6;
 
       function getFeatureCardsPerView() {
-        return 1;
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
       }
       function getFeatureTotalSlides() {
-        return featureTotalCards;
+        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
       }
       function updateFeatureCarousel() {
         var track = document.getElementById('securityFenceCarousel');
         if (track) {
-          track.style.transform = 'translateX(' + (featureSlide * -100) + '%)';
+          var perView = getFeatureCardsPerView();
+          var slides = getFeatureTotalSlides();
+          var step = track.scrollWidth / slides;
+          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
         }
         updateFeatureDots();
       }
