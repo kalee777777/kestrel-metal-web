@@ -781,9 +781,9 @@
       var controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.minDistance = 15;
-      controls.maxDistance = 90;
-      controls.target.set(0, 4, 0);
+      controls.minDistance = 20;
+      controls.maxDistance = 180;
+      controls.target.set(0, 10, 0);
 
       scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
@@ -825,7 +825,7 @@
         var center = box.getCenter(new THREE.Vector3());
         var size = box.getSize(new THREE.Vector3());
         var maxDim = Math.max(size.x, size.y, size.z);
-        var scale = 34 / maxDim;
+        var scale = 68 / maxDim;
         model.scale.setScalar(scale);
 
         fencePivot = new THREE.Group();
@@ -875,15 +875,15 @@
       }
       function resetCamera() {
         camera.position.set(30, 22, 45);
-        controls.target.set(0, 4, 0);
+        controls.target.set(0, 10, 0);
         controls.update();
       }
       function setCameraAngle(angle) {
-        var dist = 50;
-        if (angle === 'front') camera.position.set(0, 16, dist);
-        else if (angle === 'side') camera.position.set(dist, 16, 0);
+        var dist = 85;
+        if (angle === 'front') camera.position.set(0, 28, dist);
+        else if (angle === 'side') camera.position.set(dist, 28, 0);
         else if (angle === 'top') camera.position.set(0, dist, 0.01);
-        controls.target.set(0, 4, 0);
+        controls.target.set(0, 10, 0);
         controls.update();
       }
 
