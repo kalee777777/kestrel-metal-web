@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete range of fence accessories including post caps, clamps, brackets, tension bands, fasteners, and gabion box connecting components. Hot-dip galvanized or PVC coated to match your fence system.">
+  <title>Fence Accessories | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/faq.css">
+
+  <style>
+    /* 仅作用于本页 Applications 版块：一行 3 列、两行展示，并缩短卡片高度 */
+    .apps-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+    }
+    .apps-grid .app-tile {
+      aspect-ratio: 4 / 3;
+    }
+    @media (max-width: 1200px) {
+      .apps-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .apps-grid .app-tile { aspect-ratio: 3 / 2; }
+    }
+    @media (max-width: 480px) {
+      .apps-grid { grid-template-columns: 1fr; }
+      .apps-grid .app-tile { aspect-ratio: 16 / 10; }
+    }
+  
+    /* Security Fence Features Carousel */
+    .carousel-container{position:relative;max-width:1200px;margin:0 auto;padding:0 64px}
+    .carousel-wrapper{width:100%;padding:6px 0;margin:-6px 0;overflow:hidden}
+    .carousel-track{display:flex;align-items:stretch;gap:20px;transition:transform 0.5s ease-in-out}
+    .carousel-track .feature-card{flex:0 0 calc((100% - 40px) / 3);box-sizing:border-box}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:var(--color-white);border:1px solid #e5e7eb;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .carousel-prev{left:0}
+    .carousel-next{right:0}
+    .carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}
+    .carousel-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .3s ease}
+    .carousel-dot.active{background:var(--color-orange-primary);width:24px;border-radius:5px}
+    .carousel-dot:hover{background:var(--color-orange-bg-light)}
+    .feature-card{background:var(--color-white);border:1px solid #e5e7eb;border-radius:16px;padding:32px 24px;text-align:center;transition:all .3s ease}
+    .feature-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.12);border-color:var(--color-orange-primary)}
+    .feature-icon{width:64px;height:64px;margin:0 auto 16px;background:linear-gradient(135deg,#FFF8F0,#FFF0E0);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--color-orange-primary);font-size:1.5rem}
+    .feature-card h3{font-size:1.05rem;font-weight:600;color:var(--color-black);margin-bottom:8px}
+    .feature-card p{font-size:.88rem;color:#4b5563;line-height:1.6}
+    @media(max-width:1024px){.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}}
+    @media(max-width:768px){.carousel-container{padding:0 50px}.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}.carousel-btn{width:40px;height:40px}}
+
+    /* ===== Security Fence Features - Black Glassmorphism style ===== */
+    .security-features{position:relative;overflow:hidden;background:radial-gradient(1200px 600px at 0% 0%,rgba(255,103,31,.14),transparent 55%),radial-gradient(1000px 500px at 100% 100%,rgba(255,103,31,.10),transparent 55%),#0a0a0a}
+    .security-features .security-features-glow{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,103,31,.22),transparent 65%);top:-160px;right:-120px;filter:blur(20px);pointer-events:none;z-index:0}
+    .security-features .section-header{position:relative;z-index:1}
+    .security-features .section-header .category-tag{color:var(--color-orange-primary);border-color:rgba(255,103,31,.4)}
+    .security-features .carousel-container{position:relative;z-index:1}
+    .security-features .carousel-track .feature-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.35);color:rgba(255,255,255,.9)}
+    .security-features .feature-card:hover{border-color:var(--color-orange-primary);background:rgba(255,255,255,.10);box-shadow:0 20px 44px rgba(0,0,0,.5),0 0 24px rgba(255,103,31,.15)}
+    .security-features .feature-icon{background:linear-gradient(135deg,rgba(255,103,31,.18),rgba(255,103,31,.06));color:var(--color-orange-primary)}
+    .security-features .feature-card h3{color:var(--color-white)}
+    .security-features .feature-card p{color:rgba(255,255,255,.72)}
+    .security-features .carousel-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--color-white);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    .security-features .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .security-features .carousel-dot{background:rgba(255,255,255,.28)}
+    .security-features .carousel-dot.active{background:var(--color-orange-primary)}
+</style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/js/threejs/three.module.min.js",
+      "three/addons/": "/js/threejs/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('products/fence/accessories-category-product.webp');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="fence-products.html">Fence Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Fence Accessories</span>
+        </nav>
+        <span class="article-hero-kicker">Complete Fencing Hardware</span>
+        <h1 class="article-hero-title">Fence Accessories</h1>
+        <div class="article-hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Post Caps &amp; Clamps</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>M6&ndash;M12 Fasteners</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>HDG / PVC Finish</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT OVERVIEW ============ -->
+    <section class="product-overview">
+      <div class="product-overview-inner">
+        <div class="product-overview-image">
+          <span class="product-badge">Full Hardware Range</span>
+          <img src="products/fence/fence-accessories-product.webp" alt="Complete range of fence accessories" loading="lazy">
+        </div>
+        <div class="product-overview-text">
+          <span class="category-tag">Product Overview</span>
+          <h2>Every Fitting You Need to Complete Your Fence</h2>
+          <p>KESTREL METAL supplies a complete range of fence accessories &mdash; post caps, clamps, brackets, tension bands, fasteners, and gabion box connecting components. All are manufactured from high-quality materials and finished with hot-dip galvanized or PVC coating to match your fence system.</p>
+          <p>From securing a single panel to reinforcing heavy-duty gabion structures, our accessories ensure a clean, professional, and long-lasting installation.</p>
+          <ul>
+            <li>Post caps in flat, pyramid, ball &amp; gothic designs</li>
+            <li>Clamps, U-bolts &amp; brackets for panel-to-post fixing</li>
+            <li>Fasteners from Grade 4.8 to 8.8 &amp; stainless steel</li>
+            <li>Gabion lacing wire, helicals, rings &amp; clips</li>
+            <li>Hot-dip galvanized or PVC coated finish</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES STRIP ============ -->
+    <section class="product-features-strip">
+      <div class="product-features-strip-inner">
+        <div class="feature-stat">
+          <div class="feature-stat-num">3</div>
+          <div class="feature-stat-label">Hardware Groups<br>Caps / Clamps / Fixings</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">5</div>
+          <div class="feature-stat-label">Gabion Accessories<br>Lacing / Rings / Clips</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">8.8</div>
+          <div class="feature-stat-label">Bolt Grade<br>Up to Grade 8.8</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">3</div>
+          <div class="feature-stat-label">Finish Options<br>HDG / PVC / SS</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT TYPES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Range</span>
+        <h2>Chain Link Fence <span class="accent">Accessory Types</span></h2>
+        <p>Complete range of fence accessories manufactured from high-quality galvanized or PVC coated materials to finish any fence system.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/accessories-category-product.webp" alt="Post caps and tops" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Post Caps &amp; Tops</h3>
+              <p class="product-desc">Flat cap, pyramid cap, ball cap, and gothic cap in galvanized, green, or black finish. Compatible with round, square, and rectangular posts.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Flat / Pyramid / Ball</span>
+                <span class="spec-tag">HDG / Green / Black</span>
+                <span class="spec-tag">All Post Profiles</span>
+              </div>
+              <a href="#gabion" class="product-card-link">View More <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-u-clips.webp" alt="Clamps and fixings" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Clamps &amp; Fixings</h3>
+              <p class="product-desc">Metal clamp, plastic clamp, U-bolt clamp, and bracket for panel-to-post connection. Sizes from 40mm to 80mm for various fence types.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Metal / Plastic</span>
+                <span class="spec-tag">U-Bolt &amp; Bracket</span>
+                <span class="spec-tag">40&ndash;80mm</span>
+              </div>
+              <a href="#gabion" class="product-card-link">View More <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-hook-connection.webp" alt="Fasteners and hardware" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fasteners &amp; Hardware</h3>
+              <p class="product-desc">Hex bolts, nuts, washers, self-tapping screws, and anchor bolts in Grade 4.8/8.8 steel or stainless steel. M6 to M12 sizes available.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Grade 4.8 / 8.8</span>
+                <span class="spec-tag">Stainless Option</span>
+                <span class="spec-tag">M6&ndash;M12</span>
+              </div>
+              <a href="#gabion" class="product-card-link">View More <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GABION ACCESSORIES ============ -->
+    <section id="gabion" class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Gabion Box Networking</span>
+        <h2>Welded Gabion Box <span class="accent">Accessories</span></h2>
+        <p>Connecting and fastening components for welded gabion boxes, produced from high-strength galvanized wire to deliver secure, lasting structures.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-lacing-wire.webp" alt="Gabion lacing wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Lacing Wire</h3>
+              <p class="product-desc">Flexible galvanized wire used to bind gabion panels together at the edges, forming secure, continuous connection along box seams.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Hot-Dip Galvanized</span>
+                <span class="spec-tag">Flexible</span>
+                <span class="spec-tag">Seam Binding</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-helicals-spiral.webp" alt="Helical and spiral wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Helicals &amp; Spiral Wire</h3>
+              <p class="product-desc">Pre-wound spiral connectors that fasten adjacent gabion edges quickly and evenly, ensuring consistent spacing and faster assembly.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Pre-Wound</span>
+                <span class="spec-tag">Fast Assembly</span>
+                <span class="spec-tag">Consistent Spacing</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-c-rings.webp" alt="C ring fasteners" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">C Rings</h3>
+              <p class="product-desc">Circular metal rings that cinch intersecting wires together at connection points, adding strength and holding mesh firmly in place.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Secure Fixing</span>
+                <span class="spec-tag">Galvanized</span>
+                <span class="spec-tag">Strong Connection</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-u-clips.webp" alt="U clip fasteners" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">U Clips</h3>
+              <p class="product-desc">U-shaped clips that clamp around adjoining panels or wires for a clean, tool-assisted connection that protects the coating surface.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Tool Assisted</span>
+                <span class="spec-tag">Coating Safe</span>
+                <span class="spec-tag">Quick Lock</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/acc-hook-connection.webp" alt="Hook connection fasteners" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Hook Connection</h3>
+              <p class="product-desc">Hook-shaped connectors that join panels edge-to-edge or at corners, providing a strong mechanical grip for permanent assembly.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Edge Joining</span>
+                <span class="spec-tag">Corner Fixing</span>
+                <span class="spec-tag">Permanent Grip</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FARM FENCE FEATURES ============ -->
+    <section id="features" class="product-section-dark security-features">
+      <div class="security-features-glow"></div>
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Features</span>
+        <h2>Fence Accessories <span class="accent">Features</span></h2>
+        <p>Precision-made fittings and connecting components that complete every fence with strength, durability, and a professional finish.</p>
+      </div>
+      <div class="carousel-container">
+        <button class="carousel-btn carousel-prev" type="button" onclick="moveCarousel(-1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="securityFenceCarousel">
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>Durable Protection</h3>
+              <p>Hot-dip galvanized or PVC coated finishing resists rust and weathering, keeping caps, fasteners, and connecting components sound well beyond the service life of the fence.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <h3>Complete Coverage</h3>
+              <p>Post caps in flat, pyramid, ball, and gothic styles protect post tops, while clamps, U-bolts, brackets, bolts, and anchors cover every panel-to-post fixing need.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3>Strength &amp; Corrosion Resistance</h3>
+              <p>Fasteners are available from Grade 4.8 high-carbon steel to Grade 8.8 and stainless, meeting demanding load and environmental requirements for industrial and coastal projects.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h3>Universal Fit</h3>
+              <p>Caps and clamps are sized to suit round, square, and rectangular posts from 40mm to 80mm, with bolts from M6 to M12, ensuring compatibility across standard fence systems.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              </div>
+              <h3>Fast Assembly</h3>
+              <p>Pre-wound helicals, C rings, U clips, and hook connections let you bind gabion panels quickly and evenly, cutting installation time while keeping connections consistent.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+              </div>
+              <h3>Custom Options</h3>
+              <p>Custom sizes, colors, and material grades are available on request to match specific fence designs, security levels, and project aesthetics.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-next" type="button" onclick="moveCarousel(1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots"></div>
+      </div>
+    </section>
+
+    <!-- ============ SPECIFICATIONS ============ -->
+    <section id="specifications" class="product-section-light">
+
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Data</span>
+        <h2>Product <span class="accent">Specifications</span></h2>
+        <p>Complete specifications for fence fittings, fasteners, and gabion connecting components. Custom sizes and materials available for project requirements.</p>
+      </div>
+      <div class="article-container">
+        <article class="article-content">
+
+          <h3>Fence Accessory Specification</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Post Caps</strong></td><td>Flat, pyramid, ball, gothic &mdash; galvanized, green, black</td></tr>
+              <tr><td><strong>Clamps &amp; Fixings</strong></td><td>Metal clamp, plastic clamp, U-bolt clamp, bracket (40&ndash;80mm)</td></tr>
+              <tr><td><strong>Fasteners</strong></td><td>Hex bolt, nut, washer, self-tapping screw, anchor bolt (M6&ndash;M12)</td></tr>
+              <tr><td><strong>Material Grade</strong></td><td>Carbon steel Grade 4.8 / 8.8, or stainless steel</td></tr>
+              <tr><td><strong>Finish</strong></td><td>Hot-dip galvanized, PVC coated, plain</td></tr>
+              <tr><td><strong>Gabion Wire</strong></td><td>Lacing wire &mdash; flexible hot-dip galvanized</td></tr>
+              <tr><td><strong>Connectors</strong></td><td>Helicals &amp; spiral, C rings, U clips, hook connection</td></tr>
+              <tr><td><strong>Standards</strong></td><td>ISO 9001 quality management</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Gabion Connecting Accessories</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Function</th>
+                <th>Finish</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Lacing wire</td><td>Bind panels at edges for secure seams</td><td>Hot-dip galvanized</td></tr>
+              <tr><td>Helicals &amp; spiral wire</td><td>Fasten adjacent edges quickly and evenly</td><td>Hot-dip galvanized</td></tr>
+              <tr><td>C rings</td><td>Cinch intersecting wires at connection points</td><td>Hot-dip galvanized</td></tr>
+              <tr><td>U clips</td><td>Clamp adjoining panels or wires</td><td>Hot-dip galvanized</td></tr>
+              <tr><td>Hook connection</td><td>Join panels edge-to-edge or at corners</td><td>Hot-dip galvanized</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Material &amp; Finishing Information</h3>
+          <ul>
+            <li><strong>Corrosion protection:</strong> Hot-dip galvanized finish provides sacrificial zinc protection for long outdoor service</li>
+            <li><strong>Color option:</strong> PVC coating available in green, black, and other colors to match coated fence systems</li>
+            <li><strong>Grade selection:</strong> Grade 8.8 and stainless fasteners for high-load and marine environments</li>
+            <li>Custom sizes, grades, and colors available upon request</li>
+          </ul>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATIONS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Common <span class="accent">Applications</span></h2>
+        <p style="color:var(--color-gray-light);">Complete every fence system &mdash; from residential yards and commercial sites to gabion retaining walls and landscaping structures.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="products/fence/industrial-facility.webp" alt="Residential fence accessories" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Residential Fencing</div>
+            <div class="app-tile-desc">Caps and fasteners for garden and property fencing</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/fence/government-building.webp" alt="Commercial and high security accessories" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Commercial &amp; High Security</div>
+            <div class="app-tile-desc">Heavy-duty clamps and anchors for security fences</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-farmland-protection.webp" alt="Agricultural fence accessories" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Agriculture</div>
+            <div class="app-tile-desc">Fixing hardware for livestock and field fencing</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/fence/acc-helicals-spiral.webp" alt="Gabion retaining wall hardware" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Gabion Retaining Walls</div>
+            <div class="app-tile-desc">Lacing wire, helicals &amp; rings for gabion boxes</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-wildlife-exclusion.webp" alt="Highway and road fence hardware" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Highway &amp; Road</div>
+            <div class="app-tile-desc">Rigid brackets and anchors for roadside fencing</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-orchard-vineyard.webp" alt="Park and landscaping hardware" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Parks &amp; Landscaping</div>
+            <div class="app-tile-desc">Rail access and garden gabion connections</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ YOU MAY ALSO LIKE ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Related Products</span>
+        <h2>You May Also <span class="accent">Like</span></h2>
+        <p>Explore the fence systems our accessories are designed to complete &mdash; chain link, farm, and post systems.</p>
+      </div>
+      <div class="container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/chain-link-fence-product.webp" alt="Chain Link Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Chain Link Fence</h3>
+              <p class="product-desc">Diamond pattern woven mesh fence, versatile and cost-effective. Available in galvanized and PVC coated finishes for residential, commercial, and agricultural use.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Opening 1/4" to 6"</span>
+                <span class="spec-tag">Wire BWG 24-12</span>
+                <span class="spec-tag">PVC: Green, Black</span>
+              </div>
+              <a href="chain-link.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/fence-posts-product.webp" alt="Fence Posts" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fence Posts</h3>
+              <p class="product-desc">The structural backbone of any fencing system. Round, square, and rectangular posts in galvanized, PVC, or powder coated finishes.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Round / Square / Rect.</span>
+                <span class="spec-tag">Length 1.5&ndash;3.0m</span>
+                <span class="spec-tag">HDG / PVC</span>
+              </div>
+              <a href="fence-posts.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/farm-fence-product.webp" alt="Farm Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Farm Fence</h3>
+              <p class="product-desc">Knot-fixed field fence for livestock, farmland, and pasture. Flexible hinge joint and rigid fixed knot designs available.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Hinge / S / Fixed Knot</span>
+                <span class="spec-tag">Height 39"&ndash;96"</span>
+                <span class="spec-tag">Class 3 Galvanized</span>
+              </div>
+              <a href="fence-farm.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RELATED ARTICLES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Blog</span>
+        <h2>Related <span class="accent">Articles</span></h2>
+        <p>Learn more about fence installation and how hardware and fittings complete a secure, long-lasting fence system.</p>
+      </div>
+      <div class="related-articles-grid">
+        <a class="related-article-card" href="blog-field-fence-installation.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-field-fence-installation-hero.jpg" alt="Field Fence Installation" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">How-To</span>
+            <h3 class="related-article-title">Field Fence Installation: End Posts, Line Posts &amp; Wire Mesh</h3>
+            <div class="related-article-meta">2025 &middot; 9 min read</div>
+            <p class="related-article-desc">A step-by-step guide to installing farm fence covering end posts, line posts and wire mesh, with tensioning and fastening tips for a secure, long-lasting fence.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+
+        <a class="related-article-card" href="blog-fence-liability-escaped-animals.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-fence-liability-hero.jpg" alt="Fence Liability Escaped Animals" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Legal</span>
+            <h3 class="related-article-title">Fence Liability: Escaped Animals</h3>
+            <div class="related-article-meta">2025 &middot; 5 min read</div>
+            <p class="related-article-desc">Understand legal responsibility for escaped livestock, the rules of keeping stock in or out, and how to protect your property from liability claims.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Support</span>
+        <h2>Frequently Asked <span class="accent">Questions</span></h2>
+        <p>Answers to the most common questions about fence accessories, fasteners, and gabion connecting components.</p>
+      </div>
+      <div class="article-container">
+        <div class="faq-group" data-reveal>
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Which post cap styles are available?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">We offer flat, pyramid, ball, and gothic post caps in hot-dip galvanized, green, or black finish. They are sized to suit round, square, and rectangular posts from 40mm to 80mm. Caps protect post tops from moisture and debris while giving the fence a clean, finished appearance.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What clamp styles do you supply and for which posts?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">We supply metal clamps, plastic clamps, U-bolt clamps, and brackets in sizes from 40mm to 80mm. They are designed to fix mesh, rail, and panels securely to round, square, or rectangular posts. Provide your post profile and size so we recommend and supply the correct clamp.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What bolt grades are available for fastening?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Hex bolts, nuts, and washers are available from Grade 4.8 high-carbon steel for general use, up to Grade 8.8 for high-load applications, and stainless steel for marine and corrosive environments. Sizes range from M6 to M12. Choose the grade based on tension load and exposure conditions.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How are gabion box panels connected?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Gabion panels are typically joined using lacing wire for secure edge seams, helical and spiral wire for quick even fastening, or C rings, U clips, and hook connections for specific joints and corners. The right method balances installation speed, connection strength, and coating protection.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What is lacing wire used for?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Lacing wire is a flexible, hot-dip galvanized wire used to bind gabion panels together along their edges, creating a secure, continuous connection that keeps stone fill contained. It is threaded through adjacent panel edges rather than wound fully around, saving material and time during assembly.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Are accessories available in colors to match my fence?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Yes. Caps, clamps, and brackets are available in hot-dip galvanized, green, and black PVC coated finishes to match common chain link and welded fence systems. Custom RAL colors can be produced on request for larger quantities, so tell us your fence coating when ordering.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Do your accessories come as complete fixing kits?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Yes. We can package pre-assembled fixing kits &mdash; bolts, nuts, washers, and clamps together &mdash; for each panel or post, simplifying on-site installation and reducing the risk of missing hardware. Tell us your fence type and panel count for a tailored bill of materials.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How long do galvanized accessories last?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Hot-dip galvanized accessories typically provide 25+ years of corrosion protection in most environments; stainless steel lasts even longer. The zinc coating offers sacrificial protection, so choosing the correct thickness and keeping coatings intact during installation maximizes service life.</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20steel%20wire%20being%20drawn%20orange%20hot%20industrial%20furnace%20glowing%20metal%20manufacturing%20close%20up%20dramatic&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Get the Right Fittings for Your Fence</h2>
+        <p class="article-cta-desc">Get a personalized fence hardware quote within 24 hours. Tell us your post profile, mesh type, and project size &mdash; we handle the rest, from caps and clamps to sea freight delivery.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="products.html" class="btn-hero-secondary">VIEW ALL PRODUCTS</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/faq.js"></script>
+
+
+  
+  <script>
+    (function () {
+      var featureSlide = 0;
+      var featureTotalCards = 6;
+
+      function getFeatureCardsPerView() {
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+      }
+      function getFeatureTotalSlides() {
+        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
+      }
+      function updateFeatureCarousel() {
+        var track = document.getElementById('securityFenceCarousel');
+        if (track) {
+          var perView = getFeatureCardsPerView();
+          var slides = getFeatureTotalSlides();
+          var step = track.scrollWidth / slides;
+          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
+        }
+        updateFeatureDots();
+      }
+      function updateFeatureDots() {
+        var totalSlides = getFeatureTotalSlides();
+        var container = document.querySelector('.carousel-dots');
+        if (!container) return;
+        container.innerHTML = '';
+        for (var i = 0; i < totalSlides; i++) {
+          var dot = document.createElement('span');
+          dot.className = 'carousel-dot' + (i === featureSlide ? ' active' : '');
+          (function (i) {
+            dot.onclick = function () { goToSlide(i); };
+          })(i);
+          container.appendChild(dot);
+        }
+      }
+      function moveCarousel(direction) {
+        var totalSlides = getFeatureTotalSlides();
+        featureSlide += direction;
+        if (featureSlide < 0) featureSlide = totalSlides - 1;
+        if (featureSlide >= totalSlides) featureSlide = 0;
+        updateFeatureCarousel();
+      }
+      function goToSlide(index) {
+        featureSlide = index;
+        updateFeatureCarousel();
+      }
+      window.addEventListener('resize', function () {
+        var totalSlides = getFeatureTotalSlides();
+        if (featureSlide >= totalSlides) featureSlide = totalSlides - 1;
+        updateFeatureCarousel();
+      });
+      updateFeatureCarousel();
+      // Expose handlers for inline onclick buttons
+      window.moveCarousel = moveCarousel;
+      window.goToSlide = goToSlide;
+    })();
+  </script>
+
+</body>
+</html>

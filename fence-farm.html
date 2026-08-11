@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Reliable and versatile agricultural fencing solutions featuring hinge joint knots, S-knots, and fixed knot designs for livestock, farmland protection, and grassland management.">
+  <title>Farm Fence | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/faq.css">
+
+  <style>
+    /* 仅作用于本页 Applications 版块：一行 3 列、两行展示，并缩短卡片高度 */
+    .apps-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+    }
+    .apps-grid .app-tile {
+      aspect-ratio: 4 / 3;
+    }
+    @media (max-width: 1200px) {
+      .apps-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .apps-grid .app-tile { aspect-ratio: 3 / 2; }
+    }
+    @media (max-width: 480px) {
+      .apps-grid { grid-template-columns: 1fr; }
+      .apps-grid .app-tile { aspect-ratio: 16 / 10; }
+    }
+  
+    /* Security Fence Features Carousel */
+    .carousel-container{position:relative;max-width:1200px;margin:0 auto;padding:0 64px}
+    .carousel-wrapper{width:100%;padding:6px 0;margin:-6px 0;overflow:hidden}
+    .carousel-track{display:flex;align-items:stretch;gap:20px;transition:transform 0.5s ease-in-out}
+    .carousel-track .feature-card{flex:0 0 calc((100% - 40px) / 3);box-sizing:border-box}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:var(--color-white);border:1px solid #e5e7eb;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .carousel-prev{left:0}
+    .carousel-next{right:0}
+    .carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}
+    .carousel-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .3s ease}
+    .carousel-dot.active{background:var(--color-orange-primary);width:24px;border-radius:5px}
+    .carousel-dot:hover{background:var(--color-orange-bg-light)}
+    .feature-card{background:var(--color-white);border:1px solid #e5e7eb;border-radius:16px;padding:32px 24px;text-align:center;transition:all .3s ease}
+    .feature-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.12);border-color:var(--color-orange-primary)}
+    .feature-icon{width:64px;height:64px;margin:0 auto 16px;background:linear-gradient(135deg,#FFF8F0,#FFF0E0);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--color-orange-primary);font-size:1.5rem}
+    .feature-card h3{font-size:1.05rem;font-weight:600;color:var(--color-black);margin-bottom:8px}
+    .feature-card p{font-size:.88rem;color:#4b5563;line-height:1.6}
+    @media(max-width:1024px){.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}}
+    @media(max-width:768px){.carousel-container{padding:0 50px}.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}.carousel-btn{width:40px;height:40px}}
+
+    /* ===== Security Fence Features - Black Glassmorphism style ===== */
+    .security-features{position:relative;overflow:hidden;background:radial-gradient(1200px 600px at 0% 0%,rgba(255,103,31,.14),transparent 55%),radial-gradient(1000px 500px at 100% 100%,rgba(255,103,31,.10),transparent 55%),#0a0a0a}
+    .security-features .security-features-glow{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,103,31,.22),transparent 65%);top:-160px;right:-120px;filter:blur(20px);pointer-events:none;z-index:0}
+    .security-features .section-header{position:relative;z-index:1}
+    .security-features .section-header .category-tag{color:var(--color-orange-primary);border-color:rgba(255,103,31,.4)}
+    .security-features .carousel-container{position:relative;z-index:1}
+    .security-features .carousel-track .feature-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.35);color:rgba(255,255,255,.9)}
+    .security-features .feature-card:hover{border-color:var(--color-orange-primary);background:rgba(255,255,255,.10);box-shadow:0 20px 44px rgba(0,0,0,.5),0 0 24px rgba(255,103,31,.15)}
+    .security-features .feature-icon{background:linear-gradient(135deg,rgba(255,103,31,.18),rgba(255,103,31,.06));color:var(--color-orange-primary)}
+    .security-features .feature-card h3{color:var(--color-white)}
+    .security-features .feature-card p{color:rgba(255,255,255,.72)}
+    .security-features .carousel-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--color-white);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    .security-features .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .security-features .carousel-dot{background:rgba(255,255,255,.28)}
+    .security-features .carousel-dot.active{background:var(--color-orange-primary)}
+</style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/js/threejs/three.module.min.js",
+      "three/addons/": "/js/threejs/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('products/fence/farm-fence.webp');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="fence-products.html">Fence Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Farm Fence</span>
+        </nav>
+        <span class="article-hero-kicker">Field &amp; Farm Fencing</span>
+        <h1 class="article-hero-title">Farm Fence</h1>
+        <div class="article-hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Hinge Joint &amp; Knot Wire</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>Height 39"&ndash;96"</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Galvanized Class 3</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT OVERVIEW ============ -->
+    <section class="product-overview">
+      <div class="product-overview-inner">
+        <div class="product-overview-image">
+          <span class="product-badge">Livestock Rated</span>
+          <img src="products/fence/farm-fence-product.webp" alt="Field farm fence for livestock" loading="lazy">
+        </div>
+        <div class="product-overview-text">
+          <span class="category-tag">Product Overview</span>
+          <h2>Durable, Reliable Confinement for Livestock</h2>
+          <p>Farm fence is engineered for the demands of agriculture &mdash; cattle, sheep, goats, horses, and more. Manufactured in-plant from quality steel with controlled alloy formulation, it eliminates impurities and guarantees consistent tensile strength to prevent sagging, breakage, and premature failure.</p>
+          <p>High strength combined with flexibility, our field fence resists the pressure of large livestock herds and harsh weather. The knot designs allow the fence to flex under pressure and spring back into place, keeping livestock safe and secure inside.</p>
+          <ul>
+            <li>Hinge joint, S-knot, and fixed knot designs</li>
+            <li>Heights from 39" to 96" (100&ndash;244cm)</li>
+            <li>Line wire 12.5&ndash;14 gauge galvanized steel</li>
+            <li>Heavy galvanized coating (Class 3)</li>
+            <li>Roll lengths: 100m, 200m, 330m</li>
+            <li>Tensile strength &ge; 550 MPa</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES STRIP ============ -->
+    <section class="product-features-strip">
+      <div class="product-features-strip-inner">
+        <div class="feature-stat">
+          <div class="feature-stat-num">96"</div>
+          <div class="feature-stat-label">Max Height<br>Up to 8ft</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">3</div>
+          <div class="feature-stat-label">Knot Types<br>Hinge / S / Fixed</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">330m</div>
+          <div class="feature-stat-label">Roll Length<br>Up to 330m</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">7</div>
+          <div class="feature-stat-label">Farm Fence<br>Types</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT TYPES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Range</span>
+        <h2>Farm Fence <span class="accent">Types</span></h2>
+        <p>Choose from seven farm fence systems to match your livestock, terrain, and containment requirements.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/hinge-joint-fence.webp" alt="Hinge joint knot farm fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Hinge Joint Knot</h3>
+              <p class="product-desc">Flexible knot design that allows the fence to flex under animal pressure and spring back, maintaining structural integrity.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Flexible</span>
+                <span class="spec-tag">Spring-Back</span>
+                <span class="spec-tag">Cattle Rated</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/s-knot-card-img.webp" alt="S-knot farm fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">S-Knot</h3>
+              <p class="product-desc">Smooth S-knot design prevents injury to animals while providing secure wire attachment for reliable containment.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Smooth Joint</span>
+                <span class="spec-tag">Animal Safe</span>
+                <span class="spec-tag">Secure Weave</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/non-climb-card-img.webp" alt="Non-climb horse fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Non-Climb Horse Fence</h3>
+              <p class="product-desc">2"&times;4" mesh pattern prevents hooves from getting caught, making it ideal for horse enclosures and paddocks.</p>
+              <div class="product-specs">
+                <span class="spec-tag">2&times;4" Mesh</span>
+                <span class="spec-tag">Horse Safe</span>
+                <span class="spec-tag">No Footholds</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/sheep-goat-card-img.webp" alt="Sheep and goat farm fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Sheep &amp; Goat Fence</h3>
+              <p class="product-desc">Closely spaced wires at the bottom prevent small animals from squeezing through, keeping sheep and goats secure.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Tight Bottom Mesh</span>
+                <span class="spec-tag">Small Stock</span>
+                <span class="spec-tag">Escape-Proof</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/yard-garden-card-img.webp" alt="Yard and garden farm fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Yard &amp; Garden Fence</h3>
+              <p class="product-desc">Attractive and functional fencing for residential yards, gardens, and playgrounds that keeps animals in and pests out.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Residential</span>
+                <span class="spec-tag">Aesthetic</span>
+                <span class="spec-tag">Multi-Purpose</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/deer-card-img.webp" alt="Deer farm fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Deer Fence</h3>
+              <p class="product-desc">Extra-tall fencing designed to keep deer and wildlife out of gardens, orchards, and farmland.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Extra Tall</span>
+                <span class="spec-tag">Wildlife Exclusion</span>
+                <span class="spec-tag">Crop Protection</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/fixed-knot-card-img.webp" alt="Fixed knot farm fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fixed Knot Fence</h3>
+              <p class="product-desc">High-strength fixed knot provides maximum rigidity for demanding containment needs and heavy livestock pressure.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Maximum Rigidity</span>
+                <span class="spec-tag">Heavy Duty</span>
+                <span class="spec-tag">Demanding Control</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FARM FENCE FEATURES ============ -->
+    <section id="features" class="product-section-dark security-features">
+      <div class="security-features-glow"></div>
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Features</span>
+        <h2>Farm Fence <span class="accent">Features</span></h2>
+        <p>Engineered for the demands of agriculture with reinforced knots, graduated spacing, and heavy galvanized protection.</p>
+      </div>
+      <div class="carousel-container">
+        <button class="carousel-btn carousel-prev" type="button" onclick="moveCarousel(-1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="securityFenceCarousel">
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>Safety, Security &amp; Durability</h3>
+              <p>Braided wire withstands pressure from large herds. Heavy-duty knots and strong wire keep cattle worry-free, while closely spaced bottom wires protect young animals from being trapped or escaping.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <h3>Versatile Application</h3>
+              <p>Ideally suited for corralling cattle and bison, and equally effective for pigs, horses, sheep, goats, and dogs. Ideal for large ranches and capable of handling crowded cattle pens.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              </div>
+              <h3>Built-in Benefits</h3>
+              <p>Quality steel selection guarantees reliable performance. Elastic design resists failure and prevents animal injury, while special crimps adapt to changing weather conditions.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3>Smart Construction</h3>
+              <p>Three knot options handle animal pressure, predation, terrain, and weather. Special crimps expand and contract with the seasons to maintain tension and integrity over time.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h3>Graduated Spacing</h3>
+              <p>Multiple spacing options, most featuring graduated spacing to deter small animals. Pull-out spacing from 6" to 16" with heights ranging from 26" to 49".</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+              </div>
+              <h3>Galvanized Wire</h3>
+              <p>Standard 12&ndash;1/2 gauge wire with low or high tensile strength options for light and heavy applications. All wire is galvanized with a protective zinc layer to resist rust and corrosion.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-next" type="button" onclick="moveCarousel(1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots"></div>
+      </div>
+    </section>
+
+    <!-- ============ SPECIFICATIONS ============ -->
+    <section id="specifications" class="product-section-light">
+
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Data</span>
+        <h2>Product <span class="accent">Specifications</span></h2>
+        <p>Complete manufacturing specifications for farm fence knot types, wire, heights, and coating. Custom dimensions available for project requirements.</p>
+      </div>
+      <div class="article-container">
+        <article class="article-content">
+
+          <h3>Field Farm Fence Specification</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Knot Type</strong></td><td>Hinge Joint, S-Knot, Fixed Knot</td></tr>
+              <tr><td><strong>Height Range</strong></td><td>39" &ndash; 96" (100cm &ndash; 244cm)</td></tr>
+              <tr><td><strong>Stay Spacing</strong></td><td>6" &ndash; 12" (15cm &ndash; 30cm)</td></tr>
+              <tr><td><strong>Line Wire</strong></td><td>12.5 &ndash; 14 gauge galvanized steel</td></tr>
+              <tr><td><strong>Roll Length</strong></td><td>100m, 200m, 330m available</td></tr>
+              <tr><td><strong>Coating</strong></td><td>Heavy galvanized (Class 3)</td></tr>
+              <tr><td><strong>Wire Material</strong></td><td>High-carbon steel</td></tr>
+              <tr><td><strong>Tensile Strength</strong></td><td>&ge; 550 MPa</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Spacing Options</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Spacing Option</th>
+                <th>Pull-out</th>
+                <th>Height</th>
+                <th>Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Graduated Spacing</td><td>6" &ndash; 16"</td><td>26" &ndash; 49"</td><td>Small animals &amp; livestock</td></tr>
+              <tr><td>Standard Spacing</td><td>8" &ndash; 12"</td><td>48" &ndash; 96"</td><td>Cattle / general farm</td></tr>
+              <tr><td>Close Spacing</td><td>6" &ndash; 8"</td><td>39" &ndash; 72"</td><td>Sheep / goats</td></tr>
+              <tr><td>Non-Climb (2&times;4")</td><td>&mdash;</td><td>48" &ndash; 60"</td><td>Horses</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Material Information</h3>
+          <ul>
+            <li><strong>Wire material:</strong> High-carbon steel, standard 12&ndash;1/2 gauge, low or high tensile options</li>
+            <li><strong>Coating:</strong> Heavy galvanized coating (Class 3 zinc) for maximum rust resistance</li>
+            <li><strong>Knots:</strong> Hinge joint, S-knot, and fixed knot for flexible-to-rigid containment</li>
+            <li>Special crimps allow the fence to expand and contract with changing weather</li>
+            <li>Custom specifications available upon request</li>
+          </ul>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ FARM FENCING COMPONENTS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Components</span>
+        <h2>Farm Fencing <span class="accent">Components</span></h2>
+        <p>Complete range of knot and fastening components that give field fence its strength and flexibility.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/hinge-joint-fence.webp" alt="Hinge joint wire component" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Hinge Joint Wire</h3>
+              <div class="product-specs">
+                <span class="spec-tag">Flexible Knot</span>
+                <span class="spec-tag">Spring-Back</span>
+                <span class="spec-tag">Cattle Proof</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/s-knot-card-img.webp" alt="S-knot wire component" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">S-Knot Fastening</h3>
+              <div class="product-specs">
+                <span class="spec-tag">Smooth Joint</span>
+                <span class="spec-tag">Animal Safe</span>
+                <span class="spec-tag">Secure Tie</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/fixed-knot-card-img.webp" alt="Fixed knot wire component" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fixed Knot Wire</h3>
+              <div class="product-specs">
+                <span class="spec-tag">Rigid Joint</span>
+                <span class="spec-tag">Maximum Strength</span>
+                <span class="spec-tag">Heavy Duty</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATIONS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Common <span class="accent">Applications</span></h2>
+        <p style="color:var(--color-gray-light);">From cattle runs and pasture to horse paddocks and wildlife exclusion, farm fence adapts to every agricultural need.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="images/app-cattle-livestock.webp" alt="Cattle and livestock farm fence" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Cattle &amp; Livestock</div>
+            <div class="app-tile-desc">Secure enclosures for cattle, sheep, and other livestock</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-farmland-protection.webp" alt="Farmland protection fence" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Farmland Protection</div>
+            <div class="app-tile-desc">Protect crops from wildlife and animal intrusion</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-pasture-management.webp" alt="Pasture management fence" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Pasture Management</div>
+            <div class="app-tile-desc">Grassland and pasture division and rotation</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-horse-paddocks.webp" alt="Horse paddock farm fence" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Horse Paddocks</div>
+            <div class="app-tile-desc">Safe fencing for horse enclosures and paddocks</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-wildlife-exclusion.webp" alt="Wildlife exclusion farm fence" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Wildlife Exclusion</div>
+            <div class="app-tile-desc">Prevent wild animals from entering property</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-orchard-vineyard.webp" alt="Orchard and vineyard farm fence" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Orchard &amp; Vineyard</div>
+            <div class="app-tile-desc">Protect fruit trees and vineyards from animals</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ YOU MAY ALSO LIKE ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Related Products</span>
+        <h2>You May Also <span class="accent">Like</span></h2>
+        <p>Explore more fencing systems engineered for agriculture, security, and long-term performance.</p>
+      </div>
+      <div class="container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/chain-link-fence-product.webp" alt="Chain Link Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Chain Link Fence</h3>
+              <p class="product-desc">Diamond pattern woven mesh fence, versatile and cost-effective. Available in galvanized and PVC coated finishes for residential, commercial, and agricultural use.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Opening 1/4" to 6"</span>
+                <span class="spec-tag">Wire BWG 24-12</span>
+                <span class="spec-tag">PVC: Green, Black</span>
+              </div>
+              <a href="chain-link.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/fence-posts-product.webp" alt="Fence Posts" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fence Posts</h3>
+              <p class="product-desc">The structural backbone of any fencing system. Round, square, and rectangular posts in galvanized, PVC, or powder coated finishes.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Round / Square / Rect.</span>
+                <span class="spec-tag">Length 1.5&ndash;3.0m</span>
+                <span class="spec-tag">HDG / PVC</span>
+              </div>
+              <a href="fence-posts.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/fence-accessories-product.webp" alt="Fence Accessories" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fence Accessories</h3>
+              <p class="product-desc">Complete range of fittings and hardware including post caps, clamps, brackets, tension bands, and fasteners to complete your fence system.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Post Caps</span>
+                <span class="spec-tag">Clamps &amp; Brackets</span>
+                <span class="spec-tag">Fasteners</span>
+              </div>
+              <a href="fence-accessories.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RELATED ARTICLES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Blog</span>
+        <h2>Related <span class="accent">Articles</span></h2>
+        <p>Learn more about field fence installation and fencing liability protection.</p>
+      </div>
+      <div class="related-articles-grid">
+        <a class="related-article-card" href="blog-field-fence-installation.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-field-fence-installation-hero.jpg" alt="Field Fence Installation" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">How-To</span>
+            <h3 class="related-article-title">Field Fence Installation: End Posts, Line Posts &amp; Wire Mesh</h3>
+            <div class="related-article-meta">2025 &middot; 9 min read</div>
+            <p class="related-article-desc">A step-by-step guide to installing farm fence covering end posts, line posts and wire mesh, with tensioning and fastening tips for a secure, long-lasting fence.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+
+        <a class="related-article-card" href="blog-fence-liability-escaped-animals.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-fence-liability-hero.jpg" alt="Fence Liability Escaped Animals" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Legal</span>
+            <h3 class="related-article-title">Fence Liability: Escaped Animals</h3>
+            <div class="related-article-meta">2025 &middot; 5 min read</div>
+            <p class="related-article-desc">Understand legal responsibility for escaped livestock, the rules of keeping stock in or out, and how to protect your property from liability claims.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Support</span>
+        <h2>Frequently Asked <span class="accent">Questions</span></h2>
+        <p>Answers to the most common questions about farm fence selection, installation, and livestock containment.</p>
+      </div>
+      <div class="article-container">
+        <div class="faq-group" data-reveal>
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What height farm fence do I need for my livestock?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Farm fence heights range from 39" to 96" (100&ndash;244cm). Cattle and general livestock typically need 48"&ndash;54"; sheep and goats are well-served by 39"&ndash;48" with tight bottom spacing; horses do best with 54"&ndash;60" non-climb mesh; deer fencing requires extra-tall panels of 72" and above. Choose based on your specific animals and escape risk.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What is the difference between hinge joint and fixed knot?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Hinge joint knots allow the fence to flex and spring back under animal pressure, ideal for cattle and general livestock where some give is desirable. Fixed knot provides maximum rigidity and stays put even under heavy tension, better for demanding containment needs where the fence must hold its shape. S-knot offers a smooth finish that minimizes animal injury.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How long does a galvanized farm fence last?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Farm fence with heavy galvanized coating (Class 3) can last 25 to 50 years depending on environment and maintenance. The zinc layer provides sacrificial corrosion protection; in normal rural conditions expect several decades of service. Regular inspection, proper tensioning, and timely repairs of broken wires will maximize the lifespan of your fence.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What roll lengths are available?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Farm fence rolls are available in 100m, 200m, and 330m lengths. The ideal roll length depends on your fence line and terrain. Longer rolls reduce joints and installation time for straight runs, while shorter rolls are easier to handle on uneven or hilly ground. Contact us to plan the most efficient roll lengths for your acreage.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What is graduated spacing and why does it matter?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Graduated spacing places horizontal wires closer together at the bottom of the fence and wider apart toward the top. This design prevents small animals like lambs, kids, and rabbits from squeezing through lower gaps while reducing material cost. Pull-out spacing typically ranges from 6" at the bottom to 16" near the top.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What wire gauge and tensile strength should I choose?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Standard farm fence uses 12&ndash;1/2 gauge line wire with a minimum tensile strength of 550 MPa. High-tensile steel provides greater strength and allows longer spans with fewer posts, ideal for large acreage. Low-carbon options offer more ductility and ease of tying, suited to light applications. All wire is galvanized to resist rust.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Can farm fence be used for horses?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Yes. The Non-Climb Horse Fence uses a 2"&times;4" mesh pattern that prevents hooves from getting caught while maintaining clear sight lines for horses. Alternatively, hinge joint or fixed knot fence with closely spaced wires works well for horse paddocks. Always ensure smooth, injury-free knots and proper tension to keep horses safe.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What steel is used for farm fence wire?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">KESTREL METAL manufactures farm fence from high-quality low-carbon and high-tensile steel wire. All wire is galvanized with a heavy zinc coating (Class 3) for maximum corrosion resistance. In-plant alloy control eliminates impurities and guarantees consistent tensile strength, preventing sagging, breakage, and premature fence failure.</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20steel%20wire%20being%20drawn%20orange%20hot%20industrial%20furnace%20glowing%20metal%20manufacturing%20close%20up%20dramatic&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Build a Farm Fence That Works for Generations</h2>
+        <p class="article-cta-desc">Get a personalized farm fencing quote within 24 hours. Tell us your fencing length, livestock type, intended height, and knot preference &mdash; we handle the rest, from wire drawing to sea freight delivery.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="products.html" class="btn-hero-secondary">VIEW ALL PRODUCTS</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/faq.js"></script>
+
+
+  
+  <script>
+    (function () {
+      var featureSlide = 0;
+      var featureTotalCards = 6;
+
+      function getFeatureCardsPerView() {
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+      }
+      function getFeatureTotalSlides() {
+        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
+      }
+      function updateFeatureCarousel() {
+        var track = document.getElementById('securityFenceCarousel');
+        if (track) {
+          var perView = getFeatureCardsPerView();
+          var slides = getFeatureTotalSlides();
+          var step = track.scrollWidth / slides;
+          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
+        }
+        updateFeatureDots();
+      }
+      function updateFeatureDots() {
+        var totalSlides = getFeatureTotalSlides();
+        var container = document.querySelector('.carousel-dots');
+        if (!container) return;
+        container.innerHTML = '';
+        for (var i = 0; i < totalSlides; i++) {
+          var dot = document.createElement('span');
+          dot.className = 'carousel-dot' + (i === featureSlide ? ' active' : '');
+          (function (i) {
+            dot.onclick = function () { goToSlide(i); };
+          })(i);
+          container.appendChild(dot);
+        }
+      }
+      function moveCarousel(direction) {
+        var totalSlides = getFeatureTotalSlides();
+        featureSlide += direction;
+        if (featureSlide < 0) featureSlide = totalSlides - 1;
+        if (featureSlide >= totalSlides) featureSlide = 0;
+        updateFeatureCarousel();
+      }
+      function goToSlide(index) {
+        featureSlide = index;
+        updateFeatureCarousel();
+      }
+      window.addEventListener('resize', function () {
+        var totalSlides = getFeatureTotalSlides();
+        if (featureSlide >= totalSlides) featureSlide = totalSlides - 1;
+        updateFeatureCarousel();
+      });
+      updateFeatureCarousel();
+      // Expose handlers for inline onclick buttons
+      window.moveCarousel = moveCarousel;
+      window.goToSlide = goToSlide;
+    })();
+  </script>
+
+</body>
+</html>
