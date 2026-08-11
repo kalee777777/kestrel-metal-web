@@ -5,7 +5,35 @@
     initScrollProgress();
     initScrollReveal();
     initBackToTop();
+    initShareButtons();
   });
+
+  function initShareButtons() {
+    var section = document.querySelector('.share-section');
+    var btns = document.querySelectorAll('.share-btn[data-share]');
+    if (!section || !btns.length) return;
+    var pageUrl = section.getAttribute('data-page-url') || window.location.href;
+    var pageTitle = section.getAttribute('data-page-title') || document.title;
+    var encodedUrl = encodeURIComponent(pageUrl);
+    var encodedTitle = encodeURIComponent(pageTitle);
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var type = btn.getAttribute('data-share');
+        var href;
+        if (type === 'linkedin') {
+          href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodedUrl;
+        } else if (type === 'twitter') {
+          href = 'https://twitter.com/intent/tweet?text=' + encodedTitle + '&url=' + encodedUrl;
+        } else if (type === 'email') {
+          href = 'mailto:?subject=' + encodedTitle + '&body=' + encodedUrl;
+        } else {
+          return;
+        }
+        window.open(href, '_blank', 'noopener');
+      });
+    });
+  }
 
   function initScrollReveal() {
     var revealEls = document.querySelectorAll('[data-reveal]');

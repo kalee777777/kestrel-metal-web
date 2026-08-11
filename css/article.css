@@ -361,6 +361,87 @@
   text-align: right;
 }
 
+/* ---------- Inquiry CTA ---------- */
+.article-inquiry-cta {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+  margin-top: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.article-inquiry-cta p {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--color-gray-dark, #4b5563);
+  max-width: 680px;
+}
+
+.article-inquiry-cta p a {
+  color: var(--color-orange-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.article-inquiry-cta p a:hover {
+  text-decoration: underline;
+}
+
+.article-inquiry-cta .inquiry-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ---------- Share section ---------- */
+.share-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.share-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.share-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: #4b5563;
+}
+
+.share-btn:hover {
+  background: var(--color-orange-primary);
+  color: #fff;
+}
+
+.share-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* ---------- Sidebar ---------- */
 .article-sidebar {
   position: sticky;
