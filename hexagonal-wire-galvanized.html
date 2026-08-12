@@ -111,6 +111,32 @@
     .security-features .carousel-btn:hover { background: var(--color-orange-primary); border-color: var(--color-orange-primary); color: var(--color-white); }
     .security-features .carousel-dot { background: rgba(255,255,255,.28); }
     .security-features .carousel-dot.active { background: var(--color-orange-primary); }
+
+    /* Specification Simulator */
+    .sim-wrap { max-width: 1024px; margin: 0 auto; }
+    .sim-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding: 1.5rem; background: #f7f7f5; border-radius: 12px 12px 0 0; border: 1px solid #e5e7eb; border-bottom: none; text-align: center; }
+    .sim-stats .sim-stat-label { font-size: .7rem; color: #6b7280; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .25rem; }
+    .sim-stats .sim-stat-value { font-size: 1.25rem; font-weight: 700; color: #111827; }
+    .sim-stats .sim-stat-value.accent { color: var(--color-orange-primary); }
+    .sim-canvas { position: relative; width: 100%; height: 320px; background: var(--color-white); overflow: hidden; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; }
+    .sim-mesh { position: absolute; inset: 0; }
+    .sim-center-wrap { position: absolute; z-index: 10; display: flex; align-items: center; justify-content: center; }
+    .sim-center-line { position: absolute; width: 128px; height: 0; border-top: 2px dashed var(--color-orange-primary); }
+    .sim-center-badge { position: relative; width: 56px; height: 56px; background: rgba(255,255,255,.95); border-radius: 50%; border: 2px dashed var(--color-orange-primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,.1); z-index: 20; }
+    .sim-center-label { font-weight: 700; color: var(--color-orange-primary); font-size: .85rem; }
+    .sim-controls { padding: 1.5rem 2rem 2rem; background: var(--color-white); border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+    .sim-controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .sim-field-head { display: flex; justify-content: space-between; margin-bottom: .5rem; }
+    .sim-field-head label { font-weight: 700; color: #374151; text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; }
+    .sim-field-head .sim-val { font-family: monospace; color: var(--color-orange-primary); font-weight: 700; font-size: .9rem; }
+    .sim-range { -webkit-appearance: none; width: 100%; background: transparent; margin-bottom: .5rem; }
+    .sim-range::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--color-orange-primary); cursor: pointer; margin-top: -7px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .sim-range::-moz-range-thumb { height: 18px; width: 18px; border: none; border-radius: 50%; background: var(--color-orange-primary); cursor: pointer; }
+    .sim-range::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #e5e7eb; border-radius: 2px; }
+    .sim-range::-moz-range-track { width: 100%; height: 4px; cursor: pointer; background: #e5e7eb; border-radius: 2px; }
+    .sim-finish-field label { display: block; font-weight: 700; color: #374151; text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; margin-bottom: .5rem; }
+    .sim-finish-select { width: 50%; padding: .75rem; border: 1px solid #d1d5db; border-radius: 8px; background: var(--color-white); outline: none; font-size: .9rem; cursor: pointer; }
+    @media (max-width: 768px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-finish-select { width: 100%; } .sim-stats { grid-template-columns: 1fr 1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -260,6 +286,66 @@
               <tr><td>4"</td><td>100</td><td>19, 18, 17, 16, 15, 14</td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2.5 SPECIFICATION SIMULATOR ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Interactive</span>
+        <h2>Specification <span class="accent">Simulator</span></h2>
+        <p>Customize mesh opening, wire diameter and surface finish to preview the hexagonal pattern in real time.</p>
+      </div>
+      <div class="sim-wrap">
+        <div class="sim-stats">
+          <div>
+            <p class="sim-stat-label">Opening</p>
+            <p class="sim-stat-value" id="stat-opening">1.00"</p>
+          </div>
+          <div>
+            <p class="sim-stat-label">Metric</p>
+            <p class="sim-stat-value" id="stat-metric">25.4 mm</p>
+          </div>
+          <div>
+            <p class="sim-stat-label">Wire Dia</p>
+            <p class="sim-stat-value accent" id="stat-dia">1.20 mm</p>
+          </div>
+        </div>
+        <div class="sim-canvas">
+          <svg class="sim-mesh" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="hexGrid" patternUnits="userSpaceOnUse" width="100" height="173.2">
+                <path fill="none" stroke="#9ca3af" stroke-width="3" id="mesh-lines" stroke-linecap="round" stroke-linejoin="round"></path>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#hexGrid)"></rect>
+          </svg>
+          <div class="sim-center-wrap">
+            <div class="sim-center-line"></div>
+            <div class="sim-center-badge"><span class="sim-center-label" id="center-label">1.0"</span></div>
+          </div>
+        </div>
+        <div class="sim-controls">
+          <div class="sim-controls-grid">
+            <div>
+              <div class="sim-field-head"><label for="input-opening">Mesh Opening (Inch)</label><span class="sim-val" id="val-opening">1.00</span></div>
+              <input type="range" class="sim-range" id="input-opening" min="0.5" max="4" step="0.25" value="1">
+            </div>
+            <div>
+              <div class="sim-field-head"><label for="input-dia">Wire Diameter (mm)</label><span class="sim-val" id="val-dia">1.20</span></div>
+              <input type="range" class="sim-range" id="input-dia" min="0.4" max="2.5" step="0.1" value="1.2">
+            </div>
+          </div>
+          <div class="sim-finish-field">
+            <label for="input-finish">Surface Finish</label>
+            <select class="sim-finish-select" id="input-finish">
+              <option value="#9ca3af">Galvanized (Zinc Grey)</option>
+              <option value="#064e3b">PVC Coated (Dark Green)</option>
+              <option value="#111827">PVC Coated (Black)</option>
+              <option value="#1e3a8a">PVC Coated (Industrial Blue)</option>
+            </select>
+          </div>
         </div>
       </div>
     </section>
@@ -668,6 +754,52 @@
       updateFeatureCarousel();
       window.moveCarousel = moveCarousel;
       window.goToSlide = goToSlide;
+    })();
+
+    (function () {
+      var elOpening = document.getElementById('input-opening');
+      var elDia = document.getElementById('input-dia');
+      var elFinish = document.getElementById('input-finish');
+      var outStatOpening = document.getElementById('stat-opening');
+      var outStatMetric = document.getElementById('stat-metric');
+      var outStatDia = document.getElementById('stat-dia');
+      var outValOpening = document.getElementById('val-opening');
+      var outValDia = document.getElementById('val-dia');
+      var outCenterLabel = document.getElementById('center-label');
+      var meshPattern = document.getElementById('hexGrid');
+      var meshLines = document.getElementById('mesh-lines');
+
+      function refresh() {
+        var aperture = parseFloat(elOpening.value);
+        var diameter = parseFloat(elDia.value);
+        var color = elFinish.value;
+
+        outStatOpening.textContent = aperture.toFixed(2) + '"';
+        outValOpening.textContent = aperture.toFixed(2);
+        outCenterLabel.textContent = aperture.toFixed(1) + '"';
+        outStatMetric.textContent = (aperture * 25.4).toFixed(1) + ' mm';
+        outStatDia.textContent = diameter.toFixed(2) + ' mm';
+        outValDia.textContent = diameter.toFixed(2);
+
+        var W = aperture * 80;
+        var L = W / 1.7320508075688772;
+        var H = 3 * L;
+
+        meshPattern.setAttribute('width', W);
+        meshPattern.setAttribute('height', H);
+
+        var pathData = 'M 0 ' + (1.5 * L) + ' L 0 ' + (0.5 * L) + ' L ' + (W / 2) + ' 0 L ' + W + ' ' + (0.5 * L) + ' L ' + W + ' ' + (1.5 * L) + ' L ' + (W / 2) + ' ' + (2 * L) + ' Z M ' + (W / 2) + ' ' + (2 * L) + ' L ' + (W / 2) + ' ' + (3 * L);
+        meshLines.setAttribute('d', pathData.replace(/\s+/g, ' ').trim());
+        meshLines.setAttribute('stroke-width', diameter * 3);
+        meshLines.setAttribute('stroke', color);
+      }
+
+      if (elOpening && elDia && elFinish) {
+        elOpening.addEventListener('input', refresh);
+        elDia.addEventListener('input', refresh);
+        elFinish.addEventListener('change', refresh);
+        refresh();
+      }
     })();
   </script>
 
