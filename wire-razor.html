@@ -888,7 +888,7 @@
       var w = container.clientWidth;
       var h = container.clientHeight || 540;
       var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 400);
-      camera.position.set(8, 5, 10);
+      camera.position.set(4, 2.5, 5);
 
       var renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(w, h);
@@ -900,7 +900,7 @@
       var controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.minDistance = 3;
+      controls.minDistance = 1.5;
       controls.maxDistance = 40;
       controls.target.set(0, 0.8, 0);
 
@@ -998,14 +998,14 @@
         if (btn) btn.classList.add('active');
       }
       function resetCamera() {
-        camera.position.set(8, 5, 10);
+        camera.position.set(4, 2.5, 5);
         controls.target.set(0, 0.8, 0);
         controls.update();
       }
       function setCameraAngle(angle) {
-        var dist = 12;
-        if (angle === 'front') camera.position.set(0, 3, dist);
-        else if (angle === 'side') camera.position.set(dist, 3, 0);
+        var dist = 6;
+        if (angle === 'front') camera.position.set(0, 1.5, dist);
+        else if (angle === 'side') camera.position.set(dist, 1.5, 0);
         else if (angle === 'top') camera.position.set(0, dist, 0.01);
         controls.target.set(0, 0.8, 0);
         controls.update();
