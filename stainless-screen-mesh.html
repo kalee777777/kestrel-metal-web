@@ -34,7 +34,9 @@
     @media (max-width: 1200px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } }
 
-    .sim-wire-select { background: rgba(255,255,255); border: 1px solid #e5e7eb; color: #111827; padding: .7rem .9rem; border-radius: 8px; font-size: .9rem; width: 100%; }
+    .sim-wire-select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: .6rem 1rem; border-radius: 8px; font-size: .88rem; width: 100%; cursor: pointer; outline: none; }
+    .sim-wire-select option { background: #1a1a1a; color: #fff; }
+    .sim-wire-select:focus { border-color: var(--color-orange-primary); box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15); }
     @media (max-width: 600px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-stats-grid { grid-template-columns: repeat(2,1fr) !important; } }
   </style>
 </head>
