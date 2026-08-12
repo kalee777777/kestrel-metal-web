@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="High-security razor wire in galvanized, stainless steel, and PVC coated forms. Cross concertina, single coil, flat wrap, BTC, long blade, fish-hook and welded mesh configurations for maximum perimeter protection.">
+  <title>Razor Wire | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/faq.css">
+
+  <style>
+    /* 仅作用于本页 Applications 版块：一行 3 列、两行展示，并缩短卡片高度 */
+    .apps-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+    }
+    .apps-grid .app-tile {
+      aspect-ratio: 4 / 3;
+    }
+    @media (max-width: 1200px) {
+      .apps-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .apps-grid .app-tile { aspect-ratio: 3 / 2; }
+    }
+    @media (max-width: 480px) {
+      .apps-grid { grid-template-columns: 1fr; }
+      .apps-grid .app-tile { aspect-ratio: 16 / 10; }
+    }
+  
+    /* Security Fence Features Carousel */
+    .carousel-container{position:relative;max-width:1200px;margin:0 auto;padding:0 64px}
+    .carousel-wrapper{width:100%;padding:6px 0;margin:-6px 0;overflow:hidden}
+    .carousel-track{display:flex;align-items:stretch;gap:20px;transition:transform 0.5s ease-in-out}
+    .carousel-track .feature-card{flex:0 0 calc((100% - 40px) / 3);box-sizing:border-box}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:var(--color-white);border:1px solid #e5e7eb;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .carousel-prev{left:0}
+    .carousel-next{right:0}
+    .carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}
+    .carousel-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .3s ease}
+    .carousel-dot.active{background:var(--color-orange-primary);width:24px;border-radius:5px}
+    .carousel-dot:hover{background:var(--color-orange-bg-light)}
+    .feature-card{background:var(--color-white);border:1px solid #e5e7eb;border-radius:16px;padding:32px 24px;text-align:center;transition:all .3s ease}
+    .feature-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.12);border-color:var(--color-orange-primary)}
+    .feature-icon{width:64px;height:64px;margin:0 auto 16px;background:linear-gradient(135deg,#FFF8F0,#FFF0E0);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--color-orange-primary);font-size:1.5rem}
+    .feature-card h3{font-size:1.05rem;font-weight:600;color:var(--color-black);margin-bottom:8px}
+    .feature-card p{font-size:.88rem;color:#4b5563;line-height:1.6}
+    @media(max-width:1024px){.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}}
+    @media(max-width:768px){.carousel-container{padding:0 50px}.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}.carousel-btn{width:40px;height:40px}}
+
+    /* ===== Security Fence Features - Black Glassmorphism style ===== */
+    .security-features{position:relative;overflow:hidden;background:radial-gradient(1200px 600px at 0% 0%,rgba(255,103,31,.14),transparent 55%),radial-gradient(1000px 500px at 100% 100%,rgba(255,103,31,.10),transparent 55%),#0a0a0a}
+    .security-features .security-features-glow{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,103,31,.22),transparent 65%);top:-160px;right:-120px;filter:blur(20px);pointer-events:none;z-index:0}
+    .security-features .section-header{position:relative;z-index:1}
+    .security-features .section-header .category-tag{color:var(--color-orange-primary);border-color:rgba(255,103,31,.4)}
+    .security-features .carousel-container{position:relative;z-index:1}
+    .security-features .carousel-track .feature-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.35);color:rgba(255,255,255,.9)}
+    .security-features .feature-card:hover{border-color:var(--color-orange-primary);background:rgba(255,255,255,.10);box-shadow:0 20px 44px rgba(0,0,0,.5),0 0 24px rgba(255,103,31,.15)}
+    .security-features .feature-icon{background:linear-gradient(135deg,rgba(255,103,31,.18),rgba(255,103,31,.06));color:var(--color-orange-primary)}
+    .security-features .feature-card h3{color:var(--color-white)}
+    .security-features .feature-card p{color:rgba(255,255,255,.72)}
+    .security-features .carousel-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--color-white);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    .security-features .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .security-features .carousel-dot{background:rgba(255,255,255,.28)}
+    .security-features .carousel-dot.active{background:var(--color-orange-primary)}
+</style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/js/threejs/three.module.min.js",
+      "three/addons/": "/js/threejs/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('products/wire/razor-wire-category.webp');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="fence-products.html">Fence Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Razor Wire</span>
+        </nav>
+        <span class="article-hero-kicker">High-Security Blade Wire</span>
+        <h1 class="article-hero-title">Razor Wire</h1>
+        <div class="article-hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Cross / Coil / Flat</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>Diameter 300&ndash;980mm</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Galvanized / SS304/316</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT OVERVIEW ============ -->
+    <section class="product-overview">
+      <div class="product-overview-inner">
+        <div class="product-overview-image">
+          <span class="product-badge">High-Security Rated</span>
+          <img src="products/wire/razor-wire-overview.webp" alt="High-security razor wire for perimeter protection" loading="lazy">
+        </div>
+        <div class="product-overview-text">
+          <span class="category-tag">Product Overview</span>
+          <h2>Maximum Perimeter Protection With Razor Wire</h2>
+          <p>Razor wire is a high-security blade-style fencing material engineered for applications where maximum deterrence is required. Sharp steel blades are securely attached to a high tensile steel wire core, creating a barrier that is exceptionally difficult to climb or cut through.</p>
+          <p>Available in galvanized, stainless steel (SS304/SS316), and PVC-coated finishes, our razor wire is manufactured to strict standards with consistent blade sharpness, uniform coil diameter, and reliable tensile strength &mdash; ideal for military installations, correctional facilities, border security, and critical infrastructure.</p>
+          <ul>
+            <li>Cross concertina, coil, flat &amp; welded mesh types</li>
+            <li>Coil diameters from 300mm to 980mm</li>
+            <li>Core wire 2.5&ndash;4.0mm, blade 0.4&ndash;0.6mm</li>
+            <li>Galvanized, stainless &amp; PVC finishes</li>
+            <li>Certified tensile and shear strength</li>
+            <li>Tamper-resistant, difficult to breach</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES STRIP ============ -->
+    <section class="product-features-strip">
+      <div class="product-features-strip-inner">
+        <div class="feature-stat">
+          <div class="feature-stat-num">8</div>
+          <div class="feature-stat-label">Razor Wire<br>Configurations</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">980mm</div>
+          <div class="feature-stat-label">Max Coil Dia<br>Up to 980mm</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">3</div>
+          <div class="feature-stat-label">Finish Options<br>Galv / SS / PVC</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">316</div>
+          <div class="feature-stat-label">SS Grade<br>Up to SS316</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT TYPES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Range</span>
+        <h2>Razor Wire <span class="accent">Types</span></h2>
+        <p>Choose from eight razor wire configurations engineered for maximum deterrence &mdash; from cross concertina coils to flat wrap and welded mesh.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/cross-razor-wire-banner.webp" alt="Cross concertina razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Cross Concertina</h3>
+              <p class="product-desc">Interlocking X-shaped blades on a high-tensile core create the most formidable barrier, self-supporting and extremely hard to breach.</p>
+              <div class="product-specs">
+                <span class="spec-tag">X Blade</span>
+                <span class="spec-tag">Interlocking</span>
+                <span class="spec-tag">Formidable</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/single-coil-razor-wire.webp" alt="Single coil razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Single Coil</h3>
+              <p class="product-desc">Helically wound razor coil that expands on deployment, a fast and effective barrier for temporary and permanent security.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Self-Expanding</span>
+                <span class="spec-tag">Fast Deploy</span>
+                <span class="spec-tag">Temporary Use</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/flat-wrap-razor-wire.webp" alt="Flat wrap razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Flat Wrap Razor</h3>
+              <p class="product-desc">Razor wire wrapped tightly in a helical pattern around a core, ideal as a straight-line topping along the top of mesh fences.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Straight Line</span>
+                <span class="spec-tag">Top Topping</span>
+                <span class="spec-tag">Compact</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/btc-razor-wire.webp" alt="BTC razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">BTC Razor Wire</h3>
+              <p class="product-desc">Big Thermal Cut blades with a fast and safe fitting process, providing long-lasting corrosion protection for coastal security.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Big Thermal Cut</span>
+                <span class="spec-tag">Coastal Rated</span>
+                <span class="spec-tag">Corrosion Proof</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/long-blade-razor-wire.webp" alt="Long blade razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Long Blade Razor</h3>
+              <p class="product-desc">Extended sharp blades wound around the core deliver superior cutting deterrent over long perimeter spans.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Extended Blade</span>
+                <span class="spec-tag">Superior Deterrent</span>
+                <span class="spec-tag">Long Reach</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/fish-hook-razor-wire.webp" alt="Fish hook razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Fish-Hook Razor</h3>
+              <p class="product-desc">Sharpened hook-shaped barbs that snag clothing and slow intruders, a classic cruciform blade design for dense barriers.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Hook Design</span>
+                <span class="spec-tag">Snag Barrier</span>
+                <span class="spec-tag">Cruciform</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/straight-razor-wire.webp" alt="Straight razor wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Straight Razor Wire</h3>
+              <p class="product-desc">Linear razor wire run along fence tops, combining visible deterrence with a clean, low-profile security upgrade.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Linear</span>
+                <span class="spec-tag">Low Profile</span>
+                <span class="spec-tag">Visible Deterrent</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/welded-razor-mesh.webp" alt="Welded razor mesh" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Welded Razor Mesh</h3>
+              <p class="product-desc">Flat panels of welded razor blades offering a rigid, climb-proof barrier ideal for walls, roofs, and pre-fabricated screens.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Rigid Panel</span>
+                <span class="spec-tag">Climb-Proof</span>
+                <span class="spec-tag">Flat / Wall Top</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- ============ RAZOR WIRE FEATURES ============ -->
+    <section id="features" class="product-section-dark security-features">
+      <div class="security-features-glow"></div>
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Features</span>
+        <h2>Razor Wire <span class="accent">Features</span></h2>
+        <p>Formidable blade barriers that deter, delay, and deny &mdash; engineered for the highest security perimeters worldwide.</p>
+      </div>
+      <div class="carousel-container">
+        <button class="carousel-btn carousel-prev" type="button" onclick="moveCarousel(-1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="securityFenceCarousel">
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>Maximum Deterrence</h3>
+              <p>Relentless sharp blades create a barrier that is visually and physically imposing, deterring casual intruders and delaying determined attackers.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <h3>Superior Security</h3>
+              <p>Specified worldwide for military bases, correctional facilities, borders, airports, power plants, and critical infrastructure that demands the highest protection.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              </div>
+              <h3>Tamper Resistant</h3>
+              <p>High-tensile steel core and hardened blades resist cutting and pulling, while coil configurations self-support and expand to defeat crossing attempts.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3>Corrosion Resistance</h3>
+              <p>Hot-dip galvanized, stainless steel (SS304/SS316), and PVC-coated options provide lasting protection in coastal, industrial, and aggressive environments.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h3>Rapid Deployment</h3>
+              <p>Self-expanding concertina coils deliver fast, tool-free barrier setup for temporary checkpoints and emergency security, plus permanent installation options.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+              </div>
+              <h3>Consistent Quality</h3>
+              <p>Automated manufacturing guarantees uniform blade sharpness, consistent coil diameter, and certified tensile and shear strength in every unit.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-next" type="button" onclick="moveCarousel(1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots"></div>
+      </div>
+    </section>
+
+    <!-- ============ SPECIFICATIONS ============ -->
+    <section id="specifications" class="product-section-light">
+
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Data</span>
+        <h2>Product <span class="accent">Specifications</span></h2>
+        <p>Complete specifications for razor wire cores, blades, coils, and finishes. Custom dimensions available for project requirements.</p>
+      </div>
+      <div class="article-container">
+        <article class="article-content">
+
+          <h3>Razor Wire Specification</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Core Wire</strong></td><td>&Oslash;2.5 / 3.0 / 3.5 / 4.0mm high-tensile steel</td></tr>
+              <tr><td><strong>Blade Material</strong></td><td>Galvanized, SS304, SS316</td></tr>
+              <tr><td><strong>Blade Thickness</strong></td><td>0.4 &ndash; 0.6mm</td></tr>
+              <tr><td><strong>Blade Width</strong></td><td>15mm &ndash; 30mm</td></tr>
+              <tr><td><strong>Coil Diameter</strong></td><td>300mm &ndash; 980mm</td></tr>
+              <tr><td><strong>Core Coating</strong></td><td>Galvanized, PVC, SS304/SS316</td></tr>
+              <tr><td><strong>Screw Pitch</strong></td><td>Circular and square pitch variants</td></tr>
+              <tr><td><strong>Strength</strong></td><td>Certified tensile and shear strength</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Common Coil Specifications</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Coil Dia</th>
+                <th>Core</th>
+                <th>Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Cross Concertina</td><td>450&ndash;980mm</td><td>2.5&ndash;4.0mm</td><td>High-security barriers</td></tr>
+              <tr><td>Single Coil</td><td>300&ndash;750mm</td><td>2.5&ndash;3.5mm</td><td>Temporary &amp; perimeter</td></tr>
+              <tr><td>Flat Wrap</td><td>&mdash;</td><td>2.5mm</td><td>Fence-top straight line</td></tr>
+              <tr><td>BTC Razor</td><td>500&ndash;700mm</td><td>3.0mm</td><td>Coastal / corrosion-proof</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Material &amp; Finishing Information</h3>
+          <ul>
+            <li><strong>Core wire:</strong> High-tensile galvanized steel or stainless steel for maximum cutting resistance</li>
+            <li><strong>Blades:</strong> SS430/SS304/SS316 or galvanized, with consistent sharpness and uniform spacing</li>
+            <li><strong>Corrosion protection:</strong> Hot-dip galvanizing, stainless steel, and PVC coating for all environments</li>
+            <li>Automated production ensures uniform coil diameter and certified mechanical strength</li>
+            <li>Custom coil diameters, blade sizes, and core gauges available upon request</li>
+          </ul>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ RAZOR WIRE MATERIAL OPTIONS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Options</span>
+        <h2>Razor Wire <span class="accent">Build &amp; Finish</span></h2>
+        <p>Select the right material grade, coil format, and finish to match your security level and exposure conditions.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/btc-razor-wire.webp" alt="Razor wire material grades" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Material Grades</h3>
+              <p class="product-desc">Choose galvanized steel for economy or stainless steel SS304/SS316 for superior corrosion resistance in coastal and extreme environments.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Galvanized</span>
+                <span class="spec-tag">SS304 / SS316</span>
+                <span class="spec-tag">Corrosion Proof</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/cross-razor-wire-banner.webp" alt="Razor wire coil formats" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Coil Formats</h3>
+              <p class="product-desc">Self-expanding concertina and single coils for fast deployment, or flat wrap and welded mesh for permanent, rigid installations.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Concertina / Coil</span>
+                <span class="spec-tag">Flat Wrap</span>
+                <span class="spec-tag">Welded Mesh</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/welded-razor-mesh.webp" alt="Razor wire finishes" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Finish &amp; Coating</h3>
+              <p class="product-desc">Hot-dip galvanized, PVC coated, or bright stainless finishes provide durable protection matched to your climate and aesthetics.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Hot-Dip Galvanized</span>
+                <span class="spec-tag">PVC Coated</span>
+                <span class="spec-tag">Stainless</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATIONS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Common <span class="accent">Applications</span></h2>
+        <p style="color:var(--color-gray-light);">Deliver the highest level of perimeter protection for the most demanding security environments worldwide.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="products/fence/government-building.webp" alt="Military and defense razor wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Military &amp; Defense</div>
+            <div class="app-tile-desc">Perimeter security for bases and tactical installations</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/wire/cross-razor-wire-banner.webp" alt="Correctional facility razor wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Correctional Facilities</div>
+            <div class="app-tile-desc">Escape-proof barriers for prisons and detention centers</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/wire/single-coil-razor-wire.webp" alt="Border control razor wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Border Control</div>
+            <div class="app-tile-desc">National border fencing and crossing point security</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/fence/industrial-facility.webp" alt="Critical infrastructure razor wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Critical Infrastructure</div>
+            <div class="app-tile-desc">Protect power plants, substations and utilities</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-warehouse.webp" alt="Airport and logistic razor wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Airports &amp; Logistics</div>
+            <div class="app-tile-desc">Secure airside perimeters and cargo facilities</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/wire/welded-razor-mesh.webp" alt="Commercial and high security razor wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">High-Security Commercial</div>
+            <div class="app-tile-desc">Vaults, data centers and high-value industrial sites</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ YOU MAY ALSO LIKE ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Related Products</span>
+        <h2>You May Also <span class="accent">Like</span></h2>
+        <p>Explore more fencing systems engineered for agriculture, security, and long-term performance.</p>
+      </div>
+      <div class="container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/chain-link-fence-product.webp" alt="Chain Link Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Chain Link Fence</h3>
+              <p class="product-desc">Diamond pattern woven mesh fence, versatile and cost-effective. Available in galvanized and PVC coated finishes for residential, commercial, and agricultural use.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Opening 1/4" to 6"</span>
+                <span class="spec-tag">Wire BWG 24-12</span>
+                <span class="spec-tag">PVC: Green, Black</span>
+              </div>
+              <a href="chain-link.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/barbed-wire-product.webp" alt="Barbed Wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Barbed Wire</h3>
+              <p class="product-desc">Classic twisted wire fencing with sharp barbs for cost-effective perimeter and agricultural security.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Single / Double Twist</span>
+                <span class="spec-tag">Galvanized / PVC</span>
+                <span class="spec-tag">Economical</span>
+              </div>
+              <a href="wire-barbed.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/welded-mesh-fence.avif" alt="Welded Wire Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Welded Wire Fence</h3>
+              <p class="product-desc">Rigid welded mesh panels offering strong, durable fencing for residential, agricultural, and industrial applications.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Rigid Panels</span>
+                <span class="spec-tag">Strong</span>
+                <span class="spec-tag">Durable</span>
+              </div>
+              <a href="welded-wire-mesh.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RELATED ARTICLES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Blog</span>
+        <h2>Related <span class="accent">Articles</span></h2>
+        <p>Learn more about razor coil selection, border deployment, and coating choices.</p>
+      </div>
+      <div class="related-articles-grid">
+        <a class="related-article-card" href="blog-razor-coils-7-things.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-razor-coils-hero.avif" alt="Razor Coils 7 Things" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Guide</span>
+            <h3 class="related-article-title">Razor Coils: 7 Things to Know Before You Buy</h3>
+            <div class="related-article-meta">2025 &middot; 8 min read</div>
+            <p class="related-article-desc">Key factors in choosing razor coils &mdash; diameter, blade type, finish, and standards &mdash; for effective perimeter security.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+
+        <a class="related-article-card" href="blog-border-razor-wire-deployment.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-border-razor-hero.avif" alt="Border Razor Wire Deployment" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Deployment</span>
+            <h3 class="related-article-title">Border Razor Wire Deployment: Best Practices</h3>
+            <div class="related-article-meta">2025 &middot; 7 min read</div>
+            <p class="related-article-desc">How military and border security teams specify and install razor wire for maximum, long-lasting deterrence.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Support</span>
+        <h2>Frequently Asked <span class="accent">Questions</span></h2>
+        <p>Answers to the most common questions about razor wire specification, coils, and installation.</p>
+      </div>
+      <div class="article-container">
+        <div class="faq-group" data-reveal>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What is the difference between razor wire and barbed wire?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Razor wire uses flat, stamped steel blades with a sharp, exposed edge attached to a high-tensile core, delivering a far higher deterrence and cutting risk than barbed wire's round twisted strands with pointed barbs. Razor wire is the standard for high-security perimeters, while barbed wire suits general, agricultural, and lower-risk fencing.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Should I choose galvanized or stainless steel razor wire?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Galvanized razor wire is economical and offers good corrosion resistance for most inland installations, lasting many years. Stainless steel (SS304/SS316) and heavy hot-dip galvanized/PVC finishes are best for coastal, humid, or chemically aggressive environments. If long service life in harsh conditions is the priority, choose stainless or PVC-coated razor wire.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How is razor wire measured and what coil diameter do I need?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Razor wire is specified by core wire diameter, blade material and width, and coil diameter. Coil diameters typically range from 300mm to 980mm. Larger diameters provide a taller, more intimidating barrier. Cross concertina is measured by its four intersecting blade points. Tell us your fence height and threat level to select the right coil.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Can I install razor wire myself?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Due to the sharp blades, razor wire installation requires professional handling, proper personal protective equipment (heavy gloves, protective clothing, safety glasses), and experience to avoid serious injury. Users should also comply with local regulations, which may restrict razor wire in residential and urban settings. We recommend professional installation by trained contractors.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Is razor wire legal and suitable for residential use?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Regulations vary by country and municipality. In many jurisdictions, razor wire is restricted or prohibited for residential use due to injury risk and liability, or requires special permits and height limits with signage. It is most commonly permitted for industrial, commercial, and government perimeter security. Check local laws before specifying razor wire for a home boundary.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How much razor wire do I need for my perimeter?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Estimate by measuring your perimeter length and the number of coil rows you plan. For a single top line of concertina, each meter of fence generally needs roughly one meter of deployed coil (with typical 300&ndash;450mm coil pitch), so a 100m perimeter needs about 100m of coil. Add 5&ndash;10% for joints and overlaps. Contact us with your fence plan for an accurate figure.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What is the difference between concertina and flat wrap razor wire?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Concertina razor wire is coiled into self-supporting circular spirals that expand to form a tall, dense barrier, ideal for the top or full face of fences and walls. Flat wrap razor wire is wound in a tight, low-profile helix along the fence top, offering a cleaner look while still deterring climbing. Choose concertina for maximum barrier volume, flat wrap for a compact straight topping.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How long does razor wire last?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">With proper installation and coating selection, galvanized razor wire can last 10 to 20 years or more, while stainless steel razor wire can last 30+ years with virtually no maintenance. Service life depends on coating weight, climate, and exposure. Regular inspection and touch-up of damaged coating help maximize longevity and maintain deterrent effectiveness.</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20steel%20wire%20being%20drawn%20orange%20hot%20industrial%20furnace%20glowing%20metal%20manufacturing%20close%20up%20dramatic&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Secure Your Perimeter With Razor Wire</h2>
+        <p class="article-cta-desc">Get a personalized razor wire quote within 24 hours. Tell us your perimeter length, coil type, diameter, and finish &mdash; we handle the rest, from blade stamping to sea freight delivery.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="products.html" class="btn-hero-secondary">VIEW ALL PRODUCTS</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/faq.js"></script>
+
+
+  
+  <script>
+    (function () {
+      var featureSlide = 0;
+      var featureTotalCards = 6;
+
+      function getFeatureCardsPerView() {
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+      }
+      function getFeatureTotalSlides() {
+        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
+      }
+      function updateFeatureCarousel() {
+        var track = document.getElementById('securityFenceCarousel');
+        if (track) {
+          var perView = getFeatureCardsPerView();
+          var slides = getFeatureTotalSlides();
+          var step = track.scrollWidth / slides;
+          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
+        }
+        updateFeatureDots();
+      }
+      function updateFeatureDots() {
+        var totalSlides = getFeatureTotalSlides();
+        var container = document.querySelector('.carousel-dots');
+        if (!container) return;
+        container.innerHTML = '';
+        for (var i = 0; i < totalSlides; i++) {
+          var dot = document.createElement('span');
+          dot.className = 'carousel-dot' + (i === featureSlide ? ' active' : '');
+          (function (i) {
+            dot.onclick = function () { goToSlide(i); };
+          })(i);
+          container.appendChild(dot);
+        }
+      }
+      function moveCarousel(direction) {
+        var totalSlides = getFeatureTotalSlides();
+        featureSlide += direction;
+        if (featureSlide < 0) featureSlide = totalSlides - 1;
+        if (featureSlide >= totalSlides) featureSlide = 0;
+        updateFeatureCarousel();
+      }
+      function goToSlide(index) {
+        featureSlide = index;
+        updateFeatureCarousel();
+      }
+      window.addEventListener('resize', function () {
+        var totalSlides = getFeatureTotalSlides();
+        if (featureSlide >= totalSlides) featureSlide = totalSlides - 1;
+        updateFeatureCarousel();
+      });
+      updateFeatureCarousel();
+      // Expose handlers for inline onclick buttons
+      window.moveCarousel = moveCarousel;
+      window.goToSlide = goToSlide;
+    })();
+  </script>
+
+</body>
+</html>

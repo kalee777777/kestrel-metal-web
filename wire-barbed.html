@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Classic twisted wire fencing — cost-effective perimeter security for agricultural, residential and industrial applications. Single twist, double twist, galvanized, PVC coated, concertina and traditional barbed wire available.">
+  <title>Barbed Wire | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/faq.css">
+
+  <style>
+    /* 仅作用于本页 Applications 版块：一行 3 列、两行展示，并缩短卡片高度 */
+    .apps-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+    }
+    .apps-grid .app-tile {
+      aspect-ratio: 4 / 3;
+    }
+    @media (max-width: 1200px) {
+      .apps-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .apps-grid .app-tile { aspect-ratio: 3 / 2; }
+    }
+    @media (max-width: 480px) {
+      .apps-grid { grid-template-columns: 1fr; }
+      .apps-grid .app-tile { aspect-ratio: 16 / 10; }
+    }
+  
+    /* Security Fence Features Carousel */
+    .carousel-container{position:relative;max-width:1200px;margin:0 auto;padding:0 64px}
+    .carousel-wrapper{width:100%;padding:6px 0;margin:-6px 0;overflow:hidden}
+    .carousel-track{display:flex;align-items:stretch;gap:20px;transition:transform 0.5s ease-in-out}
+    .carousel-track .feature-card{flex:0 0 calc((100% - 40px) / 3);box-sizing:border-box}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:var(--color-white);border:1px solid #e5e7eb;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .carousel-prev{left:0}
+    .carousel-next{right:0}
+    .carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}
+    .carousel-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .3s ease}
+    .carousel-dot.active{background:var(--color-orange-primary);width:24px;border-radius:5px}
+    .carousel-dot:hover{background:var(--color-orange-bg-light)}
+    .feature-card{background:var(--color-white);border:1px solid #e5e7eb;border-radius:16px;padding:32px 24px;text-align:center;transition:all .3s ease}
+    .feature-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.12);border-color:var(--color-orange-primary)}
+    .feature-icon{width:64px;height:64px;margin:0 auto 16px;background:linear-gradient(135deg,#FFF8F0,#FFF0E0);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--color-orange-primary);font-size:1.5rem}
+    .feature-card h3{font-size:1.05rem;font-weight:600;color:var(--color-black);margin-bottom:8px}
+    .feature-card p{font-size:.88rem;color:#4b5563;line-height:1.6}
+    @media(max-width:1024px){.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}}
+    @media(max-width:768px){.carousel-container{padding:0 50px}.carousel-track .feature-card{flex:0 0 calc((100% - 20px) / 2)}.carousel-btn{width:40px;height:40px}}
+
+    /* ===== Security Fence Features - Black Glassmorphism style ===== */
+    .security-features{position:relative;overflow:hidden;background:radial-gradient(1200px 600px at 0% 0%,rgba(255,103,31,.14),transparent 55%),radial-gradient(1000px 500px at 100% 100%,rgba(255,103,31,.10),transparent 55%),#0a0a0a}
+    .security-features .security-features-glow{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,103,31,.22),transparent 65%);top:-160px;right:-120px;filter:blur(20px);pointer-events:none;z-index:0}
+    .security-features .section-header{position:relative;z-index:1}
+    .security-features .section-header .category-tag{color:var(--color-orange-primary);border-color:rgba(255,103,31,.4)}
+    .security-features .carousel-container{position:relative;z-index:1}
+    .security-features .carousel-track .feature-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.35);color:rgba(255,255,255,.9)}
+    .security-features .feature-card:hover{border-color:var(--color-orange-primary);background:rgba(255,255,255,.10);box-shadow:0 20px 44px rgba(0,0,0,.5),0 0 24px rgba(255,103,31,.15)}
+    .security-features .feature-icon{background:linear-gradient(135deg,rgba(255,103,31,.18),rgba(255,103,31,.06));color:var(--color-orange-primary)}
+    .security-features .feature-card h3{color:var(--color-white)}
+    .security-features .feature-card p{color:rgba(255,255,255,.72)}
+    .security-features .carousel-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--color-white);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+    .security-features .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
+    .security-features .carousel-dot{background:rgba(255,255,255,.28)}
+    .security-features .carousel-dot.active{background:var(--color-orange-primary)}
+</style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/js/threejs/three.module.min.js",
+      "three/addons/": "/js/threejs/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('products/wire/barbed-wire-category.webp');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="fence-products.html">Fence Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Barbed Wire</span>
+        </nav>
+        <span class="article-hero-kicker">Perimeter &amp; Security Wire</span>
+        <h1 class="article-hero-title">Barbed Wire</h1>
+        <div class="article-hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Single / Double Twist</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>Barb 3"&ndash;6" spacing</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Galvanized / PVC</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT OVERVIEW ============ -->
+    <section class="product-overview">
+      <div class="product-overview-inner">
+        <div class="product-overview-image">
+          <span class="product-badge">Perimeter Security Rated</span>
+          <img src="products/wire/barbed-wire-overview.avif" alt="Roll of reliable barbed wire for perimeter security" loading="lazy">
+        </div>
+        <div class="product-overview-text">
+          <span class="category-tag">Product Overview</span>
+          <h2>Reliable Barbed Wire for Perimeter Security</h2>
+          <p>Barbed wire is a classic and time-tested fencing solution consisting of twisted wire strands with sharp barbs spaced at regular intervals. It provides an effective physical and psychological deterrent for a wide range of applications, from agricultural fencing to high-security perimeter protection.</p>
+          <p>Manufactured from high-quality carbon steel, our barbed wire is available in both galvanized and PVC-coated finishes to ensure maximum durability and corrosion resistance in all weather conditions. Advanced automated machinery guarantees consistent barb spacing, uniform twist, and reliable tensile strength across every roll.</p>
+          <ul>
+            <li>Single twist &amp; double twist configurations</li>
+            <li>Barb spacing 75&ndash;150mm (3"&ndash;6")</li>
+            <li>Wire gauge 12&ndash;18 ga (2.5&ndash;1.2mm)</li>
+            <li>Galvanized or PVC coated finish</li>
+            <li>Roll lengths 200&ndash;500m</li>
+            <li>Tensile strength 350&ndash;900 MPa</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES STRIP ============ -->
+    <section class="product-features-strip">
+      <div class="product-features-strip-inner">
+        <div class="feature-stat">
+          <div class="feature-stat-num">36X</div>
+          <div class="feature-stat-label">Barb Types<br>Materials &amp; Configs</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">2</div>
+          <div class="feature-stat-label">Finish Options<br>Galvanized / PVC</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">500m</div>
+          <div class="feature-stat-label">Roll Length<br>Up to 500m</div>
+        </div>
+        <div class="feature-stat">
+          <div class="feature-stat-num">6</div>
+          <div class="feature-stat-label">Barbed Wire<br>Types</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCT TYPES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Range</span>
+        <h2>Barbed Wire <span class="accent">Types</span></h2>
+        <p>Choose from six barbed wire configurations to match your application &mdash; from agricultural fencing to high-security perimeter protection.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/double-twist-barbed-wire.webp" alt="Double twist barbed wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Double Twist Barbed Wire</h3>
+              <p class="product-desc">Enhanced durability achieved with double-strand twist construction, the most common and robust choice for standard fencing.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Double Strand</span>
+                <span class="spec-tag">Durable</span>
+                <span class="spec-tag">Standard Choice</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/single-twist-barbed-wire.webp" alt="Single twist barbed wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Single Twist Barbed Wire</h3>
+              <p class="product-desc">Traditional single-strand barbed wire fencing, economical and widely used for agricultural and ranch applications.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Single Strand</span>
+                <span class="spec-tag">Economical</span>
+                <span class="spec-tag">Traditional</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/pvc-coated-barbed-wire.webp" alt="PVC coated barbed wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">PVC Coated Barbed Wire</h3>
+              <p class="product-desc">Superior corrosion protection with a smooth PVC coating, ideal for coastal and corrosive environments.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Corrosion Resistant</span>
+                <span class="spec-tag">Smooth Finish</span>
+                <span class="spec-tag">Coastal Rated</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/galvanized-barbed-wire.webp" alt="Galvanized barbed wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Galvanized Barbed Wire</h3>
+              <p class="product-desc">Hot-dip galvanized for maximum rust resistance, providing long service life in general and agricultural conditions.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Hot-Dip Galvanized</span>
+                <span class="spec-tag">Rust Resistant</span>
+                <span class="spec-tag">Long-Lasting</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/concertina-barbed-wire.webp" alt="Concertina barbed wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Concertina Barbed Wire</h3>
+              <p class="product-desc">Coiled configuration for rapid deployment and portable fencing, expanding to create an immediate effective barrier.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Coiled</span>
+                <span class="spec-tag">Rapid Deployment</span>
+                <span class="spec-tag">Portable</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/traditional-twist-barbed-wire.webp" alt="Traditional barbed wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Traditional Barbed Wire</h3>
+              <p class="product-desc">Classic design trusted for generations of agricultural and ranch fencing, offering reliable low-tech containment.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Classic Design</span>
+                <span class="spec-tag">Proven</span>
+                <span class="spec-tag">Ranch Fencing</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- ============ BARBED WIRE FEATURES ============ -->
+    <section id="features" class="product-section-dark security-features">
+      <div class="security-features-glow"></div>
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Features</span>
+        <h2>Barbed Wire <span class="accent">Features</span></h2>
+        <p>Sharp, durable, and cost-effective &mdash; barbed wire keeps livestock in and intruders out with minimal maintenance.</p>
+      </div>
+      <div class="carousel-container">
+        <button class="carousel-btn carousel-prev" type="button" onclick="moveCarousel(-1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="securityFenceCarousel">
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>Effective Deterrent</h3>
+              <p>Sharp, evenly spaced barbs create a reliable physical and psychological barrier that discourages climbing and crossing for both people and animals.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <h3>Versatile Application</h3>
+              <p>Suited to agricultural containment, perimeter security, military outposts, border demarcation, construction sites, and residential property lines alike.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              </div>
+              <h3>Cost-Effective Security</h3>
+              <p>Offers a high strength-to-cost ratio, delivering dependable perimeter security without the higher expense of premium blade-style barriers.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3>Corrosion Protection</h3>
+              <p>Available hot-dip galvanized or PVC coated, protecting the steel against rust and weathering in coastal, humid, and corrosive environments.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h3>Consistent Quality</h3>
+              <p>Automated production ensures uniform barb spacing, consistent twist, and reliable tensile strength in every roll, from 350 to 900 MPa.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+              </div>
+              <h3>Easy Installation</h3>
+              <p>Lightweight and forgiving to handle, barbed wire stretches quickly between posts and can be combined with mesh or used as outrigger topping.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-next" type="button" onclick="moveCarousel(1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots"></div>
+      </div>
+    </section>
+
+    <!-- ============ SPECIFICATIONS ============ -->
+    <section id="specifications" class="product-section-light">
+
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Data</span>
+        <h2>Product <span class="accent">Specifications</span></h2>
+        <p>Complete manufacturing specifications for barbed wire strands, barbs, coatings, and strength. Custom dimensions available for project requirements.</p>
+      </div>
+      <div class="article-container">
+        <article class="article-content">
+
+          <h3>Barbed Wire Specification</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Wire Gauge</strong></td><td>12ga &ndash; 18ga (2.5mm &ndash; 1.2mm)</td></tr>
+              <tr><td><strong>Barb Spacing</strong></td><td>75mm &ndash; 150mm (3" &ndash; 6")</td></tr>
+              <tr><td><strong>Barb Length</strong></td><td>10mm &ndash; 25mm</td></tr>
+              <tr><td><strong>Strand Type</strong></td><td>Single Twist / Double Twist</td></tr>
+              <tr><td><strong>Coating</strong></td><td>Galvanized / PVC Coated</td></tr>
+              <tr><td><strong>Tensile Strength</strong></td><td>350 &ndash; 900 MPa</td></tr>
+              <tr><td><strong>Roll Length</strong></td><td>200m &ndash; 500m per roll</td></tr>
+              <tr><td><strong>Core Material</strong></td><td>Q195 / Q235 low-carbon steel</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Common Combinations</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Strand Gauge</th>
+                <th>Barb Gauge</th>
+                <th>Barb Spacing</th>
+                <th>Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>12.5ga (2.5mm)</td><td>14ga (2.0mm)</td><td>4" (100mm)</td><td>Standard agricultural &amp; perimeter</td></tr>
+              <tr><td>12ga (2.5mm)</td><td>14ga (2.0mm)</td><td>3" (75mm)</td><td>High-security topping</td></tr>
+              <tr><td>14ga (2.0mm)</td><td>16ga (1.6mm)</td><td>5" (125mm)</td><td>Light &amp; residential</td></tr>
+              <tr><td>16ga (1.6mm)</td><td>18ga (1.2mm)</td><td>6" (150mm)</td><td>Economical / temporary</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Material &amp; Finishing Information</h3>
+          <ul>
+            <li><strong>Core wire:</strong> Q195 / Q235 low-carbon steel in single or double twist configurations</li>
+            <li><strong>Galvanized coating:</strong> Hot-dip zinc layer for maximum rust resistance</li>
+            <li><strong>PVC coating:</strong> Smooth protective layer, commonly green or black, for coastal and corrosive environments</li>
+            <li>Consistent barb spacing and twist guaranteed by automated production</li>
+            <li>Custom gauges, spacing, and roll lengths available upon request</li>
+          </ul>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ BARBED WIRE OPTIONS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Options</span>
+        <h2>Barbed Wire <span class="accent">Configuration</span></h2>
+        <p>Tailor your barbed wire with the right twist, barb spacing, and coating for your exact containment or security needs.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/double-twist-barbed-wire.webp" alt="Twist configuration" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Twist Configuration</h3>
+              <p class="product-desc">Choose single twist for strength across long runs or double twist for enhanced durability and resistance to sagging under tension.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Single / Double</span>
+                <span class="spec-tag">Consistent Twist</span>
+                <span class="spec-tag">Two Strands</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/galvanized-barbed-wire.webp" alt="Coating options" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Coating Options</h3>
+              <p class="product-desc">Hot-dip galvanized for maximum rust resistance, or smooth PVC coating in green and black for harsh and coastal environments.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Galvanized</span>
+                <span class="spec-tag">PVC Coated</span>
+                <span class="spec-tag">Rust Resistant</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/concertina-barbed-wire.webp" alt="Barb spacing and configuration" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Barb Spacing</h3>
+              <p class="product-desc">Standard 4-point barbs spaced from 3" to 6" with selectable barb spacing, balancing deterrent strength with material economy.</p>
+              <div class="product-specs">
+                <span class="spec-tag">4-Point Barbs</span>
+                <span class="spec-tag">3"&ndash;6" Spacing</span>
+                <span class="spec-tag">Customisable</span>
+              </div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATIONS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Common <span class="accent">Applications</span></h2>
+        <p style="color:var(--color-gray-light);">From paddocks and cropland to high-security perimeters, barbed wire adapts to every fencing need.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="images/app-cattle-livestock.webp" alt="Agriculture and livestock barbed wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Agriculture &amp; Livestock</div>
+            <div class="app-tile-desc">Contain livestock and protect crops with reliable fencing</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-warehouse.webp" alt="Perimeter security barbed wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Perimeter Security</div>
+            <div class="app-tile-desc">Secure commercial and industrial properties effectively</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/fence/government-building.webp" alt="Military and defense barbed wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Military &amp; Defense</div>
+            <div class="app-tile-desc">Tactical perimeter protection for installations and bases</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/wire/concertina-barbed-wire.webp" alt="Border control barbed wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Border Control</div>
+            <div class="app-tile-desc">National border fencing and customs zone demarcation</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="products/fence/industrial-facility.webp" alt="Construction site barbed wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Construction Sites</div>
+            <div class="app-tile-desc">Temporary and permanent site security during projects</div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-farmland-protection.webp" alt="Residential fencing barbed wire" loading="lazy">
+          <div class="app-tile-overlay">
+            <div class="app-tile-label">Residential Fencing</div>
+            <div class="app-tile-desc">Property boundary definition and area security</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ YOU MAY ALSO LIKE ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Related Products</span>
+        <h2>You May Also <span class="accent">Like</span></h2>
+        <p>Explore more fencing systems engineered for agriculture, security, and long-term performance.</p>
+      </div>
+      <div class="container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/chain-link-fence-product.webp" alt="Chain Link Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Chain Link Fence</h3>
+              <p class="product-desc">Diamond pattern woven mesh fence, versatile and cost-effective. Available in galvanized and PVC coated finishes for residential, commercial, and agricultural use.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Opening 1/4" to 6"</span>
+                <span class="spec-tag">Wire BWG 24-12</span>
+                <span class="spec-tag">PVC: Green, Black</span>
+              </div>
+              <a href="chain-link.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/wire/razor-wire-product.webp" alt="Razor Wire" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Razor Wire</h3>
+              <p class="product-desc">High-security blade-type wire with sharp steel blades on high-tensile core wire for maximum perimeter protection.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Blade-Type</span>
+                <span class="spec-tag">High Security</span>
+                <span class="spec-tag">Galvanized / SS</span>
+              </div>
+              <a href="wire-razor.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual">
+              <img src="products/fence/welded-mesh-fence.avif" alt="Welded Wire Fence" loading="lazy">
+            </div>
+            <div class="product-card-content">
+              <h3 class="product-name">Welded Wire Fence</h3>
+              <p class="product-desc">Rigid welded mesh panels offering strong, durable fencing for residential, agricultural, and industrial applications.</p>
+              <div class="product-specs">
+                <span class="spec-tag">Rigid Panels</span>
+                <span class="spec-tag">Strong</span>
+                <span class="spec-tag">Durable</span>
+              </div>
+              <a href="welded-wire-mesh.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RELATED ARTICLES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Blog</span>
+        <h2>Related <span class="accent">Articles</span></h2>
+        <p>Learn more about barbed wire selection, cost calculation, and coating choices.</p>
+      </div>
+      <div class="related-articles-grid">
+        <a class="related-article-card" href="blog-barbed-wire-cost-calculation.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/products/wire/barbed-wire.webp" alt="Barbed Wire Cost Calculation" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Guide</span>
+            <h3 class="related-article-title">How to Calculate the Cost of a Barbed Wire Fence</h3>
+            <div class="related-article-meta">2025 &middot; 7 min read</div>
+            <p class="related-article-desc">A practical guide to estimating barbed wire quantities and costs by fence length, strand count, and post spacing.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+
+        <a class="related-article-card" href="blog-galvanized-vs-pvc.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/pvc-coated-wire.jpg" alt="Galvanized vs PVC Fencing" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Comparison</span>
+            <h3 class="related-article-title">Galvanized vs PVC Fencing: Which Is Right for You?</h3>
+            <div class="related-article-meta">2025 &middot; 6 min read</div>
+            <p class="related-article-desc">Compare the durability, corrosion resistance, and cost of galvanized and PVC coated wire fencing to choose the right finish.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Support</span>
+        <h2>Frequently Asked <span class="accent">Questions</span></h2>
+        <p>Answers to the most common questions about barbed wire selection, configuration, and installation.</p>
+      </div>
+      <div class="article-container">
+        <div class="faq-group" data-reveal>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">What gauge and barb spacing should I choose?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Standard barbed wire uses a 12&ndash;13 gauge core wire with a lighter barb gauge and a barb spacing of 3" to 6". Closer spacing (3"&ndash;4") provides a denser, more aggressive barrier, ideal for high-security topping. Wider spacing (5"&ndash;6") balances material economy for long agricultural runs. Choose 12ga for strength or thinner gauges for lighter duty.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Galvanized or PVC coated &mdash; which finish is better?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Hot-dip galvanized barbed wire offers excellent all-round corrosion resistance and is the most economical choice for most projects, lasting decades in rural and urban settings. PVC-coated wire adds a smooth protective layer that suits coastal, humid, or chemically aggressive environments and is available in green or black. For aggressive coastal conditions, prefer PVC or heavy galvanizing.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How many strands of barbed wire do I need?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">For livestock, 3 to 5 strands are typical depending on animal size and fence height &mdash; cattle calves may use 4&ndash;5 tightly spaced strands, while adult cattle do well with 3&ndash;4. For security-topping on mesh fences, a single to three strands run along the top or angled outriggers. Add strands near the bottom for smaller animals and near the top for climbing deterrence.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Single twist or double twist &mdash; what's the difference?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Single twist barbed wire consists of two strands twisted together and is the traditional, economical standard. Double twist uses a more robust construction that resists unwinding and sagging under tension, making it stronger and more durable for long spans and heavier duty. Choose double twist where maximum strength and longevity matter.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Is barbed wire suitable for livestock?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Yes, barbed wire is widely used for cattle, sheep, and ranch fencing. The barbs act as a strong physical deterrent that encourages animals to respect the boundary. Because barbs can injure closely confined animals, many livestock producers prefer non-barbed field fence or high-tensile wire for horses and confined pens, reserving barbed wire for perimeter and cattle fencing.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How much barbed wire do I need for my fence?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Estimate fence length and multiply by the number of strands. Add 5&ndash;10% for sag, knots, start/end wrapping, and corners. For a 500m fence with 4 strands, you'll need roughly 2,100m of wire. Rolls are typically 200&ndash;500m, so plan purchases to minimize joins. Contact us with your layout for an exact quantity recommendation.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">How long does galvanized barbed wire last?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Hot-dip galvanized barbed wire typically lasts 15 to 30 years or more in most environments, depending on coating weight, climate, and installation quality. PVC-coated wire offers similar longevity where the coating stays intact. High-humidity or coastal installations benefit from heavier galvanizing to extend service life.</div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-reveal>
+          <div class="faq-question">
+            <span class="faq-question-text">Can barbed wire be combined with chain link or welded fences?</span>
+            <span class="faq-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </div>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer">Yes. Barbed wire is commonly installed along the top of chain link or welded mesh fences, either on the post top or on angled outrigger arms, to boost security and deter climbing. It can also be run along the bottom kick-rail to deter burrowing animals. This combination offers visual transparency with an effective barrier.</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20steel%20wire%20being%20drawn%20orange%20hot%20industrial%20furnace%20glowing%20metal%20manufacturing%20close%20up%20dramatic&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Get the Right Barbed Wire for Your Job</h2>
+        <p class="article-cta-desc">Get a personalized barbed wire quote within 24 hours. Tell us your fence length, strand count, barb spacing, and finish &mdash; we handle the rest, from wire drawing to sea freight delivery.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="products.html" class="btn-hero-secondary">VIEW ALL PRODUCTS</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/faq.js"></script>
+
+
+  
+  <script>
+    (function () {
+      var featureSlide = 0;
+      var featureTotalCards = 6;
+
+      function getFeatureCardsPerView() {
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+      }
+      function getFeatureTotalSlides() {
+        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
+      }
+      function updateFeatureCarousel() {
+        var track = document.getElementById('securityFenceCarousel');
+        if (track) {
+          var perView = getFeatureCardsPerView();
+          var slides = getFeatureTotalSlides();
+          var step = track.scrollWidth / slides;
+          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
+        }
+        updateFeatureDots();
+      }
+      function updateFeatureDots() {
+        var totalSlides = getFeatureTotalSlides();
+        var container = document.querySelector('.carousel-dots');
+        if (!container) return;
+        container.innerHTML = '';
+        for (var i = 0; i < totalSlides; i++) {
+          var dot = document.createElement('span');
+          dot.className = 'carousel-dot' + (i === featureSlide ? ' active' : '');
+          (function (i) {
+            dot.onclick = function () { goToSlide(i); };
+          })(i);
+          container.appendChild(dot);
+        }
+      }
+      function moveCarousel(direction) {
+        var totalSlides = getFeatureTotalSlides();
+        featureSlide += direction;
+        if (featureSlide < 0) featureSlide = totalSlides - 1;
+        if (featureSlide >= totalSlides) featureSlide = 0;
+        updateFeatureCarousel();
+      }
+      function goToSlide(index) {
+        featureSlide = index;
+        updateFeatureCarousel();
+      }
+      window.addEventListener('resize', function () {
+        var totalSlides = getFeatureTotalSlides();
+        if (featureSlide >= totalSlides) featureSlide = totalSlides - 1;
+        updateFeatureCarousel();
+      });
+      updateFeatureCarousel();
+      // Expose handlers for inline onclick buttons
+      window.moveCarousel = moveCarousel;
+      window.goToSlide = goToSlide;
+    })();
+  </script>
+
+</body>
+</html>
