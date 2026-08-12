@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/products.css">
   <link rel="stylesheet" href="css/product-detail.css">
   <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/faq.css">
 
   <style>
     .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
@@ -56,6 +57,22 @@
     .article-hero-content .article-hero-desc { color: #ffffff; }
     .article-hero-content .article-hero-title { color: #ffffff; }
     .article-hero-content .article-hero-kicker { color: #ffffff; }
+
+    .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1200px; margin: 0 auto; padding: 0 var(--container-gap); }
+    .apps-grid .app-tile { aspect-ratio: 4 / 3; position: relative; overflow: hidden; border-radius: 10px; }
+    .apps-grid .app-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    .apps-grid .app-tile:hover img { transform: scale(1.05); }
+    @media (max-width: 768px) { .apps-grid { grid-template-columns: repeat(2, 1fr); } .apps-grid .app-tile { aspect-ratio: 3 / 2; } }
+    @media (max-width: 480px) { .apps-grid { grid-template-columns: 1fr; } .apps-grid .app-tile { aspect-ratio: 16 / 10; } }
+    .faq-section { background: var(--color-white); padding: 5rem var(--container-gap); }
+    .faq-list { max-width: 980px; margin: 2rem auto 0; border-top: 1px solid #e5e7eb; }
+    .faq-item { border-bottom: 1px solid #e5e7eb; }
+    .faq-item summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; padding: 1.35rem 0; color: var(--color-black); font-size: 1rem; font-weight: 600; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; color: var(--color-orange-primary); font-size: 1.5rem; font-weight: 300; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-answer { padding: 0 3rem 1.35rem 0; color: #4b5563; line-height: 1.8; font-size: .95rem; }
+    @media (max-width: 600px) { .faq-section { padding: 3.5rem var(--container-gap); } .faq-item summary { font-size: .94rem; } }
   </style>
 </head>
 <body>
@@ -97,6 +114,7 @@
           <h2>Flexible Protection,<br>Built for the Outdoors</h2>
           <p>Galvanized hexagonal wire netting, also known as chicken wire or poultry netting, is woven from low-carbon steel wire and protected with an electric or hot-dip galvanized zinc coating. Its flexible hexagonal openings conform easily to uneven ground, curved boundaries and irregular structures.</p>
           <p>Normal twist offers an economical solution for everyday fencing, while reverse twist improves structural stability where the mesh must resist local wire damage. From poultry enclosures and gardens to gabion walls and erosion control, it provides dependable protection with simple installation.</p>
+          <p>Modern automated weaving keeps mesh openings and wire tension consistent across each roll. The result is a lightweight, cost-effective material that balances visibility, airflow, flexibility and dependable outdoor performance.</p>
           <ul>
             <li>Electric or hot-dip galvanized finish</li>
             <li>Normal and reverse twist patterns</li>
@@ -130,12 +148,55 @@
       </div>
     </section>
 
-    <!-- ============ 2. WIRE SPECIFICATIONS ============ -->
-    <section class="product-section-light">
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Product Range</span>
+        <h2>Hexagonal Wire <span class="accent">Types</span></h2>
+        <p>Choose the finish that best matches your corrosion, appearance and service-life requirements.</p>
+      </div>
+      <div class="article-container">
+        <div class="products-grid">
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="PVC coated hexagonal wire netting" loading="lazy"></div>
+            <div class="product-card-content">
+              <h3 class="product-name">PVC Coated Hexagonal Mesh</h3>
+              <p class="product-desc">A galvanized core with a durable colored PVC coating for enhanced outdoor corrosion resistance and visual integration.</p>
+              <div class="product-specs"><span class="spec-tag">Green / Black</span><span class="spec-tag">0.4–2.0mm Wire</span></div>
+              <a href="hexagonal-wire-pvc.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="Stainless steel hexagonal wire netting" loading="lazy"></div>
+            <div class="product-card-content">
+              <h3 class="product-name">Stainless Hexagonal Mesh</h3>
+              <p class="product-desc">Premium AISI 304 or 316 stainless steel for marine, chemical, food processing and high-corrosion environments.</p>
+              <div class="product-specs"><span class="spec-tag">AISI 304 / 316</span><span class="spec-tag">BWG 14–32</span></div>
+              <a href="hexagonal-wire-stainless.html" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+          <article class="product-card" data-reveal>
+            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="Galvanized hexagonal wire netting" loading="lazy"></div>
+            <div class="product-card-content">
+              <h3 class="product-name">Galvanized Hexagonal Mesh</h3>
+              <p class="product-desc">Galvanized hexagonal wire netting with an electric or hot-dip zinc coating for economical general-purpose fencing, agriculture and construction.</p>
+              <div class="product-specs"><span class="spec-tag">Normal / Reverse Twist</span><span class="spec-tag">BWG 14–32</span></div>
+              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="specifications" class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Data</span>
+        <h2>Product <span class="accent">Specifications</span></h2>
+        <p>Normal twist and reverse twist mesh ranges for galvanized hexagonal wire netting.</p>
+      </div>
       <div class="article-container" style="max-width:1080px;">
         <div class="section-header" data-reveal>
-          <span class="category-tag">Technical Data</span>
-          <h2>Wire Specifications</h2>
+          <span class="category-tag">Normal Twist</span>
+          <h2>Wire Mesh Specifications</h2>
           <p>Available mesh sizes, aperture and wire gauges for normal twist hexagonal wire netting.</p>
         </div>
         <div class="spec-table-wrap">
@@ -165,7 +226,7 @@
       </div>
     </section>
 
-    <!-- ============ 3. REVERSE TWIST ============ -->
+    <!-- ============ 3. REVERSE TWIST SPECIFICATIONS ============ -->
     <section class="product-section-light product-section-light-alt">
       <div class="article-container" style="max-width:1080px;">
         <div class="section-header" data-reveal>
@@ -249,7 +310,38 @@
       </div>
     </section>
 
-    <!-- ============ 5. PACKING &amp; PACKAGING ============ -->
+    <!-- ============ 5. KEY FEATURES ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Why Choose Us</span>
+        <h2>Key <span class="accent">Features</span></h2>
+        <p>Practical performance details that make galvanized hexagonal wire netting a dependable everyday mesh solution.</p>
+      </div>
+      <div class="features-grid">
+        <article class="feature-card" data-reveal>
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg></div>
+          <h3>Hexagonal Weave Pattern</h3>
+          <p>Uniform openings provide an excellent strength-to-weight ratio while allowing the mesh to follow uneven ground and irregular shapes.</p>
+        </article>
+        <article class="feature-card" data-reveal>
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg></div>
+          <h3>Electro &amp; Hot-Dip Galvanized</h3>
+          <p>Select the zinc coating process according to the required corrosion resistance, outdoor exposure and service-life target.</p>
+        </article>
+        <article class="feature-card" data-reveal>
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 20v-5h6v5"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg></div>
+          <h3>Lightweight &amp; Easy to Install</h3>
+          <p>Flexible rolls can be cut, overlapped, tied and fixed with simple tools, reducing labor and adapting quickly to site conditions.</p>
+        </article>
+        <article class="feature-card" data-reveal>
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 19V9l7-5 7 5v10M8 19v-5h8v5"/><path d="M3 9h18"/></svg></div>
+          <h3>Versatile Applications</h3>
+          <p>Suitable for poultry fencing, garden protection, farm boundaries, animal enclosures, plastering, gabions and erosion control.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 6. PACKING &amp; PACKAGING ============ -->
     <section class="product-section-light product-section-light-alt">
       <div class="article-container" style="max-width:1080px;">
         <div class="section-header" data-reveal>
@@ -322,7 +414,7 @@
     </section>
 
     <!-- ============ 8. RELATED PRODUCTS ============ -->
-    <section class="product-section-light product-section-light-alt">
+    <section id="related-products" class="product-section-light product-section-light-alt">
       <div class="section-header" data-reveal>
         <span class="category-tag">Related Products</span>
         <h2>Choose Your <span class="accent">Finish</span></h2>
@@ -352,7 +444,42 @@
       </div>
     </section>
 
-    <!-- ============ 9. INQUIRY CTA ============ -->
+    <!-- ============ 9. FAQ ============ -->
+    <section class="faq-section">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Support</span>
+        <h2>Frequently Asked <span class="accent">Questions</span></h2>
+        <p>Find answers to common questions about galvanized hexagonal wire netting.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What is galvanized hexagonal wire mesh?</summary>
+          <div class="faq-answer">Galvanized hexagonal wire mesh, commonly known as chicken wire or poultry netting, is a woven wire fencing product made by twisting low-carbon steel wires into uniform hexagonal openings and protecting them with a zinc coating. It is lightweight, flexible and widely used for poultry, garden, farm and construction applications.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What is the difference between electro and hot-dip galvanizing?</summary>
+          <div class="faq-answer">Electro galvanizing applies a thinner, more uniform zinc layer for economical general-purpose use. Hot-dip galvanizing immerses the finished wire in molten zinc, creating a thicker coating and longer service life for demanding outdoor or humid environments.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What mesh size should I choose for poultry fencing?</summary>
+          <div class="faq-answer">A 1-inch or 2-inch mesh is commonly selected for chickens and larger poultry. For chicks, small birds or areas with small predators, choose a smaller 1/2-inch or 3/8-inch opening. The final choice should consider bird size, predator risk and the required wire gauge.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What is the difference between normal twist and reverse twist?</summary>
+          <div class="faq-answer">Normal twist is an economical pattern for general-purpose fencing. Reverse twist alternates the twisting direction of adjacent wires, improving structural stability and helping prevent the mesh from unraveling if one wire is cut.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can galvanized hexagonal wire mesh be used for plastering?</summary>
+          <div class="faq-answer">Yes. Hexagonal mesh is often used as plastering or stucco lath because it provides a mechanical key for the coating to grip. A 3/4-inch or 1-inch mesh with a heavier wire gauge is commonly selected, and galvanized wire helps reduce rust staining.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I install galvanized hexagonal wire mesh?</summary>
+          <div class="faq-answer">Set timber or metal posts along the fence line, unroll the mesh, fasten it with staples or wire ties, overlap adjacent sections by at least one opening, and secure the bottom edge against digging. Wire cutters or tin snips can be used to trim the roll on site.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ 10. INQUIRY CTA ============ -->
     <section class="article-cta">
       <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%20hexagonal%20wire%20mesh%20rolls%20stacked%20warehouse%20industrial%20wide%20shot&image_size=landscape_16_9');"></div>
       <div class="article-cta-overlay"></div>
