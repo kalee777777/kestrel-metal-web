@@ -14,6 +14,26 @@
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/products.css">
   <link rel="stylesheet" href="css/footer.css">
+
+  <style>
+    .hex-detail-section { padding: 6rem var(--container-gap); background: var(--color-white); }
+    .hex-detail-section + .hex-detail-section { background: #F7F7F5; }
+    .info-layout { display: grid; grid-template-columns: 1.12fr .88fr; gap: 3rem; align-items: start; }
+    .info-left h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 1px; font-size: 1.55rem; color: var(--color-black); text-transform: uppercase; padding-left: .9rem; border-left: 4px solid var(--color-orange-primary); margin: 2.4rem 0 1.1rem; line-height: 1.15; }
+    .info-left h3:first-child { margin-top: 0; }
+    .info-left p { color: #4b5563; line-height: 1.85; font-size: .98rem; margin: 0 0 1rem; }
+    .benefits-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .benefits-list li { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; color: #374151; line-height: 1.55; }
+    .benefits-list .chk { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); display: inline-flex; align-items: center; justify-content: center; font-size: .8rem; margin-top: 1px; }
+    .info-right { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+    .info-right .info-img-card { position: relative; border-radius: 14px; overflow: hidden; height: 220px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+    .info-right .info-img-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s ease; }
+    .info-right .info-img-card:hover .info-img-bg { transform: scale(1.06); }
+    .info-right .info-img-cap { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.76), rgba(0,0,0,.14) 60%, rgba(0,0,0,.08)); display: flex; align-items: flex-end; gap: 6px; padding: 12px 14px; color: var(--color-white); font-weight: 600; font-size: .86rem; }
+    .info-right .info-img-cap svg { color: var(--color-orange-primary); flex: 0 0 auto; }
+    @media (max-width: 900px) { .info-layout { grid-template-columns: 1fr; gap: 2rem; } .info-right { grid-template-columns: 1fr; } .info-right .info-img-card { height: 200px; } }
+    @media (max-width: 600px) { .benefits-list { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 
@@ -110,6 +130,70 @@
               <a href="#" class="product-card-link">View Details <span>&rarr;</span></a>
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HEXAGONAL WIRE NETTING - PRODUCT INFO / BENEFITS / APPLICATION ============ -->
+    <section class="hex-detail-section">
+      <div class="container">
+        <div class="category-header" data-reveal>
+          <div class="category-header-left">
+            <span class="category-tag">HEXAGONAL WIRE NETTING</span>
+            <h2 class="category-title">Galvanized Hexagonal Wire Netting</h2>
+          </div>
+          <p class="category-desc">Woven hexagonal mesh for gabion walls, poultry cages and agricultural fencing.</p>
+        </div>
+
+        <div class="info-layout">
+          <div class="info-left" data-reveal>
+            <h3>Product Information</h3>
+            <p>Galvanized hexagonal wire netting, also known as chicken wire or poultry netting, is manufactured from low carbon steel wire with a zinc coating applied through either hot-dip galvanizing or electro galvanizing. The galvanized coating provides excellent protection against rust and corrosion, making it ideal for outdoor applications.</p>
+            <p>Available in both normal twist and reverse twist weaving patterns. The reverse twist design offers greater structural stability as adjacent wires are twisted in opposite directions, preventing the mesh from unraveling if a single wire is cut. Normal twist is more economical and suitable for general-purpose applications.</p>
+
+            <h3>Benefits</h3>
+            <ul class="benefits-list">
+              <li><span class="chk">&#10003;</span><span>Zinc coating provides excellent corrosion and rust resistance.</span></li>
+              <li><span class="chk">&#10003;</span><span>Available in 11 mesh sizes (3/8" to 4") and BWG 14 to 32.</span></li>
+              <li><span class="chk">&#10003;</span><span>Both normal twist and reverse twist patterns available.</span></li>
+              <li><span class="chk">&#10003;</span><span>Lightweight and flexible &mdash; conforms to uneven terrain.</span></li>
+              <li><span class="chk">&#10003;</span><span>Cost-effective for large area fencing and enclosure projects.</span></li>
+            </ul>
+
+            <h3>Application</h3>
+            <p>Galvanized hexagonal wire netting is widely used in poultry fencing, livestock enclosures, garden protection, orchard fencing, gabion wall construction, erosion control, rock fall netting, and various agricultural and industrial applications.</p>
+          </div>
+
+          <div class="info-right">
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-poultry.webp');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><path d="M12 7v6M9 10h6"/></svg>
+                For Poultry Fencing
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-garden.webp');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-8a4 4 0 0 1 4-4h1a2 2 0 0 1 2 2v1a4 4 0 0 1-4 4h-3"/></svg>
+                For Garden Protection
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-gabion.webp');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-1"/></svg>
+                For Gabion Wall Construction
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-erosion.webp');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                For Erosion Control
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
