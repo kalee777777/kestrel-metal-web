@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/product-detail.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/faq.css">
+  <link rel="stylesheet" href="css/blog.css">
 
   <style>
     .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
@@ -73,6 +74,43 @@
     .faq-item[open] summary::after { content: '−'; }
     .faq-answer { padding: 0 3rem 1.35rem 0; color: #4b5563; line-height: 1.8; font-size: .95rem; }
     @media (max-width: 600px) { .faq-section { padding: 3.5rem var(--container-gap); } .faq-item summary { font-size: .94rem; } }
+
+    /* Security Fence Features Carousel */
+    .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; padding: 0 64px; }
+    .carousel-wrapper { width: 100%; padding: 6px 0; margin: -6px 0; overflow: hidden; }
+    .carousel-track { display: flex; align-items: stretch; gap: 20px; transition: transform 0.5s ease-in-out; }
+    .carousel-track .feature-card { flex: 0 0 calc((100% - 40px) / 3); box-sizing: border-box; }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; background: var(--color-white); border: 1px solid #e5e7eb; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .3s ease; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+    .carousel-btn:hover { background: var(--color-orange-primary); border-color: var(--color-orange-primary); color: var(--color-white); }
+    .carousel-prev { left: 0; }
+    .carousel-next { right: 0; }
+    .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+    .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; cursor: pointer; transition: all .3s ease; }
+    .carousel-dot.active { background: var(--color-orange-primary); width: 24px; border-radius: 5px; }
+    .carousel-dot:hover { background: var(--color-orange-bg-light); }
+    .feature-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 32px 24px; text-align: center; transition: all .3s ease; }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.12); border-color: var(--color-orange-primary); }
+    .feature-icon { width: 64px; height: 64px; margin: 0 auto 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E0); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--color-orange-primary); font-size: 1.5rem; }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 600; color: var(--color-black); margin-bottom: 8px; }
+    .feature-card p { font-size: .88rem; color: #4b5563; line-height: 1.6; }
+    @media (max-width: 1024px) { .carousel-track .feature-card { flex: 0 0 calc((100% - 20px) / 2); } }
+    @media (max-width: 768px) { .carousel-container { padding: 0 50px; } .carousel-track .feature-card { flex: 0 0 calc((100% - 20px) / 2); } .carousel-btn { width: 40px; height: 40px; } }
+
+    /* ===== Security Fence Features - Black Glassmorphism style ===== */
+    .security-features { position: relative; overflow: hidden; background: radial-gradient(1200px 600px at 0% 0%, rgba(255,103,31,.14), transparent 55%), radial-gradient(1000px 500px at 100% 100%, rgba(255,103,31,.10), transparent 55%), #0a0a0a; }
+    .security-features .security-features-glow { position: absolute; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(255,103,31,.22), transparent 65%); top: -160px; right: -120px; filter: blur(20px); pointer-events: none; z-index: 0; }
+    .security-features .section-header { position: relative; z-index: 1; }
+    .security-features .section-header .category-tag { color: var(--color-orange-primary); border-color: rgba(255,103,31,.4); }
+    .security-features .carousel-container { position: relative; z-index: 1; }
+    .security-features .carousel-track .feature-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0,0,0,.35); color: rgba(255,255,255,.9); }
+    .security-features .feature-card:hover { border-color: var(--color-orange-primary); background: rgba(255,255,255,.10); box-shadow: 0 20px 44px rgba(0,0,0,.5), 0 0 24px rgba(255,103,31,.15); }
+    .security-features .feature-icon { background: linear-gradient(135deg, rgba(255,103,31,.18), rgba(255,103,31,.06)); color: var(--color-orange-primary); }
+    .security-features .feature-card h3 { color: var(--color-white); }
+    .security-features .feature-card p { color: rgba(255,255,255,.72); }
+    .security-features .carousel-btn { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); color: var(--color-white); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+    .security-features .carousel-btn:hover { background: var(--color-orange-primary); border-color: var(--color-orange-primary); color: var(--color-white); }
+    .security-features .carousel-dot { background: rgba(255,255,255,.28); }
+    .security-features .carousel-dot.active { background: var(--color-orange-primary); }
   </style>
 </head>
 <body>
@@ -227,7 +265,7 @@
     </section>
 
     <!-- ============ 3. REVERSE TWIST SPECIFICATIONS ============ -->
-    <section class="product-section-light product-section-light-alt">
+    <section id="reverse-twist-specifications" class="product-section-light product-section-light-alt">
       <div class="article-container" style="max-width:1080px;">
         <div class="section-header" data-reveal>
           <span class="category-tag">Reverse Twist</span>
@@ -311,33 +349,67 @@
     </section>
 
     <!-- ============ 5. KEY FEATURES ============ -->
-    <section class="product-section-light product-section-light-alt">
+    <section id="features" class="product-section-dark security-features">
+      <div class="security-features-glow"></div>
       <div class="section-header" data-reveal>
-        <span class="category-tag">Why Choose Us</span>
-        <h2>Key <span class="accent">Features</span></h2>
-        <p>Practical performance details that make galvanized hexagonal wire netting a dependable everyday mesh solution.</p>
+        <span class="category-tag">Product Features</span>
+        <h2>Galvanized Hexagonal <span class="accent">Features</span></h2>
+        <p>Flexible, corrosion-resistant and easy to install &mdash; a dependable mesh solution for agriculture, construction and outdoor protection.</p>
       </div>
-      <div class="features-grid">
-        <article class="feature-card" data-reveal>
-          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg></div>
-          <h3>Hexagonal Weave Pattern</h3>
-          <p>Uniform openings provide an excellent strength-to-weight ratio while allowing the mesh to follow uneven ground and irregular shapes.</p>
-        </article>
-        <article class="feature-card" data-reveal>
-          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg></div>
-          <h3>Electro &amp; Hot-Dip Galvanized</h3>
-          <p>Select the zinc coating process according to the required corrosion resistance, outdoor exposure and service-life target.</p>
-        </article>
-        <article class="feature-card" data-reveal>
-          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 20v-5h6v5"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg></div>
-          <h3>Lightweight &amp; Easy to Install</h3>
-          <p>Flexible rolls can be cut, overlapped, tied and fixed with simple tools, reducing labor and adapting quickly to site conditions.</p>
-        </article>
-        <article class="feature-card" data-reveal>
-          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 19V9l7-5 7 5v10M8 19v-5h8v5"/><path d="M3 9h18"/></svg></div>
-          <h3>Versatile Applications</h3>
-          <p>Suitable for poultry fencing, garden protection, farm boundaries, animal enclosures, plastering, gabions and erosion control.</p>
-        </article>
+      <div class="carousel-container">
+        <button class="carousel-btn carousel-prev" type="button" onclick="moveCarousel(-1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="securityFenceCarousel">
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>
+              </div>
+              <h3>Hexagonal Weave Pattern</h3>
+              <p>Uniform openings provide an excellent strength-to-weight ratio while allowing the mesh to follow uneven ground and irregular shapes.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg>
+              </div>
+              <h3>Electro &amp; Hot-Dip Galvanized</h3>
+              <p>Select the zinc coating process according to the required corrosion resistance, outdoor exposure and service-life target.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 20v-5h6v5"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg>
+              </div>
+              <h3>Lightweight &amp; Easy to Install</h3>
+              <p>Flexible rolls can be cut, overlapped, tied and fixed with simple tools, reducing labor and adapting quickly to site conditions.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 19V9l7-5 7 5v10M8 19v-5h8v5"/><path d="M3 9h18"/></svg>
+              </div>
+              <h3>Versatile Applications</h3>
+              <p>Suitable for poultry fencing, garden protection, farm boundaries, animal enclosures, plastering, gabions and erosion control.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>Corrosion Protection</h3>
+              <p>Electric or hot-dip galvanized zinc coating resists rust and weathering in humid, coastal and general outdoor environments.</p>
+            </div>
+            <div class="feature-card" data-reveal>
+              <div class="feature-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h3>Consistent Quality</h3>
+              <p>Automated weaving keeps mesh openings, twist and wire tension uniform across every roll for dependable performance.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-next" type="button" onclick="moveCarousel(1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="carousel-dots"></div>
       </div>
     </section>
 
@@ -444,7 +516,41 @@
       </div>
     </section>
 
-    <!-- ============ 9. FAQ ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Blog</span>
+        <h2>Related <span class="accent">Articles</span></h2>
+        <p>Learn more about hexagonal wire mesh applications, selection and installation.</p>
+      </div>
+      <div class="related-articles-grid">
+        <a class="related-article-card" href="blog-hexagonal-wire-mesh-global-impact.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-hex-mesh-hero.jpg" alt="Hexagonal wire mesh applications" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Product Information</span>
+            <h3 class="related-article-title">Hexagonal Wire Mesh: A Simple Solution with Global Impact</h3>
+            <div class="related-article-meta">2025 &middot; 8 min read</div>
+            <p class="related-article-desc">Discover how hexagonal wire mesh supports sustainable construction, environmental protection, disaster relief and agriculture worldwide.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+        <a class="related-article-card" href="blog-hexagonal-vs-gabion-mesh.html" data-reveal>
+          <div class="related-article-media">
+            <img src="images/blog/blog-hex-mesh-hero.jpg" alt="Hexagonal wire mesh and gabion mesh comparison" loading="lazy">
+          </div>
+          <div class="related-article-body">
+            <span class="related-article-tag">Selection Guide</span>
+            <h3 class="related-article-title">Hexagonal Wire Mesh vs Gabion Mesh: Key Differences</h3>
+            <div class="related-article-meta">2025 &middot; 10 min read</div>
+            <p class="related-article-desc">Compare structure, applications and selection criteria before choosing a hexagonal or gabion mesh solution.</p>
+            <span class="related-article-link">Read Article <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ 10. FAQ ============ -->
     <section class="faq-section">
       <div class="section-header" data-reveal>
         <span class="category-tag">Support</span>
@@ -506,6 +612,64 @@
   <script src="js/includes.js"></script>
   <script src="js/blog-detail.js"></script>
   <script src="js/products.js"></script>
+
+  <script>
+    (function () {
+      var featureSlide = 0;
+      var featureTotalCards = 6;
+
+      function getFeatureCardsPerView() {
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+      }
+      function getFeatureTotalSlides() {
+        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
+      }
+      function updateFeatureCarousel() {
+        var track = document.getElementById('securityFenceCarousel');
+        if (track) {
+          var perView = getFeatureCardsPerView();
+          var slides = getFeatureTotalSlides();
+          var step = track.scrollWidth / slides;
+          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
+        }
+        updateFeatureDots();
+      }
+      function updateFeatureDots() {
+        var totalSlides = getFeatureTotalSlides();
+        var container = document.querySelector('.carousel-dots');
+        if (!container) return;
+        container.innerHTML = '';
+        for (var i = 0; i < totalSlides; i++) {
+          var dot = document.createElement('span');
+          dot.className = 'carousel-dot' + (i === featureSlide ? ' active' : '');
+          (function (i) {
+            dot.onclick = function () { goToSlide(i); };
+          })(i);
+          container.appendChild(dot);
+        }
+      }
+      function moveCarousel(direction) {
+        var totalSlides = getFeatureTotalSlides();
+        featureSlide += direction;
+        if (featureSlide < 0) featureSlide = totalSlides - 1;
+        if (featureSlide >= totalSlides) featureSlide = 0;
+        updateFeatureCarousel();
+      }
+      function goToSlide(index) {
+        featureSlide = index;
+        updateFeatureCarousel();
+      }
+      window.addEventListener('resize', function () {
+        var totalSlides = getFeatureTotalSlides();
+        if (featureSlide >= totalSlides) featureSlide = totalSlides - 1;
+        updateFeatureCarousel();
+      });
+      updateFeatureCarousel();
+      window.moveCarousel = moveCarousel;
+      window.goToSlide = goToSlide;
+    })();
+  </script>
 
 </body>
 </html>
