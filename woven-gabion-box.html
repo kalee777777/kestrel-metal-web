@@ -38,6 +38,22 @@
     .gabion-mesh-select option { background: #1a1a1a; color: #fff; }
     .gabion-mesh-select:focus { border-color: var(--color-orange-primary); box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15); }
     @media (max-width: 600px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-stats-grid { grid-template-columns: repeat(3,1fr) !important; } }
+
+    .story-banner { position: relative; min-height: 420px; background: #0a0a0a; color: #fff; overflow: hidden; }
+    .story-banner-bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .story-banner-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.65) 45%, rgba(10,10,10,0.15) 100%); }
+    .story-banner-content { position: relative; z-index: 2; max-width: 620px; padding: clamp(2rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem); }
+    .story-banner-content .story-label { font-size: .82rem; letter-spacing: .18em; text-transform: uppercase; color: var(--color-orange-primary); font-weight: 600; margin-bottom: 1rem; display: block; }
+    .story-banner-content h2 { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.2rem; color: #fff; letter-spacing: -.02em; }
+    .story-banner-content p { font-size: clamp(1rem, 1.2vw, 1.1rem); color: rgba(255,255,255,0.78); line-height: 1.75; margin-bottom: 2rem; max-width: 520px; }
+    .story-banner-readmore { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.8rem; border: 2px solid var(--color-orange-primary); color: var(--color-orange-primary); font-weight: 700; text-decoration: none; border-radius: 4px; transition: all .3s ease; font-size: .95rem; letter-spacing: .02em; }
+    .story-banner-readmore:hover { background: var(--color-orange-primary); color: #fff; transform: translateY(-2px); }
+    .story-banner-readmore span { transition: transform .3s ease; }
+    .story-banner-readmore:hover span { transform: translateX(4px); }
+    @media (max-width: 600px) {
+      .story-banner { min-height: 360px; }
+      .story-banner-content { padding: 2rem 1.5rem; max-width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -327,17 +343,15 @@
       </div>
     </section>
 
-    <!-- ============ OVERVIEW / STORY ============ -->
-    <section class="product-section-light product-section-light-alt">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">About</span>
-        <h2>The Story of <span class="accent">Gabion</span></h2>
-      </div>
-      <div class="article-container">
-        <article class="article-content">
-          <p>The word gabion comes from the Italian <em>gabbione</em>, which literally means "big cage". The gabion basket design can date back to ancient times. Remains of gabion basket walls dating back to 5000 years ago were first found on the banks of the Nile for coast protection. In the 16th century, the first gabion basket appeared in Britain was a wicker basket filled with soil and was used as a bunker for artillery in military bases. In the 17th century, gabion basket structures were first employed in Japan for flood prevention projects. In the early 18th century, bag-shaped gabion baskets were used in Italy for river bank maintenance and reinforcement.</p>
-          <p>After decades of use and improvement, modern gabion basket emerges and prevails.</p>
-        </article>
+    <!-- ============ STORY BANNER ============ -->
+    <section class="story-banner">
+      <div class="story-banner-bg" style="background-image: url('images/blog/blog-gabion-story-banner.jpg');"></div>
+      <div class="story-banner-overlay"></div>
+      <div class="story-banner-content" data-reveal>
+        <span class="story-label">Our Story</span>
+        <h2>The Story of <span style="color: var(--color-orange-primary);">Gabion</span></h2>
+        <p>From ancient Nile riverbanks to modern infrastructure, the gabion basket has evolved over 5,000 years &mdash; a timeless engineering solution that balances strength, nature, and human innovation.</p>
+        <a href="blog-history-of-gabion.html" class="story-banner-readmore">Read More <span>&rarr;</span></a>
       </div>
     </section>
 
