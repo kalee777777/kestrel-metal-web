@@ -26,6 +26,8 @@
     .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
 
     .spec-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; max-width: 820px; margin: 0 auto; }
+    .spec-card-diagram { background: #F7F7F5; padding: 1.4rem 1.4rem 1rem; text-align: center; border-bottom: 1px solid #e5e7eb; }
+    .spec-card-diagram img { width: 100%; height: auto; max-height: 150px; object-fit: contain; display: block; }
     .spec-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; }
     .spec-card-tag { background: var(--color-orange-primary); color: var(--color-white); font-family: var(--font-display); letter-spacing: 1px; font-size: .82rem; padding: 10px 18px; }
     .spec-card table { width: 100%; border-collapse: collapse; }
@@ -98,6 +100,7 @@
         </div>
         <div class="spec-cards-grid">
           <div class="spec-card" data-reveal>
+            <div class="spec-card-diagram"><img src="products/wire/cbt-60-spec.webp" alt="CBT-60 Dimension Diagram"></div>
             <div class="spec-card-tag">CBT-60</div>
             <table>
               <tbody>
@@ -110,6 +113,7 @@
             </table>
           </div>
           <div class="spec-card" data-reveal>
+            <div class="spec-card-diagram"><img src="products/wire/cbt-65-spec.webp" alt="CBT-65 Dimension Diagram"></div>
             <div class="spec-card-tag">CBT-65</div>
             <table>
               <tbody>
