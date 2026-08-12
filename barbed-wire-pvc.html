@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PVC coated barbed wire — dual-layer galvanized core plus PVC protection. Available in green, black, blue and yellow for enhanced corrosion resistance and aesthetics.">
+  <title>PVC Coated Barbed Wire | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+
+  <style>
+    .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
+    .spec-table-wrap table { width: 100%; border-collapse: collapse; min-width: 640px; margin: 0; }
+    .spec-table-wrap th, .spec-table-wrap td { border: 1px solid #eceef1; padding: 12px 16px; text-align: left; font-size: .9rem; }
+    .spec-table-wrap thead th { background: #F7F7F5; color: var(--color-black); font-family: var(--font-display); letter-spacing: .5px; font-size: .8rem; }
+    .spec-table-wrap tbody tr:nth-child(even) { background: #FBFBFA; }
+    .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
+
+    .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+    .pack-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px 24px; text-align: center; transition: all .3s ease; }
+    .pack-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.10); border-color: var(--color-orange-primary); }
+    .pack-icon { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E0); display: flex; align-items: center; justify-content: center; color: var(--color-orange-primary); }
+    .pack-card h3 { font-size: 1.02rem; font-weight: 600; color: var(--color-black); margin-bottom: 8px; }
+    .pack-card p { font-size: .86rem; color: #4b5563; line-height: 1.6; }
+    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
+
+    .info-layout { display: grid; grid-template-columns: 1.12fr .88fr; gap: 3rem; align-items: start; }
+    .info-left h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 1px; font-size: 1.55rem; color: var(--color-black); text-transform: uppercase; padding-left: .9rem; border-left: 4px solid var(--color-orange-primary); margin: 2.4rem 0 1.1rem; line-height: 1.15; }
+    .info-left h3:first-child { margin-top: 0; }
+    .info-left p { color: #4b5563; line-height: 1.85; font-size: .98rem; margin: 0 0 1rem; }
+    .benefits-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .benefits-list li { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; color: #374151; line-height: 1.55; }
+    .benefits-list .chk { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); display: inline-flex; align-items: center; justify-content: center; font-size: .8rem; margin-top: 1px; }
+    .info-right { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .info-right .info-img-card { position: relative; border-radius: 14px; overflow: hidden; height: 150px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+    .info-right .info-img-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s ease; }
+    .info-right .info-img-card:hover .info-img-bg { transform: scale(1.06); }
+    .info-right .info-img-cap { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.76), rgba(0,0,0,.14) 60%, rgba(0,0,0,.08)); display: flex; align-items: flex-end; gap: 6px; padding: 12px 14px; color: var(--color-white); font-weight: 600; font-size: .86rem; }
+    .info-right .info-img-cap svg { color: var(--color-orange-primary); flex: 0 0 auto; }
+    @media (max-width: 900px) { .info-layout { grid-template-columns: 1fr; gap: 2rem; } .info-right { grid-template-columns: 1fr; } .info-right .info-img-card { height: 200px; } }
+
+    .material-info-list { list-style: none; padding: 0; margin: 2.2rem 0 0; }
+    .material-info-list li { position: relative; padding: .5rem 0 .5rem 1.5rem; font-size: .9rem; color: #4b5563; line-height: 1.65; }
+    .material-info-list li::before { content: ''; position: absolute; left: 0; top: .98rem; width: 7px; height: 7px; border-radius: 50%; background: var(--color-orange-primary); }
+    .material-info-list strong { color: var(--color-black); font-weight: 600; }
+
+    .article-hero-content .article-hero-desc { color: #ffffff; }
+    .article-hero-content .article-hero-title { color: #ffffff; }
+    .article-hero-content .article-hero-kicker { color: #ffffff; }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=green%20pvc%20coated%20barbed%20wire%20fence%20in%20garden%20park%20landscape%20outdoor%20scene%20plastic%20coated%20wire%20closeup&image_size=landscape_16_9');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="products.html">Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="wire-barbed.html">Barbed Wire</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">PVC Coated</span>
+        </nav>
+        <span class="article-hero-kicker">Dual-Layer Protection</span>
+        <h1 class="article-hero-title">PVC Coated Barbed Wire</h1>
+        <p class="article-hero-desc">PVC coated barbed wire features a durable plastic coating over galvanized steel wire, providing enhanced corrosion resistance and a variety of color options for different applications.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. WIRE SPECIFICATIONS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Technical Data</span>
+          <h2>Wire Specifications</h2>
+          <p>Approximate length per kilogram for various gauge and barb spacing combinations (m/kg).</p>
+        </div>
+        <div class="spec-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Gauge of Strand &amp; Barb (B.W.G.)</th>
+                <th>Barbs Spacing 3" (m/kg)</th>
+                <th>Barbs Spacing 4" (m/kg)</th>
+                <th>Barbs Spacing 5" (m/kg)</th>
+                <th>Barbs Spacing 6" (m/kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>12 &times; 12</td><td>6.0617</td><td>6.7590</td><td>7.2700</td><td>7.6376</td></tr>
+              <tr><td>12 &times; 14</td><td>7.3335</td><td>7.9051</td><td>8.3015</td><td>8.5741</td></tr>
+              <tr><td>12-1/2 &times; 12-1/2</td><td>6.9223</td><td>7.7190</td><td>8.3022</td><td>8.7221</td></tr>
+              <tr><td>12-1/2 &times; 14</td><td>8.1096</td><td>8.8140</td><td>9.2242</td><td>9.5620</td></tr>
+              <tr><td>13 &times; 13</td><td>7.9808</td><td>8.8990</td><td>9.5721</td><td>10.0553</td></tr>
+              <tr><td>13 &times; 14</td><td>8.8448</td><td>9.6899</td><td>10.2923</td><td>10.7146</td></tr>
+              <tr><td>13-1/2 &times; 14</td><td>9.6079</td><td>10.6134</td><td>11.4705</td><td>11.8553</td></tr>
+              <tr><td>14 &times; 14</td><td>10.4569</td><td>11.6590</td><td>12.5423</td><td>13.1752</td></tr>
+              <tr><td>14-1/2 &times; 14-1/2</td><td>11.9875</td><td>13.3671</td><td>14.3781</td><td>15.1034</td></tr>
+              <tr><td>15 &times; 15</td><td>13.8927</td><td>15.4942</td><td>16.6666</td><td>17.5070</td></tr>
+              <tr><td>15-1/2 &times; 15-1/2</td><td>15.3491</td><td>17.1144</td><td>18.4060</td><td>19.3386</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. ROLL SPECIFICATIONS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Roll Data</span>
+          <h2>Roll Specifications</h2>
+          <p>Standard roll configurations available for PVC coated barbed wire.</p>
+        </div>
+        <div class="spec-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Wire Gauge (BWG)</th>
+                <th>Barb Spacing</th>
+                <th>Roll Length (m)</th>
+                <th>Roll Weight (kg)</th>
+                <th>Coating</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>12 &times; 12</td><td>3" / 4" / 5" / 6"</td><td>200 - 400</td><td>25 - 50</td><td>PVC (Green/Black/Blue)</td></tr>
+              <tr><td>12-1/2 &times; 12-1/2</td><td>3" / 4" / 5" / 6"</td><td>200 - 400</td><td>20 - 40</td><td>PVC (Green/Black/Blue)</td></tr>
+              <tr><td>13 &times; 13</td><td>3" / 4" / 5" / 6"</td><td>200 - 500</td><td>15 - 35</td><td>PVC (Green/Black/Blue)</td></tr>
+              <tr><td>14 &times; 14</td><td>3" / 4" / 5" / 6"</td><td>200 - 500</td><td>10 - 25</td><td>PVC (Green/Black/Blue)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="material-info-list">
+          <li><strong>Wire material:</strong> high-quality low-carbon steel wire</li>
+          <li><strong>PVC coating:</strong> premium polyvinyl chloride, thickness 0.4 - 1.0mm, available in green, black, blue, yellow</li>
+          <li><strong>Barb wire:</strong> same PVC coated material as strand wire for consistent protection</li>
+          <li>Custom specifications available upon request (gauge, color, coating thickness)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 4. PRODUCT INFO &amp; BENEFITS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1180px;">
+        <div class="info-layout">
+          <div class="info-left">
+            <h3>Product Information</h3>
+            <p>PVC coated barbed wire is made of high-quality low carbon steel wire with a layer of PVC (polyvinyl chloride) coating applied over the galvanized wire core. The PVC coating provides an additional barrier against corrosion while offering a variety of color options such as green, black, blue, and yellow for aesthetic integration with the surrounding environment.</p>
+            <p>The dual-layer protection system &mdash; galvanized core wire plus PVC outer coating &mdash; ensures superior durability in harsh outdoor conditions, making it significantly more resistant to UV radiation, moisture, and chemical exposure compared to standard galvanized barbed wire.</p>
+
+            <h3>Benefits</h3>
+            <ul class="benefits-list">
+              <li><span class="chk">&#10003;</span><span>Dual-layer protection (galvanized core + PVC coating) for maximum corrosion resistance.</span></li>
+              <li><span class="chk">&#10003;</span><span>Available in multiple colors (green, black, blue, yellow) for aesthetic blending.</span></li>
+              <li><span class="chk">&#10003;</span><span>Excellent UV resistance &mdash; coating does not crack or fade under prolonged sun exposure.</span></li>
+              <li><span class="chk">&#10003;</span><span>Smooth PVC surface reduces risk of injury during installation and handling.</span></li>
+              <li><span class="chk">&#10003;</span><span>Extended service life of 20+ years in outdoor environments.</span></li>
+            </ul>
+
+            <h3>Application</h3>
+            <p>PVC coated barbed wire is widely used in garden fencing, park boundaries, residential security, farm and ranch enclosures, highway isolation, railway protection, airport fencing, and any application where both security and visual appearance are equally important.</p>
+          </div>
+          <div class="info-right">
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=green%20pvc%20barbed%20wire%20garden%20park%20fence%20landscaped%20area%20aesthetic%20boundary&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v5M8 21h8"/></svg>
+                For Garden &amp; Park Fencing
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=barbed%20wire%20residential%20house%20security%20fence%20suburban%20home%20perimeter%20boundary&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l3-9 3 9M5 11v9M19 14h-5l2-4 2 4M18 18v2"/></svg>
+                For Residential Security
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=barbed%20wire%20highway%20roadside%20isolation%20fence%20between%20traffic%20lanes%20road%20safety&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l3-9 3 9M5 11v9M19 14h-5l2-4 2 4M18 18v2"/></svg>
+                For Highway Isolation
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=airport%20perimeter%20barbed%20wire%20security%20fence%20runway%20area%20restricted%20zone&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l9-3 2-5a2 2 0 1 1 4 0l-2 5 9 3v3L14 19l-2 3-1-7-9 2v-1z"/></svg>
+                For Airport Fencing
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. PACKING &amp; PACKAGING ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Packing</span>
+          <h2>Packing &amp; Packaging</h2>
+        </div>
+        <div class="pack-grid">
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3>Coil Package</h3>
+            <p>Each roll is tightly wound, fixed with wire ties and wrapped in plastic film plus a woven bag for protection.</p>
+          </div>
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            </div>
+            <h3>Pallet Package</h3>
+            <p>Multiple rolls stacked uniformly on a pallet (about 1,000 kg per pallet) and wrapped with plastic stretch film for safe shipping.</p>
+          </div>
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>
+            </div>
+            <h3>Container Loading</h3>
+            <p>Coils or pallets are loaded into a 20ft or 40ft container for secure, efficient ocean freight delivery worldwide.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. INQUIRY CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pvc%20coated%20barbed%20wire%20coil%20green%20fence%20security%20industrial%20photography&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Get a Quote for PVC Coated Barbed Wire</h2>
+        <p class="article-cta-desc">Tell us your gauge, barb spacing, color and coating thickness &mdash; our team will respond with a tailored quotation and delivery plan within 24 hours.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="wire-barbed.html" class="btn-hero-secondary">VIEW BARBED WIRE</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+
+</body>
+</html>
