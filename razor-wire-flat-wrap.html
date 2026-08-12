@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Flat Wrap Razor Wire — compressed, flattened coil design for aesthetic security fencing. BTO-10 and BTO-22, ideal for wall-top mounting, fence integration and limited-space applications.">
+  <title>Flat Wrap Razor Wire | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+
+  <style>
+    .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
+    .spec-table-wrap table { width: 100%; border-collapse: collapse; min-width: 640px; margin: 0; }
+    .spec-table-wrap th, .spec-table-wrap td { border: 1px solid #eceef1; padding: 12px 16px; text-align: left; font-size: .88rem; }
+    .spec-table-wrap thead th { background: #F7F7F5; color: var(--color-black); font-family: var(--font-display); letter-spacing: .5px; font-size: .8rem; }
+    .spec-table-wrap tbody tr:nth-child(even) { background: #FBFBFA; }
+    .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
+
+    .spec-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; max-width: 820px; margin: 0 auto; }
+    .spec-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; }
+    .spec-card-tag { background: var(--color-orange-primary); color: var(--color-white); font-family: var(--font-display); letter-spacing: 1px; font-size: .82rem; padding: 10px 18px; }
+    .spec-card table { width: 100%; border-collapse: collapse; }
+    .spec-card table td { border-bottom: 1px solid #f0f1f3; padding: 9px 16px; font-size: .82rem; }
+    .spec-card table td:first-child { color: #6b7280; width: 55%; }
+    .spec-card table td:last-child { color: var(--color-black); font-weight: 600; }
+    .spec-card table tr:last-child td { border-bottom: none; }
+    @media (max-width: 640px) { .spec-cards-grid { grid-template-columns: 1fr; } }
+
+    .info-layout { display: grid; grid-template-columns: 1.12fr .88fr; gap: 3rem; align-items: start; }
+    .info-left h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 1px; font-size: 1.55rem; color: var(--color-black); text-transform: uppercase; padding-left: .9rem; border-left: 4px solid var(--color-orange-primary); margin: 2.4rem 0 1.1rem; line-height: 1.15; }
+    .info-left h3:first-child { margin-top: 0; }
+    .info-left p { color: #4b5563; line-height: 1.85; font-size: .98rem; margin: 0 0 1rem; }
+    .benefits-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: .9rem; }
+    .benefits-list li { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; color: #374151; line-height: 1.55; }
+    .benefits-list .chk { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); display: inline-flex; align-items: center; justify-content: center; font-size: .8rem; margin-top: 1px; }
+    .info-right { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .info-right .info-img-card { position: relative; border-radius: 14px; overflow: hidden; height: 150px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+    .info-right .info-img-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s ease; }
+    .info-right .info-img-card:hover .info-img-bg { transform: scale(1.06); }
+    .info-right .info-img-cap { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.76), rgba(0,0,0,.14) 60%, rgba(0,0,0,.08)); display: flex; align-items: flex-end; gap: 6px; padding: 12px 14px; color: var(--color-white); font-weight: 600; font-size: .86rem; }
+    .info-right .info-img-cap svg { color: var(--color-orange-primary); flex: 0 0 auto; }
+    @media (max-width: 900px) { .info-layout { grid-template-columns: 1fr; gap: 2rem; } .info-right { grid-template-columns: 1fr; } .info-right .info-img-card { height: 200px; } }
+
+    .material-info-list { list-style: none; padding: 0; margin: 2.2rem 0 0; }
+    .material-info-list li { position: relative; padding: .5rem 0 .5rem 1.5rem; font-size: .9rem; color: #4b5563; line-height: 1.65; }
+    .material-info-list li::before { content: ''; position: absolute; left: 0; top: .98rem; width: 7px; height: 7px; border-radius: 50%; background: var(--color-orange-primary); }
+    .material-info-list strong { color: var(--color-black); font-weight: 600; }
+
+    .article-hero-content .article-hero-desc { color: #ffffff; }
+    .article-hero-content .article-hero-title { color: #ffffff; }
+    .article-hero-content .article-hero-kicker { color: #ffffff; }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=flat%20wrap%20razor%20wire%20flattened%20coil%20on%20top%20of%20fence%20wall%20security%20barrier%20neat%20compact%20low%20profile%20scene&image_size=landscape_16_9');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="products.html">Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="wire-razor.html">Razor Wire</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Flat Wrap</span>
+        </nav>
+        <span class="article-hero-kicker">Compressed Flat Coil Form</span>
+        <h1 class="article-hero-title">Flat Wrap Razor Wire</h1>
+        <p class="article-hero-desc">Flattened razor wire coil for aesthetic security fencing. The compressed coil design provides effective security while maintaining a clean, low-profile appearance. It is ideal for wall-top mounting, fence integration, and applications where visual aesthetics are important alongside security requirements.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. BLADE SPECIFICATIONS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Blade Data</span>
+          <h2>Blade Specifications</h2>
+          <p>Two blade types available for flat wrap razor wire.</p>
+        </div>
+        <div class="spec-cards-grid">
+          <div class="spec-card" data-reveal>
+            <div class="spec-card-tag">BTO-10</div>
+            <table>
+              <tbody>
+                <tr><td>Blade Type</td><td>BTO-10</td></tr>
+                <tr><td>Barb Thickness (mm)</td><td>0.5&plusmn;0.05</td></tr>
+                <tr><td>Barb Length (mm)</td><td>10&plusmn;1</td></tr>
+                <tr><td>Barb Width (mm)</td><td>13&plusmn;1</td></tr>
+                <tr><td>Barb Spacing (mm)</td><td>25&plusmn;1</td></tr>
+                <tr><td>Core Wire Diameter (mm)</td><td>2.5&plusmn;0.1</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="spec-card" data-reveal>
+            <div class="spec-card-tag">BTO-22</div>
+            <table>
+              <tbody>
+                <tr><td>Blade Type</td><td>BTO-22</td></tr>
+                <tr><td>Barb Thickness (mm)</td><td>0.5&plusmn;0.05</td></tr>
+                <tr><td>Barb Length (mm)</td><td>22&plusmn;1</td></tr>
+                <tr><td>Barb Width (mm)</td><td>16&plusmn;1</td></tr>
+                <tr><td>Barb Spacing (mm)</td><td>35&plusmn;1</td></tr>
+                <tr><td>Core Wire Diameter (mm)</td><td>2.5&plusmn;0.1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. ROLL SPECIFICATIONS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Coil Data</span>
+          <h2>Roll Specifications</h2>
+          <p>Standard roll configurations for flat wrap razor wire.</p>
+        </div>
+        <div class="spec-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Height (mm)</th>
+                <th>Extended Length (m)</th>
+                <th>Blade Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>500</td><td>15</td><td>BTO-10, BTO-22</td></tr>
+              <tr><td>700</td><td>15</td><td>BTO-10, BTO-22</td></tr>
+              <tr><td>900</td><td>15</td><td>BTO-10, BTO-22</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="material-info-list">
+          <li><strong>Core wire material:</strong> galvanized steel wires or stainless steel wires</li>
+          <li><strong>Blade material:</strong> galvanized steel, stainless steel or aluminized zinc steel sheets</li>
+          <li>Blade types and surface treatments are customized upon request</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 4. PRODUCT INFO &amp; BENEFITS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1180px;">
+        <div class="info-layout">
+          <div class="info-left">
+            <h3>Product Information</h3>
+            <p>Flat wrap razor wire is a new type of razor wire fabricated by single coil razor wire that is flattened and then clipped to wires to create flat sheets. It unfolds into a flat structure that stays within the overall dimensions of the fence, offering a more compact design and solving the problem of spiral concertina wire hanging out of the boundary to make it a perfect choice for applications within limited space.</p>
+            <p>Flat wrap razor wire is commonly used to upgrade the security of residential fences, precast concrete walls, chain link fences, perimeter fences and gates. This combination offers a high security barrier and is designed to deter and prevent illegal intruders while delivering a neat, attractive appearance.</p>
+
+            <h3>Benefits</h3>
+            <ul class="benefits-list">
+              <li><span class="chk">&#10003;</span><span>No razor wires are draped and no innocent people are hurt.</span></li>
+              <li><span class="chk">&#10003;</span><span>Your ideal choice for security protection in limited space.</span></li>
+              <li><span class="chk">&#10003;</span><span>Easy installation, you can start your installation directly after unfolding the product.</span></li>
+              <li><span class="chk">&#10003;</span><span>It can be flexibly combined with fences, gates and walls.</span></li>
+              <li><span class="chk">&#10003;</span><span>Little or no maintenance.</span></li>
+            </ul>
+
+            <h3>Application</h3>
+            <p>Flat wrap razor wire can be used as a vertical anti-climb deterrent for almost all types of fences, fence gates, walls and roof windows. When being secured to the top of a fence, it offers an enhanced deterrent for places where high security protection is required.</p>
+          </div>
+          <div class="info-right">
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=flat%20wrap%20razor%20wire%20on%20top%20of%20high%20security%20fence%20wall%20anti%20climb%20barrier&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l3-9 3 9M5 11v9M19 14h-5l2-4 2 4M18 18v2"/></svg>
+                Top of High Security Fence
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=flat%20wrap%20razor%20wire%20on%20top%20of%20fence%20gate%20security%20entrance%20barrier&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V7l4-3 10 4v13"/></svg>
+                Top of Fence Gate
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=flat%20wrap%20razor%20wire%20upper%20part%20of%20palisade%20fencing%20vertical%20steel%20fence%20security&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18M7 3v18M12 3v18M17 3v18M3 21h18"/></svg>
+                Upper Part of Palisade Fencing
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=sliding%20door%20flat%20wrap%20razor%20wire%20industrial%20gate%20security%20top%20and%20bottom%20protection&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+                Top &amp; Bottom of Sliding Door
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. INQUIRY CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=flat%20wrap%20razor%20wire%20coils%20fence%20security%20industrial%20photography&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Get a Quote for Flat Wrap Razor Wire</h2>
+        <p class="article-cta-desc">Tell us your blade type, roll height, length and quantity &mdash; our team will respond with a tailored quotation and delivery plan within 24 hours.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="wire-razor.html" class="btn-hero-secondary">VIEW RAZOR WIRE</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+
+</body>
+</html>
