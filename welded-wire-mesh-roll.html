@@ -202,6 +202,10 @@
               <div class="spec-sim-stat-label">Wire Dia</div>
               <div class="spec-sim-stat-value" id="sim-stat-wire">4.0 mm</div>
             </div>
+            <div class="spec-sim-stat">
+              <div class="spec-sim-stat-label">Treatment</div>
+              <div class="spec-sim-stat-value" id="sim-stat-treatment">Galvanized</div>
+            </div>
           </div>
 
           <div class="spec-sim-visual">
@@ -840,8 +844,9 @@
 
         document.getElementById('sim-val-wire').textContent = wire.toFixed(1) + ' mm';
         document.getElementById('sim-stat-wire').textContent = wire.toFixed(1) + ' mm';
-        document.getElementById('sim-stat-mesh').textContent = meshW + ' &times; ' + meshH + ' mm';
-        document.getElementById('sim-stat-roll').textContent = rollW.toFixed(1) + ' &times; ' + rollL.toFixed(0) + ' m';
+        document.getElementById('sim-stat-mesh').innerHTML = meshW + ' &times; ' + meshH + ' mm';
+        document.getElementById('sim-stat-roll').innerHTML = rollW.toFixed(1) + ' &times; ' + rollL.toFixed(0) + ' m';
+        document.getElementById('sim-stat-treatment').textContent = matSel.options[matSel.selectedIndex].text.split(' ')[0];
 
         if (!ctx) return;
 
