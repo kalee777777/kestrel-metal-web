@@ -943,6 +943,47 @@
   color: #4b5563;
 }
 
+/* ---------- Gabion Accessories 5列网格 ---------- */
+.accessories-grid {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+.accessories-grid .product-card {
+  text-align: center;
+}
+
+.accessories-grid .product-card-visual {
+  height: 160px;
+}
+
+.accessories-grid .product-name {
+  font-size: 0.95rem;
+}
+
+.accessories-grid .product-desc {
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1200px) {
+  .accessories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .accessories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .accessories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .related-article-link {
   margin-top: auto;
   padding-top: 1rem;
