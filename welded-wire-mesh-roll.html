@@ -60,7 +60,7 @@
     .spec-sim-stat { border-right: 1px solid #e5e7eb; }
     .spec-sim-stat-value { color: var(--color-black); }
     .spec-sim-visual { background: #fff; height: 320px; position: relative; overflow: hidden; }
-    .spec-sim-visual svg { display: block; width: 100%; height: 100%; }
+    .spec-sim-visual canvas { display: block; width: 100%; height: 100%; }
     .spec-sim-slider-group label { color: #374151; }
     .spec-sim-slider-group input[type="range"] { background: #e5e7eb; }
     .gabion-mesh-select { background: #fff; border: 1px solid #d1d5db; color: #1f2937; }
@@ -205,16 +205,7 @@
           </div>
 
           <div class="spec-sim-visual">
-            <svg id="sim-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <defs>
-                <pattern id="weldedGrid" patternUnits="userSpaceOnUse" width="12.5" height="20">
-                  <path id="sim-mesh-lines" d="M 12.5 0 L 12.5 20 L 0 20" fill="none" stroke="#6b7280" stroke-width="0.5" stroke-linecap="square"></path>
-                  <circle id="sim-weld-dot" cx="0" cy="0" r="0.8" fill="#6b7280"></circle>
-                </pattern>
-              </defs>
-              <rect id="sim-bg" x="0" y="0" width="100" height="100" fill="#fff"></rect>
-              <rect id="sim-fg" x="0" y="0" width="100" height="100" fill="url(#weldedGrid)"></rect>
-            </svg>
+            <canvas id="sim-canvas"></canvas>
           </div>
 
           <div class="spec-sim-controls">
@@ -822,7 +813,19 @@
 
       var wires = [2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0];
       var visualContainer = document.querySelector('.spec-sim-visual');
-      var svgEl = visualContainer ? visualContainer.querySelector('svg') : null;
+      var canvas = document.getElementById('sim-canvas');
+      var ctx = canvas ? canvas.getContext('2d') : null;
+
+      function resizeCanvas() {
+        if (!canvas) return;
+        var rect = visualContainer.getBoundingClientRect();
+        var dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
 
       function refresh() {
         var i = parseInt(wireRange.value, 10);
@@ -840,41 +843,51 @@
         document.getElementById('sim-stat-mesh').textContent = meshW + ' &times; ' + meshH + ' mm';
         document.getElementById('sim-stat-roll').textContent = rollW.toFixed(1) + ' &times; ' + rollL.toFixed(0) + ' m';
 
-        var targetCellsX = 8;
-        var targetCellsY = 5;
+        if (!ctx) return;
 
-        var patternW = 100 / targetCellsX;
-        var patternH = 100 / targetCellsY;
+        var rect = visualContainer.getBoundingClientRect();
+        var W = rect.width;
+        var H = rect.height;
 
-        var ratio = meshH / meshW;
-        patternH = patternW * ratio;
-        if (patternH > 100 / 2) {
-          patternH = 100 / 2;
-          patternW = patternH / ratio;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, W, H);
+
+        var cellsX = 8;
+        var cellsY = Math.max(1, Math.round(cellsX * (meshH / meshW) * (H / W)));
+
+        var cellW = W / cellsX;
+        var cellH = H / cellsY;
+
+        var strokeW = Math.max(0.5, Math.min(4, wire * 0.3));
+        var dotR = Math.max(1, strokeW * 0.8);
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = strokeW;
+        ctx.lineCap = 'square';
+
+        for (var x = 0; x <= cellsX; x++) {
+          var px = x * cellW;
+          ctx.beginPath();
+          ctx.moveTo(px, 0);
+          ctx.lineTo(px, H);
+          ctx.stroke();
         }
 
-        var cellsX = Math.max(1, Math.round(100 / patternW));
-        var cellsY = Math.max(1, Math.round(100 / patternH));
-        patternW = 100 / cellsX;
-        patternH = 100 / cellsY;
+        for (var y = 0; y <= cellsY; y++) {
+          var py = y * cellH;
+          ctx.beginPath();
+          ctx.moveTo(0, py);
+          ctx.lineTo(W, py);
+          ctx.stroke();
+        }
 
-        var pattern = document.getElementById('weldedGrid');
-        var lines = document.getElementById('sim-mesh-lines');
-        var weldDot = document.getElementById('sim-weld-dot');
-
-        pattern.setAttribute('width', patternW);
-        pattern.setAttribute('height', patternH);
-        lines.setAttribute('d', 'M ' + patternW + ' 0 L ' + patternW + ' ' + patternH + ' L 0 ' + patternH);
-
-        var strokeW = Math.max(0.2, Math.min(2, wire * 0.15));
-        lines.setAttribute('stroke-width', strokeW);
-        lines.setAttribute('stroke', color);
-
-        if (weldDot) {
-          weldDot.setAttribute('cx', 0);
-          weldDot.setAttribute('cy', 0);
-          weldDot.setAttribute('r', Math.max(0.3, strokeW * 0.55));
-          weldDot.setAttribute('fill', color);
+        ctx.fillStyle = color;
+        for (var dx = 0; dx < cellsX; dx++) {
+          for (var dy = 0; dy < cellsY; dy++) {
+            ctx.beginPath();
+            ctx.arc(dx * cellW, dy * cellH, dotR, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
 
         var body = document.getElementById('sim-spec-body');
@@ -889,7 +902,7 @@
       }
 
       if (visualContainer && 'ResizeObserver' in window) {
-        var ro = new ResizeObserver(function () { refresh(); });
+        var ro = new ResizeObserver(function () { resizeCanvas(); refresh(); });
         ro.observe(visualContainer);
       }
 
@@ -897,12 +910,13 @@
       rollSel.addEventListener('change', refresh);
       wireRange.addEventListener('input', refresh);
       matSel.addEventListener('change', refresh);
-      window.addEventListener('resize', function () { setTimeout(refresh, 100); });
+      window.addEventListener('resize', function () { setTimeout(function () { resizeCanvas(); refresh(); }, 100); });
 
       if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        resizeCanvas();
         refresh();
       } else {
-        window.addEventListener('load', function () { refresh(); });
+        window.addEventListener('load', function () { resizeCanvas(); refresh(); });
       }
     })();
   </script>
