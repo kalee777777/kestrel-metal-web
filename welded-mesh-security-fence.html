@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Welded mesh security fence with industrial-grade rigid wire panels. High structural rigidity for factory and warehouse perimeter protection.">
+  <title="Welded Mesh Security Fence | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+
+  <style>
+    .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
+    .spec-table-wrap table { width: 100%; border-collapse: collapse; min-width: 640px; margin: 0; }
+    .spec-table-wrap th, .spec-table-wrap td { border: 1px solid #eceef1; padding: 12px 16px; text-align: left; font-size: .9rem; }
+    .spec-table-wrap thead th { background: #F7F7F5; color: var(--color-black); font-family: var(--font-display); letter-spacing: .5px; font-size: .8rem; }
+    .spec-table-wrap tbody tr:nth-child(even) { background: #FBFBFA; }
+    .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
+    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
+
+    .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+    .pack-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px 24px; text-align: center; transition: all .3s ease; }
+    .pack-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.10); border-color: var(--color-orange-primary); }
+    .pack-icon { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E0); display: flex; align-items: center; justify-content: center; color: var(--color-orange-primary); }
+    .pack-card h3 { font-size: 1.02rem; font-weight: 600; color: var(--color-black); margin-bottom: 8px; }
+    .pack-card p { font-size: .86rem; color: #4b5563; line-height: 1.6; }
+    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
+
+    .info-layout { display: grid; grid-template-columns: 1.12fr .88fr; gap: 3rem; align-items: start; }
+    .info-left h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 1px; font-size: 1.55rem; color: var(--color-black); text-transform: uppercase; padding-left: .9rem; border-left: 4px solid var(--color-orange-primary); margin: 2.4rem 0 1.1rem; line-height: 1.15; }
+    .info-left h3:first-child { margin-top: 0; }
+    .info-left p { color: #4b5563; line-height: 1.85; font-size: .98rem; margin: 0 0 1rem; }
+    .benefits-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .benefits-list li { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; color: #374151; line-height: 1.55; }
+    .benefits-list .chk { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); display: inline-flex; align-items: center; justify-content: center; font-size: .8rem; margin-top: 1px; }
+    .info-right { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+    .info-right .info-img-card { position: relative; border-radius: 14px; overflow: hidden; height: 360px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+    .info-right .info-img-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s ease; }
+    .info-right .info-img-card:hover .info-img-bg { transform: scale(1.06); }
+    .info-right .info-img-cap { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.76), rgba(0,0,0,.14) 60%, rgba(0,0,0,.08)); display: flex; align-items: flex-end; gap: 6px; padding: 12px 14px; color: var(--color-white); font-weight: 600; font-size: .86rem; }
+    .info-right .info-img-cap svg { color: var(--color-orange-primary); flex: 0 0 auto; }
+    @media (max-width: 900px) { .info-layout { grid-template-columns: 1fr; gap: 2rem; } .info-right { grid-template-columns: 1fr; } .info-right .info-img-card { height: 260px; } }
+
+    .material-info-list { list-style: none; padding: 0; margin: 2.2rem 0 0; }
+    .material-info-list li { position: relative; padding: .5rem 0 .5rem 1.5rem; font-size: .9rem; color: #4b5563; line-height: 1.65; }
+    .material-info-list li::before { content: ''; position: absolute; left: 0; top: .98rem; width: 7px; height: 7px; border-radius: 50%; background: var(--color-orange-primary); }
+    .material-info-list strong { color: var(--color-black); font-weight: 600; }
+
+    .article-hero-content .article-hero-desc { color: #ffffff; }
+    .article-hero-content .article-hero-title { color: #ffffff; }
+    .article-hero-content .article-hero-kicker { color: #ffffff; }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('products/fence/welded-mesh-fence.avif');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="products.html">Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="fence-security.html">Security Fence</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Welded Mesh Security Fence</span>
+        </nav>
+        <span class="article-hero-kicker">Industrial Security</span>
+        <h1 class="article-hero-title">Welded Mesh Security Fence</h1>
+        <p class="article-hero-desc">Industrial-grade welded wire mesh panels with high structural rigidity for factory and warehouse perimeter protection.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. SPECIFICATIONS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Technical Data</span>
+          <h2>Welded Mesh Security Fence Specifications</h2>
+          <p>Industrial-grade welded mesh security fence panel specifications for factory and warehouse perimeter applications.</p>
+        </div>
+        <div class="spec-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Panel Height</strong></td><td>1.8m &ndash; 4.0m</td></tr>
+              <tr><td><strong>Panel Width</strong></td><td>2.5m &ndash; 3.0m</td></tr>
+              <tr><td><strong>Mesh Opening</strong></td><td>50&times;200mm</td></tr>
+              <tr><td><strong>Wire Diameter</strong></td><td>4.0mm &ndash; 5.0mm</td></tr>
+              <tr><td><strong>Coating</strong></td><td>HDG / PVC</td></tr>
+              <tr><td><strong>Frame Material</strong></td><td>Q235 Steel</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="material-info-list">
+          <li><strong>Material:</strong> Q235 low carbon steel wire with precision welded mesh construction</li>
+          <li><strong>Coating:</strong> hot-dip galvanized or PVC coated for corrosion resistance</li>
+          <li><strong>Welded construction:</strong> rigid panels with high structural rigidity and impact resistance</li>
+          <li>Custom heights, widths and frame options available upon request</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 3. PRODUCT INFO & BENEFITS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="article-container" style="max-width:1180px;">
+        <div class="info-layout">
+          <div class="info-left">
+            <h3>Product Information</h3>
+            <p>Welded mesh security fence features industrial-grade rigid welded wire panels providing high structural rigidity. Ideal for factory perimeters, warehouse boundaries, and industrial facility protection requiring durable security fencing.</p>
+            <p>The welded construction eliminates the flexibility of woven mesh, creating a rigid panel that maintains its shape under impact and provides a solid physical barrier. The Q235 steel frame adds additional structural strength for demanding industrial environments.</p>
+
+            <h3>Benefits</h3>
+            <ul class="benefits-list">
+              <li><span class="chk">&#10003;</span><span>High Rigidity</span></li>
+              <li><span class="chk">&#10003;</span><span>Industrial Grade</span></li>
+              <li><span class="chk">&#10003;</span><span>Impact Resistant</span></li>
+              <li><span class="chk">&#10003;</span><span>Durable Construction</span></li>
+              <li><span class="chk">&#10003;</span><span>Weather Resistant</span></li>
+              <li><span class="chk">&#10003;</span><span>Long Service Life</span></li>
+            </ul>
+
+            <h3>Applications</h3>
+            <p>Welded mesh security fence is designed for factory perimeters, warehouse boundaries, industrial facilities, logistics centers, and other applications requiring rigid and durable perimeter protection.</p>
+          </div>
+          <div class="info-right">
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('products/fence/welded-mesh-fence.avif');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Welded Mesh Security Fence &mdash; Industrial Rigid Panel
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. PACKING & PACKAGING ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Packing</span>
+          <h2>Packing &amp; Packaging</h2>
+        </div>
+        <div class="pack-grid">
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+            </div>
+            <h3>Bundle Package</h3>
+            <p>Welded mesh panels are bundled together with steel straps and wrapped in plastic film for protection during transport.</p>
+          </div>
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3>Pallet Package</h3>
+            <p>Panels are stacked uniformly on wooden pallets and wrapped with plastic stretch film for safe shipping.</p>
+          </div>
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>
+            </div>
+            <h3>Container Loading</h3>
+            <p>Welded mesh fence panels are loaded into 20ft or 40ft containers for secure ocean freight delivery.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. INQUIRY CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('products/fence/welded-mesh-fence.avif');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Get a Quote for Welded Mesh Security Fence</h2>
+        <p class="article-cta-desc">Tell us your required panel height, width, mesh opening and coating &mdash; our team will respond with a tailored quotation and delivery plan within 24 hours.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="fence-security.html" class="btn-hero-secondary">VIEW ALL SECURITY FENCES</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+
+</body>
+</html>

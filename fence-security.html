@@ -208,7 +208,7 @@
                 <span class="spec-tag">2&ndash;6m High</span>
                 <span class="spec-tag">Razor Wire Option</span>
               </div>
-              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+              <a href="y-post-security-fence.html" class="product-card-link">View Details <span>&rarr;</span></a>
             </div>
           </article>
 
@@ -224,7 +224,7 @@
                 <span class="spec-tag">Tamper-Proof</span>
                 <span class="spec-tag">Max Security</span>
               </div>
-              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+              <a href="358-security-fence.html" class="product-card-link">View Details <span>&rarr;</span></a>
             </div>
           </article>
 
@@ -240,7 +240,7 @@
                 <span class="spec-tag">Anti-Climb</span>
                 <span class="spec-tag">Reinforced Rigidity</span>
               </div>
-              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+              <a href="v-mesh-security-fence.html" class="product-card-link">View Details <span>&rarr;</span></a>
             </div>
           </article>
 
@@ -256,7 +256,7 @@
                 <span class="spec-tag">HDG / PVC</span>
                 <span class="spec-tag">Multi-Purpose</span>
               </div>
-              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+              <a href="chain-link-security-fence.html" class="product-card-link">View Details <span>&rarr;</span></a>
             </div>
           </article>
 
@@ -272,7 +272,7 @@
                 <span class="spec-tag">High Rigidity</span>
                 <span class="spec-tag">Industrial Grade</span>
               </div>
-              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
+              <a href="welded-mesh-security-fence.html" class="product-card-link">View Details <span>&rarr;</span></a>
             </div>
           </article>
         </div>
@@ -836,12 +836,12 @@
       var skyTexture = new THREE.CanvasTexture(skyCanvas);
       scene.background = skyTexture;
 
-      scene.fog = new THREE.Fog(0xf7f9fa, 60, 180);
+      scene.fog = new THREE.Fog(0xf7f9fa, 5, 30);
 
       var w = container.clientWidth;
       var h = container.clientHeight || 540;
       var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
-      camera.position.set(30, 22, 45);
+      camera.position.set(5, 3, 7);
 
       var renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(w, h);
@@ -853,9 +853,10 @@
       var controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.minDistance = 20;
-      controls.maxDistance = 180;
-      controls.target.set(0, 10, 0);
+      controls.enablePan = false;
+      controls.minDistance = 0.5;
+      controls.maxDistance = 15;
+      controls.target.set(0, 0.8, 0);
 
       scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
@@ -875,7 +876,7 @@
       scene.add(bottomLight);
 
       // 地平线网格（GridHelper）
-      var gridHelper = new THREE.GridHelper(200, 40, 0x9aa3ab, 0xc9d1d6);
+      var gridHelper = new THREE.GridHelper(20, 20, 0x9aa3ab, 0xc9d1d6);
       gridHelper.position.y = 0;
       scene.add(gridHelper);
 
@@ -884,7 +885,7 @@
       var autoRotate = true;
 
       var loader = new GLTFLoader();
-      loader.load('models/3d-fence-panel-model.glb', function (gltf) {
+      loader.load('products/fence/chain-link-fence.glb', function (gltf) {
         var model = gltf.scene;
         model.traverse(function (child) {
           if (child.isMesh) {
@@ -897,7 +898,7 @@
         var center = box.getCenter(new THREE.Vector3());
         var size = box.getSize(new THREE.Vector3());
         var maxDim = Math.max(size.x, size.y, size.z);
-        var scale = 68 / maxDim;
+        var scale = 6 / maxDim;
         model.scale.setScalar(scale);
 
         fencePivot = new THREE.Group();
@@ -946,16 +947,16 @@
         if (btn) btn.classList.add('active');
       }
       function resetCamera() {
-        camera.position.set(30, 22, 45);
-        controls.target.set(0, 10, 0);
+        camera.position.set(5, 3, 7);
+        controls.target.set(0, 0.8, 0);
         controls.update();
       }
       function setCameraAngle(angle) {
-        var dist = 85;
-        if (angle === 'front') camera.position.set(0, 28, dist);
-        else if (angle === 'side') camera.position.set(dist, 28, 0);
+        var dist = 7;
+        if (angle === 'front') camera.position.set(0, 1.5, dist);
+        else if (angle === 'side') camera.position.set(dist, 1.5, 0);
         else if (angle === 'top') camera.position.set(0, dist, 0.01);
-        controls.target.set(0, 10, 0);
+        controls.target.set(0, 0.8, 0);
         controls.update();
       }
 
