@@ -38,6 +38,48 @@
     .sim-wire-select option { background: #1a1a1a; color: #fff; }
     .sim-wire-select:focus { border-color: var(--color-orange-primary); box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15); }
     @media (max-width: 600px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-stats-grid { grid-template-columns: repeat(2,1fr) !important; } }
+
+    .spec-pdf-card {
+      display: flex; align-items: center; gap: 24px;
+      max-width: 900px; margin: 0 auto;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 28px;
+      transition: all .25s ease;
+    }
+    .spec-pdf-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      border-color: #d1d5db;
+    }
+    .spec-pdf-icon {
+      width: 72px; height: 72px; flex-shrink: 0;
+      background: linear-gradient(135deg, #FFF8F0, #FFF0E0);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-orange-primary);
+    }
+    .spec-pdf-info { flex: 1; min-width: 0; }
+    .spec-pdf-info h3 { font-size: 1.05rem; font-weight: 700; color: var(--color-black); margin-bottom: 6px; }
+    .spec-pdf-info p { font-size: .85rem; color: #6b7280; line-height: 1.55; }
+    .spec-pdf-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px;
+      background: var(--color-orange-primary); color: #fff;
+      border-radius: 10px;
+      font-weight: 600; font-size: .88rem;
+      transition: all .2s ease; flex-shrink: 0;
+      text-decoration: none;
+    }
+    .spec-pdf-btn:hover {
+      background: #E55A2B; transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(255,107,53,.3);
+    }
+    .spec-pdf-btn svg { flex-shrink: 0; }
+    @media (max-width: 768px) {
+      .spec-pdf-card { flex-direction: column; text-align: center; padding: 24px; }
+      .spec-pdf-btn { width: 100%; justify-content: center; }
+    }
   </style>
 </head>
 <body>
@@ -370,6 +412,34 @@
             <li>Full material test certificates and compliance documentation supplied on request.</li>
           </ul>
         </article>
+      </div>
+    </section>
+
+    <!-- ============ PDF SPEC DOWNLOAD ============ -->
+    <section class="product-section-light" style="padding-top:0;">
+      <div class="article-container">
+        <div class="spec-pdf-card" data-reveal>
+          <div class="spec-pdf-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="42" height="42">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div class="spec-pdf-info">
+            <h3>Stainless Steel Screen Mesh Specification</h3>
+            <p>Complete technical data including mesh sizes, wire diameters, opening sizes, open area percentages, and weight per square meter for all available specifications.</p>
+          </div>
+          <a href="files/stainless-screen-mesh-specification.pdf" class="spec-pdf-btn" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            View PDF
+          </a>
+        </div>
       </div>
     </section>
 
