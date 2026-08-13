@@ -320,7 +320,25 @@
               </div>
               <div class="spec-sim-slider-group">
                 <label>Wire Diameter <span id="sim-val-wire">0.135"</span></label>
-                <p class="spec-sim-hint">* Sorted by available diameters for the selected mesh count</p>
+                <select id="sim-input-wire" class="sim-wire-select">
+                  <option value="0.192">0.192"</option>
+                  <option value="0.135" selected>0.135"</option>
+                  <option value="0.120">0.120"</option>
+                  <option value="0.105">0.105"</option>
+                  <option value="0.080">0.080"</option>
+                  <option value="0.063">0.063"</option>
+                  <option value="0.047">0.047"</option>
+                  <option value="0.028">0.028"</option>
+                  <option value="0.023">0.023"</option>
+                  <option value="0.016">0.016"</option>
+                  <option value="0.014">0.014"</option>
+                  <option value="0.011">0.011"</option>
+                  <option value="0.009">0.009"</option>
+                  <option value="0.007">0.007"</option>
+                  <option value="0.0045">0.0045"</option>
+                  <option value="0.0021">0.0021"</option>
+                  <option value="0.001">0.001"</option>
+                </select>
               </div>
             </div>
             <div class="spec-sim-select-group">
@@ -738,6 +756,7 @@
       ];
 
       var meshEl = document.getElementById('sim-input-mesh');
+      var wireEl = document.getElementById('sim-input-wire');
       var colorEl = document.getElementById('sim-input-color');
       var elStatMesh = document.getElementById('sim-stat-mesh');
       var elStatWire = document.getElementById('sim-stat-wire');
@@ -751,10 +770,23 @@
       var body = document.getElementById('sim-spec-body');
       if (!meshEl) return;
 
+      function findGroupByWire(wireDia) {
+        for (var i = 0; i < groups.length; i++) {
+          if (groups[i].w === wireDia + '"' || groups[i].w === wireDia) return groups[i];
+        }
+        return null;
+      }
+
       function refresh() {
         var idx = parseInt(meshEl.value, 10);
         var g = groups[Math.min(idx, groups.length - 1)];
         var color = colorEl ? colorEl.value : '#111827';
+
+        if (wireEl) {
+          var wireVal = wireEl.value;
+          var matched = findGroupByWire(wireVal);
+          if (matched) g = matched;
+        }
 
         elStatMesh.textContent = g.m;
         elValMesh.textContent = g.m;
@@ -763,6 +795,13 @@
         elStatOpen.textContent = g.a;
         elCenter.textContent = g.a;
         elStatWeave.textContent = 'PLAIN';
+
+        if (wireEl && g.w) {
+          var wireNoQuote = g.w.replace('"', '');
+          if (wireEl.value !== wireNoQuote) {
+            wireEl.value = wireNoQuote;
+          }
+        }
 
         var ap = parseFloat(g.a.replace('"', ''));
         var size = Math.max(8, Math.min(130, ap * 140 + 8));
@@ -786,6 +825,7 @@
       }
 
       meshEl.addEventListener('input', refresh);
+      if (wireEl) wireEl.addEventListener('change', refresh);
       if (colorEl) colorEl.addEventListener('change', refresh);
       refresh();
     })();

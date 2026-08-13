@@ -271,6 +271,9 @@
 
 /* ---------- Spec Simulator 交互式规格模拟器 ---------- */
 .spec-sim-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
@@ -278,6 +281,7 @@
 }
 
 .spec-sim-stats {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
@@ -309,8 +313,10 @@
 }
 
 .spec-sim-visual {
+  grid-column: 1;
+  grid-row: 2;
   position: relative;
-  height: 320px;
+  min-height: 320px;
   background: rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
@@ -347,14 +353,18 @@
 }
 
 .spec-sim-controls {
+  grid-column: 2;
+  grid-row: 2;
   padding: 1.5rem 1.75rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .spec-sim-sliders {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.25rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
 .spec-sim-slider-group label {
@@ -554,6 +564,10 @@
 }
 
 @media (max-width: 768px) {
+  .spec-sim-card {
+    grid-template-columns: 1fr;
+  }
+
   .spec-sim-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -568,7 +582,15 @@
   }
 
   .spec-sim-visual {
-    height: 180px;
+    grid-column: 1;
+    grid-row: auto;
+    min-height: 220px;
+  }
+
+  .spec-sim-controls {
+    grid-column: 1;
+    grid-row: auto;
+    padding: 1.25rem 1.25rem 1.5rem;
   }
 
   .spec-sim-sliders {
