@@ -26,16 +26,11 @@
     .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
     @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
 
-    .apps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
-    .apps-grid .app-tile { position: relative; border-radius: 14px; overflow: hidden; height: 220px; box-shadow: 0 10px 30px rgba(0,0,0,.08); transition: transform .3s ease; }
-    .apps-grid .app-tile:hover { transform: translateY(-6px); }
-    .apps-grid .app-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
-    .apps-grid .app-tile:hover img { transform: scale(1.06); }
-    .apps-grid .app-tile-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.76), rgba(0,0,0,.14) 60%, rgba(0,0,0,.08)); display: flex; flex-direction: column; justify-content: flex-end; padding: 14px 16px; color: var(--color-white); }
-    .apps-grid .app-tile-label { font-weight: 600; font-size: 1rem; color: var(--color-white); }
-    .apps-grid .app-tile-desc { font-size: .82rem; color: rgba(255,255,255,.82); margin-top: 2px; }
-    @media (max-width: 900px) { .apps-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 480px) { .apps-grid { grid-template-columns: 1fr; } }
+    .apps-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: auto; }
+    .apps-grid .app-tile { aspect-ratio: 4 / 3; }
+    @media (max-width: 1200px) { .apps-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } .apps-grid .app-tile { aspect-ratio: 3 / 2; } }
+    @media (max-width: 480px) { .apps-grid { grid-template-columns: 1fr; } .apps-grid .app-tile { aspect-ratio: 16 / 10; } }
 
     .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
     .pack-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px 24px; text-align: center; transition: all .3s ease; }
@@ -187,30 +182,28 @@
     </section>
 
     <!-- ============ 4. APPLICATIONS ============ -->
-    <section class="product-section-light">
-      <div class="article-container" style="max-width:1180px;">
-        <div class="section-header" data-reveal>
-          <span class="category-tag">Applications</span>
-          <h2>Application Scenarios</h2>
-          <p>Explore the diverse range of applications where epoxy coated wire mesh delivers reliable performance.</p>
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Application <span class="accent">Scenarios</span></h2>
+        <p style="color:var(--color-gray-light);">Explore the diverse range of applications where epoxy coated wire mesh delivers reliable performance.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile" data-reveal>
+          <img src="images/blog/epoxy-app-architectural(1).jpg" alt="Architectural Facades" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Architectural Facades</div><div class="app-tile-desc">Decorative cladding and sunshade screens</div></div>
         </div>
-        <div class="apps-grid">
-          <div class="app-tile" data-reveal>
-            <img src="images/blog/epoxy-app-architectural(1).jpg" alt="Architectural Facades" loading="lazy">
-            <div class="app-tile-overlay"><div class="app-tile-label">Architectural Facades</div><div class="app-tile-desc">Decorative cladding and sunshade screens</div></div>
-          </div>
-          <div class="app-tile" data-reveal>
-            <img src="images/blog/epoxy-app-industrial(1).jpg" alt="Industrial Equipment" loading="lazy">
-            <div class="app-tile-overlay"><div class="app-tile-label">Industrial Equipment</div><div class="app-tile-desc">Machine guards and safety barriers</div></div>
-          </div>
-          <div class="app-tile" data-reveal>
-            <img src="images/blog/epoxy-app-marine(1).jpg" alt="Marine Components" loading="lazy">
-            <div class="app-tile-overlay"><div class="app-tile-label">Marine Components</div><div class="app-tile-desc">Offshore and coastal structure protection</div></div>
-          </div>
-          <div class="app-tile" data-reveal>
-            <img src="images/blog/epoxy-app-fencing(1).jpg" alt="Protective Fencing" loading="lazy">
-            <div class="app-tile-overlay"><div class="app-tile-label">Protective Fencing</div><div class="app-tile-desc">Highway, railway and utility barriers</div></div>
-          </div>
+        <div class="app-tile" data-reveal>
+          <img src="images/blog/epoxy-app-industrial(1).jpg" alt="Industrial Equipment" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Industrial Equipment</div><div class="app-tile-desc">Machine guards and safety barriers</div></div>
+        </div>
+        <div class="app-tile" data-reveal>
+          <img src="images/blog/epoxy-app-marine(1).jpg" alt="Marine Components" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Marine Components</div><div class="app-tile-desc">Offshore and coastal structure protection</div></div>
+        </div>
+        <div class="app-tile" data-reveal>
+          <img src="images/blog/epoxy-app-fencing(1).jpg" alt="Protective Fencing" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Protective Fencing</div><div class="app-tile-desc">Highway, railway and utility barriers</div></div>
         </div>
       </div>
     </section>
