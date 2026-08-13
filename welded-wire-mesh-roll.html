@@ -55,12 +55,12 @@
     @media (max-width: 900px) { .product-types-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } .product-type-card-img { height: 140px; } }
     @media (max-width: 600px) { .product-types-grid { grid-template-columns: 1fr; } }
 
-    .spec-sim-card { background: #fff; border: 1px solid #e5e7eb; }
+    .spec-sim-card { background: #fff; border: 1px solid #e5e7eb; grid-template-rows: auto 320px !important; }
     .spec-sim-stats { border-bottom: 1px solid #e5e7eb; }
     .spec-sim-stat { border-right: 1px solid #e5e7eb; }
     .spec-sim-stat-value { color: var(--color-black); }
     .spec-sim-visual { background: #fff; height: 320px; position: relative; overflow: hidden; }
-    .spec-sim-visual svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .spec-sim-visual svg { display: block; width: 100%; height: 100%; }
     .spec-sim-slider-group label { color: #374151; }
     .spec-sim-slider-group input[type="range"] { background: #e5e7eb; }
     .gabion-mesh-select { background: #fff; border: 1px solid #d1d5db; color: #1f2937; }
@@ -840,15 +840,14 @@
         document.getElementById('sim-stat-mesh').textContent = meshW + ' &times; ' + meshH + ' mm';
         document.getElementById('sim-stat-roll').textContent = rollW.toFixed(1) + ' &times; ' + rollL.toFixed(0) + ' m';
 
-        var availW = visualContainer ? visualContainer.clientWidth : 800;
-        var availH = visualContainer ? visualContainer.clientHeight : 320;
+        var rect = visualContainer.getBoundingClientRect();
+        var availW = rect.width || visualContainer.clientWidth || 600;
+        var availH = rect.height || visualContainer.clientHeight || 320;
 
         availW = Math.max(availW, 280);
         availH = Math.max(availH, 150);
 
         if (svgEl) {
-          svgEl.setAttribute('width', availW);
-          svgEl.setAttribute('height', availH);
           svgEl.setAttribute('viewBox', '0 0 ' + availW + ' ' + availH);
         }
 
