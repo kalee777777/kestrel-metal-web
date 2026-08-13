@@ -151,87 +151,6 @@
       </div>
     </section>
 
-    <!-- ============ SPECIFICATION SIMULATOR ============ -->
-    <section id="specifications" class="product-section-light">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Interactive</span>
-        <h2>Specification <span class="accent">Simulator</span></h2>
-        <p>Customize welded gabion box parameters and preview the mesh pattern in real time.</p>
-      </div>
-      <div class="article-container">
-        <div class="spec-sim-card" data-reveal>
-
-          <div class="spec-sim-stats">
-            <div class="spec-sim-stat">
-              <div class="spec-sim-stat-label">Mesh Size</div>
-              <div class="spec-sim-stat-value" id="sim-stat-mesh">75 &times; 75 mm</div>
-            </div>
-            <div class="spec-sim-stat">
-              <div class="spec-sim-stat-label">Box Size</div>
-              <div class="spec-sim-stat-value" id="sim-stat-box">1.0 &times; 1.0 &times; 1.0 m</div>
-            </div>
-            <div class="spec-sim-stat">
-              <div class="spec-sim-stat-label">Wire Dia</div>
-              <div class="spec-sim-stat-value" id="sim-stat-wire">4.0 mm</div>
-            </div>
-          </div>
-
-          <div class="spec-sim-visual">
-            <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <pattern id="weldedGrid" patternUnits="userSpaceOnUse" width="20" height="20">
-                  <path id="sim-mesh-lines" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="square"></path>
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#weldedGrid)"></rect>
-            </svg>
-          </div>
-
-          <div class="spec-sim-controls">
-            <div class="spec-sim-sliders">
-              <div class="spec-sim-slider-group">
-                <label>Mesh Opening (W &times; H)</label>
-                <select id="sim-input-opening" class="gabion-mesh-select">
-                  <option value="50x50">50 &times; 50 mm</option>
-                  <option value="75x75" selected>75 &times; 75 mm</option>
-                  <option value="100x100">100 &times; 100 mm</option>
-                  <option value="50x100">50 &times; 100 mm</option>
-                </select>
-              </div>
-              <div class="spec-sim-slider-group">
-                <label>Box Size (L &times; W &times; H)</label>
-                <select id="sim-input-box" class="gabion-mesh-select">
-                  <option value="1x1x1" selected>1.0 &times; 1.0 &times; 1.0 m</option>
-                  <option value="1.5x1x0.5">1.5 &times; 1.0 &times; 0.5 m</option>
-                  <option value="2x1x1">2.0 &times; 1.0 &times; 1.0 m</option>
-                  <option value="2x1x1.5">2.0 &times; 1.0 &times; 1.5 m</option>
-                  <option value="3x1x1">3.0 &times; 1.0 &times; 1.0 m</option>
-                </select>
-              </div>
-              <div class="spec-sim-slider-group">
-                <label>Wire Diameter <span id="sim-val-wire">4.0 mm</span></label>
-                <input type="range" id="sim-input-wire" min="4" max="10" step="1" value="6">
-              </div>
-              <div class="spec-sim-slider-group">
-                <label>Surface Treatment</label>
-                <select id="sim-input-material" class="gabion-mesh-select">
-                  <option value="#9ca3af">Galvanized (Zinc Grey)</option>
-                  <option value="#4b5563">Black Steel (Plain/Untreated)</option>
-                  <option value="#064e3b">PVC Coated (Dark Green)</option>
-                </select>
-              </div>
-            </div>
-            <div class="specs-table-wrap">
-              <table class="specs-table" id="sim-spec-table">
-                <thead><tr><th>Specification</th><th>Details</th></tr></thead>
-                <tbody id="sim-spec-body"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ PRODUCT TYPES ============ -->
     <section class="product-section-light product-section-light-alt">
       <div class="section-header" data-reveal>
@@ -289,32 +208,160 @@
       </div>
     </section>
 
-    <!-- ============ SPECIFICATIONS TABLE ============ -->
+    <!-- ============ SPECIFICATIONS (ASTM A974) ============ -->
     <section class="product-section-light">
       <div class="section-header" data-reveal>
         <span class="category-tag">Technical Data</span>
-        <h2>Welded Gabion Box <span class="accent">Specifications</span></h2>
-        <p>Standard box sizes, wire diameters and mesh opening configurations.</p>
+        <h2>Specifications <span class="accent">(ASTM A974)</span></h2>
       </div>
       <div class="article-container">
-        <article class="article-content">
-          <h3>Gabion Box Specifications</h3>
-          <table>
+        <div class="specs-table-wrap" style="max-width:1100px;margin:0 auto">
+          <table class="specs-table">
             <thead>
-              <tr><th>Box Size (L &times; W &times; H)</th><th>Volume</th><th>Wire Diameter</th><th>Mesh Opening</th><th>Weight (approx.)</th></tr>
+              <tr>
+                <th>Lacing</th>
+                <th>Shear Strength</th>
+                <th>Wire Diameter</th>
+                <th>Mesh Size</th>
+                <th>Coating</th>
+                <th>Typical ASTM Gabion Specification</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td>0.5 &times; 0.5 &times; 0.5 m</td><td>0.125 m&sup3;</td><td>3.0 mm</td><td>50 &times; 50 mm</td><td>2.5 kg</td></tr>
-              <tr><td>1.0 &times; 0.5 &times; 0.5 m</td><td>0.25 m&sup3;</td><td>3.0 mm</td><td>50 &times; 50 mm</td><td>4.5 kg</td></tr>
-              <tr><td>1.0 &times; 1.0 &times; 0.5 m</td><td>0.5 m&sup3;</td><td>3.5 mm</td><td>75 &times; 75 mm</td><td>8.5 kg</td></tr>
-              <tr><td>1.0 &times; 1.0 &times; 1.0 m</td><td>1.0 m&sup3;</td><td>4.0 mm</td><td>75 &times; 75 mm</td><td>15 kg</td></tr>
-              <tr><td>1.5 &times; 1.0 &times; 0.5 m</td><td>0.75 m&sup3;</td><td>4.0 mm</td><td>75 &times; 75 mm</td><td>12 kg</td></tr>
-              <tr><td>2.0 &times; 1.0 &times; 1.0 m</td><td>2.0 m&sup3;</td><td>4.0 mm</td><td>100 &times; 100 mm</td><td>25 kg</td></tr>
-              <tr><td>2.0 &times; 1.0 &times; 1.5 m</td><td>3.0 m&sup3;</td><td>5.0 mm</td><td>100 &times; 100 mm</td><td>40 kg</td></tr>
-              <tr><td>3.0 &times; 1.0 &times; 1.0 m</td><td>3.0 m&sup3;</td><td>5.0 mm</td><td>100 &times; 100 mm</td><td>45 kg</td></tr>
+              <tr>
+                <td>2.2mm (Galvanized)</td>
+                <td>Min. 70% of wire tensile strength</td>
+                <td>3.05mm</td>
+                <td>76 × 76mm</td>
+                <td>Galvanized</td>
+                <td>Gabion Box</td>
+              </tr>
+              <tr>
+                <td>2.2mm (PVC coated)</td>
+                <td>Min. 70% of wire tensile strength</td>
+                <td>2.7mm</td>
+                <td>76 × 76mm</td>
+                <td>PVC Coated</td>
+                <td>Gabion Box</td>
+              </tr>
+              <tr>
+                <td>2.2mm (same as mesh)</td>
+                <td>Min. 70% of wire tensile strength</td>
+                <td>2.2mm</td>
+                <td>76 × 38mm</td>
+                <td>Galvanized / PVC</td>
+                <td>Gabion Mattress</td>
+              </tr>
             </tbody>
           </table>
-        </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SPECIFICATIONS (BS EN 10223-8) ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Data</span>
+        <h2>Specifications <span class="accent">(BS EN 10223-8)</span></h2>
+      </div>
+      <div class="article-container">
+        <div class="specs-table-wrap" style="max-width:1100px;margin:0 auto">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>Lacing</th>
+                <th>Shear Strength</th>
+                <th>Wire Diameter</th>
+                <th>Mesh Size</th>
+                <th>Coating</th>
+                <th>Typical ASTM Gabion Specification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="5">Spiral: 3.76mm<br>C pins: 3mm<br>Lacing wire: 2.2mm</td>
+                <td rowspan="5">Min. 75% of wire breaking load</td>
+                <td>5.0mm</td>
+                <td>100 × 100mm</td>
+                <td rowspan="5">Hot-dip galvanized, Zn-5%Al (Galfan), PVC-coated</td>
+                <td>Gabion Box</td>
+              </tr>
+              <tr>
+                <td>4.0mm</td>
+                <td>50 × 100mm</td>
+                <td>Gabion Box</td>
+              </tr>
+              <tr>
+                <td>3.0mm</td>
+                <td>75 × 75mm</td>
+                <td>Gabion Box</td>
+              </tr>
+              <tr>
+                <td>2.7mm</td>
+                <td>50 × 75mm</td>
+                <td>Gabion Mattress</td>
+              </tr>
+              <tr>
+                <td>2.4mm</td>
+                <td>50 × 50mm</td>
+                <td>Gabion Mattress</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COATING OPTIONS ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Surface Treatment</span>
+        <h2>Coating <span class="accent">Options</span></h2>
+      </div>
+      <div class="article-container">
+        <div class="specs-table-wrap" style="max-width:1100px;margin:0 auto">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>Application</th>
+                <th>Corrosion Resistance</th>
+                <th>Composition</th>
+                <th>Standard</th>
+                <th>Coating Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Standard environments with low to moderate moisture exposure</td>
+                <td>Moderate</td>
+                <td>Zinc-coated wire</td>
+                <td>ASTM A641 (Class 3)</td>
+                <td>Galvanized Steel</td>
+              </tr>
+              <tr>
+                <td>Suitable for coastal and high-moisture environments</td>
+                <td>High</td>
+                <td>Zinc-Aluminum alloy (95% Zn, 5% Al)</td>
+                <td>ASTM A856 (Class 3)</td>
+                <td>Zn-5%Al (Galfan)</td>
+              </tr>
+              <tr>
+                <td>Highly corrosive areas, such as marine and industrial applications</td>
+                <td>Very High</td>
+                <td>Galvanized / Zn-5%Al wire + PVC layer (0.5mm)</td>
+                <td>ASTM A974</td>
+                <td>PVC Coated</td>
+              </tr>
+              <tr>
+                <td>Used in extreme weather conditions for long-term durability</td>
+                <td>Very High</td>
+                <td>Aluminum-coated steel wire</td>
+                <td>ASTM A809</td>
+                <td>Aluminized Steel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -601,67 +648,6 @@
   <script src="js/blog-detail.js"></script>
   <script src="js/products.js"></script>
   <script src="js/faq.js"></script>
-
-  <script>
-    (function () {
-      var openingSel = document.getElementById('sim-input-opening');
-      var boxSel = document.getElementById('sim-input-box');
-      var wireRange = document.getElementById('sim-input-wire');
-      var matSel = document.getElementById('sim-input-material');
-      if (!openingSel) return;
-
-      var wires = [3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0];
-
-      function refresh() {
-        var i = parseInt(wireRange.value, 10);
-        var wire = wires[i];
-        var opening = openingSel.value.split('x');
-        var meshW = parseInt(opening[0]);
-        var meshH = parseInt(opening[1]);
-        var box = boxSel.value.split('x');
-        var boxL = parseFloat(box[0]);
-        var boxW = parseFloat(box[1]);
-        var boxH = parseFloat(box[2]);
-        var color = matSel.value;
-
-        document.getElementById('sim-val-wire').textContent = wire.toFixed(1) + ' mm';
-        document.getElementById('sim-stat-wire').textContent = wire.toFixed(1) + ' mm';
-        document.getElementById('sim-stat-mesh').textContent = meshW + ' &times; ' + meshH + ' mm';
-        document.getElementById('sim-stat-box').textContent = boxL.toFixed(1) + ' &times; ' + boxW.toFixed(1) + ' &times; ' + boxH.toFixed(1) + ' m';
-
-        var visualScaleW = boxL * 100;
-        var visualScaleH = boxW * 100;
-        var numMeshesX = (boxL * 1000) / meshW;
-        var numMeshesY = (boxW * 1000) / meshH;
-        var patternW = visualScaleW / numMeshesX;
-        var patternH = visualScaleH / numMeshesY;
-
-        var pattern = document.getElementById('weldedGrid');
-        var lines = document.getElementById('sim-mesh-lines');
-        pattern.setAttribute('width', patternW);
-        pattern.setAttribute('height', patternH);
-        lines.setAttribute('d', 'M 0 0 L ' + patternW + ' 0 M 0 0 L 0 ' + patternH);
-        lines.setAttribute('stroke-width', wire * 0.5);
-        lines.setAttribute('stroke', color);
-
-        var body = document.getElementById('sim-spec-body');
-        if (body) {
-          body.innerHTML =
-            '<tr><td>Mesh Opening</td><td>' + meshW + ' &times; ' + meshH + ' mm</td></tr>' +
-            '<tr><td>Box Size</td><td>' + boxL.toFixed(1) + ' &times; ' + boxW.toFixed(1) + ' &times; ' + boxH.toFixed(1) + ' m</td></tr>' +
-            '<tr><td>Wire Diameter</td><td>' + wire.toFixed(1) + ' mm</td></tr>' +
-            '<tr><td>Surface Treatment</td><td>' + matSel.options[matSel.selectedIndex].text + '</td></tr>' +
-            '<tr><td>Welding Type</td><td>Electric Resistance Welding</td></tr>';
-        }
-      }
-
-      openingSel.addEventListener('change', refresh);
-      boxSel.addEventListener('change', refresh);
-      wireRange.addEventListener('input', refresh);
-      matSel.addEventListener('change', refresh);
-      refresh();
-    })();
-  </script>
 
   <script>
     (function () {
