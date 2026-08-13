@@ -433,7 +433,7 @@
         <p>Choose the right post type for your fencing project. Each post is available in galvanized or PVC coated finish to match your panels.</p>
       </div>
       <div class="posts-grid">
-        <div class="post-card">
+        <a href="round-post.html" class="post-card" data-reveal>
           <div class="post-card-image">
             <div class="post-slider" id="roundPostSlider">
               <div class="post-slider-track">
@@ -455,8 +455,8 @@
             <span class="post-dims">&Oslash;48 / &Oslash;60 mm</span>
             <p>The most common and economical choice for general fencing applications. Thickness 1.5mm or 2.0mm, available in galvanized or PVC coated finish to match panel color.</p>
           </div>
-        </div>
-        <div class="post-card">
+        </a>
+        <a href="square-post.html" class="post-card" data-reveal>
           <div class="post-card-image">
             <div class="post-slider" id="squarePostSlider">
               <div class="post-slider-track">
@@ -478,8 +478,8 @@
             <span class="post-dims">50&times;50 / 60&times;60 mm</span>
             <p>Clean modern appearance with excellent structural stability. Ideal for architectural and premium residential projects where aesthetics matter.</p>
           </div>
-        </div>
-        <div class="post-card">
+        </a>
+        <a href="rectangular-post.html" class="post-card" data-reveal>
           <div class="post-card-image">
             <div class="post-slider" id="rectPostSlider">
               <div class="post-slider-track">
@@ -501,7 +501,7 @@
             <span class="post-dims">40&times;60 to 80&times;100 mm</span>
             <p>Enhanced rigidity for high-security and heavy-duty applications. Larger cross-section provides superior wind resistance and impact resistance.</p>
           </div>
-        </div>
+        </a>
       </div>
     </section>
 
@@ -742,11 +742,11 @@
             update();
           }
 
-          if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); go(-1); });
-          if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); go(1); });
+          if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); go(-1); });
+          if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); go(1); });
           for (var d = 0; d < dots.length; d++) {
             (function (idx) {
-              dots[d].addEventListener('click', function (e) { e.preventDefault(); goTo(idx); });
+              dots[d].addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); goTo(idx); });
             })(d);
           }
 
