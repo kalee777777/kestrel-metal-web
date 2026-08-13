@@ -205,15 +205,15 @@
           </div>
 
           <div class="spec-sim-visual">
-            <svg id="sim-svg" xmlns="http://www.w3.org/2000/svg">
+            <svg id="sim-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
-                <pattern id="weldedGrid" patternUnits="userSpaceOnUse" width="80" height="80">
-                  <path id="sim-mesh-lines" d="M 80 0 L 80 80 L 0 80" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="square"></path>
-                  <circle id="sim-weld-dot" cx="0" cy="0" r="3" fill="#6b7280"></circle>
+                <pattern id="weldedGrid" patternUnits="userSpaceOnUse" width="12.5" height="20">
+                  <path id="sim-mesh-lines" d="M 12.5 0 L 12.5 20 L 0 20" fill="none" stroke="#6b7280" stroke-width="0.5" stroke-linecap="square"></path>
+                  <circle id="sim-weld-dot" cx="0" cy="0" r="0.8" fill="#6b7280"></circle>
                 </pattern>
               </defs>
-              <rect id="sim-bg" width="100%" height="100%" fill="#fff"></rect>
-              <rect id="sim-fg" width="100%" height="100%" fill="url(#weldedGrid)"></rect>
+              <rect id="sim-bg" x="0" y="0" width="100" height="100" fill="#fff"></rect>
+              <rect id="sim-fg" x="0" y="0" width="100" height="100" fill="url(#weldedGrid)"></rect>
             </svg>
           </div>
 
@@ -840,38 +840,23 @@
         document.getElementById('sim-stat-mesh').textContent = meshW + ' &times; ' + meshH + ' mm';
         document.getElementById('sim-stat-roll').textContent = rollW.toFixed(1) + ' &times; ' + rollL.toFixed(0) + ' m';
 
-        var rect = visualContainer.getBoundingClientRect();
-        var availW = rect.width || visualContainer.clientWidth || 600;
-        var availH = rect.height || visualContainer.clientHeight || 320;
-
-        availW = Math.max(availW, 280);
-        availH = Math.max(availH, 150);
-
-        if (svgEl) {
-          svgEl.setAttribute('viewBox', '0 0 ' + availW + ' ' + availH);
-        }
-
         var targetCellsX = 8;
         var targetCellsY = 5;
 
-        var maxPatternW = availW / targetCellsX;
-        var maxPatternH = availH / targetCellsY;
+        var patternW = 100 / targetCellsX;
+        var patternH = 100 / targetCellsY;
 
-        var patternW = maxPatternW;
-        var patternH = maxPatternW * (meshH / meshW);
-
-        if (patternH > maxPatternH) {
-          patternH = maxPatternH;
-          patternW = maxPatternH * (meshW / meshH);
+        var ratio = meshH / meshW;
+        patternH = patternW * ratio;
+        if (patternH > 100 / 2) {
+          patternH = 100 / 2;
+          patternW = patternH / ratio;
         }
 
-        patternW = Math.max(12, Math.min(patternW, 220));
-        patternH = Math.max(10, Math.min(patternH, 180));
-
-        var cellsX = Math.max(1, Math.round(availW / patternW));
-        var cellsY = Math.max(1, Math.round(availH / patternH));
-        patternW = availW / cellsX;
-        patternH = availH / cellsY;
+        var cellsX = Math.max(1, Math.round(100 / patternW));
+        var cellsY = Math.max(1, Math.round(100 / patternH));
+        patternW = 100 / cellsX;
+        patternH = 100 / cellsY;
 
         var pattern = document.getElementById('weldedGrid');
         var lines = document.getElementById('sim-mesh-lines');
@@ -881,14 +866,14 @@
         pattern.setAttribute('height', patternH);
         lines.setAttribute('d', 'M ' + patternW + ' 0 L ' + patternW + ' ' + patternH + ' L 0 ' + patternH);
 
-        var strokeW = Math.max(1, wire * 0.25);
+        var strokeW = Math.max(0.2, Math.min(2, wire * 0.15));
         lines.setAttribute('stroke-width', strokeW);
         lines.setAttribute('stroke', color);
 
         if (weldDot) {
           weldDot.setAttribute('cx', 0);
           weldDot.setAttribute('cy', 0);
-          weldDot.setAttribute('r', Math.max(0.8, strokeW * 0.55));
+          weldDot.setAttribute('r', Math.max(0.3, strokeW * 0.55));
           weldDot.setAttribute('fill', color);
         }
 
