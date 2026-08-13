@@ -474,4 +474,34 @@ Industries 页面
 
 ---
 
-*文档版本: v2.0 | 创建者: AI Assistant | 最后更新: 2026-08-10*
+## 🔴 待处理问题 / 图片替换清单
+
+> 记录日期: 2026-08-13
+> 负责人: AI Assistant
+
+### 问题 1: Technical Guide 板块产品图片待替换
+
+**涉及页面**:
+1. `welded-wire-mesh-roll.html` — "Welded Wire Mesh Roll Technical Guide" 板块（4 张卡片图片）
+2. `blog-welded-wire-mesh-technical.html` — 博客正文内嵌产品图片（4 张）
+
+**待替换图片清单**（共 4 组，8 处引用）:
+
+| 图片文件 | 用途 | 状态 |
+|----------|------|------|
+| `images/blog/tech-wire-gauge.jpg` | 线径与网孔选型指南 | ⚠️ 待替换 |
+| `images/blog/tech-weld-quality.jpg` | 电阻焊质量标准 | ⚠️ 待替换 |
+| `images/blog/tech-coating.jpg` | 防腐涂层系统对比 | ⚠️ 待替换 |
+| `images/blog/tech-standards.jpg` | 行业标准与合规 | ⚠️ 待替换 |
+
+**当前状态说明**:
+- 图片已重新生成为纯产品展示图（无文字、白底、专业产品摄影风格）
+- 但图片仍需人工审核确认是否符合预期
+- 若不符合，需重新生成或从旧项目迁移
+
+**优先级**: 中
+**关联提交**: `a314564` (图片重新生成) + `888e0ab` (侧边栏 CSS 样式)
+
+---
+
+*文档版本: v2.1 | 创建者: AI Assistant | 最后更新: 2026-08-13*
