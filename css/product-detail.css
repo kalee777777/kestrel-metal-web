@@ -483,6 +483,7 @@
 
 .product-section-light .spec-sim-stats {
   border-bottom: 1px solid #e5e7eb;
+  background: #F7F7F5;
 }
 
 .product-section-light .spec-sim-stat {
@@ -494,11 +495,11 @@
 }
 
 .product-section-light .spec-sim-visual {
-  background: #f3f4f6;
+  background: #F7F7F5;
 }
 
 .product-section-light .spec-sim-center-line {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .product-section-light .spec-sim-slider-group label {
@@ -511,6 +512,58 @@
 
 .product-section-light .spec-sim-hint {
   color: var(--color-gray);
+}
+
+.product-section-light .spec-sim-controls {
+  background: #fff;
+}
+
+.product-section-light .spec-sim-select-group label {
+  color: var(--color-black);
+}
+
+.product-section-light .spec-sim-select-group select {
+  background: #fff;
+  color: var(--color-black);
+  border: 1px solid #d1d5db;
+}
+
+.product-section-light .spec-sim-select-group select option {
+  background: #fff;
+  color: var(--color-black);
+}
+
+.product-section-light .specs-table-wrap {
+  border: 1px solid #e5e7eb;
+}
+
+.product-section-light .specs-table th {
+  background: #F7F7F5;
+  color: var(--color-black);
+}
+
+.product-section-light .specs-table td {
+  color: var(--color-black);
+  border-top: 1px solid #e5e7eb;
+}
+
+.product-section-light .specs-table tbody tr:nth-child(even) {
+  background: #FBFBFA;
+}
+
+.product-section-light .sim-wire-select {
+  background: #fff;
+  color: var(--color-black);
+  border: 1px solid #d1d5db;
+}
+
+.product-section-light .sim-wire-select option {
+  background: #fff;
+  color: var(--color-black);
+}
+
+.product-section-light .sim-wire-select:focus {
+  border-color: var(--color-orange-primary);
 }
 
 .product-section-light .gabion-mesh-select {
