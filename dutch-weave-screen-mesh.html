@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dutch weave screen mesh — ultra-fine filtration mesh with dissimilar warp and weft diameters for fine particle separation. Available in PDW and TDW types for chemical, pharmaceutical and oil filtration applications.">
+  <meta name="description" content="Dutch weave screen mesh — ultra-fine filtration mesh with dissimilar warp and weft diameters for fine particle separation. Available in PDW, TDW and RDW types for chemical, pharmaceutical and oil filtration applications.">
   <title>Dutch Weave Screen Mesh | KESTREL METAL</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,15 +24,18 @@
     .spec-table-wrap thead th { background: #F7F7F5; color: var(--color-black); font-family: var(--font-display); letter-spacing: .5px; font-size: .8rem; }
     .spec-table-wrap tbody tr:nth-child(even) { background: #FBFBFA; }
     .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
-    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
 
-    .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
-    .pack-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px 24px; text-align: center; transition: all .3s ease; }
-    .pack-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.10); border-color: var(--color-orange-primary); }
-    .pack-icon { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E0); display: flex; align-items: center; justify-content: center; color: var(--color-orange-primary); }
-    .pack-card h3 { font-size: 1.02rem; font-weight: 600; color: var(--color-black); margin-bottom: 8px; }
-    .pack-card p { font-size: .86rem; color: #4b5563; line-height: 1.6; }
-    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
+    /* Weave Type Tabs */
+    .weave-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
+    .weave-tab { padding: 12px 24px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-size: .9rem; font-weight: 600; color: #4b5563; cursor: pointer; transition: all .2s; }
+    .weave-tab:hover { background: #fff; border-color: var(--color-orange-primary); color: var(--color-orange-primary); }
+    .weave-tab.active { background: var(--color-orange-primary); border-color: var(--color-orange-primary); color: #fff; }
+    .weave-content { display: none; }
+    .weave-content.active { display: block; }
+    .weave-info { max-width: 800px; margin: 0 auto 2rem; text-align: center; }
+    .weave-info h3 { font-size: 1.2rem; font-weight: 700; color: var(--color-black); margin-bottom: .5rem; font-family: var(--font-display); letter-spacing: .5px; }
+    .weave-info p { font-size: .9rem; color: #6b7280; line-height: 1.7; }
+    @media (max-width: 768px) { .weave-tabs { flex-direction: column; } .weave-tab { text-align: center; } }
 
     .info-layout { display: grid; grid-template-columns: 1.12fr .88fr; gap: 3rem; align-items: start; }
     .info-left h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 1px; font-size: 1.55rem; color: var(--color-black); text-transform: uppercase; padding-left: .9rem; border-left: 4px solid var(--color-orange-primary); margin: 2.4rem 0 1.1rem; line-height: 1.15; }
@@ -53,6 +56,14 @@
     .material-info-list li { position: relative; padding: .5rem 0 .5rem 1.5rem; font-size: .9rem; color: #4b5563; line-height: 1.65; }
     .material-info-list li::before { content: ''; position: absolute; left: 0; top: .98rem; width: 7px; height: 7px; border-radius: 50%; background: var(--color-orange-primary); }
     .material-info-list strong { color: var(--color-black); font-weight: 600; }
+
+    .special-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; }
+    .special-card { background: #FAFAF8; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all .3s ease; }
+    .special-card:hover { border-color: var(--color-orange-primary); box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+    .special-card h4 { font-size: .98rem; font-weight: 600; color: var(--color-black); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .special-card h4 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-orange-primary); flex-shrink: 0; }
+    .special-card p { font-size: .85rem; color: #6b7280; line-height: 1.65; margin: 0; }
+    @media (max-width: 768px) { .special-grid { grid-template-columns: 1fr; } }
 
     .article-hero-content .article-hero-desc { color: #ffffff; }
     .article-hero-content .article-hero-title { color: #ffffff; }
@@ -88,42 +99,142 @@
         </nav>
         <span class="article-hero-kicker">Ultra-Fine Filtration Weave</span>
         <h1 class="article-hero-title">Dutch Weave Screen Mesh</h1>
-        <p class="article-hero-desc">A specialized weave combining different warp and weft diameters to produce a dense filtration mesh with very small openings for fine particle separation.</p>
+        <p class="article-hero-desc">Dutch weave mesh is formed by weaving a limited number of warp threads to closely weave the largest number of weft threads together, resulting in a cloth that does not have holes that are easy to see. Dutch weave mesh is strong, stable, easy to clean and has a high flow rate, suitable for high-pressure liquid/solid separation.</p>
       </div>
     </section>
 
     <!-- ============ 2. SPECIFICATIONS ============ -->
     <section class="product-section-light">
-      <div class="article-container" style="max-width:1080px;">
+      <div class="article-container" style="max-width:1120px;">
         <div class="section-header" data-reveal>
           <span class="category-tag">Technical Data</span>
-          <h2>Specifications</h2>
-          <p>Available Dutch weave mesh types with wire diameters and nominal filtration ratings.</p>
+          <h2>Dutch Weave Mesh Specifications</h2>
+          <p>Select weave type to view detailed specifications</p>
         </div>
-        <div class="spec-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Mesh</th>
-                <th>Wire Dia. (mm)</th>
-                <th>Nominal (μm)</th>
-                <th>Max Width (mm)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>PDW</td><td>20 &times; 80</td><td>0.20 &times; 0.18</td><td>128 &ndash; 155</td><td>2000</td></tr>
-              <tr><td>PDW</td><td>40 &times; 150</td><td>0.14 &times; 0.10</td><td>70 &ndash; 84</td><td>2000</td></tr>
-              <tr><td>PDW</td><td>50 &times; 250</td><td>0.12 &times; 0.06</td><td>50 &ndash; 60</td><td>2000</td></tr>
-              <tr><td>TDW</td><td>80 &times; 700</td><td>0.10 &times; 0.03</td><td>35 &ndash; 44</td><td>1300</td></tr>
-              <tr><td>TDW</td><td>100 &times; 800</td><td>0.10 &times; 0.024</td><td>28 &ndash; 32</td><td>1600</td></tr>
-              <tr><td>TDW</td><td>250 &times; 1400</td><td>0.051 &times; 0.030</td><td>8 &ndash; 11</td><td>1300</td></tr>
-            </tbody>
-          </table>
+
+        <!-- Weave Type Tabs -->
+        <div class="weave-tabs" role="tablist">
+          <button class="weave-tab active" data-tab="pdw" role="tab" aria-selected="true">Plain Dutch Weave (PDW)</button>
+          <button class="weave-tab" data-tab="tdw" role="tab" aria-selected="false">Twill Dutch Weave (TDW)</button>
+          <button class="weave-tab" data-tab="rdw" role="tab" aria-selected="false">Reverse Dutch Weave (RDW)</button>
         </div>
+
+        <!-- Plain Dutch Weave Table -->
+        <div class="weave-content active" id="tab-pdw" role="tabpanel">
+          <div class="weave-info">
+            <h3>Plain Dutch Weave (PDW)</h3>
+            <p>In a plain dutch weave mesh the diameter of the warp wire is larger than the weft. The mesh is formed by weaving a limited number of warps with the maximum number of weft wires woven tightly together, producing a cloth with no readily visible apertures. This mesh is strong and stable, easy to clean and with a good flow rate suitable for high-pressure liquid/solid separation.</p>
+          </div>
+          <div class="spec-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Mesh</th>
+                  <th>Wire Dia. (Inch)</th>
+                  <th>Wire Dia. (mm)</th>
+                  <th>Nominal (μm)</th>
+                  <th>Max Width (mm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>PDW</td><td>8 &times; 85</td><td>0.0140 &times; 0.0126</td><td>0.36 &times; 0.32</td><td>300&ndash;320</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>12 &times; 64</td><td>0.0110 &times; 0.0098</td><td>0.28 &times; 0.25</td><td>200&ndash;220</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>14 &times; 68</td><td>0.0098 &times; 0.0087</td><td>0.25 &times; 0.22</td><td>175&ndash;195</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>16 &times; 70</td><td>0.0087 &times; 0.0079</td><td>0.22 &times; 0.20</td><td>155&ndash;185</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>20 &times; 80</td><td>0.0079 &times; 0.0071</td><td>0.20 &times; 0.18</td><td>128&ndash;155</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>24 &times; 90</td><td>0.0071 &times; 0.0063</td><td>0.18 &times; 0.16</td><td>105&ndash;128</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>30 &times; 110</td><td>0.0063 &times; 0.0055</td><td>0.16 &times; 0.14</td><td>84&ndash;105</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>30 &times; 150</td><td>0.0063 &times; 0.0039</td><td>0.16 &times; 0.10</td><td>70&ndash;90</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>40 &times; 150</td><td>0.0055 &times; 0.0039</td><td>0.14 &times; 0.10</td><td>70&ndash;84</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>40 &times; 200</td><td>0.0055 &times; 0.0031</td><td>0.14 &times; 0.08</td><td>55&ndash;70</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>50 &times; 200</td><td>0.0047 &times; 0.0031</td><td>0.12 &times; 0.08</td><td>55&ndash;65</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>50 &times; 250</td><td>0.0047 &times; 0.0024</td><td>0.12 &times; 0.06</td><td>50&ndash;60</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>50 &times; 280</td><td>0.0047 &times; 0.0022</td><td>0.12 &times; 0.055</td><td>50&ndash;55</td><td>2000</td></tr>
+                <tr><td>PDW</td><td>50 &times; 460</td><td>0.0047 &times; 0.0014</td><td>0.12 &times; 0.035</td><td>41&ndash;47</td><td>1300</td></tr>
+                <tr><td>PDW</td><td>60 &times; 400</td><td>0.0039 &times; 0.0022</td><td>0.10 &times; 0.055</td><td>45&ndash;50</td><td>1300</td></tr>
+                <tr><td>PDW</td><td>60 &times; 500</td><td>0.0039 &times; 0.0018</td><td>0.10 &times; 0.045</td><td>40&ndash;45</td><td>1300</td></tr>
+                <tr><td>PDW</td><td>70 &times; 350</td><td>0.0059 &times; 0.0028</td><td>0.15 &times; 0.07</td><td>50&ndash;60</td><td>1300</td></tr>
+                <tr><td>PDW</td><td>70 &times; 620</td><td>0.0059 &times; 0.0020</td><td>0.15 &times; 0.05</td><td>41&ndash;47</td><td>1300</td></tr>
+                <tr><td>PDW</td><td>80 &times; 700</td><td>0.0039 &times; 0.0012</td><td>0.10 &times; 0.03</td><td>35&ndash;44</td><td>1300</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Twill Dutch Weave Table -->
+        <div class="weave-content" id="tab-tdw" role="tabpanel">
+          <div class="weave-info">
+            <h3>Twill Dutch Weave (TDW)</h3>
+            <p>Twill dutch weave mesh is produced with the weft wires packed together in the same principle as Plain Dutch Weave but with double the number of weft wires woven in an over two, under two pattern. The weft wires overlie each other creating a sinuous path of filtration. The cloth is very robust with a smooth surface and the finer weft wires and smaller pore sizes provide excellent flow characteristics. The finest filtration rates are obtained with this type of weave.</p>
+          </div>
+          <div class="spec-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Mesh</th>
+                  <th>Wire Dia. (Inch)</th>
+                  <th>Wire Dia. (mm)</th>
+                  <th>Nominal (μm)</th>
+                  <th>Max Width (mm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>TDW</td><td>20 &times; 250</td><td>0.0100 &times; 0.0079</td><td>0.254 &times; 0.200</td><td>100&ndash;118</td><td>2000</td></tr>
+                <tr><td>TDW</td><td>30 &times; 300</td><td>0.0080 &times; 0.0063</td><td>0.203 &times; 0.160</td><td>75&ndash;90</td><td>2000</td></tr>
+                <tr><td>TDW</td><td>40 &times; 300</td><td>0.0070 &times; 0.0055</td><td>0.178 &times; 0.140</td><td>55&ndash;70</td><td>2000</td></tr>
+                <tr><td>TDW</td><td>50 &times; 250</td><td>0.0060 &times; 0.0047</td><td>0.152 &times; 0.120</td><td>55&ndash;65</td><td>2000</td></tr>
+                <tr><td>TDW</td><td>80 &times; 700</td><td>0.0050 &times; 0.0028</td><td>0.127 &times; 0.071</td><td>28&ndash;35</td><td>1600</td></tr>
+                <tr><td>TDW</td><td>100 &times; 800</td><td>0.0040 &times; 0.0024</td><td>0.102 &times; 0.061</td><td>28&ndash;32</td><td>1600</td></tr>
+                <tr><td>TDW</td><td>165 &times; 800</td><td>0.0030 &times; 0.0020</td><td>0.076 &times; 0.051</td><td>30&ndash;39</td><td>1300</td></tr>
+                <tr><td>TDW</td><td>165 &times; 1400</td><td>0.0030 &times; 0.0014</td><td>0.076 &times; 0.036</td><td>11&ndash;15</td><td>1300</td></tr>
+                <tr><td>TDW</td><td>200 &times; 600</td><td>0.0028 &times; 0.0018</td><td>0.071 &times; 0.046</td><td>32&ndash;38</td><td>1600</td></tr>
+                <tr><td>TDW</td><td>250 &times; 1400</td><td>0.0020 &times; 0.0012</td><td>0.051 &times; 0.030</td><td>8&ndash;11</td><td>1300</td></tr>
+                <tr><td>TDW</td><td>325 &times; 2300</td><td>0.0016 &times; 0.0008</td><td>0.041 &times; 0.020</td><td>5&ndash;9</td><td>1300</td></tr>
+                <tr><td>TDW</td><td>400 &times; 2500</td><td>0.0014 &times; 0.0007</td><td>0.036 &times; 0.018</td><td>3&ndash;6</td><td>1300</td></tr>
+                <tr><td>TDW</td><td>500 &times; 3600</td><td>0.0010 &times; 0.0006</td><td>0.025 &times; 0.014</td><td>2&ndash;3</td><td>1300</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reverse Dutch Weave Table -->
+        <div class="weave-content" id="tab-rdw" role="tabpanel">
+          <div class="weave-info">
+            <h3>Reverse Dutch Weave (RDW)</h3>
+            <p>Manufactured as a Reverse Plain Dutch Weave in a twill pattern, which reduces the deformation of the warp wire. This cloth is very stable and particularly strong in the warp direction with a high flow rate, making it ideal for continuous belt filter applications.</p>
+          </div>
+          <div class="spec-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Mesh</th>
+                  <th>Wire Dia. (Inch)</th>
+                  <th>Wire Dia. (mm)</th>
+                  <th>Nominal (μm)</th>
+                  <th>Max Width (mm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>RDW</td><td>48 &times; 10</td><td>0.0200 &times; 0.0200</td><td>0.500 &times; 0.500</td><td>350&ndash;450</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>72 &times; 15</td><td>0.0200 &times; 0.0200</td><td>0.500 &times; 0.500</td><td>250&ndash;350</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>132 &times; 16</td><td>0.0140 &times; 0.0180</td><td>0.352 &times; 0.457</td><td>210&ndash;260</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>132 &times; 17</td><td>0.0140 &times; 0.0179</td><td>0.355 &times; 0.455</td><td>180&ndash;220</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>152 &times; 24</td><td>0.0120 &times; 0.0140</td><td>0.315 &times; 0.350</td><td>115&ndash;130</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>260 &times; 40</td><td>0.0059 &times; 0.0086</td><td>0.150 &times; 0.220</td><td>80&ndash;95</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>325 &times; 39</td><td>0.0059 &times; 0.0120</td><td>0.150 &times; 0.300</td><td>45&ndash;75</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>345 &times; 45</td><td>0.0055 &times; 0.0090</td><td>0.140 &times; 0.230</td><td>40&ndash;65</td><td>1300</td></tr>
+                <tr><td>RDW</td><td>400 &times; 120</td><td>0.0026 &times; 0.0040</td><td>0.065 &times; 0.100</td><td>60&ndash;70</td><td>1300</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <ul class="material-info-list">
           <li><strong>Material:</strong> AISI 304 or 316 stainless steel wire</li>
-          <li><strong>Weave Types:</strong> PDW (Plain Dutch Weave) and TDW (Twill Dutch Weave)</li>
+          <li><strong>Weave Types:</strong> PDW (Plain Dutch Weave), TDW (Twill Dutch Weave) and RDW (Reverse Dutch Weave)</li>
           <li><strong>Custom specifications:</strong> custom mesh counts, wire diameters and widths available upon request</li>
         </ul>
       </div>
@@ -135,49 +246,72 @@
         <div class="info-layout">
           <div class="info-left">
             <h3>Dutch Weave Construction</h3>
-            <p>Dutch weave is a specialized wire weave where the warp and weft wires have different diameters. In <strong>PDW</strong> (Plain Dutch Weave), the thicker warp wires run straight while the thinner weft wires are woven over and under, creating a dense mesh structure. In <strong>TDW</strong> (Twill Dutch Weave), the weft wires follow a twill pattern, producing even finer openings for ultra-fine filtration.</p>
-            <p>This unique construction allows Dutch weave mesh to achieve much smaller and more uniform openings compared to standard plain or twill weaves of equivalent mesh counts, making it ideal for applications requiring precise fine particle separation.</p>
+            <p>Dutch weave mesh is formed by weaving a limited number of warp threads to closely weave the largest number of weft threads together, resulting in a cloth that does not have holes that are easy to see. Dutch weave mesh is strong, stable, easy to clean and has a high flow rate, suitable for high-pressure liquid/solid separation.</p>
 
-            <h3>Benefits</h3>
+            <h3>Advantages of Plain Dutch Weave</h3>
             <ul class="benefits-list">
-              <li><span class="chk">&#10003;</span><span>Ultra-fine filtration with openings as small as 8 μm.</span></li>
-              <li><span class="chk">&#10003;</span><span>High mechanical strength despite fine wire diameters.</span></li>
-              <li><span class="chk">&#10003;</span><span>Optimized flow rate with minimal pressure drop.</span></li>
-              <li><span class="chk">&#10003;</span><span>Good cake release properties for continuous filtration.</span></li>
-              <li><span class="chk">&#10003;</span><span>Easy to clean and backwash for long service life.</span></li>
-              <li><span class="chk">&#10003;</span><span>Available in PDW and TDW types for various weave densities.</span></li>
+              <li><span class="chk">&#10003;</span><span>Higher mechanical stability.</span></li>
+              <li><span class="chk">&#10003;</span><span>A finer opening can improve filtration efficiency and quality.</span></li>
+              <li><span class="chk">&#10003;</span><span>Thicker wires have higher tensile strength.</span></li>
+              <li><span class="chk">&#10003;</span><span>Easy to clean with good flow rate.</span></li>
             </ul>
 
-            <h3>Applications</h3>
-            <p>Dutch weave screen mesh is widely used in fine chemical filtration, pharmaceutical processing, oil and gas separation, water treatment, and other industries requiring precise fine particle separation. Its ability to retain very small particles makes it the preferred choice for critical filtration processes where product purity and separation efficiency are paramount.</p>
+            <h3>Advantages of Twill Dutch Weave</h3>
+            <ul class="benefits-list">
+              <li><span class="chk">&#10003;</span><span>Better filtering performance.</span></li>
+              <li><span class="chk">&#10003;</span><span>Higher tensile strength.</span></li>
+              <li><span class="chk">&#10003;</span><span>Can be used to filter ultra-fine products.</span></li>
+              <li><span class="chk">&#10003;</span><span>More stable structure.</span></li>
+              <li><span class="chk">&#10003;</span><span>The finest filtration rates are obtained with this type of weave.</span></li>
+            </ul>
+
+            <h3>Special Characteristics</h3>
+            <div class="special-grid">
+              <div class="special-card">
+                <h4><span class="dot"></span>High Tensile Warp Wire</h4>
+                <p>High tensile warp wire configurations, a part of auto screen changers used in the plastic extrusion industries.</p>
+              </div>
+              <div class="special-card">
+                <h4><span class="dot"></span>AISI 304 for Auto-Screen Changers</h4>
+                <p>High tensile warp AISI 304 wire for auto-screen changers used in the poly extrusion industry. The AISI 304 warp wire's tensile is 1300&ndash;1600&nbsp;MPa.</p>
+              </div>
+              <div class="special-card">
+                <h4><span class="dot"></span>Copper Coated Carbon Steel</h4>
+                <p>High tensile warp copper coated carbon steel wire for auto-screen changers used in plastic and rubber extrusion industry. The copper coated carbon steel warp wire's tensile is 1500&ndash;2000&nbsp;MPa.</p>
+              </div>
+              <div class="special-card">
+                <h4><span class="dot"></span>Rubbed Edges</h4>
+                <p>Rubbed edges after slitting to help with tracking for auto-screen changers.</p>
+              </div>
+            </div>
           </div>
           <div class="info-right">
             <div class="info-img-card" data-reveal>
               <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fine%20chemical%20filtration%20dutch%20weave%20wire%20mesh%20industrial%20process%20equipment%20stainless%20steel&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m4.22-16.22l-4.22 4.22m-4.22 4.22l-4.22 4.22m0-12.64l4.22 4.22m4.22 4.22l4.22 4.22"/></svg>
-                Fine Chemical Filtration
+                Petrochemical Filtration
               </div>
             </div>
             <div class="info-img-card" data-reveal>
               <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pharmaceutical%20filters%20dutch%20weave%20mesh%20stainless%20steel%20cleanroom%20process%20filtration&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                Pharmaceutical Filters
+                Pharmaceutical Processing
               </div>
             </div>
             <div class="info-img-card" data-reveal>
-              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=oil%20and%20gas%20separation%20dutch%20weave%20wire%20mesh%20industrial%20pipeline%20filtration%20equipment&image_size=square_hd');"></div>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mining%20industry%20dutch%20weave%20wire%20mesh%20filtration%20mineral%20processing%20separation&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h18M6 22V10M10 22V4M14 22v-8M18 22V8"/></svg>
-                Oil &amp; Gas Separation
+                Mining Industry
               </div>
             </div>
             <div class="info-img-card" data-reveal>
-              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=water%20treatment%20filtration%20dutch%20weave%20wire%20mesh%20industrial%20water%20processing%20clean&image_size=square_hd');"></div>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=waste%20water%20treatment%20filtration%20dutch%20weave%20wire%20mesh%20industrial%20water%20processing&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                Water Treatment
+                Waste Water Treatment
               </div>
             </div>
           </div>
@@ -190,24 +324,24 @@
       <div class="section-header" data-reveal>
         <span class="category-tag" style="color:#fff;">Applications</span>
         <h2 style="color:#fff;">Application <span class="accent">Scenarios</span></h2>
-        <p style="color:var(--color-gray-light);">Dutch weave screen mesh excels in demanding filtration processes across a wide range of industries.</p>
+        <p style="color:var(--color-gray-light);">Dutch woven wire mesh is mainly used for filtration. It provides excellent filtering capabilities for a wide range of applications including petrochemical, pharmaceuticals, mining industry, and waste water treatment.</p>
       </div>
       <div class="apps-grid">
         <div class="app-tile">
-          <img src="images/blog/stainless-steel-screen-mesh.webp" alt="Fine Chemical Filtration" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Fine Chemical Filtration</div><div class="app-tile-desc">Precision filtration for chemical processing</div></div>
+          <img src="images/blog/stainless-steel-screen-mesh.webp" alt="Petrochemical" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Petrochemical</div><div class="app-tile-desc">Filtration for petrochemical processing</div></div>
         </div>
         <div class="app-tile">
-          <img src="images/blog/plain-weave-screen-mesh.webp" alt="Pharmaceutical Filters" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Pharmaceutical Filters</div><div class="app-tile-desc">High-purity process filtration</div></div>
+          <img src="images/blog/plain-weave-screen-mesh.webp" alt="Pharmaceuticals" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Pharmaceuticals</div><div class="app-tile-desc">High-purity process filtration</div></div>
         </div>
         <div class="app-tile">
-          <img src="images/blog/twill-weave-blog.webp" alt="Oil & Gas Separation" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Oil &amp; Gas Separation</div><div class="app-tile-desc">Gas and liquid separation systems</div></div>
+          <img src="images/blog/twill-weave-blog.webp" alt="Mining Industry" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Mining Industry</div><div class="app-tile-desc">Mineral processing and separation</div></div>
         </div>
         <div class="app-tile">
-          <img src="images/blog/industrial-screening-application.webp" alt="Water Treatment" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Water Treatment</div><div class="app-tile-desc">Fine filtration for water purification</div></div>
+          <img src="images/blog/industrial-screening-application.webp" alt="Waste Water" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Waste Water</div><div class="app-tile-desc">Fine filtration for water treatment</div></div>
         </div>
       </div>
     </section>
@@ -218,7 +352,7 @@
       <div class="article-cta-overlay"></div>
       <div class="article-cta-content">
         <h2 class="article-cta-title">Get a Quote for Dutch Weave Screen Mesh</h2>
-        <p class="article-cta-desc">Tell us your required mesh count, wire diameter and application &mdash; our team will respond with a tailored quotation and delivery plan within 24 hours.</p>
+        <p class="article-cta-desc">Tell us your required weave type (PDW / TDW / RDW), mesh count, wire diameter and application &mdash; our team will respond with a tailored quotation and delivery plan within 24 hours.</p>
         <div class="article-cta-buttons">
           <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -239,6 +373,25 @@
   <script src="js/includes.js"></script>
   <script src="js/blog-detail.js"></script>
   <script src="js/products.js"></script>
+
+  <script>
+    // Weave type tab switching
+    document.querySelectorAll('.weave-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.weave-tab').forEach(function(t) {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.weave-content').forEach(function(c) {
+          c.classList.remove('active');
+        });
+        this.classList.add('active');
+        this.setAttribute('aria-selected', 'true');
+        var target = document.getElementById('tab-' + this.dataset.tab);
+        if (target) target.classList.add('active');
+      });
+    });
+  </script>
 
 </body>
 </html>
