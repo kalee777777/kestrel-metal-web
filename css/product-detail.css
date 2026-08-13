@@ -435,6 +435,95 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* ---------- Spec Simulator Light Theme Overrides ---------- */
+.product-section-light .spec-sim-card {
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.product-section-light .spec-sim-stats {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.product-section-light .spec-sim-stat {
+  border-right: 1px solid #e5e7eb;
+}
+
+.product-section-light .spec-sim-stat-value {
+  color: var(--color-black);
+}
+
+.product-section-light .spec-sim-visual {
+  background: #f3f4f6;
+}
+
+.product-section-light .spec-sim-center-line {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.product-section-light .spec-sim-slider-group label {
+  color: var(--color-black);
+}
+
+.product-section-light .spec-sim-slider-group input[type="range"] {
+  background: #e5e7eb;
+}
+
+.product-section-light .spec-sim-hint {
+  color: var(--color-gray);
+}
+
+.product-section-light .gabion-mesh-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  color: var(--color-black);
+  font-size: 0.88rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  outline: none;
+}
+
+.product-section-light .gabion-mesh-select option {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+.product-section-light .gabion-mesh-select:focus {
+  border-color: var(--color-orange-primary);
+  box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15);
+}
+
+.product-section-light .specs-table-wrap {
+  border-color: #e5e7eb;
+}
+
+.product-section-light .specs-table th {
+  background: var(--color-gray-light);
+  color: var(--color-black);
+}
+
+.product-section-light .specs-table td {
+  color: var(--color-black);
+  border-top-color: #e5e7eb;
+}
+
+.product-section-light .specs-table tbody tr:nth-child(even) {
+  background: var(--color-gray-light);
+}
+
+@media (max-width: 768px) {
+  .product-section-light .spec-sim-stat:nth-child(1),
+  .product-section-light .spec-sim-stat:nth-child(2) {
+    border-bottom: 1px solid #e5e7eb;
+  }
+}
+
 @media (max-width: 768px) {
   .spec-sim-stats {
     grid-template-columns: repeat(2, 1fr);
