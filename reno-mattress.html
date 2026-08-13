@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Reno mattresses (gabion mattresses) are thin, flat gabion units for channel lining, riverbank protection, and scour defense. Low-profile design with hexagonal double-twisted woven wire mesh.">
+  <title>Reno Mattress | KESTREL METAL</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+
+  <style>
+    .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
+    .spec-table-wrap table { width: 100%; border-collapse: collapse; min-width: 640px; margin: 0; }
+    .spec-table-wrap th, .spec-table-wrap td { border: 1px solid #eceef1; padding: 12px 16px; text-align: left; font-size: .9rem; }
+    .spec-table-wrap thead th { background: #F7F7F5; color: var(--color-black); font-family: var(--font-display); letter-spacing: .5px; font-size: .8rem; }
+    .spec-table-wrap tbody tr:nth-child(even) { background: #FBFBFA; }
+    .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
+    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
+
+    .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+    .pack-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px 24px; text-align: center; transition: all .3s ease; }
+    .pack-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.10); border-color: var(--color-orange-primary); }
+    .pack-icon { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E0); display: flex; align-items: center; justify-content: center; color: var(--color-orange-primary); }
+    .pack-card h3 { font-size: 1.02rem; font-weight: 600; color: var(--color-black); margin-bottom: 8px; }
+    .pack-card p { font-size: .86rem; color: #4b5563; line-height: 1.6; }
+    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
+
+    .info-layout { display: grid; grid-template-columns: 1.12fr .88fr; gap: 3rem; align-items: start; }
+    .info-left h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 1px; font-size: 1.55rem; color: var(--color-black); text-transform: uppercase; padding-left: .9rem; border-left: 4px solid var(--color-orange-primary); margin: 2.4rem 0 1.1rem; line-height: 1.15; }
+    .info-left h3:first-child { margin-top: 0; }
+    .info-left p { color: #4b5563; line-height: 1.85; font-size: .98rem; margin: 0 0 1rem; }
+    .benefits-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .benefits-list li { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; color: #374151; line-height: 1.55; }
+    .benefits-list .chk { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); display: inline-flex; align-items: center; justify-content: center; font-size: .8rem; margin-top: 1px; }
+    .info-right { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+    .info-right .info-img-card { position: relative; border-radius: 14px; overflow: hidden; height: 220px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+    .info-right .info-img-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s ease; }
+    .info-right .info-img-card:hover .info-img-bg { transform: scale(1.06); }
+    .info-right .info-img-cap { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.76), rgba(0,0,0,.14) 60%, rgba(0,0,0,.08)); display: flex; align-items: flex-end; gap: 6px; padding: 12px 14px; color: var(--color-white); font-weight: 600; font-size: .86rem; }
+    .info-right .info-img-cap svg { color: var(--color-orange-primary); flex: 0 0 auto; }
+    @media (max-width: 900px) { .info-layout { grid-template-columns: 1fr; gap: 2rem; } .info-right { grid-template-columns: 1fr; } .info-right .info-img-card { height: 200px; } }
+
+    .spec-types-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .spec-type-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 18px; overflow: hidden; transition: all .3s ease; box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+    .spec-type-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.12); border-color: var(--color-orange-primary); }
+    .spec-type-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #f9fafb; }
+    .spec-type-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    .spec-type-card:hover .spec-type-img img { transform: scale(1.04); }
+    .spec-type-info { padding: 1.25rem 1.25rem 1.5rem; }
+    .spec-type-tag { display: inline-block; padding: .3rem .8rem; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); font-size: .72rem; font-weight: 600; border-radius: 6px; letter-spacing: .5px; text-transform: uppercase; margin-bottom: .75rem; }
+    .spec-type-info h4 { font-size: 1.05rem; font-weight: 700; color: var(--color-black); margin: 0 0 .5rem; }
+    .spec-type-info p { font-size: .85rem; color: #6b7280; line-height: 1.5; margin: 0; }
+    @media (max-width: 900px) { .spec-types-gallery { grid-template-columns: 1fr; gap: 1.25rem; } }
+
+    .material-info-list { list-style: none; padding: 0; margin: 2.2rem 0 0; }
+    .material-info-list li { position: relative; padding: .5rem 0 .5rem 1.5rem; font-size: .9rem; color: #4b5563; line-height: 1.65; }
+    .material-info-list li::before { content: ''; position: absolute; left: 0; top: .98rem; width: 7px; height: 7px; border-radius: 50%; background: var(--color-orange-primary); }
+    .material-info-list strong { color: var(--color-black); font-weight: 600; }
+
+    .article-hero-content .article-hero-desc { color: #ffffff; }
+    .article-hero-content .article-hero-title { color: #ffffff; }
+    .article-hero-content .article-hero-kicker { color: #ffffff; }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress"><div id="scroll-progress" class="scroll-progress-bar"></div></div>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=reno%20mattress%20gabion%20riverbank%20protection%20channel%20lining%20stone%20filled%20hexagonal%20mesh%20erosion%20control&image_size=landscape_16_9');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="products.html">Products</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="woven-wire-mesh.html">Woven Wire Mesh</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="woven-gabion-box.html">Woven Gabion Box</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">Reno Mattress</span>
+        </nav>
+        <span class="article-hero-kicker">Thin &amp; Flat Gabion Units</span>
+        <h1 class="article-hero-title">Reno Mattress</h1>
+        <p class="article-hero-desc">Thin, flat gabion units for channel lining, riverbank protection, and scour defense. Low-profile design with hexagonal double-twisted woven wire mesh for erosion control.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. PRODUCT TYPES ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1200px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Product Types</span>
+          <h2>Reno Mattress Specifications</h2>
+          <p>Three standard configurations available for different hydraulic engineering and erosion control applications.</p>
+        </div>
+        <div class="spec-types-gallery" data-reveal>
+          <div class="spec-type-card">
+            <div class="spec-type-img">
+              <img src="products/wire/gabion-mattress-type-a.jpg" alt="Reno Mattress Type A - Standard" loading="lazy">
+            </div>
+            <div class="spec-type-info">
+              <span class="spec-type-tag">Standard Type A</span>
+              <h4>300 &times; 3000 &times; 2000 mm</h4>
+              <p>Mesh: 60 &times; 80 mm | Wire: 2.7 mm | Stone: 70&ndash;150 mm</p>
+            </div>
+          </div>
+          <div class="spec-type-card">
+            <div class="spec-type-img">
+              <img src="products/wire/gabion-mattress-type-b.jpg" alt="Reno Mattress Type B - Heavy Duty" loading="lazy">
+            </div>
+            <div class="spec-type-info">
+              <span class="spec-type-tag">Heavy Duty Type B</span>
+              <h4>500 &times; 3000 &times; 2000 mm</h4>
+              <p>Mesh: 50 &times; 50 mm | Wire: 3.0 mm | Stone: 60&ndash;150 mm</p>
+            </div>
+          </div>
+          <div class="spec-type-card">
+            <div class="spec-type-img">
+              <img src="products/wire/gabion-mattress-type-c.jpg" alt="Reno Mattress Type C - Reinforced" loading="lazy">
+            </div>
+            <div class="spec-type-info">
+              <span class="spec-type-tag">Reinforced Type C</span>
+              <h4>300 &times; 4000 &times; 2000 mm</h4>
+              <p>Mesh: 60 &times; 80 mm | Wire: 2.7 mm | Stone: 70&ndash;150 mm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. MATTRESS SPECIFICATIONS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Technical Data</span>
+          <h2>Reno Mattress Specifications</h2>
+          <p>Standard dimensions and parameters for reno mattresses in different configurations.</p>
+        </div>
+        <div class="spec-table-wrap" style="margin-bottom: 2rem;">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Mattress Height (mm)</th>
+                <th>Length (mm)</th>
+                <th>Width (mm)</th>
+                <th>Mesh Opening (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Standard Type A</td><td>300</td><td>3000</td><td>2000</td><td>60 &times; 80</td></tr>
+              <tr><td>Heavy Duty Type B</td><td>500</td><td>3000</td><td>2000</td><td>50 &times; 50</td></tr>
+              <tr><td>Reinforced Type C</td><td>300</td><td>4000</td><td>2000</td><td>60 &times; 80</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="spec-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Mesh Wire (mm)</th>
+                <th>Selvedge Wire (mm)</th>
+                <th>Lacing Wire (mm)</th>
+                <th>Filling Stone (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Standard Type A</td><td>2.7</td><td>3.4</td><td>2.2</td><td>70 &ndash; 150</td></tr>
+              <tr><td>Heavy Duty Type B</td><td>3.0</td><td>3.8</td><td>2.2</td><td>60 &ndash; 150</td></tr>
+              <tr><td>Reinforced Type C</td><td>2.7</td><td>3.4</td><td>2.2</td><td>70 &ndash; 150</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul class="material-info-list">
+          <li><strong>Material:</strong> high-quality low-carbon steel wire</li>
+          <li><strong>Coating:</strong> hot-dip galvanized or PVC coated</li>
+          <li><strong>Mesh Construction:</strong> hexagonal double-twisted woven</li>
+          <li>Custom specifications and sizes available upon request</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 4. PRODUCT INFO & BENEFITS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="article-container" style="max-width:1180px;">
+        <div class="info-layout">
+          <div class="info-left">
+            <h3>Product Information</h3>
+            <p>Reno mattresses, also known as gabion mattresses, are thin, flat gabion units manufactured from hexagonal double-twisted woven wire mesh. Unlike standard gabion baskets, reno mattresses have a significantly lower profile, typically ranging from 300mm to 500mm in height, making them ideal for applications requiring flexible, erosion-resistant coverage over large surface areas.</p>
+            <p>The primary function of reno mattresses is to provide scour protection and erosion control for hydraulic structures, riverbeds, and channel linings. Their low-profile design allows them to conform closely to the underlying terrain, providing continuous protection against water-induced erosion while maintaining natural groundwater flow through the permeable stone-filled structure.</p>
+            <p>Reno mattresses are delivered flat-packed for efficient transportation and can be easily assembled on-site. Once filled with natural stone, they create a stable, flexible lining that allows vegetation to establish over time, promoting ecological restoration and blending seamlessly with the natural environment.</p>
+
+            <h3>Benefits</h3>
+            <ul class="benefits-list">
+              <li><span class="chk">&#10003;</span><span>Low-profile design conforms to irregular terrain and channel beds.</span></li>
+              <li><span class="chk">&#10003;</span><span>Excellent erosion protection for riverbeds and hydraulic structures.</span></li>
+              <li><span class="chk">&#10003;</span><span>Permeable structure maintains natural groundwater flow.</span></li>
+              <li><span class="chk">&#10003;</span><span>Allows vegetation establishment for ecological restoration.</span></li>
+              <li><span class="chk">&#10003;</span><span>Durable double-twist mesh withstands high-velocity water flow.</span></li>
+              <li><span class="chk">&#10003;</span><span>Easy transportation and installation due to flat-pack delivery.</span></li>
+            </ul>
+
+            <h3>Application</h3>
+            <p>Reno mattresses are extensively used in channel lining, riverbank protection, scour protection, coastal defense, outlet structures, and dam toe protection. Their flexibility and durability make them the preferred solution for hydraulic engineers requiring reliable, long-term erosion control in rivers, canals, and coastal environments.</p>
+          </div>
+          <div class="info-right">
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=river%20channel%20lining%20reno%20mattress%20gabion%20stone%20filled%20erosion%20control%20hydraulic%20engineering&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 6c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>
+                River Channel Lining
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=riverbank%20erosion%20protection%20gabion%20mattress%20reno%20stone%20filled%20river%20bank%20stabilization&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-8h6v8"/></svg>
+                Riverbank Protection
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=scour%20protection%20installation%20reno%20mattress%20gabion%20foundation%20engineering%20construction%20site&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Scour Protection
+              </div>
+            </div>
+            <div class="info-img-card" data-reveal>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=coastal%20defense%20project%20gabion%20mattress%20sea%20wall%20wave%20protection%20beach%20erosion%20control&image_size=square_hd');"></div>
+              <div class="info-img-cap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Coastal Defense
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. PACKING & PACKAGING ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1080px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Packing</span>
+          <h2>Packing &amp; Packaging</h2>
+        </div>
+        <div class="pack-grid">
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3>Flat-Packed Units</h3>
+            <p>Reno mattresses are collapsed and flat-packed for efficient transportation, maximizing container space utilization.</p>
+          </div>
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            </div>
+            <h3>Bale Packaging</h3>
+            <p>Flat mattresses are tied in bales and wrapped in plastic film for protection during storage and shipping.</p>
+          </div>
+          <div class="pack-card" data-reveal>
+            <div class="pack-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>
+            </div>
+            <h3>Container Loading</h3>
+            <p>Bales are loaded into 20ft or 40ft containers for secure, cost-effective ocean freight delivery.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. INQUIRY CTA ============ -->
+    <section class="article-cta">
+      <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=reno%20mattress%20gabion%20installation%20riverbank%20protection%20construction%20site%20civil%20engineering&image_size=landscape_16_9');"></div>
+      <div class="article-cta-overlay"></div>
+      <div class="article-cta-content">
+        <h2 class="article-cta-title">Get a Quote for Reno Mattress</h2>
+        <p class="article-cta-desc">Tell us your mattress type, dimensions, mesh size and quantity &mdash; our team will respond with a tailored quotation and delivery plan within 24 hours.</p>
+        <div class="article-cta-buttons">
+          <a href="contact.html" class="btn-hero-primary">REQUEST A QUOTE
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="woven-gabion-box.html" class="btn-hero-secondary">VIEW GABION PRODUCTS</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
+  <script src="js/products.js"></script>
+
+</body>
+</html>

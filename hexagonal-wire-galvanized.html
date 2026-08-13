@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Galvanized hexagonal wire netting — chicken wire / poultry netting in electric or hot-dip galvanized finishes. Normal & reverse twist, mesh 3/8-inch to 4-inch, BWG 14-32 for agricultural, garden and gabion applications.">
+  <meta name="description" content="Galvanized hexagonal wire netting — chicken wire / poultry netting in electric or hot-dip galvanized finishes. Normal twist, mesh 3/8-inch to 4-inch, BWG 14-32 for agricultural, garden and gabion applications.">
   <title>Galvanized Hexagonal Wire Netting | KESTREL METAL</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,8 +16,6 @@
   <link rel="stylesheet" href="css/products.css">
   <link rel="stylesheet" href="css/product-detail.css">
   <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/faq.css">
-  <link rel="stylesheet" href="css/blog.css">
 
   <style>
     .spec-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid #e5e7eb; background: var(--color-white); }
@@ -26,6 +24,7 @@
     .spec-table-wrap thead th { background: #F7F7F5; color: var(--color-black); font-family: var(--font-display); letter-spacing: .5px; font-size: .8rem; }
     .spec-table-wrap tbody tr:nth-child(even) { background: #FBFBFA; }
     .spec-table-wrap td:first-child { font-weight: 600; color: var(--color-black); white-space: nowrap; }
+    @media (max-width: 768px) { .pack-grid { grid-template-columns: 1fr; } }
 
     .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
     .pack-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px 24px; text-align: center; transition: all .3s ease; }
@@ -58,85 +57,6 @@
     .article-hero-content .article-hero-desc { color: #ffffff; }
     .article-hero-content .article-hero-title { color: #ffffff; }
     .article-hero-content .article-hero-kicker { color: #ffffff; }
-
-    .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1200px; margin: 0 auto; padding: 0 var(--container-gap); }
-    .apps-grid .app-tile { aspect-ratio: 4 / 3; position: relative; overflow: hidden; border-radius: 10px; }
-    .apps-grid .app-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
-    .apps-grid .app-tile:hover img { transform: scale(1.05); }
-    @media (max-width: 768px) { .apps-grid { grid-template-columns: repeat(2, 1fr); } .apps-grid .app-tile { aspect-ratio: 3 / 2; } }
-    @media (max-width: 480px) { .apps-grid { grid-template-columns: 1fr; } .apps-grid .app-tile { aspect-ratio: 16 / 10; } }
-    .faq-section { background: var(--color-white); padding: 5rem var(--container-gap); }
-    .faq-list { max-width: 980px; margin: 2rem auto 0; border-top: 1px solid #e5e7eb; }
-    .faq-item { border-bottom: 1px solid #e5e7eb; }
-    .faq-item summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; padding: 1.35rem 0; color: var(--color-black); font-size: 1rem; font-weight: 600; }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::after { content: '+'; color: var(--color-orange-primary); font-size: 1.5rem; font-weight: 300; line-height: 1; }
-    .faq-item[open] summary::after { content: '−'; }
-    .faq-answer { padding: 0 3rem 1.35rem 0; color: #4b5563; line-height: 1.8; font-size: .95rem; }
-    @media (max-width: 600px) { .faq-section { padding: 3.5rem var(--container-gap); } .faq-item summary { font-size: .94rem; } }
-
-    /* Security Fence Features Carousel */
-    .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; padding: 0 64px; }
-    .carousel-wrapper { width: 100%; padding: 6px 0; margin: -6px 0; overflow: hidden; }
-    .carousel-track { display: flex; align-items: stretch; gap: 20px; transition: transform 0.5s ease-in-out; }
-    .carousel-track .feature-card { flex: 0 0 calc((100% - 40px) / 3); box-sizing: border-box; }
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; background: var(--color-white); border: 1px solid #e5e7eb; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .3s ease; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
-    .carousel-btn:hover { background: var(--color-orange-primary); border-color: var(--color-orange-primary); color: var(--color-white); }
-    .carousel-prev { left: 0; }
-    .carousel-next { right: 0; }
-    .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
-    .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; cursor: pointer; transition: all .3s ease; }
-    .carousel-dot.active { background: var(--color-orange-primary); width: 24px; border-radius: 5px; }
-    .carousel-dot:hover { background: var(--color-orange-bg-light); }
-    .feature-card { background: var(--color-white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 32px 24px; text-align: center; transition: all .3s ease; }
-    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.12); border-color: var(--color-orange-primary); }
-    .feature-icon { width: 64px; height: 64px; margin: 0 auto 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E0); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--color-orange-primary); font-size: 1.5rem; }
-    .feature-card h3 { font-size: 1.05rem; font-weight: 600; color: var(--color-black); margin-bottom: 8px; }
-    .feature-card p { font-size: .88rem; color: #4b5563; line-height: 1.6; }
-    @media (max-width: 1024px) { .carousel-track .feature-card { flex: 0 0 calc((100% - 20px) / 2); } }
-    @media (max-width: 768px) { .carousel-container { padding: 0 50px; } .carousel-track .feature-card { flex: 0 0 calc((100% - 20px) / 2); } .carousel-btn { width: 40px; height: 40px; } }
-
-    /* ===== Security Fence Features - Black Glassmorphism style ===== */
-    .security-features { position: relative; overflow: hidden; background: radial-gradient(1200px 600px at 0% 0%, rgba(255,103,31,.14), transparent 55%), radial-gradient(1000px 500px at 100% 100%, rgba(255,103,31,.10), transparent 55%), #0a0a0a; }
-    .security-features .security-features-glow { position: absolute; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(255,103,31,.22), transparent 65%); top: -160px; right: -120px; filter: blur(20px); pointer-events: none; z-index: 0; }
-    .security-features .section-header { position: relative; z-index: 1; }
-    .security-features .section-header .category-tag { color: var(--color-orange-primary); border-color: rgba(255,103,31,.4); }
-    .security-features .carousel-container { position: relative; z-index: 1; }
-    .security-features .carousel-track .feature-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0,0,0,.35); color: rgba(255,255,255,.9); }
-    .security-features .feature-card:hover { border-color: var(--color-orange-primary); background: rgba(255,255,255,.10); box-shadow: 0 20px 44px rgba(0,0,0,.5), 0 0 24px rgba(255,103,31,.15); }
-    .security-features .feature-icon { background: linear-gradient(135deg, rgba(255,103,31,.18), rgba(255,103,31,.06)); color: var(--color-orange-primary); }
-    .security-features .feature-card h3 { color: var(--color-white); }
-    .security-features .feature-card p { color: rgba(255,255,255,.72); }
-    .security-features .carousel-btn { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); color: var(--color-white); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-    .security-features .carousel-btn:hover { background: var(--color-orange-primary); border-color: var(--color-orange-primary); color: var(--color-white); }
-    .security-features .carousel-dot { background: rgba(255,255,255,.28); }
-    .security-features .carousel-dot.active { background: var(--color-orange-primary); }
-
-    /* Specification Simulator */
-    .sim-wrap { max-width: 1024px; margin: 0 auto; }
-    .sim-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding: 1.5rem; background: #f7f7f5; border-radius: 12px 12px 0 0; border: 1px solid #e5e7eb; border-bottom: none; text-align: center; }
-    .sim-stats .sim-stat-label { font-size: .7rem; color: #6b7280; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .25rem; }
-    .sim-stats .sim-stat-value { font-size: 1.25rem; font-weight: 700; color: #111827; }
-    .sim-stats .sim-stat-value.accent { color: var(--color-orange-primary); }
-    .sim-canvas { position: relative; width: 100%; height: 320px; background: var(--color-white); overflow: hidden; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; }
-    .sim-mesh { position: absolute; inset: 0; }
-    .sim-center-wrap { position: absolute; z-index: 10; display: flex; align-items: center; justify-content: center; }
-    .sim-center-line { position: absolute; width: 128px; height: 0; border-top: 2px dashed var(--color-orange-primary); }
-    .sim-center-badge { position: relative; width: 56px; height: 56px; background: rgba(255,255,255,.95); border-radius: 50%; border: 2px dashed var(--color-orange-primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,.1); z-index: 20; }
-    .sim-center-label { font-weight: 700; color: var(--color-orange-primary); font-size: .85rem; }
-    .sim-controls { padding: 1.5rem 2rem 2rem; background: var(--color-white); border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
-    .sim-controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
-    .sim-field-head { display: flex; justify-content: space-between; margin-bottom: .5rem; }
-    .sim-field-head label { font-weight: 700; color: #374151; text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; }
-    .sim-field-head .sim-val { font-family: monospace; color: var(--color-orange-primary); font-weight: 700; font-size: .9rem; }
-    .sim-range { -webkit-appearance: none; width: 100%; background: transparent; margin-bottom: .5rem; }
-    .sim-range::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--color-orange-primary); cursor: pointer; margin-top: -7px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
-    .sim-range::-moz-range-thumb { height: 18px; width: 18px; border: none; border-radius: 50%; background: var(--color-orange-primary); cursor: pointer; }
-    .sim-range::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #e5e7eb; border-radius: 2px; }
-    .sim-range::-moz-range-track { width: 100%; height: 4px; cursor: pointer; background: #e5e7eb; border-radius: 2px; }
-    .sim-finish-field label { display: block; font-weight: 700; color: #374151; text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; margin-bottom: .5rem; }
-    .sim-finish-select { width: 50%; padding: .75rem; border: 1px solid #d1d5db; border-radius: 8px; background: var(--color-white); outline: none; font-size: .9rem; cursor: pointer; }
-    @media (max-width: 768px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-finish-select { width: 100%; } .sim-stats { grid-template-columns: 1fr 1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -169,99 +89,11 @@
       </div>
     </section>
 
-    <section class="product-overview">
-      <div class="product-overview-inner">
-        <div class="product-overview-image">
-          <span class="product-badge">Core Product</span>
-          <img src="products/wire/hexagonal-netting-product.webp" alt="Galvanized Hexagonal Wire Netting roll" loading="lazy">
-        </div>
-        <div class="product-overview-text">
-          <span class="category-tag">Product Overview</span>
-          <h2>Flexible Protection,<br>Built for the Outdoors</h2>
-          <p>Galvanized hexagonal wire netting, also known as chicken wire or poultry netting, is woven from low-carbon steel wire and protected with an electric or hot-dip galvanized zinc coating. Its flexible hexagonal openings conform easily to uneven ground, curved boundaries and irregular structures.</p>
-          <p>Normal twist offers an economical solution for everyday fencing, while reverse twist improves structural stability where the mesh must resist local wire damage. From poultry enclosures and gardens to gabion walls and erosion control, it provides dependable protection with simple installation.</p>
-          <p>Modern automated weaving keeps mesh openings and wire tension consistent across each roll. The result is a lightweight, cost-effective material that balances visibility, airflow, flexibility and dependable outdoor performance.</p>
-          <ul>
-            <li>Electric or hot-dip galvanized finish</li>
-            <li>Normal and reverse twist patterns</li>
-            <li>Mesh sizes from 3/8-inch to 4-inch</li>
-            <li>BWG 14 to 32 wire gauges</li>
-            <li>Lightweight, flexible and easy to install</li>
-            <li>Suitable for agricultural and industrial use</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="product-features-strip">
-      <div class="product-features-strip-inner">
-        <div class="feature-stat">
-          <div class="feature-stat-num">11</div>
-          <div class="feature-stat-label">Normal Twist Mesh Sizes<br>3/8-inch to 4-inch</div>
-        </div>
-        <div class="feature-stat">
-          <div class="feature-stat-num">32–14</div>
-          <div class="feature-stat-label">BWG Wire Gauges<br>Fine to Heavy Duty</div>
-        </div>
-        <div class="feature-stat">
-          <div class="feature-stat-num">2</div>
-          <div class="feature-stat-label">Weaving Patterns<br>Normal &amp; Reverse Twist</div>
-        </div>
-        <div class="feature-stat">
-          <div class="feature-stat-num">HDG</div>
-          <div class="feature-stat-label">Surface Treatment<br>Long Outdoor Service</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="product-section-light product-section-light-alt">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Product Range</span>
-        <h2>Hexagonal Wire <span class="accent">Types</span></h2>
-        <p>Choose the finish that best matches your corrosion, appearance and service-life requirements.</p>
-      </div>
-      <div class="article-container">
-        <div class="products-grid">
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="PVC coated hexagonal wire netting" loading="lazy"></div>
-            <div class="product-card-content">
-              <h3 class="product-name">PVC Coated Hexagonal Mesh</h3>
-              <p class="product-desc">A galvanized core with a durable colored PVC coating for enhanced outdoor corrosion resistance and visual integration.</p>
-              <div class="product-specs"><span class="spec-tag">Green / Black</span><span class="spec-tag">0.4–2.0mm Wire</span></div>
-              <a href="hexagonal-wire-pvc.html" class="product-card-link">View Details <span>&rarr;</span></a>
-            </div>
-          </article>
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="Stainless steel hexagonal wire netting" loading="lazy"></div>
-            <div class="product-card-content">
-              <h3 class="product-name">Stainless Hexagonal Mesh</h3>
-              <p class="product-desc">Premium AISI 304 or 316 stainless steel for marine, chemical, food processing and high-corrosion environments.</p>
-              <div class="product-specs"><span class="spec-tag">AISI 304 / 316</span><span class="spec-tag">BWG 14–32</span></div>
-              <a href="hexagonal-wire-stainless.html" class="product-card-link">View Details <span>&rarr;</span></a>
-            </div>
-          </article>
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="Galvanized hexagonal wire netting" loading="lazy"></div>
-            <div class="product-card-content">
-              <h3 class="product-name">Galvanized Hexagonal Mesh</h3>
-              <p class="product-desc">Galvanized hexagonal wire netting with an electric or hot-dip zinc coating for economical general-purpose fencing, agriculture and construction.</p>
-              <div class="product-specs"><span class="spec-tag">Normal / Reverse Twist</span><span class="spec-tag">BWG 14–32</span></div>
-              <a href="#specifications" class="product-card-link">View Details <span>&rarr;</span></a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="specifications" class="product-section-light">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Technical Data</span>
-        <h2>Product <span class="accent">Specifications</span></h2>
-        <p>Normal twist and reverse twist mesh ranges for galvanized hexagonal wire netting.</p>
-      </div>
+    <!-- ============ 2. WIRE SPECIFICATIONS ============ -->
+    <section class="product-section-light">
       <div class="article-container" style="max-width:1080px;">
         <div class="section-header" data-reveal>
-          <span class="category-tag">Normal Twist</span>
+          <span class="category-tag">Technical Data</span>
           <h2>Wire Mesh Specifications</h2>
           <p>Available mesh sizes, aperture and wire gauges for normal twist hexagonal wire netting.</p>
         </div>
@@ -289,100 +121,17 @@
             </tbody>
           </table>
         </div>
+        <ul class="material-info-list">
+          <li><strong>Wire material:</strong> high-quality low-carbon steel wire</li>
+          <li><strong>Coating:</strong> electric galvanized or hot-dip galvanized (zinc coating 40 - 100 g/m&sup2;)</li>
+          <li><strong>Weaving pattern:</strong> normal twist</li>
+          <li>Custom mesh sizes and wire gauges available upon request</li>
+        </ul>
       </div>
     </section>
 
-    <!-- ============ 2.5 SPECIFICATION SIMULATOR ============ -->
+    <!-- ============ 3. PRODUCT INFO &amp; BENEFITS ============ -->
     <section class="product-section-light product-section-light-alt">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Interactive</span>
-        <h2>Specification <span class="accent">Simulator</span></h2>
-        <p>Customize mesh opening, wire diameter and surface finish to preview the hexagonal pattern in real time.</p>
-      </div>
-      <div class="sim-wrap">
-        <div class="sim-stats">
-          <div>
-            <p class="sim-stat-label">Opening</p>
-            <p class="sim-stat-value" id="stat-opening">1.00"</p>
-          </div>
-          <div>
-            <p class="sim-stat-label">Metric</p>
-            <p class="sim-stat-value" id="stat-metric">25.4 mm</p>
-          </div>
-          <div>
-            <p class="sim-stat-label">Wire Dia</p>
-            <p class="sim-stat-value accent" id="stat-dia">1.20 mm</p>
-          </div>
-        </div>
-        <div class="sim-canvas">
-          <svg class="sim-mesh" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <pattern id="hexGrid" patternUnits="userSpaceOnUse" width="100" height="173.2">
-                <path fill="none" stroke="#9ca3af" stroke-width="3" id="mesh-lines" stroke-linecap="round" stroke-linejoin="round"></path>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#hexGrid)"></rect>
-          </svg>
-          <div class="sim-center-wrap">
-            <div class="sim-center-line"></div>
-            <div class="sim-center-badge"><span class="sim-center-label" id="center-label">1.0"</span></div>
-          </div>
-        </div>
-        <div class="sim-controls">
-          <div class="sim-controls-grid">
-            <div>
-              <div class="sim-field-head"><label for="input-opening">Mesh Opening (Inch)</label><span class="sim-val" id="val-opening">1.00</span></div>
-              <input type="range" class="sim-range" id="input-opening" min="0.5" max="4" step="0.25" value="1">
-            </div>
-            <div>
-              <div class="sim-field-head"><label for="input-dia">Wire Diameter (mm)</label><span class="sim-val" id="val-dia">1.20</span></div>
-              <input type="range" class="sim-range" id="input-dia" min="0.4" max="2.5" step="0.1" value="1.2">
-            </div>
-          </div>
-          <div class="sim-finish-field">
-            <label for="input-finish">Surface Finish</label>
-            <select class="sim-finish-select" id="input-finish">
-              <option value="#9ca3af">Galvanized (Zinc Grey)</option>
-              <option value="#064e3b">PVC Coated (Dark Green)</option>
-              <option value="#111827">PVC Coated (Black)</option>
-              <option value="#1e3a8a">PVC Coated (Industrial Blue)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 3. REVERSE TWIST SPECIFICATIONS ============ -->
-    <section id="reverse-twist-specifications" class="product-section-light product-section-light-alt">
-      <div class="article-container" style="max-width:1080px;">
-        <div class="section-header" data-reveal>
-          <span class="category-tag">Reverse Twist</span>
-          <h2>Reverse Twist Specifications</h2>
-          <p>Greater structural stability with adjacent wires twisted in opposite directions.</p>
-        </div>
-        <div class="spec-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Mesh Size (inch)</th>
-                <th>Mesh Size (mm)</th>
-                <th>Wire Gauge (BWG)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>1"</td><td>25</td><td>25, 24, 23, 22, 21, 20, 19, 18</td></tr>
-              <tr><td>1-1/4"</td><td>32</td><td>23, 22, 21, 20, 19, 18</td></tr>
-              <tr><td>1-1/2"</td><td>40</td><td>23, 22, 21, 20, 19, 18, 17</td></tr>
-              <tr><td>2"</td><td>50</td><td>23, 22, 21, 20, 19, 18, 17, 16</td></tr>
-              <tr><td>3"</td><td>75</td><td>20, 19, 18, 17, 16</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 4. PRODUCT INFO &amp; BENEFITS ============ -->
-    <section class="product-section-light">
       <div class="article-container" style="max-width:1180px;">
         <div class="info-layout">
           <div class="info-left">
@@ -404,28 +153,28 @@
           </div>
           <div class="info-right">
             <div class="info-img-card" data-reveal>
-              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-poultry.webp');"></div>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%20hexagonal%20wire%20mesh%20poultry%20fencing%20chicken%20wire%20enclosure%20farm%20barn%20rural%20landscape&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><path d="M12 7v6M9 10h6"/></svg>
                 For Poultry Fencing
               </div>
             </div>
             <div class="info-img-card" data-reveal>
-              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-garden.webp');"></div>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%20hexagonal%20wire%20mesh%20garden%20protection%20plant%20enclosure%20vegetable%20garden%20fencing&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-8a4 4 0 0 1 4-4h1a2 2 0 0 1 2 2v1a4 4 0 0 1-4 4h-3"/></svg>
                 For Garden Protection
               </div>
             </div>
             <div class="info-img-card" data-reveal>
-              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-gabion.webp');"></div>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=gabion%20wall%20construction%20galvanized%20hexagonal%20wire%20mesh%20stone%20filled%20retaining%20structure%20landscape&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-1"/></svg>
                 For Gabion Wall Construction
               </div>
             </div>
             <div class="info-img-card" data-reveal>
-              <div class="info-img-bg" style="background-image:url('products/wire/galvanized-hex-erosion.webp');"></div>
+              <div class="info-img-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=erosion%20control%20slope%20protection%20galvanized%20hexagonal%20wire%20mesh%20rock%20fall%20netting%20mountain&image_size=square_hd');"></div>
               <div class="info-img-cap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                 For Erosion Control
@@ -436,73 +185,8 @@
       </div>
     </section>
 
-    <!-- ============ 5. KEY FEATURES ============ -->
-    <section id="features" class="product-section-dark security-features">
-      <div class="security-features-glow"></div>
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Product Features</span>
-        <h2>Galvanized Hexagonal <span class="accent">Features</span></h2>
-        <p>Flexible, corrosion-resistant and easy to install &mdash; a dependable mesh solution for agriculture, construction and outdoor protection.</p>
-      </div>
-      <div class="carousel-container">
-        <button class="carousel-btn carousel-prev" type="button" onclick="moveCarousel(-1)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <div class="carousel-wrapper">
-          <div class="carousel-track" id="securityFenceCarousel">
-            <div class="feature-card" data-reveal>
-              <div class="feature-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>
-              </div>
-              <h3>Hexagonal Weave Pattern</h3>
-              <p>Uniform openings provide an excellent strength-to-weight ratio while allowing the mesh to follow uneven ground and irregular shapes.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-              <div class="feature-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg>
-              </div>
-              <h3>Electro &amp; Hot-Dip Galvanized</h3>
-              <p>Select the zinc coating process according to the required corrosion resistance, outdoor exposure and service-life target.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-              <div class="feature-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 20v-5h6v5"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg>
-              </div>
-              <h3>Lightweight &amp; Easy to Install</h3>
-              <p>Flexible rolls can be cut, overlapped, tied and fixed with simple tools, reducing labor and adapting quickly to site conditions.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-              <div class="feature-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 19V9l7-5 7 5v10M8 19v-5h8v5"/><path d="M3 9h18"/></svg>
-              </div>
-              <h3>Versatile Applications</h3>
-              <p>Suitable for poultry fencing, garden protection, farm boundaries, animal enclosures, plastering, gabions and erosion control.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-              <div class="feature-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <h3>Corrosion Protection</h3>
-              <p>Electric or hot-dip galvanized zinc coating resists rust and weathering in humid, coastal and general outdoor environments.</p>
-            </div>
-            <div class="feature-card" data-reveal>
-              <div class="feature-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <h3>Consistent Quality</h3>
-              <p>Automated weaving keeps mesh openings, twist and wire tension uniform across every roll for dependable performance.</p>
-            </div>
-          </div>
-        </div>
-        <button class="carousel-btn carousel-next" type="button" onclick="moveCarousel(1)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <div class="carousel-dots"></div>
-      </div>
-    </section>
-
-    <!-- ============ 6. PACKING &amp; PACKAGING ============ -->
-    <section class="product-section-light product-section-light-alt">
+    <!-- ============ 4. PACKING &amp; PACKAGING ============ -->
+    <section class="product-section-light">
       <div class="article-container" style="max-width:1080px;">
         <div class="section-header" data-reveal>
           <span class="category-tag">Packing</span>
@@ -534,146 +218,7 @@
       </div>
     </section>
 
-    <section class="product-section-dark">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Applications</span>
-        <h2>Where <span class="accent">Galvanized Hexagonal Netting</span> Is Used</h2>
-        <p>Flexible galvanized mesh for agricultural boundaries, animal enclosures, landscape protection and civil engineering projects.</p>
-      </div>
-      <div class="apps-grid">
-        <div class="app-tile">
-          <img src="products/wire/galvanized-hex-poultry.webp" alt="Galvanized hexagonal netting for poultry fencing" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Poultry Fencing</div><div class="app-tile-desc">Lightweight enclosure for chickens, ducks and other birds</div></div>
-        </div>
-        <div class="app-tile">
-          <img src="products/wire/galvanized-hex-garden.webp" alt="Galvanized hexagonal netting for garden protection" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Garden Protection</div><div class="app-tile-desc">Protecting plants, vegetables and landscaped areas</div></div>
-        </div>
-        <div class="app-tile">
-          <img src="products/wire/galvanized-hex-gabion.webp" alt="Galvanized hexagonal netting for gabion wall construction" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Gabion Walls</div><div class="app-tile-desc">Flexible mesh structure for stone-filled retaining systems</div></div>
-        </div>
-        <div class="app-tile">
-          <img src="products/wire/galvanized-hex-erosion.webp" alt="Galvanized hexagonal netting for erosion control" loading="lazy">
-          <div class="app-tile-overlay"><div class="app-tile-label">Erosion Control</div><div class="app-tile-desc">Ground stabilization and rockfall protection on slopes</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 7. STANDARDS STRIP ============ -->
-    <section class="standards-strip">
-      <div class="standards-strip-inner">
-        <h3>Manufactured for Reliable Outdoor Performance</h3>
-        <div class="standards-tags">
-          <span class="standard-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Electric Galvanized</span>
-          <span class="standard-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Hot-Dip Galvanized</span>
-          <span class="standard-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Normal Twist</span>
-          <span class="standard-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reverse Twist</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 8. RELATED PRODUCTS ============ -->
-    <section id="related-products" class="product-section-light product-section-light-alt">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Related Products</span>
-        <h2>Choose Your <span class="accent">Finish</span></h2>
-        <p>Compare the other hexagonal wire netting finishes for your environment and performance requirements.</p>
-      </div>
-      <div class="container">
-        <div class="products-grid">
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="PVC coated hexagonal wire netting" loading="lazy"></div>
-            <div class="product-card-content">
-              <h3 class="product-name">PVC Coated Hexagonal</h3>
-              <p class="product-desc">Galvanized core with a smooth, colorful PVC coating for enhanced weather resistance and visual integration.</p>
-              <div class="product-specs"><span class="spec-tag">Mesh 3/8-inch to 2-inch</span><span class="spec-tag">Wire 0.4-2.0mm</span><span class="spec-tag">Green / Black / Blue</span></div>
-              <a href="hexagonal-wire-pvc.html" class="product-card-link">View Details <span>&rarr;</span></a>
-            </div>
-          </article>
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual"><img src="products/wire/hexagonal-netting-product.webp" alt="Stainless steel hexagonal wire netting" loading="lazy"></div>
-            <div class="product-card-content">
-              <h3 class="product-name">Stainless Steel Hexagonal</h3>
-              <p class="product-desc">Premium AISI 304 or 316 stainless steel for marine, chemical, food processing and corrosive environments.</p>
-              <div class="product-specs"><span class="spec-tag">Mesh 3/8-inch to 4-inch</span><span class="spec-tag">BWG 14-32</span><span class="spec-tag">AISI 304 / 316</span></div>
-              <a href="hexagonal-wire-stainless.html" class="product-card-link">View Details <span>&rarr;</span></a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="product-section-light product-section-light-alt">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Blog</span>
-        <h2>Related <span class="accent">Articles</span></h2>
-        <p>Learn more about hexagonal wire mesh applications, selection and installation.</p>
-      </div>
-      <div class="related-articles-grid">
-        <a class="related-article-card" href="blog-hexagonal-wire-mesh-global-impact.html" data-reveal>
-          <div class="related-article-media">
-            <img src="images/blog/blog-hex-mesh-hero.jpg" alt="Hexagonal wire mesh applications" loading="lazy">
-          </div>
-          <div class="related-article-body">
-            <span class="related-article-tag">Product Information</span>
-            <h3 class="related-article-title">Hexagonal Wire Mesh: A Simple Solution with Global Impact</h3>
-            <div class="related-article-meta">2025 &middot; 8 min read</div>
-            <p class="related-article-desc">Discover how hexagonal wire mesh supports sustainable construction, environmental protection, disaster relief and agriculture worldwide.</p>
-            <span class="related-article-link">Read Article <span>&rarr;</span></span>
-          </div>
-        </a>
-        <a class="related-article-card" href="blog-hexagonal-vs-gabion-mesh.html" data-reveal>
-          <div class="related-article-media">
-            <img src="images/blog/blog-hex-mesh-hero.jpg" alt="Hexagonal wire mesh and gabion mesh comparison" loading="lazy">
-          </div>
-          <div class="related-article-body">
-            <span class="related-article-tag">Selection Guide</span>
-            <h3 class="related-article-title">Hexagonal Wire Mesh vs Gabion Mesh: Key Differences</h3>
-            <div class="related-article-meta">2025 &middot; 10 min read</div>
-            <p class="related-article-desc">Compare structure, applications and selection criteria before choosing a hexagonal or gabion mesh solution.</p>
-            <span class="related-article-link">Read Article <span>&rarr;</span></span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- ============ 10. FAQ ============ -->
-    <section class="faq-section">
-      <div class="section-header" data-reveal>
-        <span class="category-tag">Support</span>
-        <h2>Frequently Asked <span class="accent">Questions</span></h2>
-        <p>Find answers to common questions about galvanized hexagonal wire netting.</p>
-      </div>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>What is galvanized hexagonal wire mesh?</summary>
-          <div class="faq-answer">Galvanized hexagonal wire mesh, commonly known as chicken wire or poultry netting, is a woven wire fencing product made by twisting low-carbon steel wires into uniform hexagonal openings and protecting them with a zinc coating. It is lightweight, flexible and widely used for poultry, garden, farm and construction applications.</div>
-        </details>
-        <details class="faq-item">
-          <summary>What is the difference between electro and hot-dip galvanizing?</summary>
-          <div class="faq-answer">Electro galvanizing applies a thinner, more uniform zinc layer for economical general-purpose use. Hot-dip galvanizing immerses the finished wire in molten zinc, creating a thicker coating and longer service life for demanding outdoor or humid environments.</div>
-        </details>
-        <details class="faq-item">
-          <summary>What mesh size should I choose for poultry fencing?</summary>
-          <div class="faq-answer">A 1-inch or 2-inch mesh is commonly selected for chickens and larger poultry. For chicks, small birds or areas with small predators, choose a smaller 1/2-inch or 3/8-inch opening. The final choice should consider bird size, predator risk and the required wire gauge.</div>
-        </details>
-        <details class="faq-item">
-          <summary>What is the difference between normal twist and reverse twist?</summary>
-          <div class="faq-answer">Normal twist is an economical pattern for general-purpose fencing. Reverse twist alternates the twisting direction of adjacent wires, improving structural stability and helping prevent the mesh from unraveling if one wire is cut.</div>
-        </details>
-        <details class="faq-item">
-          <summary>Can galvanized hexagonal wire mesh be used for plastering?</summary>
-          <div class="faq-answer">Yes. Hexagonal mesh is often used as plastering or stucco lath because it provides a mechanical key for the coating to grip. A 3/4-inch or 1-inch mesh with a heavier wire gauge is commonly selected, and galvanized wire helps reduce rust staining.</div>
-        </details>
-        <details class="faq-item">
-          <summary>How do I install galvanized hexagonal wire mesh?</summary>
-          <div class="faq-answer">Set timber or metal posts along the fence line, unroll the mesh, fasten it with staples or wire ties, overlap adjacent sections by at least one opening, and secure the bottom edge against digging. Wire cutters or tin snips can be used to trim the roll on site.</div>
-        </details>
-      </div>
-    </section>
-
-    <!-- ============ 10. INQUIRY CTA ============ -->
+    <!-- ============ 5. INQUIRY CTA ============ -->
     <section class="article-cta">
       <div class="article-cta-bg" style="background-image:url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%20hexagonal%20wire%20mesh%20rolls%20stacked%20warehouse%20industrial%20wide%20shot&image_size=landscape_16_9');"></div>
       <div class="article-cta-overlay"></div>
@@ -700,110 +245,6 @@
   <script src="js/includes.js"></script>
   <script src="js/blog-detail.js"></script>
   <script src="js/products.js"></script>
-
-  <script>
-    (function () {
-      var featureSlide = 0;
-      var featureTotalCards = 6;
-
-      function getFeatureCardsPerView() {
-        if (window.innerWidth <= 1024) return 2;
-        return 3;
-      }
-      function getFeatureTotalSlides() {
-        return Math.ceil(featureTotalCards / getFeatureCardsPerView());
-      }
-      function updateFeatureCarousel() {
-        var track = document.getElementById('securityFenceCarousel');
-        if (track) {
-          var perView = getFeatureCardsPerView();
-          var slides = getFeatureTotalSlides();
-          var step = track.scrollWidth / slides;
-          track.style.transform = 'translateX(' + (featureSlide * -step) + 'px)';
-        }
-        updateFeatureDots();
-      }
-      function updateFeatureDots() {
-        var totalSlides = getFeatureTotalSlides();
-        var container = document.querySelector('.carousel-dots');
-        if (!container) return;
-        container.innerHTML = '';
-        for (var i = 0; i < totalSlides; i++) {
-          var dot = document.createElement('span');
-          dot.className = 'carousel-dot' + (i === featureSlide ? ' active' : '');
-          (function (i) {
-            dot.onclick = function () { goToSlide(i); };
-          })(i);
-          container.appendChild(dot);
-        }
-      }
-      function moveCarousel(direction) {
-        var totalSlides = getFeatureTotalSlides();
-        featureSlide += direction;
-        if (featureSlide < 0) featureSlide = totalSlides - 1;
-        if (featureSlide >= totalSlides) featureSlide = 0;
-        updateFeatureCarousel();
-      }
-      function goToSlide(index) {
-        featureSlide = index;
-        updateFeatureCarousel();
-      }
-      window.addEventListener('resize', function () {
-        var totalSlides = getFeatureTotalSlides();
-        if (featureSlide >= totalSlides) featureSlide = totalSlides - 1;
-        updateFeatureCarousel();
-      });
-      updateFeatureCarousel();
-      window.moveCarousel = moveCarousel;
-      window.goToSlide = goToSlide;
-    })();
-
-    (function () {
-      var elOpening = document.getElementById('input-opening');
-      var elDia = document.getElementById('input-dia');
-      var elFinish = document.getElementById('input-finish');
-      var outStatOpening = document.getElementById('stat-opening');
-      var outStatMetric = document.getElementById('stat-metric');
-      var outStatDia = document.getElementById('stat-dia');
-      var outValOpening = document.getElementById('val-opening');
-      var outValDia = document.getElementById('val-dia');
-      var outCenterLabel = document.getElementById('center-label');
-      var meshPattern = document.getElementById('hexGrid');
-      var meshLines = document.getElementById('mesh-lines');
-
-      function refresh() {
-        var aperture = parseFloat(elOpening.value);
-        var diameter = parseFloat(elDia.value);
-        var color = elFinish.value;
-
-        outStatOpening.textContent = aperture.toFixed(2) + '"';
-        outValOpening.textContent = aperture.toFixed(2);
-        outCenterLabel.textContent = aperture.toFixed(1) + '"';
-        outStatMetric.textContent = (aperture * 25.4).toFixed(1) + ' mm';
-        outStatDia.textContent = diameter.toFixed(2) + ' mm';
-        outValDia.textContent = diameter.toFixed(2);
-
-        var W = aperture * 80;
-        var L = W / 1.7320508075688772;
-        var H = 3 * L;
-
-        meshPattern.setAttribute('width', W);
-        meshPattern.setAttribute('height', H);
-
-        var pathData = 'M 0 ' + (1.5 * L) + ' L 0 ' + (0.5 * L) + ' L ' + (W / 2) + ' 0 L ' + W + ' ' + (0.5 * L) + ' L ' + W + ' ' + (1.5 * L) + ' L ' + (W / 2) + ' ' + (2 * L) + ' Z M ' + (W / 2) + ' ' + (2 * L) + ' L ' + (W / 2) + ' ' + (3 * L);
-        meshLines.setAttribute('d', pathData.replace(/\s+/g, ' ').trim());
-        meshLines.setAttribute('stroke-width', diameter * 3);
-        meshLines.setAttribute('stroke', color);
-      }
-
-      if (elOpening && elDia && elFinish) {
-        elOpening.addEventListener('input', refresh);
-        elDia.addEventListener('input', refresh);
-        elFinish.addEventListener('change', refresh);
-        refresh();
-      }
-    })();
-  </script>
 
 </body>
 </html>
