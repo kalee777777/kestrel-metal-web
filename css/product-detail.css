@@ -1058,7 +1058,7 @@
 }
 
 .accessories-grid .product-card-visual {
-  height: 160px;
+  aspect-ratio: 1 / 1;
 }
 
 .accessories-grid .product-name {

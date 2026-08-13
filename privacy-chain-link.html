@@ -58,10 +58,10 @@
     .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2rem; }
     .color-card { border-radius: 14px; overflow: hidden; border: 1px solid #e5e7eb; background: var(--color-white); transition: all .3s ease; text-align: center; }
     .color-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,.10); border-color: var(--color-orange-primary); }
-    .color-swatch-area { height: 140px; display: flex; align-items: center; justify-content: center; position: relative; }
-    .color-swatch-block { width: 80px; height: 80px; border-radius: 50%; box-shadow: 0 4px 14px rgba(0,0,0,.2), inset 0 -4px 8px rgba(0,0,0,.15), inset 0 4px 8px rgba(255,255,255,.15); border: 3px solid rgba(255,255,255,.8); }
+    .color-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
     .color-card-info { padding: 14px 16px 18px; }
     .color-card-info h4 { font-size: .92rem; font-weight: 600; color: var(--color-black); margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .color-card-info .color-swatch { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; border: 2px solid #e5e7eb; }
     .color-card-info p { font-size: .8rem; color: #6b7280; line-height: 1.45; }
     @media (max-width: 900px) { .color-grid { grid-template-columns: repeat(2, 1fr); } }
 
@@ -98,7 +98,48 @@
       </div>
     </section>
 
-    <!-- ============ 2. SPECIFICATIONS ============ -->
+    <!-- ============ 2. AVAILABLE COLORS ============ -->
+    <section class="product-section-light">
+      <div class="article-container" style="max-width:1180px;">
+        <div class="section-header" data-reveal>
+          <span class="category-tag">Color Options</span>
+          <h2>Privacy Slat <span class="accent">Color Options</span></h2>
+          <p>Choose from a variety of colors to match your fencing environment. All colors are available across our vinyl-coated wire range.</p>
+        </div>
+        <div class="color-grid">
+          <div class="color-card" data-reveal>
+            <img src="images/privacy-slat-green.webp" alt="Forest Green" loading="lazy">
+            <div class="color-card-info">
+              <h4><span class="color-swatch" style="background:#2d5a27;"></span>Forest Green</h4>
+              <p>Most popular &mdash; blends naturally with landscapes and vegetation</p>
+            </div>
+          </div>
+          <div class="color-card" data-reveal>
+            <img src="images/privacy-slat-black.webp" alt="Redwood" loading="lazy">
+            <div class="color-card-info">
+              <h4><span class="color-swatch" style="background:#8B4513;"></span>Redwood</h4>
+              <p>Rich wood tone &mdash; classic and natural appearance for residential areas</p>
+            </div>
+          </div>
+          <div class="color-card" data-reveal>
+            <img src="images/privacy-slat-brown.webp" alt="Midnight Black" loading="lazy">
+            <div class="color-card-info">
+              <h4><span class="color-swatch" style="background:#1a1a1a;"></span>Midnight Black</h4>
+              <p>Sleek and modern &mdash; ideal for commercial properties and urban settings</p>
+            </div>
+          </div>
+          <div class="color-card" data-reveal>
+            <img src="images/privacy-slat-gray.webp" alt="Royal Blue" loading="lazy">
+            <div class="color-card-info">
+              <h4><span class="color-swatch" style="background:#1e3a6e;"></span>Royal Blue</h4>
+              <p>Bold accent &mdash; stands out in any environment for visibility and style</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. SPECIFICATIONS ============ -->
     <section class="product-section-light">
       <div class="article-container" style="max-width:1140px;">
         <div class="section-header" data-reveal>
@@ -142,7 +183,7 @@
       </div>
     </section>
 
-    <!-- ============ 3. PRODUCT INFO & BENEFITS ============ -->
+    <!-- ============ 4. PRODUCT INFO & BENEFITS ============ -->
     <section class="product-section-light product-section-light-alt">
       <div class="article-container" style="max-width:1180px;">
         <div class="info-layout">
@@ -170,55 +211,6 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                 Privacy Chain Link Fence &mdash; With Privacy Slats
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 4. AVAILABLE COLORS ============ -->
-    <section class="product-section-light">
-      <div class="article-container" style="max-width:1180px;">
-        <div class="section-header" data-reveal>
-          <span class="category-tag">Color Options</span>
-          <h2>Privacy Slat <span class="accent">Color Options</span></h2>
-          <p>Choose from a variety of colors to match your fencing environment. All colors are available across our vinyl-coated wire range.</p>
-        </div>
-        <div class="color-grid">
-          <div class="color-card" data-reveal>
-            <div class="color-swatch-area" style="background:linear-gradient(135deg,#f0f4ec,#d9e2cc);">
-              <div class="color-swatch-block" style="background:#2d5a27;"></div>
-            </div>
-            <div class="color-card-info">
-              <h4>Forest Green</h4>
-              <p>Most popular &mdash; blends naturally with landscapes and vegetation</p>
-            </div>
-          </div>
-          <div class="color-card" data-reveal>
-            <div class="color-swatch-area" style="background:linear-gradient(135deg,#f7f2ec,#ebe0d2);">
-              <div class="color-swatch-block" style="background:#8B4513;"></div>
-            </div>
-            <div class="color-card-info">
-              <h4>Redwood</h4>
-              <p>Rich wood tone &mdash; classic and natural appearance for residential areas</p>
-            </div>
-          </div>
-          <div class="color-card" data-reveal>
-            <div class="color-swatch-area" style="background:linear-gradient(135deg,#edecec,#d5d4d4);">
-              <div class="color-swatch-block" style="background:#1a1a1a;"></div>
-            </div>
-            <div class="color-card-info">
-              <h4>Midnight Black</h4>
-              <p>Sleek and modern &mdash; ideal for commercial properties and urban settings</p>
-            </div>
-          </div>
-          <div class="color-card" data-reveal>
-            <div class="color-swatch-area" style="background:linear-gradient(135deg,#eceff5,#d0d7e6);">
-              <div class="color-swatch-block" style="background:#1e3a6e;"></div>
-            </div>
-            <div class="color-card-info">
-              <h4>Royal Blue</h4>
-              <p>Bold accent &mdash; stands out in any environment for visibility and style</p>
             </div>
           </div>
         </div>

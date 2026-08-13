@@ -228,21 +228,21 @@
 /* ---------- Card Visual ---------- */
 .product-card-visual {
   position: relative;
-  aspect-ratio: 16 / 10;
+  width: 100%;
   overflow: hidden;
-  background: var(--color-gray-light);
+  line-height: 0;
+  background: #f4f4f4;
 }
 
 .product-card-visual img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   transition: transform var(--transition-slow);
 }
 
 .product-card:hover .product-card-visual img {
-  transform: scale(1.08);
+  transform: scale(1.03);
 }
 
 .product-badge {
