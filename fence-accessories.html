@@ -75,6 +75,40 @@
     .security-features .carousel-btn:hover{background:var(--color-orange-primary);border-color:var(--color-orange-primary);color:var(--color-white)}
     .security-features .carousel-dot{background:rgba(255,255,255,.28)}
     .security-features .carousel-dot.active{background:var(--color-orange-primary)}
+
+    /* ===== Chain Link Fittings Grid (21 accessories) ===== */
+    .fittings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-gap); }
+    @media (max-width: 1024px) { .fittings-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .fittings-grid { grid-template-columns: 1fr; } }
+
+    .fitting-card { background: var(--color-white); border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; display: flex; flex-direction: column; }
+    .fitting-card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(0,0,0,.10); border-color: var(--color-orange-primary); }
+
+    .fitting-card-visual { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: #f4f4f4; line-height: 0; }
+    .fitting-slider { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .fitting-slider-track { display: flex; height: 100%; width: 100%; transition: transform .4s cubic-bezier(.4,0,.2,1); }
+    .fitting-slider-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .fitting-slider-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.08); color: var(--color-black); font-size: 1rem; font-weight: 700; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 5; transition: background .25s ease, color .25s ease, box-shadow .25s ease, opacity .25s ease; opacity: 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 0; }
+    .fitting-card:hover .fitting-slider-btn { opacity: 1; }
+    .fitting-slider-btn:hover { background: var(--color-orange-primary); color: var(--color-white); border-color: var(--color-orange-primary); box-shadow: 0 4px 14px rgba(255,107,0,.35); }
+    .fitting-slider-btn.prev { left: 8px; }
+    .fitting-slider-btn.next { right: 8px; }
+    .fitting-slider-dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 5; }
+    .fitting-slider-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.55); cursor: pointer; transition: background .25s ease, transform .25s ease; border: none; padding: 0; }
+    .fitting-slider-dot:hover { background: rgba(255,255,255,.85); }
+    .fitting-slider-dot.active { background: var(--color-orange-primary); transform: scale(1.3); box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+    @media (max-width: 640px) { .fitting-slider-btn { opacity: 1; width: 28px; height: 28px; font-size: .9rem; } }
+
+    .fitting-card-body { padding: 1.25rem 1.25rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+    .fitting-name { font-family: var(--font-display); font-size: clamp(1.05rem, 1.6vw, 1.25rem); font-weight: 400; letter-spacing: .02em; color: var(--color-black); margin-bottom: .5rem; line-height: 1.2; }
+    .fitting-desc { color: var(--color-gray); font-size: clamp(.82rem, .95vw, .9rem); line-height: 1.65; font-weight: 300; margin-bottom: 1rem; word-wrap: break-word; overflow-wrap: break-word; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .fitting-specs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; }
+    .fitting-spec-tag { font-size: .72rem; font-weight: 600; color: var(--color-gray-dark); background: var(--color-gray-light); border: 1px solid #e5e5e5; padding: .25rem .6rem; border-radius: 4px; letter-spacing: .02em; }
+
+    .view-all-wrap { text-align: center; margin-top: 2.5rem; }
+    .view-all-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.75rem; background: var(--color-black); color: var(--color-white); border-radius: 50px; font-size: .82rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: background .3s ease, color .3s ease, transform .3s ease; }
+    .view-all-btn:hover { background: var(--color-orange-primary); transform: translateY(-2px); }
+    .view-all-btn svg { width: 18px; height: 18px; }
 </style>
 
   <script type="importmap">
@@ -161,63 +195,153 @@
       </div>
     </section>
 
-    <!-- ============ PRODUCT TYPES ============ -->
+    <!-- ============ CHAIN LINK FITTINGS GRID (21 accessories) ============ -->
     <section class="product-section-light product-section-light-alt">
       <div class="section-header" data-reveal>
         <span class="category-tag">Product Range</span>
-        <h2>Chain Link Fence <span class="accent">Accessory Types</span></h2>
-        <p>Complete range of fence accessories manufactured from high-quality galvanized or PVC coated materials to finish any fence system.</p>
+        <h2>Chain Link Fence <span class="accent">Fittings &amp; Accessories</span></h2>
+        <p>Featured selection of chain link fence fittings &mdash; from tension bars and bands to post caps and mesh ties. Explore the full range of 21 fittings on our dedicated fittings page.</p>
       </div>
-      <div class="article-container">
-        <div class="products-grid">
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual">
-              <img src="products/fence/accessories-category-product.webp" alt="Post caps and tops" loading="lazy">
-            </div>
-            <div class="product-card-content">
-              <h3 class="product-name">Post Caps &amp; Tops</h3>
-              <p class="product-desc">Flat cap, pyramid cap, ball cap, and gothic cap in galvanized, green, or black finish. Compatible with round, square, and rectangular posts.</p>
-              <div class="product-specs">
-                <span class="spec-tag">Flat / Pyramid / Ball</span>
-                <span class="spec-tag">HDG / Green / Black</span>
-                <span class="spec-tag">All Post Profiles</span>
-              </div>
-              <a href="#gabion" class="product-card-link">View More <span>&rarr;</span></a>
-            </div>
-          </article>
 
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual">
-              <img src="products/fence/acc-u-clips.webp" alt="Clamps and fixings" loading="lazy">
-            </div>
-            <div class="product-card-content">
-              <h3 class="product-name">Clamps &amp; Fixings</h3>
-              <p class="product-desc">Metal clamp, plastic clamp, U-bolt clamp, and bracket for panel-to-post connection. Sizes from 40mm to 80mm for various fence types.</p>
-              <div class="product-specs">
-                <span class="spec-tag">Metal / Plastic</span>
-                <span class="spec-tag">U-Bolt &amp; Bracket</span>
-                <span class="spec-tag">40&ndash;80mm</span>
-              </div>
-              <a href="#gabion" class="product-card-link">View More <span>&rarr;</span></a>
-            </div>
-          </article>
+      <div class="fittings-grid" id="fittings-grid">
 
-          <article class="product-card" data-reveal>
-            <div class="product-card-visual">
-              <img src="products/fence/acc-hook-connection.webp" alt="Fasteners and hardware" loading="lazy">
+        <!-- 1. Tension Bar -->
+        <div class="fitting-card" id="tension-bar" data-reveal>
+          <div class="fitting-card-visual"><div class="fitting-slider">
+            <div class="fitting-slider-track">
+              <img src="images/chain-link-tension-bar.webp" alt="Galvanized Chain-Link Fence Tension Bar">
+              <img src="images/chain-link-tension-bar-2.webp" alt="Tension Bar Detail">
+              <img src="images/chain-link-tension-bar-3.webp" alt="Tension Bar Group">
             </div>
-            <div class="product-card-content">
-              <h3 class="product-name">Fasteners &amp; Hardware</h3>
-              <p class="product-desc">Hex bolts, nuts, washers, self-tapping screws, and anchor bolts in Grade 4.8/8.8 steel or stainless steel. M6 to M12 sizes available.</p>
-              <div class="product-specs">
-                <span class="spec-tag">Grade 4.8 / 8.8</span>
-                <span class="spec-tag">Stainless Option</span>
-                <span class="spec-tag">M6&ndash;M12</span>
-              </div>
-              <a href="#gabion" class="product-card-link">View More <span>&rarr;</span></a>
+            <button class="fitting-slider-btn prev" aria-label="Previous">&#10003;</button>
+            <button class="fitting-slider-btn next" aria-label="Next">&#10003;</button>
+            <div class="fitting-slider-dots"></div>
+          </div></div>
+          <div class="fitting-card-body">
+            <h3 class="fitting-name">Galvanized Chain-Link Fence Tension Bar</h3>
+            <p class="fitting-desc">Hot-dip galvanized steel tension bars for securing mesh fabric to terminal posts</p>
+            <div class="fitting-specs">
+              <span class="fitting-spec-tag">Terminal Post</span><span class="fitting-spec-tag">HDG</span><span class="fitting-spec-tag">600mm</span><span class="fitting-spec-tag">250mm</span>
             </div>
-          </article>
+          </div>
         </div>
+
+        <!-- 2. Brace Clamp -->
+        <div class="fitting-card" id="brace-clamp" data-reveal>
+          <div class="fitting-card-visual"><div class="fitting-slider">
+            <div class="fitting-slider-track">
+              <img src="images/chain-link-brace-clamp.webp" alt="Chain-Link Fence Brace Clamp">
+              <img src="images/chain-link-brace-clamp-2.webp" alt="Brace Clamp Detail">
+              <img src="images/chain-link-brace-clamp-3.webp" alt="Brace Clamp Group">
+            </div>
+            <button class="fitting-slider-btn prev" aria-label="Previous">&#10003;</button>
+            <button class="fitting-slider-btn next" aria-label="Next">&#10003;</button>
+            <div class="fitting-slider-dots"></div>
+          </div></div>
+          <div class="fitting-card-body">
+            <h3 class="fitting-name">Chain-Link Fence Brace Clamp</h3>
+            <p class="fitting-desc">Galvanized steel brace clamps for securing horizontal rails to terminal posts</p>
+            <div class="fitting-specs">
+              <span class="fitting-spec-tag">Brace</span><span class="fitting-spec-tag">HDG</span><span class="fitting-spec-tag">25mm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Loop Cap -->
+        <div class="fitting-card" id="loop-cap" data-reveal>
+          <div class="fitting-card-visual"><div class="fitting-slider">
+            <div class="fitting-slider-track">
+              <img src="images/chain-link-loop-cap.webp" alt="Galvanized Chain-Link Fence Loop Cap">
+              <img src="images/chain-link-loop-cap-2.webp" alt="Loop Cap Detail">
+              <img src="images/chain-link-loop-cap-3.webp" alt="Loop Cap Side View">
+              <img src="images/chain-link-loop-cap-4.webp" alt="Loop Cap Group">
+              <img src="images/chain-link-loop-cap-5.webp" alt="Loop Cap Installation">
+              <img src="images/chain-link-loop-cap-6.webp" alt="Loop Cap Close Up">
+              <img src="images/chain-link-loop-cap-7.webp" alt="Loop Cap Angled">
+              <img src="images/chain-link-loop-cap-8.webp" alt="Loop Cap Perspective">
+            </div>
+            <button class="fitting-slider-btn prev" aria-label="Previous">&#10003;</button>
+            <button class="fitting-slider-btn next" aria-label="Next">&#10003;</button>
+            <div class="fitting-slider-dots"></div>
+          </div></div>
+          <div class="fitting-card-body">
+            <h3 class="fitting-name">Galvanized Chain-Link Fence Loop Cap</h3>
+            <p class="fitting-desc">Galvanized loop caps for securing top rail to line posts in chain-link fence systems</p>
+            <div class="fitting-specs">
+              <span class="fitting-spec-tag">Line Post</span><span class="fitting-spec-tag">HDG</span><span class="fitting-spec-tag">1&frac38;"</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Rail End Cap -->
+        <div class="fitting-card" id="rail-end-cap" data-reveal>
+          <div class="fitting-card-visual"><div class="fitting-slider">
+            <div class="fitting-slider-track">
+              <img src="images/chain-link-rail-end-cap.webp" alt="Chain-Link Fence Rail End Cap">
+              <img src="images/chain-link-rail-end-cap-2.webp" alt="Rail End Cap Detail">
+              <img src="images/chain-link-rail-end-cap-3.webp" alt="Rail End Cap Group">
+            </div>
+            <button class="fitting-slider-btn prev" aria-label="Previous">&#10003;</button>
+            <button class="fitting-slider-btn next" aria-label="Next">&#10003;</button>
+            <div class="fitting-slider-dots"></div>
+          </div></div>
+          <div class="fitting-card-body">
+            <h3 class="fitting-name">Chain-Link Fence Rail End Cap</h3>
+            <p class="fitting-desc">Pressed steel or aluminum rail end cups for connecting top rail to end posts</p>
+            <div class="fitting-specs">
+              <span class="fitting-spec-tag">End Post</span><span class="fitting-spec-tag">Aluminum</span><span class="fitting-spec-tag">1&frac38;"</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Tension Band -->
+        <div class="fitting-card" id="tension-band" data-reveal>
+          <div class="fitting-card-visual"><div class="fitting-slider">
+            <div class="fitting-slider-track">
+              <img src="images/chain-link-tension-band.webp" alt="Galvanized Chain-Link Fence Tension Band">
+              <img src="images/chain-link-tension-band-2.webp" alt="Tension Band Detail">
+              <img src="images/chain-link-tension-band-3.webp" alt="Tension Band Group">
+            </div>
+            <button class="fitting-slider-btn prev" aria-label="Previous">&#10003;</button>
+            <button class="fitting-slider-btn next" aria-label="Next">&#10003;</button>
+            <div class="fitting-slider-dots"></div>
+          </div></div>
+          <div class="fitting-card-body">
+            <h3 class="fitting-name">Galvanized Chain-Link Fence Tension Band</h3>
+            <p class="fitting-desc">Hot-dip galvanized pressed steel bands for securing mesh fabric to terminal posts</p>
+            <div class="fitting-specs">
+              <span class="fitting-spec-tag">Terminal Post</span><span class="fitting-spec-tag">HDG</span><span class="fitting-spec-tag">1&frac58;"</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Hog Rings -->
+        <div class="fitting-card" id="hog-rings" data-reveal>
+          <div class="fitting-card-visual"><div class="fitting-slider">
+            <div class="fitting-slider-track">
+              <img src="images/chain-link-hog-rings.webp" alt="Black Chain-Link Fence Hog Rings">
+              <img src="images/chain-link-hog-rings-2.webp" alt="Hog Rings Detail">
+            </div>
+            <button class="fitting-slider-btn prev" aria-label="Previous">&#10003;</button>
+            <button class="fitting-slider-btn next" aria-label="Next">&#10003;</button>
+            <div class="fitting-slider-dots"></div>
+          </div></div>
+          <div class="fitting-card-body">
+            <h3 class="fitting-name">Black Chain-Link Fence Hog Rings</h3>
+            <p class="fitting-desc">Galvanized steel hog rings for attaching mesh fabric to line posts and top rail</p>
+            <div class="fitting-specs">
+              <span class="fitting-spec-tag">Mesh</span><span class="fitting-spec-tag">HDG</span><span class="fitting-spec-tag">11-gauge</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="view-all-wrap" data-reveal>
+        <a href="chain-link-fittings.html" class="view-all-btn">
+          View More Fittings &amp; Accessories
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
       </div>
     </section>
 
@@ -725,6 +849,106 @@
   <script src="js/products.js"></script>
   <script src="js/faq.js"></script>
 
+  <script>
+  (function () {
+    'use strict';
+
+    function initFittingSliders() {
+      var sliders = document.querySelectorAll('.fitting-slider');
+      if (!sliders.length) return;
+
+      sliders.forEach(function (slider) {
+        var track = slider.querySelector('.fitting-slider-track');
+        var slides = track ? track.querySelectorAll('img') : [];
+        var prevBtn = slider.querySelector('.fitting-slider-btn.prev');
+        var nextBtn = slider.querySelector('.fitting-slider-btn.next');
+        var dotsContainer = slider.querySelector('.fitting-slider-dots');
+        var currentIndex = 0;
+        var totalSlides = slides.length;
+
+        if (totalSlides <= 1) {
+          if (prevBtn) prevBtn.style.display = 'none';
+          if (nextBtn) nextBtn.style.display = 'none';
+          return;
+        }
+
+        for (var i = 0; i < totalSlides; i++) {
+          (function (idx) {
+            var dot = document.createElement('button');
+            dot.className = 'fitting-slider-dot';
+            dot.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
+            if (idx === 0) dot.classList.add('active');
+            dot.addEventListener('click', function () { goToSlide(idx); });
+            dotsContainer.appendChild(dot);
+          })(i);
+        }
+
+        function updateSlider() {
+          if (track) {
+            track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+          }
+          var dots = dotsContainer.querySelectorAll('.fitting-slider-dot');
+          dots.forEach(function (d, i) {
+            d.classList.toggle('active', i === currentIndex);
+          });
+        }
+
+        function goToSlide(index) {
+          currentIndex = (index + totalSlides) % totalSlides;
+          updateSlider();
+        }
+
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            goToSlide(currentIndex - 1);
+          });
+        }
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            goToSlide(currentIndex + 1);
+          });
+        }
+
+        var touchStartX = null;
+        slider.addEventListener('touchstart', function (e) {
+          touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        slider.addEventListener('touchend', function (e) {
+          if (touchStartX === null) return;
+          var touchEndX = e.changedTouches[0].clientX;
+          var diff = touchStartX - touchEndX;
+          if (Math.abs(diff) > 30) {
+            if (diff > 0) { goToSlide(currentIndex + 1); }
+            else { goToSlide(currentIndex - 1); }
+          }
+          touchStartX = null;
+        });
+
+        var autoTimer = null;
+        function startAutoPlay() {
+          stopAutoPlay();
+          autoTimer = setInterval(function () { goToSlide(currentIndex + 1); }, 4000);
+        }
+        function stopAutoPlay() {
+          if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+        }
+
+        slider.addEventListener('mouseenter', stopAutoPlay);
+        slider.addEventListener('mouseleave', startAutoPlay);
+        slider.addEventListener('touchstart', stopAutoPlay, { passive: true });
+        slider.addEventListener('touchend', startAutoPlay);
+
+        startAutoPlay();
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initFittingSliders();
+    });
+  })();
+  </script>
 
   
   <script>
