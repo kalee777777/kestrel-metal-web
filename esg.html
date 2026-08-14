@@ -12,60 +12,8 @@
 
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/business.css">
+  <link rel="stylesheet" href="css/esg.css">
   <link rel="stylesheet" href="css/footer.css">
-
-  <style>
-    .esg-accordion-item {
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      overflow: hidden;
-      transition: all .3s ease;
-    }
-    .esg-accordion-item:hover {
-      border-color: var(--color-orange-primary);
-    }
-    .esg-accordion-header {
-      width: 100%;
-      background: transparent;
-      border: none;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      color: var(--color-black);
-      font-family: inherit;
-      font-size: 1.05rem;
-      font-weight: 600;
-      text-align: left;
-      transition: color .3s ease;
-    }
-    .esg-accordion-header:hover { color: var(--color-orange-primary); }
-    .esg-accordion-header .accordion-icon {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: rgba(255,107,53,0.1);
-      color: var(--color-orange-primary);
-      display: flex; align-items: center; justify-content: center;
-      transition: transform .3s ease;
-      flex-shrink: 0;
-    }
-    .esg-accordion-item.active .esg-accordion-header .accordion-icon { transform: rotate(180deg); }
-    .esg-accordion-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height .4s ease;
-    }
-    .esg-accordion-item.active .esg-accordion-body { max-height: 500px; }
-    .esg-accordion-content {
-      padding: 0 1.5rem 1.25rem;
-      color: var(--color-gray-dark);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-  </style>
 </head>
 <body>
 
@@ -76,296 +24,199 @@
   <main>
 
     <!-- ============ HERO ============ -->
-    <section class="biz-hero">
-      <div class="biz-hero-bg" style="background-image:url('images/esg-hero-nature.jpg');"></div>
-      <div class="biz-hero-overlay"></div>
-      <div class="biz-hero-content" data-reveal>
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="index.html">Home</a>
-          <span class="breadcrumb-sep">/</span>
-          <span class="current">ESG</span>
-        </nav>
-        <span class="biz-hero-kicker">Sustainability</span>
-        <h1 class="biz-hero-title">Building a <span>Sustainable Future</span></h1>
-        <p class="biz-hero-sub">At Kestrel Metal, Environmental, Social, and Governance principles guide every decision we make &mdash; from the materials we source to the communities we serve.</p>
+    <section class="esg-hero">
+      <div class="esg-hero-bg" style="background-image:url('images/esg-hero-nature.jpg');"></div>
+      <div class="esg-hero-overlay"></div>
+      <div class="esg-hero-content" data-reveal>
+        <h1 class="esg-hero-title">ESG</h1>
+        <p class="esg-hero-sub">Building a sustainable future through environmental stewardship, social responsibility, and sound governance.</p>
       </div>
     </section>
 
-    <!-- ============ OVERVIEW ============ -->
-    <section class="biz-section">
-      <div class="biz-container">
-        <div class="biz-section-header" data-reveal>
-          <span class="biz-section-label">ESG Overview</span>
-          <h2 class="biz-section-title">Our <span>Commitment</span></h2>
-          <p class="biz-section-subtitle">At Kestrel Metal, we recognize that our operations have a profound impact on the environment, society, and the economy. We are committed to leading the way in sustainable practices within the metallurgical industry, ensuring that our processes, products, and partnerships are aligned with the highest standards of environmental stewardship, social responsibility, and economic viability.</p>
+    <!-- ============ OUR COMMITMENT ============ -->
+    <section class="esg-section">
+      <div class="esg-split">
+        <div class="esg-split-media" data-reveal>
+          <img src="images/blog/blog-sustainable-infrastructure.jpg" alt="Sustainable infrastructure">
         </div>
-        <div class="biz-split-grid">
-          <div class="biz-split-card" data-reveal>
-            <div class="biz-split-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            </div>
-            <h3>Environmental</h3>
-            <p>Minimizing our ecological footprint through green manufacturing, resource conservation, and carbon reduction initiatives across all facilities.</p>
-          </div>
-          <div class="biz-split-card" data-reveal>
-            <div class="biz-split-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <h3>Social</h3>
-            <p>Investing in our people, supporting local communities, and ensuring product safety and well-being for all stakeholders throughout our value chain.</p>
-          </div>
-          <div class="biz-split-card" data-reveal>
-            <div class="biz-split-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <h3>Governance</h3>
-            <p>Upholding the highest standards of business ethics, transparency, and regulatory compliance to build trust with our partners and clients worldwide.</p>
-          </div>
-          <div class="biz-split-card" data-reveal>
-            <div class="biz-split-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
-            <h3>Accountability</h3>
-            <p>Regular ESG reporting and third-party audits ensure transparency and accountability in our sustainability journey.</p>
-          </div>
+        <div class="esg-split-text" data-reveal>
+          <h2 class="esg-section-title">Our <span>Commitment</span></h2>
+          <p class="esg-section-lead">At Kestrel Metal, we recognize that our operations have a profound impact on the environment, society, and the economy.</p>
+          <p>We are committed to leading the way in sustainable practices within the metallurgical industry, ensuring that our processes, products, and partnerships are aligned with the highest standards of environmental stewardship, social responsibility, and economic viability.</p>
+          <a href="#green-future" class="esg-link">Discover how we care for the environment
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
         </div>
       </div>
     </section>
 
     <!-- ============ GREEN FUTURE ============ -->
-    <section class="biz-section alt">
-      <div class="biz-container">
-        <div class="biz-section-header" data-reveal>
-          <span class="biz-section-label">Environment</span>
-          <h2 class="biz-section-title">Green <span>Future</span></h2>
-          <p class="biz-section-subtitle">Our commitment to the environment is at the heart of everything we do. We continually invest in advanced technologies and innovative processes that minimize waste, reduce emissions, and conserve natural resources.</p>
+    <section class="esg-section esg-section-alt" id="green-future">
+      <div class="esg-split esg-split-reverse">
+        <div class="esg-split-media" data-reveal>
+          <img src="images/blog/industry-energy.jpg" alt="Clean energy and green future">
         </div>
-        <div class="biz-feature-grid">
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 14a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/><path d="M12 12V2"/></svg>
+        <div class="esg-split-text" data-reveal>
+          <h2 class="esg-section-title">Green <span>Future</span></h2>
+          <p class="esg-section-lead">Our commitment to the environment is at the heart of everything we do.</p>
+          <p>We continually invest in advanced technologies and innovative processes that minimize waste, reduce emissions, and conserve natural resources. By implementing rigorous environmental management systems, we ensure that our operations not only comply with but exceed regulatory requirements.</p>
+          <div class="esg-stats">
+            <div class="esg-stat">
+              <span class="esg-stat-num">35%</span>
+              <span class="esg-stat-label">Carbon reduced since 2020</span>
             </div>
-            <h4>Carbon Reduction</h4>
-            <p>We have invested in energy-efficient production lines and renewable energy sources, reducing our carbon footprint by 35% since 2020. Our goal is to achieve carbon neutrality by 2040.</p>
-          </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            <div class="esg-stat">
+              <span class="esg-stat-num">90%</span>
+              <span class="esg-stat-label">Water recycled &amp; reused</span>
             </div>
-            <h4>Water Conservation</h4>
-            <p>Closed-loop water recycling systems enable us to reuse 90% of process water, minimizing discharge and protecting local water resources. Rainwater harvesting supplements our process needs.</p>
-          </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <div class="esg-stat">
+              <span class="esg-stat-num">85%</span>
+              <span class="esg-stat-label">Byproducts recycled</span>
             </div>
-            <h4>Waste Recycling</h4>
-            <p>Over 85% of manufacturing byproducts are recycled or repurposed, including steel scrap recovery and zinc dust recycling from galvanizing operations. Zero waste-to-landfill target by 2030.</p>
           </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            </div>
-            <h4>Green Materials</h4>
-            <p>We prioritize recycled steel content and low-VOC coatings, and actively seek eco-friendly alternatives to traditional manufacturing materials. Our products support circular economy principles.</p>
-          </div>
-        </div>
-        <div style="max-width:720px;margin:2.5rem auto 0;text-align:center;" data-reveal>
-          <p style="font-size:0.95rem;color:var(--color-gray-dark);line-height:1.8;">
-            By implementing rigorous environmental management systems, we ensure that our operations not only comply with but exceed regulatory requirements. Our goal is to create a sustainable future by reducing our carbon footprint and promoting the responsible use of resources.
-          </p>
         </div>
       </div>
     </section>
 
     <!-- ============ SOCIAL RESPONSIBILITY ============ -->
-    <section class="biz-section">
-      <div class="biz-container">
-        <div class="biz-section-header" data-reveal>
-          <span class="biz-section-label">Society</span>
-          <h2 class="biz-section-title">Social <span>Responsibility</span></h2>
-          <p class="biz-section-subtitle">At Kestrel Metal, we believe that our success is intertwined with the well-being of the communities we serve. We are dedicated to fostering a safe, inclusive, and supportive workplace where our employees can thrive.</p>
+    <section class="esg-section">
+      <div class="esg-split">
+        <div class="esg-split-media" data-reveal>
+          <img src="images/blog/blog-community.jpg" alt="Community and social responsibility">
         </div>
-        <div class="biz-feature-grid">
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </div>
-            <h4>Employee Wellbeing</h4>
-            <p>We provide a safe, healthy workplace with comprehensive benefits, professional development opportunities, and a culture that values diversity and inclusion.</p>
-          </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            </div>
-            <h4>Community Support</h4>
-            <p>Our social responsibility initiatives extend beyond our workforce to encompass community engagement, education, and support for local development.</p>
-          </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <h4>Product Safety</h4>
-            <p>Every product we manufacture meets stringent safety standards, and we provide comprehensive technical documentation to ensure correct installation and usage.</p>
-          </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <h4>Stakeholder Engagement</h4>
-            <p>We recognize the importance of engaging with our stakeholders &mdash; shareholders, employees, customers, suppliers, and communities &mdash; fostering open dialogue and building collaborative relationships.</p>
-          </div>
-        </div>
-        <div style="max-width:720px;margin:2.5rem auto 0;text-align:center;" data-reveal>
-          <p style="font-size:0.95rem;color:var(--color-gray-dark);line-height:1.8;">
-            We strive to make a positive impact through ethical practices, transparent operations, and meaningful contributions to society. Through active engagement, we seek to understand and address the needs and concerns of all those we serve.
-          </p>
+        <div class="esg-split-text" data-reveal>
+          <h2 class="esg-section-title">Social <span>Responsibility</span></h2>
+          <p class="esg-section-lead">At Kestrel Metal, we believe that our success is intertwined with the well-being of the communities we serve.</p>
+          <p>We are dedicated to fostering a safe, inclusive, and supportive workplace where our employees can thrive. Our social responsibility initiatives extend beyond our workforce to encompass community engagement, education, and support for local development.</p>
+          <blockquote class="esg-quote">
+            <p>We strive to make a positive impact through ethical practices, transparent operations, and meaningful contributions to society.</p>
+          </blockquote>
         </div>
       </div>
     </section>
 
     <!-- ============ CORPORATE GOVERNANCE ============ -->
-    <section class="biz-section alt">
-      <div class="biz-container">
-        <div class="biz-section-header" data-reveal>
-          <span class="biz-section-label">Governance</span>
-          <h2 class="biz-section-title">Corporate <span>Governance</span></h2>
-          <p class="biz-section-subtitle">At Kestrel Metal, we are dedicated to upholding the highest standards of corporate governance. Our commitment to ethical business practices, transparency, and accountability is fundamental to our operations and integral to our mission of delivering long-term value to our stakeholders.</p>
+    <section class="esg-section esg-section-dark">
+      <div class="esg-container">
+        <div class="esg-section-header" data-reveal>
+          <h2 class="esg-section-title center">Corporate <span>Governance</span></h2>
+          <p class="esg-section-lead center">At Kestrel Metal, we are dedicated to upholding the highest standards of corporate governance. Our commitment to ethical business practices, transparency, and accountability is fundamental to our operations.</p>
         </div>
 
-        <div class="esg-accordion" id="esgAccordion">
-          <div class="esg-accordion-item active" data-reveal>
+        <div class="esg-accordion" id="esgAccordion" data-reveal>
+          <div class="esg-accordion-item active">
             <button class="esg-accordion-header" type="button">
               Ethical Business Practices
-              <span class="accordion-icon">
+              <span class="esg-accordion-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </button>
             <div class="esg-accordion-body">
               <div class="esg-accordion-content">
-                Integrity and ethical conduct are at the core of our business philosophy. We adhere to a strict code of ethics that governs all aspects of our operations. Our policies and procedures are designed to ensure that every decision and action taken by our company and its employees aligns with our values of honesty, fairness, and respect. We maintain zero tolerance for corruption and unethical behavior, fostering a culture of trust and integrity throughout our organization.
+                <p>Integrity and ethical conduct are at the core of our business philosophy. We adhere to a strict code of ethics that governs all aspects of our operations &mdash; ensuring every decision aligns with our values of honesty, fairness, and respect.</p>
               </div>
             </div>
           </div>
 
-          <div class="esg-accordion-item" data-reveal>
+          <div class="esg-accordion-item">
             <button class="esg-accordion-header" type="button">
               Transparency
-              <span class="accordion-icon">
+              <span class="esg-accordion-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </button>
             <div class="esg-accordion-body">
               <div class="esg-accordion-content">
-                We believe that transparency is essential to building and maintaining trust with our stakeholders. Kestrel Metal is committed to open and honest communication, providing accurate and timely information about our performance, governance practices, and strategic direction. We regularly disclose relevant information through financial reports, sustainability reports, and other communications channels, ensuring our stakeholders are well-informed about our operations and plans.
+                <p>We believe that transparency is essential to building and maintaining trust with our stakeholders. Kestrel Metal is committed to open and honest communication, providing accurate and timely information about our performance, governance practices, and strategic direction.</p>
               </div>
             </div>
           </div>
 
-          <div class="esg-accordion-item" data-reveal>
+          <div class="esg-accordion-item">
             <button class="esg-accordion-header" type="button">
               Accountability
-              <span class="accordion-icon">
+              <span class="esg-accordion-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </button>
             <div class="esg-accordion-body">
               <div class="esg-accordion-content">
-                Accountability is a cornerstone of our corporate governance framework. We have established a robust system of checks and balances to ensure that our actions are aligned with our strategic objectives and stakeholder interests. Our Board of Directors plays a crucial role in overseeing the management of the company, ensuring that we operate responsibly and in compliance with all applicable laws and regulations. Clear accountability structures ensure that decisions are made with full responsibility and consequences.
+                <p>Accountability is a cornerstone of our corporate governance framework. We have established a robust system of checks and balances to ensure our actions are aligned with our strategic objectives and stakeholder interests.</p>
               </div>
             </div>
           </div>
 
-          <div class="esg-accordion-item" data-reveal>
+          <div class="esg-accordion-item">
             <button class="esg-accordion-header" type="button">
               Risk Management
-              <span class="accordion-icon">
+              <span class="esg-accordion-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </button>
             <div class="esg-accordion-body">
               <div class="esg-accordion-content">
-                Effective risk management is integral to our corporate governance practices. We have implemented comprehensive risk management frameworks to identify, assess, and mitigate potential risks to our business. By proactively managing risks, we ensure the stability and sustainability of our operations while protecting the interests of our stakeholders. Our risk management processes are regularly reviewed and updated to address emerging challenges and evolving business conditions.
+                <p>Effective risk management is integral to our corporate governance practices. We have implemented comprehensive risk management frameworks to identify, assess, and mitigate potential risks to our business.</p>
               </div>
             </div>
           </div>
 
-          <div class="esg-accordion-item" data-reveal>
+          <div class="esg-accordion-item">
             <button class="esg-accordion-header" type="button">
               Continuous Improvement
-              <span class="accordion-icon">
+              <span class="esg-accordion-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </button>
             <div class="esg-accordion-body">
               <div class="esg-accordion-content">
-                Corporate governance is an evolving discipline, and we are committed to continuous improvement. We regularly review and update our governance practices to align with global best practices and regulatory developments. By fostering a culture of continuous improvement, we strive to enhance our governance framework and uphold our commitment to excellence. Our goal is to ensure that our governance practices remain robust, adaptable, and effective in supporting our long-term vision.
+                <p>Corporate governance is an evolving discipline, and we are committed to continuous improvement. We regularly review and update our governance practices to align with global best practices and regulatory developments.</p>
               </div>
             </div>
           </div>
-        </div>
-
-        <div style="max-width:720px;margin:2.5rem auto 0;text-align:center;" data-reveal>
-          <p style="font-size:0.95rem;color:var(--color-gray-dark);line-height:1.8;">
-            At Kestrel Metal, robust corporate governance is the foundation of our success. Through ethical practices, transparency, accountability, and proactive stakeholder engagement, we aim to build a resilient and sustainable future for our company and all those we serve.
-          </p>
         </div>
       </div>
     </section>
 
     <!-- ============ CERTIFICATIONS ============ -->
-    <section class="biz-section">
-      <div class="biz-container">
-        <div class="biz-section-header" data-reveal>
-          <span class="biz-section-label">Recognition</span>
-          <h2 class="biz-section-title">Certifications &amp; <span>Achievements</span></h2>
-          <p class="biz-section-subtitle">Our ESG commitment is validated through independent certifications and industry recognitions that reflect our ongoing dedication to sustainability.</p>
+    <section class="esg-section">
+      <div class="esg-container">
+        <div class="esg-section-header" data-reveal>
+          <h2 class="esg-section-title center">Certifications &amp; <span>Achievements</span></h2>
+          <p class="esg-section-lead center">Our ESG commitment is validated through independent certifications and industry recognitions.</p>
         </div>
-        <div class="biz-feature-grid">
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
+        <div class="esg-cert-grid" data-reveal>
+          <div class="esg-cert-item">
             <h4>ISO 9001:2015</h4>
-            <p>Certified Quality Management System demonstrating our commitment to consistent product quality and customer satisfaction.</p>
+            <p>Quality Management System</p>
           </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
+          <div class="esg-cert-item">
             <h4>ISO 14001</h4>
-            <p>Environmental Management System certification validating our systematic approach to reducing environmental impact and preventing pollution.</p>
+            <p>Environmental Management System</p>
           </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
+          <div class="esg-cert-item">
             <h4>CE Marking</h4>
-            <p>European Union compliance certification confirming our products meet essential safety, health, and environmental protection requirements.</p>
+            <p>EU Compliance Certification</p>
           </div>
-          <div class="biz-feature-card" data-reveal>
-            <div class="biz-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            </div>
+          <div class="esg-cert-item">
             <h4>Industry Awards</h4>
-            <p>Recognized as a leading sustainable manufacturer by industry associations for our contributions to environmental protection and social development.</p>
+            <p>Sustainable Manufacturing Excellence</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============ CTA ============ -->
-    <section class="biz-cta">
-      <div class="biz-cta-bg" style="background-image:url('images/esg-hero-nature.jpg');"></div>
-      <div class="biz-cta-overlay"></div>
-      <div class="biz-cta-content">
-        <h2 class="biz-cta-title">Building a Better Future Together</h2>
-        <p class="biz-cta-desc">Let's partner to create sustainable solutions that benefit business, society, and the environment.</p>
-        <div class="biz-cta-buttons">
-          <a href="contact.html" class="btn-hero-primary">GET A QUOTE
+    <section class="esg-cta">
+      <div class="esg-cta-bg"></div>
+      <div class="esg-cta-overlay"></div>
+      <div class="esg-container esg-cta-content" data-reveal>
+        <h2 class="esg-cta-title">Building a Better Future Together</h2>
+        <p class="esg-cta-desc">Let's partner to create sustainable solutions that benefit business, society, and the environment.</p>
+        <div class="esg-cta-actions">
+          <a href="contact.html" class="esg-btn-primary">GET A QUOTE
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </a>
-          <a href="about.html" class="btn-hero-secondary">ABOUT US</a>
+          <a href="about.html" class="esg-btn-secondary">ABOUT US</a>
         </div>
       </div>
     </section>
