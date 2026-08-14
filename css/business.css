@@ -6,7 +6,7 @@
 /* ---------- Standard Hero ---------- */
 .biz-hero {
   position: relative;
-  min-height: 380px;
+  min-height: 480px;
   display: flex;
   align-items: center;
   padding-top: 8rem;
