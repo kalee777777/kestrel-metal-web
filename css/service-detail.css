@@ -1,0 +1,581 @@
+/* ===================================================================
+   KESTREL METAL - 服务详情页样式
+   设计语言：深色 Hero + 浅色内容 + 品牌橙 #FF6B00
+   依赖：styles.css、article.css（Hero/Breadcrumb）
+   =================================================================== */
+
+/* ---------- Overview（Hero 下方概览） ---------- */
+.svc-overview {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  background: var(--color-white);
+}
+
+.svc-overview-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.svc-overview-text .category-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-orange-primary);
+  margin-bottom: 0.85rem;
+}
+
+.svc-overview-text h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  line-height: 1.1;
+  color: var(--color-black);
+  margin-bottom: 1.25rem;
+}
+
+.svc-overview-text p {
+  color: #333;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.svc-overview-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+}
+
+.svc-overview-tags .tag {
+  background: var(--color-orange-bg-light, #fff3ea);
+  color: var(--color-orange-primary);
+  border: 1px solid rgba(255, 107, 0, 0.25);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.svc-overview-image {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--color-gray-light);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+.svc-overview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Capabilities（What We Offer 交替卡片） ---------- */
+.svc-capabilities {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  background: var(--color-gray-light);
+}
+
+.svc-capabilities .container {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+}
+
+.svc-section-head {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.svc-section-head .label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+  margin-bottom: 0.85rem;
+}
+
+.svc-section-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  line-height: 1.1;
+  color: var(--color-black);
+  max-width: 800px;
+}
+
+.svc-section-head h2 .accent {
+  color: var(--color-orange-primary);
+}
+
+.svc-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.svc-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: 0;
+  background: var(--color-white);
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium), border-color var(--transition-medium);
+}
+
+.svc-feature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-orange-primary);
+}
+
+.svc-feature:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+}
+
+.svc-feature:nth-child(even) .svc-feature-image {
+  order: 2;
+}
+
+.svc-feature:nth-child(even) .svc-feature-content {
+  order: 1;
+}
+
+.svc-feature-image {
+  position: relative;
+  min-height: 280px;
+  background: var(--color-gray-light);
+  overflow: hidden;
+}
+
+.svc-feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.svc-feature:hover .svc-feature-image img {
+  transform: scale(1.05);
+}
+
+.svc-feature-content {
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.svc-feature-index {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--color-orange-primary);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+.svc-feature-content h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  color: var(--color-black);
+  margin-bottom: 0.85rem;
+}
+
+.svc-feature-content p {
+  color: var(--color-gray);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+/* ---------- Process（深色流程区） ---------- */
+.svc-process {
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  background: var(--color-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.svc-process::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.svc-process .container {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  position: relative;
+  z-index: 1;
+}
+
+.svc-process .svc-section-head .label {
+  color: var(--color-orange-primary);
+}
+
+.svc-process .svc-section-head h2 {
+  color: var(--color-white);
+}
+
+.svc-process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.svc-step {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 2rem 1.5rem;
+  transition: background var(--transition-medium), border-color var(--transition-medium), transform var(--transition-medium);
+  position: relative;
+}
+
+.svc-step:hover {
+  background: rgba(255, 107, 0, 0.08);
+  border-color: rgba(255, 107, 0, 0.35);
+  transform: translateY(-4px);
+}
+
+.svc-step-number {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 8px 22px rgba(255, 107, 0, 0.35);
+}
+
+.svc-step h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  color: var(--color-white);
+  margin-bottom: 0.75rem;
+}
+
+.svc-step p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ---------- Why Choose Us（优势列表） ---------- */
+.svc-why {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  background: var(--color-white);
+}
+
+.svc-why .container {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+}
+
+.svc-why-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.svc-why-image {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--color-gray-light);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+.svc-why-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.svc-benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1.75rem;
+}
+
+.svc-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.svc-benefit-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--color-orange-bg-light, #fff3ea);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.svc-benefit-icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-orange-primary);
+}
+
+.svc-benefit p {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.svc-benefit p strong {
+  color: var(--color-black);
+  font-weight: 600;
+}
+
+/* ---------- Stats Strip ---------- */
+.svc-stats {
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0;
+  background: var(--color-gray-light);
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.svc-stats-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.svc-stat {
+  text-align: center;
+}
+
+.svc-stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  line-height: 1;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.4rem;
+}
+
+.svc-stat-label {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ---------- Other Services（其他服务导航） ---------- */
+.svc-others {
+  padding: clamp(3rem, 6vw, 4.5rem) 0;
+  background: var(--color-white);
+}
+
+.svc-others .container {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+}
+
+.svc-others-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.svc-other-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--color-white);
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.svc-other-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-orange-primary);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+}
+
+.svc-other-card.is-current {
+  background: var(--color-orange-bg-light, #fff3ea);
+  border-color: rgba(255, 107, 0, 0.3);
+}
+
+.svc-other-card-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--color-orange-bg-light, #fff3ea);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svc-other-card-icon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-orange-primary);
+}
+
+.svc-other-card-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  color: var(--color-black);
+  line-height: 1.2;
+}
+
+.svc-other-card-desc {
+  font-size: 0.8rem;
+  color: var(--color-gray);
+  margin-top: 0.15rem;
+}
+
+/* ---------- Reveal / Shared ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media (max-width: 1024px) {
+  .svc-overview-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .svc-overview-image {
+    aspect-ratio: 16 / 9;
+    max-height: 420px;
+  }
+
+  .svc-feature,
+  .svc-feature:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+
+  .svc-feature:nth-child(even) .svc-feature-image {
+    order: 0;
+  }
+
+  .svc-feature:nth-child(even) .svc-feature-content {
+    order: 0;
+  }
+
+  .svc-feature-image {
+    min-height: 240px;
+  }
+
+  .svc-process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .svc-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .svc-why-image {
+    aspect-ratio: 16 / 9;
+    max-height: 360px;
+  }
+
+  .svc-others-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .svc-overview-inner,
+  .svc-capabilities .container,
+  .svc-process .container,
+  .svc-why .container,
+  .svc-others .container,
+  .svc-stats-inner {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .svc-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .svc-stats-inner {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1rem;
+  }
+
+  .svc-process-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .svc-others-grid {
+    grid-template-columns: 1fr;
+  }
+}
