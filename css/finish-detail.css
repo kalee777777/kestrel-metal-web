@@ -1,0 +1,382 @@
+/* ===================================================================
+   KESTREL METAL - Surface Finish Detail Page
+   Layout: dual-column finish detail (image + specs) + features + apps
+   Style: black (#0a0a0a) + orange (#ff6b35) industrial palette
+   =================================================================== */
+
+/* ---------- Finish Detail Section (dual-column) ---------- */
+.finish-detail-section {
+  padding: clamp(2.5rem, 5vw, 4rem) 0;
+  background: var(--color-white);
+}
+
+.finish-detail-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+}
+
+.finish-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+/* ---------- Image ---------- */
+.finish-detail-image {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--color-gray-light);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.finish-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Info (right column) ---------- */
+.finish-detail-info h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 400;
+  color: var(--color-black);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.finish-detail-info h1 span {
+  color: var(--color-orange-primary);
+}
+
+.finish-detail-info .finish-desc {
+  font-size: clamp(0.92rem, 1.3vw, 1rem);
+  color: #4b5563;
+  line-height: 1.8;
+  margin-bottom: 1.75rem;
+}
+
+/* ---------- Spec Table ---------- */
+.finish-spec-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: var(--color-white);
+  margin-bottom: 1.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.finish-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 400px;
+  font-size: 0.9rem;
+}
+
+.finish-spec-table thead {
+  background: var(--color-black);
+}
+
+.finish-spec-table thead th {
+  padding: 0.85rem 1rem;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.finish-spec-table tbody td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #374151;
+  background: var(--color-white);
+}
+
+.finish-spec-table tbody tr:nth-child(even) td {
+  background: #f9fafb;
+}
+
+.finish-spec-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.finish-spec-table tbody tr:hover td {
+  background: #fff7ed;
+}
+
+.finish-spec-table tbody td:first-child {
+  font-weight: 600;
+  color: var(--color-black);
+  white-space: nowrap;
+}
+
+/* ---------- Quote Button ---------- */
+.finish-btn-quote {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.85rem 2rem;
+  background: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+.finish-btn-quote:hover {
+  background: var(--color-orange-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 107, 0, 0.35);
+}
+
+.finish-btn-quote svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- Process Steps ---------- */
+.finish-process-grid {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.finish-process-step {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.finish-process-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-black);
+  color: var(--color-orange-primary);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.finish-process-step h4 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--color-white);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.finish-process-step p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+/* ---------- Advantages Grid ---------- */
+.finish-advantages-grid {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.finish-advantage-card {
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.finish-advantage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-orange-primary);
+}
+
+.finish-advantage-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fff7ed;
+  margin-bottom: 1rem;
+}
+
+.finish-advantage-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-orange-primary);
+}
+
+.finish-advantage-card h4 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-black);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.finish-advantage-card p {
+  font-size: 0.88rem;
+  color: var(--color-gray);
+  line-height: 1.65;
+}
+
+/* ---------- Related Finishes ---------- */
+.finish-related-grid {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+.finish-related-card {
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.finish-related-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-orange-primary);
+}
+
+.finish-related-card-img {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-black), #1a1a1a);
+}
+
+.finish-related-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.finish-related-card:hover .finish-related-card-img img {
+  transform: scale(1.06);
+}
+
+.finish-related-card-body {
+  padding: 1.5rem;
+}
+
+.finish-related-card-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-black);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.finish-related-card-body p {
+  font-size: 0.88rem;
+  color: var(--color-gray);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.finish-related-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-orange-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: gap 0.3s ease;
+}
+
+.finish-related-card:hover .finish-related-card-link {
+  gap: 10px;
+}
+
+.finish-related-card-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .finish-process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .finish-advantages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .finish-related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .finish-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .finish-detail-image {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .finish-process-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .finish-advantages-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .finish-related-grid {
+    grid-template-columns: 1fr;
+  }
+}
