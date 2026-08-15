@@ -399,7 +399,10 @@
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
 }
 
 .download-btn:hover {
@@ -410,6 +413,17 @@
 .download-btn svg {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
+  stroke: #ffffff;
+  fill: none;
+}
+
+.download-btn-text {
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: #ffffff;
 }
 
 /* ---------- No Results ---------- */

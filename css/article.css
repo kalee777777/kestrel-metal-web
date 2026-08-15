@@ -980,6 +980,7 @@
 .article-download-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   background: var(--color-orange-primary);
   color: var(--color-white);
@@ -992,7 +993,9 @@
   letter-spacing: 0.04em;
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
   transition: background var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .article-download-btn:hover {
@@ -1002,6 +1005,17 @@
 .article-download-btn svg {
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
+  stroke: #ffffff;
+  fill: none;
+}
+
+.article-download-btn-text {
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: #ffffff;
 }
 
 /* Download detail meta table */
