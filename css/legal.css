@@ -133,7 +133,8 @@
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 3px solid var(--color-orange-primary);
-  display: inline-block;
+  display: block;
+  width: fit-content;
   letter-spacing: 0.01em;
   line-height: 1.2;
 }
