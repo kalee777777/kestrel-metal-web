@@ -18,37 +18,32 @@
 
 .about-hero-bg {
   position: absolute;
-  inset: -8%;
-  width: 116%;
-  height: 116%;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
   z-index: 0;
   background-size: cover;
-  background-position: 50% 40%;
+  background-position: center center;
   background-repeat: no-repeat;
   will-change: transform;
-  animation: about-hero-kenburns 60s ease-in-out infinite alternate;
+  animation: about-hero-kenburns 45s cubic-bezier(0.25, 0.1, 0.25, 1) infinite alternate;
 }
 
 @keyframes about-hero-kenburns {
   0% {
-    transform: scale(1) translate(0%, 1%);
-    filter: brightness(0.92) saturate(1);
+    transform: scale(1) translate(2%, 1.5%);
   }
-  20% {
-    transform: scale(1.05) translate(-0.8%, 0.3%);
-    filter: brightness(0.98) saturate(1.05);
+  25% {
+    transform: scale(1.05) translate(0%, 0.5%);
   }
-  45% {
-    transform: scale(1.12) translate(-2%, -0.5%);
-    filter: brightness(1.02) saturate(1.08);
+  50% {
+    transform: scale(1.12) translate(-1.5%, -0.5%);
   }
-  70% {
+  75% {
     transform: scale(1.2) translate(-3%, -1.2%);
-    filter: brightness(1.05) saturate(1.1);
   }
   100% {
-    transform: scale(1.28) translate(-3.5%, -1.8%);
-    filter: brightness(1) saturate(1.05);
+    transform: scale(1.28) translate(-4.5%, -1.8%);
   }
 }
 
@@ -56,14 +51,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    to top,
-    rgba(5, 8, 5, 0.95) 0%,
-    rgba(5, 8, 5, 0.55) 25%,
-    rgba(5, 8, 5, 0.12) 50%,
-    rgba(5, 8, 5, 0.05) 70%,
-    rgba(5, 8, 5, 0.3) 100%
-  );
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .about-hero-content {
