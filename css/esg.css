@@ -18,29 +18,55 @@
 
 .esg-hero-bg {
   position: absolute;
-  inset: 0;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
   z-index: 0;
   background-size: cover;
-  background-position: center;
+  background-position: 45% 40%;
   background-repeat: no-repeat;
-  transform: scale(1.05);
-  animation: esg-hero-zoom 20s ease-in-out infinite alternate;
+  will-change: transform;
+  animation: esg-hero-kenburns 60s ease-in-out infinite alternate;
 }
 
-@keyframes esg-hero-zoom {
-  0% { transform: scale(1.05); }
-  100% { transform: scale(1.12); }
+@keyframes esg-hero-kenburns {
+  0% {
+    transform: scale(1) translate(0%, 1%);
+    filter: brightness(0.95) saturate(1);
+  }
+  15% {
+    transform: scale(1.04) translate(-0.5%, 0.5%);
+    filter: brightness(1) saturate(1.05);
+  }
+  35% {
+    transform: scale(1.1) translate(-1.5%, -0.3%);
+    filter: brightness(1.02) saturate(1.08);
+  }
+  55% {
+    transform: scale(1.18) translate(-2.5%, -1%);
+    filter: brightness(1.05) saturate(1.1);
+  }
+  75% {
+    transform: scale(1.24) translate(-3%, -1.5%);
+    filter: brightness(1.03) saturate(1.08);
+  }
+  100% {
+    transform: scale(1.3) translate(-3.5%, -2%);
+    filter: brightness(1) saturate(1.05);
+  }
 }
 
 .esg-hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     to top,
-    rgba(10, 10, 10, 0.95) 0%,
-    rgba(10, 10, 10, 0.7) 30%,
-    rgba(10, 10, 10, 0.3) 60%,
-    rgba(10, 10, 10, 0.5) 100%
+    rgba(5, 8, 5, 0.92) 0%,
+    rgba(5, 8, 5, 0.55) 25%,
+    rgba(5, 8, 5, 0.15) 50%,
+    rgba(5, 8, 5, 0.08) 70%,
+    rgba(5, 8, 5, 0.25) 100%
   );
 }
 
@@ -269,11 +295,24 @@
 
 .esg-fullimage-bg {
   position: absolute;
-  inset: 0;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
   z-index: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  will-change: transform;
+  animation: esg-fullimage-drift 50s ease-in-out infinite alternate;
+}
+
+@keyframes esg-fullimage-drift {
+  0% {
+    transform: scale(1.05) translate(0%, 0%);
+  }
+  100% {
+    transform: scale(1.15) translate(-1.5%, -1%);
+  }
 }
 
 .esg-fullimage-overlay {
