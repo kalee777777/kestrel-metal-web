@@ -1,4 +1,7 @@
 # 不作为网站静态资源部署的文件（wrangler 上传时忽略）
+README.md
+PROJECT_PROGRESS.md
+docs
 node_modules
 .git
 .gitignore
