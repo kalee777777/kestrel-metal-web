@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronRight, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import '../components/Products.css';
 import './ProductsPage.css';
 
@@ -183,7 +182,7 @@ const ProductsPage = () => {
 
       <nav className="breadcrumb">
         <div className="breadcrumb-container">
-          <Link to="/"><Home size={14} /></Link>
+          <a href="/"><Home size={14} /></a>
           <ChevronRight size={14} />
           <span>Products</span>
         </div>

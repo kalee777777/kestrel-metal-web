@@ -99,7 +99,7 @@ const Footer = () => {
                 <li><a href="#about">Company News</a></li>
                 <li><a href="#projects">Case Studies</a></li>
                 <li><a href="#consumables">Catalogs</a></li>
-                <li><a href="#solutions">Technical Papers</a></li>
+                <li><a href="http://localhost:8810/glossary.html">Glossary</a></li>
                 <li><a href="#solutions">Services</a></li>
               </ul>
             </motion.div>

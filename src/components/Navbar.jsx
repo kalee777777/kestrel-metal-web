@@ -206,7 +206,7 @@ const Navbar = () => {
                 <a href="/downloads.html">Technical Downloads</a>
                 <a href="/case-studies.html">Project Cases</a>
                 <a href="/blog.html">Company News</a>
-                <a href="/knowledge.html">Technical Papers</a>
+                <a href="http://localhost:8810/glossary.html">Glossary</a>
                 <a href="/catalogs.html">Product Catalogs</a>
                 <a href="/contact.html">FAQ</a>
               </motion.div>
