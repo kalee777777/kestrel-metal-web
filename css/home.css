@@ -932,24 +932,35 @@
 .metal-products .products-view-more {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   margin-top: 1.25rem;
-  padding: 0.6rem 1.1rem;
-  border: 1px solid var(--color-orange-primary);
-  border-radius: 30px;
+  padding: 0.4rem 0.5rem;
   font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-orange-primary);
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
   text-decoration: none;
-  letter-spacing: 0.04em;
-  transition: all 0.3s ease;
+  letter-spacing: 0;
+  transition: color 0.3s ease;
   align-self: flex-start;
 }
 
+.metal-products .products-view-more::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: #999;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
 .metal-products .products-view-more:hover {
+  color: var(--color-orange-primary);
+}
+
+.metal-products .products-view-more:hover::before {
   background: var(--color-orange-primary);
-  color: #ffffff;
 }
 
 .metal-products-right {
