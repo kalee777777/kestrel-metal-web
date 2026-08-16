@@ -37,6 +37,25 @@
     .gabion-mesh-select option { background: #1a1a1a; color: #fff; }
     .gabion-mesh-select:focus { border-color: var(--color-orange-primary); box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15); }
     @media (max-width: 600px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-stats-grid { grid-template-columns: repeat(3,1fr) !important; } }
+
+    .install-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; }
+    .install-step { position: relative; background: #fff; border-radius: 14px; padding: 2rem 1.5rem; border: 1px solid #e5e7eb; text-align: center; transition: transform .3s ease, box-shadow .3s ease; }
+    .install-step:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,.08); }
+    .install-step-num { width: 44px; height: 44px; margin: 0 auto 1rem; border-radius: 50%; background: var(--color-orange-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; }
+    .install-step h4 { color: var(--color-black); font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .install-step p { font-size: .88rem; color: #4b5563; line-height: 1.6; margin: 0; }
+    @media (max-width: 1200px) { .install-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .install-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .install-grid { grid-template-columns: 1fr; } }
+
+    .cust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .cust-card { background: #fff; border-radius: 14px; padding: 1.5rem; border: 1px solid #e5e7eb; transition: transform .3s ease, box-shadow .3s ease; }
+    .cust-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,.08); }
+    .cust-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+    .cust-card h4 { color: var(--color-black); font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .cust-card p { font-size: .88rem; color: #4b5563; line-height: 1.6; margin: 0; }
+    @media (max-width: 768px) { .cust-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .cust-grid { grid-template-columns: 1fr; } }
   </style>
 
   <script type="importmap">
@@ -524,6 +543,87 @@
         <div class="app-tile">
           <img src="images/app-gabion-road-construction.webp" alt="Road construction" loading="lazy">
           <div class="app-tile-overlay"><div class="app-tile-label">Road Construction</div><div class="app-tile-desc">Highway median barriers and sound walls</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INSTALLATION GUIDE ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Setup</span>
+        <h2>Installation <span class="accent">Guide</span></h2>
+        <p>Step-by-step installation instructions for welded gabion box</p>
+      </div>
+      <div class="article-container">
+        <div class="install-grid">
+          <div class="install-step" data-reveal>
+            <div class="install-step-num">1</div>
+            <h4>Prepare the foundation</h4>
+            <p>Excavate and level the base. For retaining walls, dig a trench 100&ndash;200mm below grade. Compact the subgrade and add a geotextile membrane if soil is soft.</p>
+          </div>
+          <div class="install-step" data-reveal>
+            <div class="install-step-num">2</div>
+            <h4>Assemble the gabion</h4>
+            <p>Unfold the flat-packed gabion panel. Fold up the sides and lid. Connect vertical edges using spiral binders (lacing wire) threaded through the mesh in a continuous spiral.</p>
+          </div>
+          <div class="install-step" data-reveal>
+            <div class="install-step-num">3</div>
+            <h4>Position &amp; align</h4>
+            <p>Place the assembled gabion in position. Use guide strings to maintain alignment. Stair-step gabions on slopes. Ensure adjacent gabions are tightly butted together.</p>
+          </div>
+          <div class="install-step" data-reveal>
+            <div class="install-step-num">4</div>
+            <h4>Fill with stone</h4>
+            <p>Fill with clean, hard stone (100&ndash;250mm size). Place larger stones at the visible face for aesthetics. Fill in layers of 300mm, tamping each layer to minimize voids.</p>
+          </div>
+          <div class="install-step" data-reveal>
+            <div class="install-step-num">5</div>
+            <h4>Close &amp; connect</h4>
+            <p>Close the lid with spiral binders. Connect adjacent gabions with C-rings or lacing wire along all shared edges. For multi-row walls, offset vertical joints between layers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CUSTOMIZATION OPTIONS ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">OEM/ODM</span>
+        <h2>Customization <span class="accent">Options</span></h2>
+        <p>Tailor welded gabion box to your exact specifications</p>
+      </div>
+      <div class="article-container">
+        <div class="cust-grid">
+          <div class="cust-card" data-reveal>
+            <div class="cust-icon">M</div>
+            <h4>Dimensions</h4>
+            <p>Length: 0.5&ndash;4m; Width: 0.5&ndash;2m; Height: 0.3&ndash;2m &mdash; custom sizes</p>
+          </div>
+          <div class="cust-card" data-reveal>
+            <div class="cust-icon">W</div>
+            <h4>Mesh opening</h4>
+            <p>50 &times; 50mm, 75 &times; 75mm, 100 &times; 100mm &mdash; or custom grid patterns</p>
+          </div>
+          <div class="cust-card" data-reveal>
+            <div class="cust-icon">D</div>
+            <h4>Wire diameter</h4>
+            <p>3.0mm to 6.0mm &mdash; galvanized or PVC coated</p>
+          </div>
+          <div class="cust-card" data-reveal>
+            <div class="cust-icon">C</div>
+            <h4>Shape</h4>
+            <p>Rectangular, triangular, cylindrical, or custom geometric shapes</p>
+          </div>
+          <div class="cust-card" data-reveal>
+            <div class="cust-icon">P</div>
+            <h4>Coating</h4>
+            <p>Hot-dip galvanized, Galfan (Zn-5%Al), PVC coated (green, grey, black)</p>
+          </div>
+          <div class="cust-card" data-reveal>
+            <div class="cust-icon">O</div>
+            <h4>Accessories</h4>
+            <p>Spiral binders, C-rings, tie wire, internal cross-ties &mdash; included or bulk</p>
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登录 | Kestrel Metal 管理后台</title>
+<link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="/kestrelmetal.png" alt="Kestrel Metal" class="login-logo">
+        <h1>管理后台</h1>
+        <p>Kestrel Metal Admin Panel</p>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="username">用户名</label>
+          <input type="text" id="username" name="username" required autocomplete="username" placeholder="请输入用户名">
+        </div>
+        <div class="form-group">
+          <label for="password">密码</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="请输入密码">
+        </div>
+        <div id="loginError" class="login-error"></div>
+        <button type="submit" class="btn btn-primary btn-block">登录</button>
+      </form>
+
+      <div class="login-footer">
+        <p>默认账号: admin / admin123</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin/js/api.js"></script>
+  <script src="/admin/js/pages/login.js"></script>
+</body>
+</html>
