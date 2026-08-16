@@ -119,11 +119,11 @@
     </section>
 
     <!-- ============ SPECIFICATION SIMULATOR ============ -->
-    <section id="specifications" class="product-section-dark">
+    <section id="specifications" class="product-section-light">
       <div class="section-header" data-reveal>
-        <span class="category-tag" style="color:#fff;">Interactive</span>
-        <h2 style="color:#fff;">Specification <span class="accent">Simulator</span></h2>
-        <p style="color:var(--color-gray-light);">Customize welded wire mesh panel parameters and preview the square grid pattern in real time.</p>
+        <span class="category-tag">Interactive</span>
+        <h2>Specification <span class="accent">Simulator</span></h2>
+        <p>Customize welded wire mesh panel parameters and preview the square grid pattern in real time.</p>
       </div>
       <div class="article-container">
         <div class="spec-sim-card" data-reveal>
@@ -144,42 +144,44 @@
           </div>
 
           <div class="spec-sim-visual">
-            <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 800 500">
               <defs>
                 <pattern id="weldedGrid" patternUnits="userSpaceOnUse" width="20" height="20">
                   <path id="sim-mesh-lines" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="square"></path>
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#weldedGrid)"></rect>
+              <g id="scene-group" transform="translate(50,30)">
+                <path id="dim-line-top" d="" stroke="#D35400" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <text id="dim-text-top" x="0" y="-10" fill="#D35400" font-size="14" font-weight="bold" text-anchor="middle">2.0 m</text>
+                <path id="dim-line-right" d="" stroke="#D35400" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <text id="dim-text-right" x="0" y="0" fill="#D35400" font-size="14" font-weight="bold" dominant-baseline="middle">1.0 m</text>
+                <rect id="panel-rect" x="0" y="0" width="700" height="400" fill="url(#weldedGrid)" stroke="#9ca3af" stroke-width="3" rx="0"/>
+              </g>
             </svg>
           </div>
 
           <div class="spec-sim-controls">
-            <div class="spec-sim-sliders">
+            <div class="spec-sim-sliders" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
               <div class="spec-sim-slider-group">
                 <label>Mesh Opening (W &times; H)</label>
                 <select id="sim-input-opening" class="gabion-mesh-select">
-                  <option value="50x50" selected>50 &times; 50 mm</option>
-                  <option value="100x100">100 &times; 100 mm</option>
-                  <option value="150x150">150 &times; 150 mm</option>
-                  <option value="50x100">50 &times; 100 mm</option>
-                  <option value="50x200">50 &times; 200 mm</option>
+                  <option value="50x50" selected>50 &times; 50 mm (2" x 2")</option>
+                  <option value="100x100">100 &times; 100 mm (4" x 4")</option>
+                  <option value="150x150">150 &times; 150 mm (6" x 6")</option>
+                  <option value="50x100">50 &times; 100 mm (2" x 4")</option>
+                  <option value="50x200">50 &times; 200 mm (2" x 8")</option>
                 </select>
-              </div>
-              <div class="spec-sim-slider-group">
-                <label>Panel Size (W &times; L)</label>
+                <label style="margin-top:1rem;">Panel Size (Width &times; Length)</label>
                 <select id="sim-input-panel" class="gabion-mesh-select">
                   <option value="1x2" selected>1.0m &times; 2.0m</option>
-                  <option value="1.2x2.4">1.2m &times; 2.4m</option>
+                  <option value="1.2x2.4">1.2m &times; 2.4m (4ft &times; 8ft)</option>
                   <option value="2x3">2.0m &times; 3.0m</option>
                 </select>
               </div>
               <div class="spec-sim-slider-group">
-                <label>Wire Diameter <span id="sim-val-wire">4.0 mm</span></label>
-                <input type="range" id="sim-input-wire" min="4" max="16" step="1" value="8">
-              </div>
-              <div class="spec-sim-slider-group">
-                <label>Surface Treatment</label>
+                <label>Wire Diameter (mm) <span id="sim-val-wire" style="float:right;color:var(--color-orange-primary);font-weight:700;">4.0</span></label>
+                <input type="range" id="sim-input-wire" min="2.0" max="8.0" step="0.5" value="4" style="margin-top:.5rem;">
+                <label style="margin-top:1.5rem;">Surface Treatment</label>
                 <select id="sim-input-material" class="gabion-mesh-select">
                   <option value="#9ca3af">Galvanized (Zinc Grey)</option>
                   <option value="#4b5563">Black Steel (Plain/Untreated)</option>
@@ -576,11 +578,8 @@
       var matSel = document.getElementById('sim-input-material');
       if (!openingSel) return;
 
-      var wires = [3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0];
-
       function refresh() {
-        var i = parseInt(wireRange.value, 10);
-        var wire = wires[i];
+        var wire = parseFloat(wireRange.value);
         var opening = openingSel.value.split('x');
         var meshW = parseInt(opening[0]);
         var meshH = parseInt(opening[1]);
@@ -589,25 +588,50 @@
         var panelH = parseFloat(panel[1]);
         var color = matSel.value;
 
-        document.getElementById('sim-val-wire').textContent = wire.toFixed(1) + ' mm';
+        document.getElementById('sim-val-wire').textContent = wire.toFixed(1);
         document.getElementById('sim-stat-wire').textContent = wire.toFixed(1) + ' mm';
         document.getElementById('sim-stat-mesh').textContent = meshW + ' &times; ' + meshH + ' mm';
         document.getElementById('sim-stat-panel').textContent = panelW.toFixed(1) + ' &times; ' + panelH.toFixed(1) + ' m';
 
-        var visualScaleW = panelH * 80;
-        var visualScaleH = panelW * 80;
+        var svg = document.querySelector('.spec-sim-visual svg');
+        var svgW = 800, svgH = 500;
+        if (svg) { svgW = svg.getBoundingClientRect().width || 800; svgH = svg.getBoundingClientRect().height || 500; }
+        var padding = 80;
+        var maxW = svgW - padding * 2, maxH = svgH - padding * 2;
+        var ratioW = maxW / panelH, ratioH = maxH / panelW;
+        var scale = Math.min(ratioW, ratioH, 600);
+        var visualWidth = panelH * scale;
+        var visualHeight = panelW * scale;
+
         var numMeshesX = (panelH * 1000) / meshW;
         var numMeshesY = (panelW * 1000) / meshH;
-        var patternW = visualScaleW / numMeshesX;
-        var patternH = visualScaleH / numMeshesY;
+        var patternW = visualWidth / numMeshesX;
+        var patternH = visualHeight / numMeshesY;
 
         var pattern = document.getElementById('weldedGrid');
         var lines = document.getElementById('sim-mesh-lines');
         pattern.setAttribute('width', patternW);
         pattern.setAttribute('height', patternH);
         lines.setAttribute('d', 'M 0 0 L ' + patternW + ' 0 M 0 0 L 0 ' + patternH);
-        lines.setAttribute('stroke-width', wire * 0.5);
+        lines.setAttribute('stroke-width', Math.max(1, wire * 0.5));
         lines.setAttribute('stroke', color);
+
+        var ox = (svgW - visualWidth) / 2, oy = (svgH - visualHeight) / 2;
+        var scene = document.getElementById('scene-group');
+        if (scene) scene.setAttribute('transform', 'translate(' + ox + ',' + oy + ')');
+
+        var panelRect = document.getElementById('panel-rect');
+        if (panelRect) { panelRect.setAttribute('width', visualWidth); panelRect.setAttribute('height', visualHeight); panelRect.setAttribute('stroke', color); }
+
+        var dimTopPath = document.getElementById('dim-line-top');
+        var dimTopText = document.getElementById('dim-text-top');
+        if (dimTopPath) { dimTopPath.setAttribute('d', 'M 0 0 L ' + visualWidth + ' 0'); }
+        if (dimTopText) { dimTopText.setAttribute('x', visualWidth / 2); dimTopText.textContent = panelH.toFixed(1) + ' m'; }
+
+        var dimRightPath = document.getElementById('dim-line-right');
+        var dimRightText = document.getElementById('dim-text-right');
+        if (dimRightPath) { dimRightPath.setAttribute('d', 'M 0 0 L 0 ' + visualHeight); }
+        if (dimRightText) { dimRightText.setAttribute('x', 10); dimRightText.setAttribute('y', visualHeight / 2); dimRightText.textContent = panelW.toFixed(1) + ' m'; }
 
         var body = document.getElementById('sim-spec-body');
         if (body) {
