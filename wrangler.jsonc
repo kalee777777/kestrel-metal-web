@@ -2,16 +2,6 @@
   "name": "kestrel-metal-web",
   "compatibility_date": "2026-08-16",
   "assets": {
-    "directory": "./",
-    "exclude": [
-      "node_modules/**",
-      ".git/**",
-      ".vscode/**",
-      ".trae/**",
-      ".DS_Store",
-      "package.json",
-      "package-lock.json",
-      "wrangler.jsonc"
-    ]
+    "directory": "./"
   }
 }
