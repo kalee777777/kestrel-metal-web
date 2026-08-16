@@ -38,6 +38,33 @@
     .gabion-mesh-select option { background: #1a1a1a; color: #fff; }
     .gabion-mesh-select:focus { border-color: var(--color-orange-primary); box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15); }
     @media (max-width: 600px) { .sim-controls-grid { grid-template-columns: 1fr !important; } .sim-stats-grid { grid-template-columns: repeat(3,1fr) !important; } }
+
+    .fabrication-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .fabrication-card { background: var(--color-white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.06); transition: transform .3s ease, box-shadow .3s ease; }
+    .fabrication-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+    .fabrication-card-img { height: 200px; overflow: hidden; }
+    .fabrication-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+    .fabrication-card:hover .fabrication-card-img img { transform: scale(1.05); }
+    .fabrication-card-body { padding: 1.5rem; }
+    .fabrication-card-body h3 { font-size: 1.1rem; font-weight: 700; color: var(--color-black); margin-bottom: .5rem; }
+    .fabrication-card-body p { font-size: .9rem; color: #4b5563; line-height: 1.6; margin: 0; }
+    @media (max-width: 992px) { .fabrication-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .fabrication-grid { grid-template-columns: 1fr; } }
+
+    .tech-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .tech-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.06); text-decoration: none; color: inherit; transition: transform .3s ease, box-shadow .3s ease; display: flex; flex-direction: column; }
+    .tech-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+    .tech-card-media { width: 100%; overflow: hidden; aspect-ratio: 16/10; background: #f3f4f6; }
+    .tech-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+    .tech-card:hover .tech-card-media img { transform: scale(1.05); }
+    .tech-card-body { padding: 1.25rem 1.25rem 1.5rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+    .tech-card-tag { display: inline-block; background: var(--color-orange-bg-light, #FFF3E8); color: var(--color-orange-primary); padding: .25rem .7rem; border-radius: 20px; font-size: .7rem; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; align-self: flex-start; }
+    .tech-card-body h4 { color: var(--color-black); font-size: 1rem; font-weight: 700; line-height: 1.35; margin: 0; }
+    .tech-card-body p { color: #6b7280; font-size: .85rem; line-height: 1.5; margin: 0; flex: 1; }
+    .tech-card-link { color: var(--color-orange-primary); font-size: .85rem; font-weight: 600; margin-top: auto; display: inline-flex; align-items: center; gap: .25rem; }
+    .tech-card:hover .tech-card-link { text-decoration: underline; }
+    @media (max-width: 1100px) { .tech-cards-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .tech-cards-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -283,6 +310,130 @@
             </tbody>
           </table>
         </article>
+      </div>
+    </section>
+
+    <!-- ============ FABRICATION & FRAMING ============ -->
+    <section class="product-section-light">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Services</span>
+        <h2>Wire Mesh Fabrication and Framing <span class="accent">Options</span></h2>
+        <p>kestrel metal offers complete fabrication services for all wire mesh products. Our fabrication teams are highly trained and ready to shear, form, roll, frame, or customize any wire mesh order.</p>
+      </div>
+      <div class="article-container">
+        <div class="fabrication-grid">
+          <div class="fabrication-card" data-reveal>
+            <div class="fabrication-card-img">
+              <img src="images/fabrication-design-consultation.webp" alt="Design Consultation" loading="lazy">
+            </div>
+            <div class="fabrication-card-body">
+              <h3>Design Consultation</h3>
+              <p>Expert guidance for your wire mesh projects including CAD drawings, product submittals, and custom fabrication specifications.</p>
+            </div>
+          </div>
+          <div class="fabrication-card" data-reveal>
+            <div class="fabrication-card-img">
+              <img src="images/fabrication-shearing-cutting.webp" alt="Shearing &amp; Cutting" loading="lazy">
+            </div>
+            <div class="fabrication-card-body">
+              <h3>Shearing &amp; Cutting</h3>
+              <p>All wire products can be easily sheared to square, rectangular, or circular sizes. Complicated geometries can be plasma or laser cut.</p>
+            </div>
+          </div>
+          <div class="fabrication-card" data-reveal>
+            <div class="fabrication-card-img">
+              <img src="images/fabrication-welding-framing.webp" alt="Welding &amp; Framing" loading="lazy">
+            </div>
+            <div class="fabrication-card-body">
+              <h3>Welding &amp; Framing</h3>
+              <p>Properly framed with U-edging, rolled angle, or sandwiched flat bars. Panels provided with mounting brackets for quick installation.</p>
+            </div>
+          </div>
+          <div class="fabrication-card" data-reveal>
+            <div class="fabrication-card-img">
+              <img src="images/fabrication-u-edging.webp" alt="U-Edging" loading="lazy">
+            </div>
+            <div class="fabrication-card-body">
+              <h3>U-Edging</h3>
+              <p>A formed U-shaped strip of metal welded to the panel edge, providing a framed appearance and protection from sheared edges.</p>
+            </div>
+          </div>
+          <div class="fabrication-card" data-reveal>
+            <div class="fabrication-card-img">
+              <img src="images/fabrication-instock-u-edging.webp" alt="In-Stock U-Edging" loading="lazy">
+            </div>
+            <div class="fabrication-card-body">
+              <h3>In-Stock U-Edging</h3>
+              <p>Available in 12' lengths of carbon steel, aluminum, or stainless steel. Openings range from 1/16" to 1/2" with 1" overall width.</p>
+            </div>
+          </div>
+          <div class="fabrication-card" data-reveal>
+            <div class="fabrication-card-img">
+              <img src="images/fabrication-separator-screens.webp" alt="Separator Screens" loading="lazy">
+            </div>
+            <div class="fabrication-card-body">
+              <h3>Separator Screens</h3>
+              <p>Fully fabricated separator screens for sorting and sifting applications. Round Ring Screens, Hooked Screens, and Edged Screens available.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TECHNICAL KNOWLEDGE ============ -->
+    <section class="product-section-light product-section-light-alt">
+      <div class="section-header" data-reveal>
+        <span class="category-tag">Technical Knowledge</span>
+        <h2>Welded Wire Mesh Panel <span class="accent">Technical Guide</span></h2>
+        <p>Essential technical information for selecting, specifying, and applying welded wire mesh panels correctly.</p>
+      </div>
+      <div class="article-container">
+        <div class="tech-cards-grid">
+          <a href="blog-welded-wire-mesh-technical.html#wire-gauge" class="tech-card" data-reveal>
+            <div class="tech-card-media">
+              <img src="images/blog/tech-wire-gauge.jpg" alt="Wire gauge and mesh opening" loading="lazy">
+            </div>
+            <div class="tech-card-body">
+              <span class="tech-card-tag">Wire Gauge</span>
+              <h4>Wire Diameter &amp; Mesh Opening</h4>
+              <p>Selection guide for wire gauge, mesh opening sizes, and application matching.</p>
+              <span class="tech-card-link">Learn more &rarr;</span>
+            </div>
+          </a>
+          <a href="blog-welded-wire-mesh-technical.html#weld-quality" class="tech-card" data-reveal>
+            <div class="tech-card-media">
+              <img src="images/blog/tech-weld-quality.jpg" alt="Weld quality inspection" loading="lazy">
+            </div>
+            <div class="tech-card-body">
+              <span class="tech-card-tag">Weld Quality</span>
+              <h4>Electric Resistance Welding Standards</h4>
+              <p>Key quality indicators, tensile strength and shear strength requirements.</p>
+              <span class="tech-card-link">Learn more &rarr;</span>
+            </div>
+          </a>
+          <a href="blog-welded-wire-mesh-technical.html#coating" class="tech-card" data-reveal>
+            <div class="tech-card-media">
+              <img src="images/blog/tech-coating.jpg" alt="Corrosion protection coating" loading="lazy">
+            </div>
+            <div class="tech-card-body">
+              <span class="tech-card-tag">Corrosion Protection</span>
+              <h4>Surface Treatment &amp; Coating Systems</h4>
+              <p>Galvanized, PVC coated, stainless steel &mdash; life expectancy comparison.</p>
+              <span class="tech-card-link">Learn more &rarr;</span>
+            </div>
+          </a>
+          <a href="blog-welded-wire-mesh-technical.html#standards" class="tech-card" data-reveal>
+            <div class="tech-card-media">
+              <img src="images/blog/tech-standards.jpg" alt="Industry standards" loading="lazy">
+            </div>
+            <div class="tech-card-body">
+              <span class="tech-card-tag">Standards</span>
+              <h4>Industry Standards &amp; Compliance</h4>
+              <p>ASTM A970, ISO 1035, BS 4483, EN 10025 and certification details.</p>
+              <span class="tech-card-link">Learn more &rarr;</span>
+            </div>
+          </a>
+        </div>
       </div>
     </section>
 
