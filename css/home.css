@@ -929,6 +929,29 @@
   color: var(--color-orange-primary) !important;
 }
 
+.metal-products .products-view-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--color-orange-primary);
+  border-radius: 30px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-orange-primary);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.metal-products .products-view-more:hover {
+  background: var(--color-orange-primary);
+  color: #ffffff;
+}
+
 .metal-products-right {
   width: 100%;
 }
@@ -2099,6 +2122,7 @@
   .metal-products-left { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: flex-start; }
   .products-header { margin-bottom: 0; }
   .products-list { flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+  .metal-products .products-view-more { grid-column: 2; justify-self: start; align-self: start; margin-top: 0.75rem; }
   .product-item { border: 1px solid #e0e0e0; border-radius: 30px; padding: 0.6rem 1.25rem; }
   .product-item:hover { border-color: var(--color-orange-primary); }
   .product-item.active { background: var(--color-orange-primary); border-color: var(--color-orange-primary); }
@@ -2151,6 +2175,7 @@
   .info-card { min-height: auto; }
   .image-card { min-height: 280px; }
   .metal-products .products-title { font-size: clamp(2rem, 6vw, 3rem); }
+  .metal-products .products-view-more { align-self: center; }
   .what-we-do { padding: 4rem 0; }
   .wwd-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
   .wwd-nav { align-self: flex-end; }
