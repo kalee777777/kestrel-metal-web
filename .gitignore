@@ -1,0 +1,15 @@
+# Dependencies (local tooling only, not part of the website)
+node_modules/
+package.json
+package-lock.json
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.trae/
+.idea/
+
+# Wrangler
+.wrangler/
