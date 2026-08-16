@@ -514,6 +514,57 @@
     });
   }
 
+  /* ---------- Posts（帖子板块）轮播导航 ---------- */
+  function initLatestPosts() {
+    var track = document.querySelector('.ltp-track');
+    if (!track) return;
+
+    var prevBtn = document.querySelector('.ltp-prev');
+    var nextBtn = document.querySelector('.ltp-next');
+    if (!prevBtn && !nextBtn) return;
+
+    var card = track.querySelector('.ltp-card');
+    if (!card) return;
+
+    function getCardWidth() {
+      var style = window.getComputedStyle(track);
+      var gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+
+    function scrollNext() {
+      var maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+      var step = getCardWidth();
+      var current = track._scrollX || 0;
+      var next = current + step;
+      if (next > maxScroll) next = 0;
+      track._scrollX = next;
+      track.style.transform = 'translateX(-' + next + 'px)';
+    }
+
+    function scrollPrev() {
+      var maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+      var step = getCardWidth();
+      var current = track._scrollX || 0;
+      var next = current - step;
+      if (next < 0) next = Math.max(0, maxScroll - (Math.ceil(maxScroll / step) - 1) * step);
+      track._scrollX = next;
+      track.style.transform = 'translateX(-' + next + 'px)';
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', scrollNext);
+    if (prevBtn) prevBtn.addEventListener('click', scrollPrev);
+
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        track._scrollX = 0;
+        track.style.transform = '';
+      }, 200);
+    });
+  }
+
   /* ---------- 初始化 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     initMetalProducts();
@@ -522,5 +573,6 @@
     initEvidence();
     initScrollReveal();
     initWhatWeDo();
+    initLatestPosts();
   });
 })();
