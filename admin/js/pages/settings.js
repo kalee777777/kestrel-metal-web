@@ -42,6 +42,12 @@ Router.register('/settings', async function (container) {
     if (document.getElementById('ga4MeasurementId')) {
       document.getElementById('ga4MeasurementId').value = configs.ga4_measurement_id || '';
     }
+    if (document.getElementById('umamiWebsiteId')) {
+      document.getElementById('umamiWebsiteId').value = configs.umami_website_id || '';
+    }
+    if (document.getElementById('umamiDomain')) {
+      document.getElementById('umamiDomain').value = configs.umami_domain || '';
+    }
   }
 
   function renderAdmins() {
@@ -161,6 +167,17 @@ Router.register('/settings', async function (container) {
         <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:1rem;margin:1rem 0;font-size:13px;color:#856404">
           <strong>说明：</strong>配置 ID 后，前端会自动加载对应统计脚本。支持自动追踪页面浏览、产品点击、询盘表单提交、文件下载、站外链接等事件。
         </div>
+        <h3 style="margin: 1.5rem 0 0.8rem; padding-top: 1rem; border-top: 1px solid #eee; font-size: 1rem; color: #333;">Umami 网站分析（地图 + 实时访客）</h3>
+        <div class="form-group">
+          <label>Umami Website ID</label>
+          <input type="text" name="umami_website_id" id="umamiWebsiteId" class="form-control" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          <small style="color:#999;font-size:12px">在 Umami 后台 → Settings → Website Details 中获取 Website ID</small>
+        </div>
+        <div class="form-group">
+          <label>Umami 服务器地址</label>
+          <input type="text" name="umami_domain" id="umamiDomain" class="form-control" placeholder="https://cloud.umami.is">
+          <small style="color:#999;font-size:12px">自建 Umami 填写你的服务器地址，使用 Umami Cloud 则留空</small>
+        </div>
         <div class="form-actions"><button class="btn btn-primary" type="submit">保存埋点配置</button></div>
       </form>
     </div>
@@ -215,6 +232,8 @@ Router.register('/settings', async function (container) {
   document.getElementById('analyticsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target));
+    data.umami_website_id = document.getElementById('umamiWebsiteId') ? document.getElementById('umamiWebsiteId').value.trim() : '';
+    data.umami_domain = document.getElementById('umamiDomain') ? document.getElementById('umamiDomain').value.trim() : '';
     try {
       await API.put('/api/settings', data);
       API.toast('埋点配置保存成功', 'success');

@@ -226,3 +226,20 @@
     } catch (e) {}
   });
 })();
+
+(function () {
+  'use strict';
+  try {
+    var s = localStorage.getItem('km_admin_site_settings');
+    if (!s) return;
+    var cfg = JSON.parse(s);
+    if (!cfg.umami_website_id) return;
+    
+    var umamiScript = document.createElement('script');
+    umamiScript.defer = true;
+    umamiScript.src = (cfg.umami_domain || 'https://cloud.umami.is') + '/script.js';
+    umamiScript.setAttribute('data-website-id', cfg.umami_website_id);
+    var head = document.head || document.getElementsByTagName('head')[0];
+    head.appendChild(umamiScript);
+  } catch (e) {}
+})();
