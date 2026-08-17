@@ -32,6 +32,40 @@
     });
   }
 
+  var _analyticsLoaded = false;
+  function ensureAnalytics() {
+    if (_analyticsLoaded) return;
+    _analyticsLoaded = true;
+    try {
+      var raw = localStorage.getItem('km_admin_site_settings');
+      var settings = raw ? JSON.parse(raw) : null;
+      if (!settings) return;
+
+      if (settings.ga4_measurement_id && !document.querySelector('script[src*="gtag/js"]')) {
+        var ga4 = document.createElement('script');
+        ga4.async = true;
+        ga4.src = 'https://www.googletagmanager.com/gtag/js?id=' + settings.ga4_measurement_id;
+        document.head.appendChild(ga4);
+        window.dataLayer = window.dataLayer || [];
+        var gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', settings.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
+      }
+
+      if (settings.baidu_stat_token && !document.querySelector('script[src*="hm.js"]')) {
+        var hm = document.createElement('script');
+        hm.async = true;
+        hm.src = 'https://hm.baidu.com/hm.js?' + settings.baidu_stat_token;
+        var firstScript = document.getElementsByTagName('script')[0];
+        if (firstScript && firstScript.parentNode) {
+          firstScript.parentNode.insertBefore(hm, firstScript);
+        }
+        window._hmt = window._hmt || [];
+      }
+    } catch (e) {}
+  }
+
   var navbarReady = loadComponent('components/navbar.html').then(function (html) {
     var placeholder = document.getElementById('navbar-placeholder');
     if (!placeholder) placeholder = document.getElementById('navbar');
@@ -51,9 +85,54 @@
     }
   });
 
+  var _analyticsAutoTrackAttached = false;
+  function attachAnalyticsAutoTrack() {
+    if (_analyticsAutoTrackAttached) return;
+    _analyticsAutoTrackAttached = true;
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a[href]');
+      if (!link) return;
+      var href = link.getAttribute('href');
+      if (!href) return;
+      if (href.match(/\.(pdf|zip|doc|docx|xlsx|csv)$/i)) {
+        trackAnalyticsEvent('file_download', { category: 'Downloads', label: href.split('/').pop() });
+      }
+      if (link.hostname && link.hostname !== window.location.hostname) {
+        trackAnalyticsEvent('click', { category: 'Outbound Link', label: href });
+      }
+      if (href.indexOf('mailto:') === 0 || href.indexOf('tel:') === 0) {
+        trackAnalyticsEvent('contact_click', { category: 'Contact', label: href.split(':')[1] });
+      }
+    });
+  }
+
+  function trackAnalyticsEvent(name, params) {
+    if (window.gtag) {
+      window.gtag('event', name, params || {});
+    }
+    if (window._hmt && params) {
+      window._hmt.push(['_trackEvent', params.category || 'engagement', name, params.label || '', params.value || 0]);
+    }
+  }
+
+  window.Analytics = window.Analytics || {
+    trackEvent: trackAnalyticsEvent,
+    trackInquiryForm: function (product) { trackAnalyticsEvent('generate_lead', { category: 'Inquiries', label: product || 'contact_form' }); },
+    trackProductClick: function (id, name, cat) { trackAnalyticsEvent('select_item', { category: 'Products', label: name }); },
+    trackDownload: function (file) { trackAnalyticsEvent('file_download', { category: 'Downloads', label: file }); },
+    trackSearch: function (q) { trackAnalyticsEvent('search', { category: 'Search', label: q }); },
+    trackFAQInteraction: function (q) { trackAnalyticsEvent('faq_expand', { category: 'FAQ', label: q ? q.substring(0, 100) : '' }); },
+    trackBlogRead: function (title) { trackAnalyticsEvent('article_read', { category: 'Blog', label: title }); }
+  };
+
   Promise.all([navbarReady, footerReady]).then(function () {
     initNavbar();
     initFooterSmoothScroll();
+    ensureAnalytics();
+    attachAnalyticsAutoTrack();
+  }, function () {
+    ensureAnalytics();
+    attachAnalyticsAutoTrack();
   });
 
   function loadScript(src) {

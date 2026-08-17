@@ -91,6 +91,9 @@ function handleContactSubmit(e) {
   setTimeout(function () {
     btn.textContent = '✓ Message Sent!';
     btn.style.background = '#28a745';
+    if (window.Analytics) {
+      Analytics.trackInquiryForm(inquiryData.product_name);
+    }
     setTimeout(function () {
       btn.textContent = originalText;
       btn.style.background = '';
