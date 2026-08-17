@@ -14,7 +14,7 @@ Router.register('/analytics', async function (container) {
       : 'https://cloud.umami.is/share/' + umamiWebsiteId;
     const dashboardUrl = umamiDomain
       ? umamiDomain + '/dashboard'
-      : 'https://cloud.umami.is/dashboard';
+      : 'https://cloud.umami.is';
 
     container.innerHTML = `
       <div class="page-header" style="display:flex;justify-content:space-between;align-items:center">
