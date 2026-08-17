@@ -348,30 +348,46 @@ const API = (function () {
 
     // Dashboard
     if (segments[0] === 'api' && segments[1] === 'dashboard' && segments[2] === 'summary') {
-      const analytics = getStorage('analytics_summary') || {};
+      const tracked = getStorage('analytics_data') || {};
+      const trackedLog = getStorage('visitor_log') || [];
       const inquiries = getCollection('inquiries');
       const products = getCollection('products');
       const posts = getCollection('blog_posts');
       const today = new Date();
-      const todayInquiries = inquiries.filter(i => new Date(i.created_at).toDateString() === today.toDateString()).length;
+      const todayStr = today.toDateString();
+      const todayInquiries = inquiries.filter(i => new Date(i.created_at).toDateString() === todayStr).length;
+
+      const realToday = tracked.today || {};
+      const realDaily = (tracked.dailyHistory || {});
+      let totalPageviews = tracked.pageviews || 0;
+      let totalVisitors = 0;
+      const seenVisitors = {};
+      for (let i = 0; i < trackedLog.length; i++) {
+        if (trackedLog[i] && trackedLog[i].id && !seenVisitors[trackedLog[i].id]) {
+          seenVisitors[trackedLog[i].id] = true;
+          totalVisitors++;
+        }
+      }
 
       return {
         today: {
-          pageviews: analytics.totals?.pageviews || 0,
-          visitors: analytics.totals?.visitors || 0,
+          pageviews: (realToday.date === todayStr) ? (realToday.pageviews || 0) : 0,
+          visitors: (realToday.date === todayStr) ? (realToday.visitors || 0) : 0,
           inquiries: todayInquiries
         },
         total: {
-          pageviews: analytics.totals?.pageviews || 0,
-          visitors: analytics.totals?.visitors || 0,
+          pageviews: totalPageviews,
+          visitors: totalVisitors,
           inquiries: inquiries.length,
           products: products.filter(p => p.is_active).length,
           blogPosts: posts.filter(p => p.status === 'published').length
         },
         weekly: {
-          avgDuration: analytics.weekly?.avgDuration || 0,
-          bounceRate: analytics.weekly?.bounceRate || 0
-        }
+          avgDuration: tracked.weekly ? (tracked.weekly.avgDuration || 0) : 0,
+          bounceRate: tracked.weekly ? (tracked.weekly.bounceRate || 0) : 0
+        },
+        topPages: tracked.topPages || {},
+        dailyHistory: realDaily
       };
     }
 
