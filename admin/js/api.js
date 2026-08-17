@@ -222,9 +222,9 @@ const API = (function () {
       social_facebook: 'https://facebook.com/kestrelmetal',
       social_twitter: 'https://twitter.com/kestrelmetal',
       social_linkedin: 'https://linkedin.com/company/kestrelmetal',
-      ga4_measurement_id: '',
-      umami_website_id: '',
-      umami_domain: '',
+      ga4_measurement_id: 'G-Q5WHY8L8BN',
+      umami_website_id: 'a7ba74c4-ee31-414b-8a9c-2fa239ae7557',
+      umami_domain: 'https://cloud.umami.is',
     });
 
     // Seed admin user
