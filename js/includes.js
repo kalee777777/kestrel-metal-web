@@ -52,17 +52,6 @@
         gtag('js', new Date());
         gtag('config', settings.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
       }
-
-      if (settings.baidu_stat_token && !document.querySelector('script[src*="hm.js"]')) {
-        var hm = document.createElement('script');
-        hm.async = true;
-        hm.src = 'https://hm.baidu.com/hm.js?' + settings.baidu_stat_token;
-        var firstScript = document.getElementsByTagName('script')[0];
-        if (firstScript && firstScript.parentNode) {
-          firstScript.parentNode.insertBefore(hm, firstScript);
-        }
-        window._hmt = window._hmt || [];
-      }
     } catch (e) {}
   }
 
@@ -109,9 +98,6 @@
   function trackAnalyticsEvent(name, params) {
     if (window.gtag) {
       window.gtag('event', name, params || {});
-    }
-    if (window._hmt && params) {
-      window._hmt.push(['_trackEvent', params.category || 'engagement', name, params.label || '', params.value || 0]);
     }
   }
 

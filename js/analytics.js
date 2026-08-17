@@ -1,14 +1,13 @@
 /**
- * Analytics - Unified tracking module for GA4 + Baidu Statistics
+ * Analytics - Unified tracking module for GA4
  *
- * GA4 Measurement ID and Baidu Token are loaded from Admin site_settings.
+ * GA4 Measurement ID is loaded from Admin site_settings.
  * Falls back to placeholder values if not configured.
  */
 var Analytics = (function () {
   'use strict';
 
   var GA_MEASUREMENT_ID = '';
-  var BAIDU_TOKEN = '';
   var isInitialized = false;
 
   function getSetting(key) {
@@ -41,25 +40,9 @@ var Analytics = (function () {
     });
   }
 
-  function loadBaidu(token) {
-    if (!token || document.querySelector('script[src*="hm.js"]')) return;
-    BAIDU_TOKEN = token;
-
-    var hm = document.createElement('script');
-    hm.async = true;
-    hm.src = 'https://hm.baidu.com/hm.js?' + token;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(hm, s);
-
-    window._hmt = window._hmt || [];
-  }
-
   function trackEvent(eventName, params) {
     if (window.gtag) {
       window.gtag('event', eventName, params || {});
-    }
-    if (window._hmt) {
-      window._hmt.push(['_trackEvent', (params && params.category) || 'engagement', eventName, (params && params.label) || '', (params && params.value) || 0]);
     }
   }
 
@@ -69,9 +52,6 @@ var Analytics = (function () {
         page_path: pagePath || window.location.pathname,
         page_title: pageTitle || document.title
       });
-    }
-    if (window._hmt) {
-      window._hmt.push(['_trackPageView', pagePath || window.location.pathname, { page_title: pageTitle || document.title }]);
     }
   }
 
@@ -141,9 +121,6 @@ var Analytics = (function () {
 
     if (settings.ga4_measurement_id) {
       loadGA4(settings.ga4_measurement_id);
-    }
-    if (settings.baidu_stat_token) {
-      loadBaidu(settings.baidu_stat_token);
     }
 
     attachAutoTrack();

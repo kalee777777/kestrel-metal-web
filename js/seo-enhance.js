@@ -1,0 +1,378 @@
+'use strict';
+
+(function () {
+    var DOMAIN = 'https://www.kestrelmetal.com';
+    var DEFAULT_IMAGE = DOMAIN + '/images/og-default.jpg';
+
+    function getMetaContent(name, attr) {
+        attr = attr || 'name';
+        var el = document.querySelector('meta[' + attr + '="' + name + '"]');
+        return el ? el.getAttribute('content') : '';
+    }
+
+    function injectMeta(attrs) {
+        var key;
+        for (key in attrs) {
+            if (attrs.hasOwnProperty(key)) {
+                var existing = document.querySelector('meta[' + key + '="' + attrs[key] + '"]');
+                if (existing && existing.getAttribute('content') === attrs.content) {
+                    return;
+                }
+            }
+        }
+        var tag = document.createElement('meta');
+        for (key in attrs) {
+            if (attrs.hasOwnProperty(key)) {
+                tag.setAttribute(key, attrs[key]);
+            }
+        }
+        document.head.appendChild(tag);
+    }
+
+    function injectJsonLd(data) {
+        var script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(data, null, 2);
+        document.head.appendChild(script);
+    }
+
+    function getCanonicalPath() {
+        var path = window.location.pathname;
+        if (path === '/' || path.indexOf('index.html') !== -1) {
+            return '/';
+        }
+        return path;
+    }
+
+    function getPageType(pathname) {
+        if (pathname === '/' || pathname.indexOf('index.html') !== -1) {
+            return 'website';
+        }
+        if (pathname.indexOf('blog-') !== -1 && pathname.indexOf('.html') !== -1) {
+            return 'article';
+        }
+        var productPatterns = [
+            'fence', 'mesh', 'wire', 'panel', 'post', 'gate', 'barrier',
+            'screen', 'roll', 'netting', 'coil', 'fastener', 'tie'
+        ];
+        var lowerPath = pathname.toLowerCase();
+        for (var i = 0; i < productPatterns.length; i++) {
+            if (lowerPath.indexOf(productPatterns[i]) !== -1) {
+                return 'product';
+            }
+        }
+        return 'website';
+    }
+
+    function getPageTitle() {
+        var titleEl = document.querySelector('title');
+        return titleEl ? titleEl.textContent.trim() : '';
+    }
+
+    function getPageDescription() {
+        return getMetaContent('description');
+    }
+
+    function getPageNameFromPath(pathname) {
+        var segments = pathname.split('/');
+        var filename = segments[segments.length - 1];
+        if (!filename || filename === '/') {
+            return 'Home';
+        }
+        filename = filename.replace('.html', '').replace(/-/g, ' ');
+        filename = filename.replace(/\b\w/g, function (c) {
+            return c.toUpperCase();
+        });
+        return filename;
+    }
+
+    function injectCanonical(pathname) {
+        if (document.querySelector('link[rel="canonical"]')) {
+            return;
+        }
+        var link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        link.setAttribute('href', DOMAIN + pathname);
+        document.head.appendChild(link);
+    }
+
+    function injectOpenGraph(pathname, title, description, pageType) {
+        var ogTags = [
+            { property: 'og:title', content: title },
+            { property: 'og:description', content: description },
+            { property: 'og:url', content: DOMAIN + pathname },
+            { property: 'og:type', content: pageType },
+            { property: 'og:image', content: DEFAULT_IMAGE },
+            { property: 'og:site_name', content: 'Kestrel Metal' },
+            { property: 'og:locale', content: 'en_US' }
+        ];
+        for (var i = 0; i < ogTags.length; i++) {
+            injectMeta({ property: ogTags[i].property, content: ogTags[i].content });
+        }
+    }
+
+    function injectTwitterCard(title, description) {
+        var twitterTags = [
+            { name: 'twitter:card', content: 'summary_large_image' },
+            { name: 'twitter:title', content: title },
+            { name: 'twitter:description', content: description },
+            { name: 'twitter:image', content: DEFAULT_IMAGE }
+        ];
+        for (var i = 0; i < twitterTags.length; i++) {
+            injectMeta({ name: twitterTags[i].name, content: twitterTags[i].content });
+        }
+    }
+
+    function injectOrganizationSchema() {
+        var schema = {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Kestrel Metal",
+            "url": DOMAIN,
+            "logo": DOMAIN + "/images/logo.png",
+            "description": "Professional metal products manufacturer specializing in fence products, wire mesh and wire products.",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Anping",
+                "addressRegion": "Hebei",
+                "addressCountry": "CN"
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+61-400-000-000",
+                "contactType": "sales",
+                "email": "sales@kestrelmetal.com",
+                "availableLanguage": ["English", "Chinese"]
+            },
+            "sameAs": [
+                "https://www.facebook.com/kestrelmetal",
+                "https://www.linkedin.com/company/kestrelmetal"
+            ]
+        };
+        injectJsonLd(schema);
+    }
+
+    function injectBreadcrumbSchema(pathname, pageTitle) {
+        if (pathname === '/' || pathname.indexOf('index.html') !== -1) {
+            return;
+        }
+
+        var breadcrumbs = [];
+        var breadcrumbLinks = document.querySelectorAll('.breadcrumb a, .breadcrumb-nav a');
+
+        if (breadcrumbLinks.length > 0) {
+            for (var i = 0; i < breadcrumbLinks.length; i++) {
+                var link = breadcrumbLinks[i];
+                var text = link.textContent.trim();
+                var href = link.getAttribute('href');
+                var url = href.indexOf('http') === 0 ? href : DOMAIN + href;
+                breadcrumbs.push({
+                    "@type": "ListItem",
+                    "position": i + 1,
+                    "name": text,
+                    "item": url
+                });
+            }
+        } else {
+            breadcrumbs.push({
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": DOMAIN
+            });
+            breadcrumbs.push({
+                "@type": "ListItem",
+                "position": 2,
+                "name": pageTitle,
+                "item": DOMAIN + pathname
+            });
+        }
+
+        if (breadcrumbs.length > 0) {
+            var schema = {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": breadcrumbs
+            };
+            injectJsonLd(schema);
+        }
+    }
+
+    function injectWebsiteSchema() {
+        var schema = {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Kestrel Metal",
+            "url": DOMAIN
+        };
+        injectJsonLd(schema);
+    }
+
+    function injectProductSchema() {
+        var productEl = document.querySelector('.product, .product-detail, .product-info, [data-product]');
+        if (!productEl) {
+            var nameEl = document.querySelector('h1, .product-name, .product-title');
+            var descriptionEl = document.querySelector('.product-description, .description, .product-desc');
+            var imageEl = document.querySelector('.product-image img, .product-img img');
+
+            var name = nameEl ? nameEl.textContent.trim() : getPageTitle();
+            var description = descriptionEl ? descriptionEl.textContent.trim() : getPageDescription();
+            var image = imageEl ? imageEl.getAttribute('src') : DEFAULT_IMAGE;
+
+            if (image && image.indexOf('http') !== 0) {
+                image = DOMAIN + image;
+            }
+
+            var schema = {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": name,
+                "description": description || "High quality metal products from Kestrel Metal.",
+                "image": image,
+                "brand": {
+                    "@type": "Brand",
+                    "name": "Kestrel Metal"
+                }
+            };
+            injectJsonLd(schema);
+        } else {
+            var prodName = productEl.querySelector('h1, .product-name, .product-title');
+            var prodDesc = productEl.querySelector('.product-description, .description');
+            var prodImage = productEl.querySelector('.product-image img, .product-img img');
+            var prodPrice = productEl.querySelector('.price, .product-price');
+
+            var productName = prodName ? prodName.textContent.trim() : getPageTitle();
+            var productDesc = prodDesc ? prodDesc.textContent.trim() : getPageDescription();
+            var productImage = prodImage ? prodImage.getAttribute('src') : DEFAULT_IMAGE;
+            var productPrice = prodPrice ? prodPrice.textContent.trim() : '';
+
+            if (productImage && productImage.indexOf('http') !== 0) {
+                productImage = DOMAIN + productImage;
+            }
+
+            var productSchema = {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": productName,
+                "description": productDesc || "High quality metal products from Kestrel Metal.",
+                "image": productImage,
+                "brand": {
+                    "@type": "Brand",
+                    "name": "Kestrel Metal"
+                }
+            };
+
+            if (productPrice) {
+                var priceValue = productPrice.replace(/[^0-9.]/g, '');
+                if (priceValue) {
+                    productSchema.offers = {
+                        "@type": "Offer",
+                        "price": priceValue,
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock"
+                    };
+                }
+            }
+            injectJsonLd(productSchema);
+        }
+    }
+
+    function injectFaqSchema() {
+        var faqItems = document.querySelectorAll('.faq-item');
+        if (faqItems.length === 0) {
+            return;
+        }
+
+        var mainEntity = [];
+        for (var i = 0; i < faqItems.length; i++) {
+            var item = faqItems[i];
+            var questionEl = item.querySelector('.faq-question, h3, h4, .question');
+            var answerEl = item.querySelector('.faq-answer, .answer, p');
+
+            if (questionEl && answerEl) {
+                mainEntity.push({
+                    "@type": "Question",
+                    "name": questionEl.textContent.trim(),
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": answerEl.textContent.trim()
+                    }
+                });
+            }
+        }
+
+        if (mainEntity.length > 0) {
+            var schema = {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": mainEntity
+            };
+            injectJsonLd(schema);
+        }
+    }
+
+    function injectArticleSchema(title, description, pathname) {
+        var dateEl = document.querySelector('time, .post-date, .article-date, [datetime]');
+        var dateStr = dateEl ? dateEl.getAttribute('datetime') || dateEl.textContent.trim() : new Date().toISOString().split('T')[0];
+
+        var schema = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": title,
+            "description": description || "",
+            "author": {
+                "@type": "Organization",
+                "name": "Kestrel Metal"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Kestrel Metal",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": DOMAIN + "/images/logo.png"
+                }
+            },
+            "url": DOMAIN + pathname,
+            "datePublished": dateStr,
+            "image": DEFAULT_IMAGE
+        };
+        injectJsonLd(schema);
+    }
+
+    function init() {
+        var pathname = getCanonicalPath();
+        var title = getPageTitle();
+        var description = getPageDescription();
+        var pageType = getPageType(pathname);
+        var pageTitle = getPageNameFromPath(pathname);
+
+        injectCanonical(pathname);
+        injectOpenGraph(pathname, title, description, pageType);
+        injectTwitterCard(title, description);
+
+        injectOrganizationSchema();
+        injectBreadcrumbSchema(pathname, pageTitle);
+
+        if (pathname === '/' || pathname.indexOf('index.html') !== -1) {
+            injectWebsiteSchema();
+        }
+
+        if (pageType === 'product') {
+            injectProductSchema();
+        }
+
+        if (pathname.indexOf('faq.html') !== -1) {
+            injectFaqSchema();
+        }
+
+        if (pageType === 'article') {
+            injectArticleSchema(title, description, pathname);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();

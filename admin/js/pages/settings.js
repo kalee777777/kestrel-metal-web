@@ -42,9 +42,6 @@ Router.register('/settings', async function (container) {
     if (document.getElementById('ga4MeasurementId')) {
       document.getElementById('ga4MeasurementId').value = configs.ga4_measurement_id || '';
     }
-    if (document.getElementById('baiduStatToken')) {
-      document.getElementById('baiduStatToken').value = configs.baidu_stat_token || '';
-    }
   }
 
   function renderAdmins() {
@@ -160,11 +157,6 @@ Router.register('/settings', async function (container) {
         <div class="form-group"><label>Measurement ID</label>
           <input type="text" name="ga4_measurement_id" id="ga4MeasurementId" class="form-control" placeholder="G-XXXXXXXXXX">
           <small style="color:#999;font-size:12px">在 Google Analytics 后台 → 管理 → 数据流 → 概览 中获取</small>
-        </div>
-        <h3>百度统计</h3>
-        <div class="form-group"><label>百度统计 Token</label>
-          <input type="text" name="baidu_stat_token" id="baiduStatToken" class="form-control" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-          <small style="color:#999;font-size:12px">在百度统计后台 → 网站列表 → 获取代码 中复制 hm.js? 后面的字符串</small>
         </div>
         <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:1rem;margin:1rem 0;font-size:13px;color:#856404">
           <strong>说明：</strong>配置 ID 后，前端会自动加载对应统计脚本。支持自动追踪页面浏览、产品点击、询盘表单提交、文件下载、站外链接等事件。

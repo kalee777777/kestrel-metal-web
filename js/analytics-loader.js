@@ -18,14 +18,5 @@
     window.gtag = gtag;
     gtag('js', new Date());
     gtag('config', cfg.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
-
-    if (cfg.baidu_stat_token) {
-      var hm = document.createElement('script');
-      hm.async = true;
-      hm.src = 'https://hm.baidu.com/hm.js?' + cfg.baidu_stat_token;
-      var first = document.getElementsByTagName('script')[0];
-      if (first && first.parentNode) first.parentNode.insertBefore(hm, first);
-      window._hmt = window._hmt || [];
-    }
   } catch (e) {}
 })();
