@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=question%20mark%20industrial%20metal%20mesh%20background%20help%20support%20desk%20dark%20blue%20toned%20customer%20service&image_size=landscape_16_9');
+  background-image: url('../images/hero-case.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -316,7 +316,7 @@
 .faq-cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography%20close%20up&image_size=landscape_16_9');
+  background-image: url('../images/hero-metal-finishing.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

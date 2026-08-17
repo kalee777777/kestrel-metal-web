@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=wire%20mesh%20sample%20coils%20catalog%20documents%20engineer%20desk%20blueprint%20technical%20drawings%20steel%20grid%20close%20up%20industrial%20library%20dark%20ambiance%20warm%20desk%20lamp%20light%20orange%20accent&image_size=landscape_16_9');
+  background-image: url('../images/hero-downloads.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -343,7 +343,7 @@
 .resources-cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography%20close%20up&image_size=landscape_16_9');
+  background-image: url('../images/hero-metal-finishing.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

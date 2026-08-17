@@ -28,7 +28,7 @@ Router.register('/dashboard', async function (container) {
   `;
 
   try {
-    const data = await API.getDashboardSummary();
+    const data = await API.get('/api/dashboard/summary');
     const fmt = (n) => n.toLocaleString('en-US');
     const fmtDuration = (sec) => {
       const m = Math.floor(sec / 60);

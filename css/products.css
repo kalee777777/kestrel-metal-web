@@ -22,7 +22,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=galvanized%20steel%20wire%20mesh%20fence%20panels%20stacked%20warehouse%20industrial%20orange%20tone%20dramatic%20lighting&image_size=landscape_16_9');
+  background-image: url('../images/products/welded-mesh-panel-overview.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -382,7 +382,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography%20close%20up&image_size=landscape_16_9');
+  background-image: url('../images/hero-metal-finishing.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

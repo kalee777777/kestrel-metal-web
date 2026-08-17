@@ -473,7 +473,7 @@
 .downloads-cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=engineer%20inspection%20steel%20fence%20panels%20factory%20quality%20control%20dark%20industrial%20orange%20lighting&image_size=landscape_16_9');
+  background-image: url('../images/hero-downloads.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

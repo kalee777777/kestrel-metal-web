@@ -113,9 +113,13 @@ Router.register('/products', async function (container) {
   };
 
   window.closeProductModal = () => {
-    document.getElementById('productModal').classList.add('show');
+    document.getElementById('productModal').classList.remove('show');
     document.getElementById('productModal').classList.remove('show');
   };
+
+  await loadCategories();
+
+  const categoryOptions = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
   container.innerHTML = `
     <div class="page-header">
@@ -127,7 +131,7 @@ Router.register('/products', async function (container) {
       <input type="text" id="searchInput" class="form-control search" placeholder="搜索产品名称..." onkeyup="handleSearch(event)">
       <select id="categoryFilter" class="form-control" onchange="handleCategoryFilter(this.value)">
         <option value="">全部分类</option>
-        ${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+        ${categoryOptions}
       </select>
       <button class="btn" onclick="handleReset()">重置</button>
     </div>
@@ -169,7 +173,7 @@ Router.register('/products', async function (container) {
                 <label>分类 *</label>
                 <select name="category_id" class="form-control" required>
                   <option value="">请选择分类</option>
-                  ${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                  ${categoryOptions}
                 </select>
               </div>
               <div class="form-group">
@@ -282,6 +286,5 @@ Router.register('/products', async function (container) {
     loadProducts(1);
   };
 
-  await loadCategories();
   await loadProducts();
 });

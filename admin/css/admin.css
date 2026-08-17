@@ -3,13 +3,13 @@
    ============================================================ */
 
 :root {
-  --primary: #D35400;
-  --primary-dark: #A04000;
-  --primary-light: #E67E22;
-  --primary-bg: #FFF8F0;
-  --primary-bg-2: #FEF0E0;
+  --primary: #ff6b35;
+  --primary-dark: #e55a2b;
+  --primary-light: #ff8c5a;
+  --primary-bg: #fff5f0;
+  --primary-bg-2: #ffe8dc;
 
-  --dark: #1a1a1a;
+  --dark: #0a0a0a;
   --gray-900: #212529;
   --gray-800: #343A40;
   --gray-700: #495057;
@@ -27,7 +27,7 @@
   --danger: #EF4444;
   --info: #3B82F6;
 
-  --sidebar-bg: #1a1a1a;
+  --sidebar-bg: #0a0a0a;
   --sidebar-width: 240px;
   --sidebar-collapsed: 64px;
   --header-height: 60px;
@@ -87,7 +87,7 @@ button { cursor: pointer; font-family: inherit; }
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
   position: relative;
 }
 
@@ -95,7 +95,7 @@ button { cursor: pointer; font-family: inherit; }
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(211,84,0,0.15) 0%, transparent 50%);
+  background: radial-gradient(circle at 30% 20%, rgba(255,107,53,0.15) 0%, transparent 50%);
 }
 
 .login-container {
@@ -159,7 +159,7 @@ button { cursor: pointer; font-family: inherit; }
 .login-form input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(211,84,0,0.1);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
 }
 
 .login-error {
@@ -327,7 +327,7 @@ button { cursor: pointer; font-family: inherit; }
   color: white;
 }
 .nav-item.active {
-  background: rgba(211,84,0,0.15);
+  background: rgba(255,107,53,0.15);
   color: var(--primary-light);
   border-left-color: var(--primary-light);
 }
@@ -565,7 +565,7 @@ tbody tr:hover { background: var(--gray-50); }
 .form-control:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(211,84,0,0.1);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
 }
 textarea.form-control {
   min-height: 120px;

@@ -184,8 +184,8 @@ Router.register('/analytics', async function (container) {
             <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="pvGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" style="stop-color:rgba(211,84,0,0.3)"/>
-                  <stop offset="100%" style="stop-color:rgba(211,84,0,0)"/>
+                  <stop offset="0%" style="stop-color:rgba(255,107,53,0.3)"/>
+                  <stop offset="100%" style="stop-color:rgba(255,107,53,0)"/>
                 </linearGradient>
                 <linearGradient id="vGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" style="stop-color:rgba(59,130,246,0.3)"/>
@@ -193,14 +193,14 @@ Router.register('/analytics', async function (container) {
                 </linearGradient>
               </defs>
               ${[0, 25, 50, 75, 100].map(y => `<line x1="0" y1="${y}" x2="100" y2="${y}" stroke="#e5e7eb" stroke-width="0.2"/>`).join('')}
-              <polyline points="${pvLines}" fill="none" stroke="#D35400" stroke-width="0.5"/>
+              <polyline points="${pvLines}" fill="none" stroke="#ff6b35" stroke-width="0.5"/>
               <polyline points="${pvLines} 100,${pvLines.split(' ')[0].split(',')[1]} 100,${pvLines.split(' ').pop().split(',')[1]}" fill="url(#pvGradient)"/>
               <polyline points="${vLines}" fill="none" stroke="#3B82F6" stroke-width="0.5"/>
               <polyline points="${vLines} 100,${vLines.split(' ')[0].split(',')[1]} 100,${vLines.split(' ').pop().split(',')[1]}" fill="url(#vGradient)"/>
             </svg>
             <div style="display:flex;justify-content:center;gap:2rem;margin-top:0.5rem">
               <div style="display:flex;align-items:center;gap:0.5rem">
-                <div style="width:12px;height:2px;background:#D35400"></div>
+                <div style="width:12px;height:2px;background:#ff6b35"></div>
                 <span style="font-size:0.75rem">页面浏览</span>
               </div>
               <div style="display:flex;align-items:center;gap:0.5rem">

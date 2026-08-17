@@ -56,6 +56,13 @@
     initFooterSmoothScroll();
   });
 
+  function loadScript(src) {
+    var s = document.createElement('script');
+    s.src = BASE + src;
+    s.defer = true;
+    document.body.appendChild(s);
+  }
+
   function initNavbar() {
     var navbar = document.querySelector('.navbar');
     var mobileToggle = document.querySelector('.mobile-toggle');

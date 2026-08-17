@@ -16,7 +16,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=metal%20product%20catalog%20brochure%20technical%20drawing%20blueprint%20industrial%20workshop%20files%20documents%20dark%20background%20orange%20accent&image_size=landscape_16_9');
+  background-image: url('../images/hero-blog.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -387,7 +387,7 @@
 .catalog-cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=rolls%20of%20wire%20mesh%20steel%20coiled%20wire%20industrial%20warehouse%20dark%20orange%20accent%20light%20dramatic&image_size=landscape_16_9');
+  background-image: url('../images/welded-wire-mesh-roll-hero.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

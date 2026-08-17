@@ -1,10 +1,54 @@
 /**
- * Admin API Client - 封装所有后端请求
+ * Admin API Client - LocalStorage Implementation
+ * 纯静态 Admin: 使用 localStorage 模拟后端数据存储
  */
 const API = (function () {
   const TOKEN_KEY = 'km_admin_token';
   const USER_KEY = 'km_admin_user';
+  const STORAGE_PREFIX = 'km_admin_';
 
+  // ==================== Storage Helpers ====================
+  function getStorage(key) {
+    const fullKey = STORAGE_PREFIX + key;
+    const raw = localStorage.getItem(fullKey);
+    return raw ? JSON.parse(raw) : null;
+  }
+
+  function setStorage(key, value) {
+    const fullKey = STORAGE_PREFIX + key;
+    if (value === null || value === undefined) {
+      localStorage.removeItem(fullKey);
+    } else {
+      localStorage.setItem(fullKey, JSON.stringify(value));
+    }
+  }
+
+  function getCollection(key) {
+    return getStorage(key) || [];
+  }
+
+  function setCollection(key, data) {
+    setStorage(key, data);
+  }
+
+  function mergeCollection(key, seedItems, idField = 'id') {
+    const existing = getCollection(key);
+    const existingIds = new Set(existing.map(item => item[idField]));
+    const newItems = seedItems.filter(item => !existingIds.has(item[idField]));
+    if (newItems.length > 0) {
+      setCollection(key, [...existing, ...newItems]);
+    }
+  }
+
+  function generateId() {
+    return Date.now() + Math.floor(Math.random() * 1000);
+  }
+
+  function delay(ms = 100) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // ==================== Auth ====================
   function getToken() {
     return localStorage.getItem(TOKEN_KEY);
   }
@@ -33,74 +77,606 @@ const API = (function () {
     setUser(null);
   }
 
-  async function request(url, options = {}) {
-    const headers = { 'Content-Type': 'application/json', ...options.headers };
-    const token = getToken();
-    if (token) headers['Authorization'] = 'Bearer ' + token;
+  // ==================== Seed Data ====================
+  function seedData() {
+    if (getStorage('seeded')) return;
 
-    try {
-      const res = await fetch(url, { ...options, headers });
-      const data = await res.json();
+    // Seed categories
+    setCollection('product_categories', [
+      { id: 1, name: 'Chain Link Fence', slug: 'chain-link-fence', description: 'Chain link fencing products', parent_id: null, sort_order: 1, is_active: true, image: '/images/chain-link-galvanized.webp', created_at: new Date().toISOString() },
+      { id: 2, name: 'Welded Wire Mesh', slug: 'welded-wire-mesh', description: 'Welded wire mesh products', parent_id: null, sort_order: 2, is_active: true, image: '/images/welded-mesh-711.webp', created_at: new Date().toISOString() },
+      { id: 3, name: 'Hexagonal Wire', slug: 'hexagonal-wire', description: 'Hexagonal wire mesh', parent_id: null, sort_order: 3, is_active: true, image: '/images/hexagonal-wire.webp', created_at: new Date().toISOString() },
+      { id: 4, name: 'Gabion & Mattress', slug: 'gabion-mattress', description: 'Gabion boxes and mattresses', parent_id: null, sort_order: 4, is_active: true, image: '/images/gabion-mattress.webp', created_at: new Date().toISOString() },
+      { id: 5, name: 'Razor & Barbed Wire', slug: 'razor-barbed-wire', description: 'Razor wire and barbed wire', parent_id: null, sort_order: 5, is_active: true, image: '/images/btc-razor-wire.webp', created_at: new Date().toISOString() },
+      { id: 6, name: 'Fence Accessories', slug: 'fence-accessories', description: 'Fence fittings and accessories', parent_id: null, sort_order: 6, is_active: true, image: '/images/chain-link-fittings-banner.webp', created_at: new Date().toISOString() },
+    ]);
 
-      if (res.status === 401) {
-        logout();
-        window.location.href = '/admin/login.html';
-        throw new Error('Unauthorized');
-      }
+    // Seed products
+    setCollection('products', [
+      { id: 1, category_id: 1, name: 'Galvanized Chain Link Fence', slug: 'galvanized-chain-link', subtitle: 'High-quality galvanized chain link', description: 'Premium galvanized chain link fence with excellent corrosion resistance', specifications: 'Wire diameter: 2.0-4.0mm\nMesh size: 50x50mm\nLength: 25m/roll', price_range: '$50-$150', meta_title: 'Galvanized Chain Link Fence | Kestrel Metal', meta_description: 'High-quality galvanized chain link fence for residential and commercial applications', cover_image: '/images/chain-link-galvanized.webp', is_featured: true, is_active: true, sort_order: 1, created_at: new Date().toISOString() },
+      { id: 2, category_id: 1, name: 'PVC Coated Chain Link Fence', slug: 'pvc-coated-chain-link', subtitle: 'Colorful PVC coated fence', description: 'PVC coated chain link fence available in various colors', specifications: 'Wire diameter: 2.5-3.5mm\nMesh size: 50x50mm\nColors: Black, Green, Blue', price_range: '$60-$180', meta_title: 'PVC Coated Chain Link Fence | Kestrel Metal', meta_description: 'Colorful PVC coated chain link fence with long-lasting performance', cover_image: '/images/chain-link-pvc.webp', is_featured: true, is_active: true, sort_order: 2, created_at: new Date().toISOString() },
+      { id: 3, category_id: 2, name: 'Welded Wire Mesh Panel', slug: 'welded-wire-mesh-panel', subtitle: 'Structural welded mesh panels', description: 'High-strength welded wire mesh panels for various applications', specifications: 'Wire diameter: 4.0-12.0mm\nPanel size: 2.4x6m\nSpacing: 50x50mm', price_range: '$30-$200', meta_title: 'Welded Wire Mesh Panel | Kestrel Metal', meta_description: 'High-strength welded wire mesh panels for construction and industrial use', cover_image: '/images/welded-mesh-711.webp', is_featured: true, is_active: true, sort_order: 3, created_at: new Date().toISOString() },
+      { id: 4, category_id: 3, name: 'Hexagonal Wire Netting', slug: 'hexagonal-wire-netting', subtitle: 'Flexible hexagonal mesh', description: 'Flexible hexagonal wire netting for chicken coop and fencing', specifications: 'Wire diameter: 0.5-2.0mm\nMesh size: 13-75mm\nLength: 30m/roll', price_range: '$10-$80', meta_title: 'Hexagonal Wire Netting | Kestrel Metal', meta_description: 'Flexible hexagonal wire netting for agricultural applications', cover_image: '/images/hexagonal-wire.webp', is_featured: false, is_active: true, sort_order: 4, created_at: new Date().toISOString() },
+      { id: 5, category_id: 4, name: 'Gabion Box', slug: 'gabion-box', subtitle: 'Stone-filled gabion baskets', description: 'Woven gabion boxes for erosion control and landscaping', specifications: 'Size: 1x1x1m to 2x1x1m\nMesh: 80x100mm\nWire: 2.7-4.0mm', price_range: '$15-$50', meta_title: 'Gabion Box | Kestrel Metal', meta_description: 'High-quality gabion boxes for erosion control and decorative landscaping', cover_image: '/images/gabion-mattress.webp', is_featured: true, is_active: true, sort_order: 5, created_at: new Date().toISOString() },
+      { id: 6, category_id: 5, name: 'Concertina Razor Wire', slug: 'concertina-razor-wire', subtitle: 'High-security razor wire', description: 'Concertina razor wire for maximum perimeter security', specifications: 'Blade length: 22mm\nWire diameter: 2.5mm\nCoil diameter: 450mm', price_range: '$20-$100', meta_title: 'Concertina Razor Wire | Kestrel Metal', meta_description: 'High-security concertina razor wire for perimeter protection', cover_image: '/images/btc-razor-wire.webp', is_featured: true, is_active: true, sort_order: 6, created_at: new Date().toISOString() },
+    ]);
 
-      if (!res.ok) {
-        throw new Error(data.message || data.error || 'Request failed');
-      }
+    // Seed blog posts
+    setCollection('blog_posts', [
+      { id: 1, title: 'The Evolution of Chain Link Fence Technology', slug: 'evolution-chain-link', description: 'Explore how chain link fencing has evolved over the decades', content_md: '# The Evolution of Chain Link Fence\n\nChain link fencing has come a long way since its invention in the late 19th century...\n\n## Early History\n\nThe first chain link fence was invented by...\n\n## Modern Innovations\n\nToday\'s chain link fences feature...', cover_image: '/images/blog-chain-link-evolution-1.webp', category: 'Industry Insights', tags: ['chain-link', 'fence', 'history'], section: 'featured', author: 'Kestrel Metal', read_time: '5 min read', status: 'published', is_ai_generated: false, created_at: new Date(Date.now() - 86400000 * 7).toISOString() },
+      { id: 2, title: 'How to Choose the Right Wire Mesh for Your Project', slug: 'choose-right-wire-mesh', description: 'A comprehensive guide to selecting the perfect wire mesh', content_md: '# How to Choose the Right Wire Mesh\n\nSelecting the right wire mesh is crucial for your project...\n\n## Consider Your Application\n\nDifferent applications require different types of wire mesh...\n\n## Material Matters\n\nGalvanized, stainless steel, or PVC coated...', cover_image: '/images/blog-welded-mesh-715.jpg', category: 'Product Guide', tags: ['wire-mesh', 'guide', 'selection'], section: 'product-info', author: 'Kestrel Metal', read_time: '8 min read', status: 'published', is_ai_generated: false, created_at: new Date(Date.now() - 86400000 * 14).toISOString() },
+      { id: 3, title: 'Gabion Installation: Step-by-Step Guide', slug: 'gabion-installation-guide', description: 'Complete guide to installing gabion boxes', content_md: '# Gabion Installation Guide\n\nFollow these steps for successful gabion installation...\n\n## Preparations\n\nBefore you begin...\n\n## Step-by-Step\n\n1. Mark the area\n2. Excavate the foundation\n3. Compress the base\n4. Lay geotextile...', cover_image: '/images/blog-gabion-install-hero.webp', category: 'Installation', tags: ['gabion', 'installation', 'guide'], section: 'tips', author: 'Kestrel Metal', read_time: '10 min read', status: 'published', is_ai_generated: false, created_at: new Date(Date.now() - 86400000 * 21).toISOString() },
+    ]);
 
-      return data;
-    } catch (err) {
-      if (err.message === 'Unauthorized') throw err;
-      console.error('API Error:', err);
-      throw err;
+    // Seed cases
+    setCollection('case_studies', [
+      { id: 1, title: 'Solar Farm Perimeter Security', slug: 'solar-farm-security', client: 'GreenEnergy Corp', location: 'Australia', category: 'Security Fencing', description: 'High-security fencing for a 50MW solar farm', content_md: '# Solar Farm Security Project\n\n## Background\n\nGreenEnergy Corp needed to secure their new 50MW solar farm...\n\n## Solution\n\nWe installed high-security chain link fence with concertina razor wire...\n\n## Results\n\n- 100% perimeter coverage\n- Zero security breaches in 6 months\n- Easy maintenance access', cover_image: '/images/case-study-solar-farm-perimeter-security.jpg', status: 'published', created_at: new Date(Date.now() - 86400000 * 30).toISOString() },
+      { id: 2, title: 'Cattle Ranch Fencing Solution', slug: 'cattle-ranch-fencing', client: 'Outback Farms', location: 'Queensland, Australia', category: 'Agricultural Fencing', description: 'Heavy-duty fencing for a 10,000-head cattle ranch', content_md: '# Cattle Ranch Project\n\n## Project Scope\n\nOutback Farms needed to fence 500 acres for their cattle operation...\n\n## Implementation\n\nInstalled heavy-duty ringlock fencing with steel posts...', cover_image: '/images/case-study-cattle-ranch-fencing.jpg', status: 'published', created_at: new Date(Date.now() - 86400000 * 45).toISOString() },
+    ]);
+
+    // Seed FAQ
+    setCollection('faqs', [
+      { id: 1, question: 'What is the lead time for custom orders?', answer: 'Standard products have a 2-3 week lead time. Custom orders typically require 4-6 weeks depending on specifications and quantity.', category: 'Orders', language: 'en', sort_order: 1, is_active: true },
+      { id: 2, question: 'Do you offer free samples?', answer: 'Yes, we offer free samples for our standard products. Please contact our sales team with your requirements.', category: 'Products', language: 'en', sort_order: 2, is_active: true },
+      { id: 3, question: 'What are your minimum order quantities?', answer: 'Minimum order quantities vary by product. Standard chain link fence starts from 1 roll, while custom fabricated products may have higher MOQs.', category: 'Orders', language: 'en', sort_order: 3, is_active: true },
+      { id: 4, question: 'How do you ensure product quality?', answer: 'All products undergo strict quality testing according to ISO 9001 standards. We provide material test reports and third-party inspection on request.', category: 'Quality', language: 'en', sort_order: 4, is_active: true },
+    ]);
+
+    // Seed glossary
+    setCollection('glossary', [
+      { id: 1, term: 'Chain Link Fence', definition: 'A type of woven fence made from galvanized steel wire that is twisted and linked together to form a diamond pattern.', category: 'Products', language: 'English', enabled: true },
+      { id: 2, term: 'Gabion', definition: 'A wire mesh box or basket filled with stones, used for erosion control, retaining walls, and decorative landscaping.', category: 'Products', language: 'English', enabled: true },
+      { id: 3, term: 'Razor Wire', definition: 'A type of barbed wire with sharp razor blades designed to deter trespassers and provide high-security perimeter protection.', category: 'Products', language: 'English', enabled: true },
+      { id: 4, term: 'Mesh Size', definition: 'The distance between the centers of adjacent openings in a wire mesh, typically measured in millimeters.', category: 'Technical', language: 'English', enabled: true },
+    ]);
+
+    // Seed inquiries (only if empty - never overwrite frontend submissions)
+    if (getCollection('inquiries').length === 0) {
+      setCollection('inquiries', [
+      { id: 1, name: 'John Smith', email: 'john@farm.com', phone: '+61 400 000 000', company: 'Farm Operations Pty Ltd', country: 'Australia', product_name: 'Galvanized Chain Link Fence', quantity: '50 rolls', status: 'pending', message: 'We need quotes for a large cattle ranch fencing project. Please contact me with pricing and availability.', source_page: '/contact.html', created_at: new Date(Date.now() - 86400000 * 2).toISOString(), replies: [] },
+      { id: 2, name: 'Maria Garcia', email: 'maria@construction.com', phone: '+34 600 000 000', company: 'Construccion Hispana', country: 'Spain', product_name: 'Gabion Box 1x1x1m', quantity: '500 pcs', status: 'replied', message: 'Interested in gabion boxes for a river bank stabilization project.', source_page: '/contact.html', created_at: new Date(Date.now() - 86400000 * 5).toISOString(), replies: [{ admin: { username: 'admin' }, content: 'Dear Maria, Thank you for your inquiry. We can supply 500 gabion boxes with 3-4 week lead time. Please find attached our quotation...', created_at: new Date(Date.now() - 86400000 * 4).toISOString() }], replied_at: new Date(Date.now() - 86400000 * 4).toISOString() },
+      { id: 3, name: 'Chen Wei', email: 'chen@security.cn', phone: '+86 100 0000 0000', company: 'Beijing Security Co.', country: 'China', product_name: 'Concertina Razor Wire', quantity: '200 coils', status: 'pending', message: 'Looking for high-security razor wire for a prison perimeter project.', source_page: '/request-quote.html', created_at: new Date(Date.now() - 86400000 * 1).toISOString(), replies: [] },
+    ]);
     }
+
+    // Seed analytics
+    setStorage('analytics_summary', {
+      totals: { pageviews: 45000, visitors: 12500, conversions: 85 },
+      today: { pageviews: 280, visitors: 95 },
+      weekly: { pageviews: 3200, visitors: 890, avgDuration: 180, bounceRate: 45 },
+      monthly: { pageviews: 14500, visitors: 4200 },
+      topPages: [
+        { url: '/index.html', count: 12500 },
+        { url: '/products.html', count: 8200 },
+        { url: '/blog.html', count: 6800 },
+        { url: '/contact.html', count: 4500 },
+        { url: '/chain-link.html', count: 3200 },
+        { url: '/gabion-boxes.html', count: 2800 },
+        { url: '/welded-mesh-711.html', count: 2100 },
+        { url: '/faq.html', count: 1800 },
+        { url: '/case-studies.html', count: 1500 },
+        { url: '/downloads.html', count: 1200 },
+      ],
+      topCountries: [
+        { country: 'US', count: 4200 },
+        { country: 'AU', count: 3100 },
+        { country: 'GB', count: 2400 },
+        { country: 'DE', count: 1800 },
+        { country: 'CN', count: 1500 },
+        { country: 'CA', count: 1200 },
+        { country: 'FR', count: 900 },
+        { country: 'Brazil', count: 650 },
+      ]
+    });
+
+    // Seed i18n translations
+    setCollection('i18n', [
+      { id: 1, module: 'header', key: 'nav.products', en: 'Products', zh: '产品', is_active: true },
+      { id: 2, module: 'header', key: 'nav.about', en: 'About Us', zh: '关于我们', is_active: true },
+      { id: 3, module: 'header', key: 'nav.contact', en: 'Contact', zh: '联系我们', is_active: true },
+      { id: 4, module: 'common', key: 'btn.inquire', en: 'Request a Quote', zh: '询价', is_active: true },
+      { id: 5, module: 'common', key: 'btn.download', en: 'Download', zh: '下载', is_active: true },
+    ]);
+
+    // Seed SEO data
+    setCollection('seo', [
+      { id: 1, page_url: '/index.html', title: 'Kestrel Metal - Premium Metal Mesh & Fencing Solutions', meta_title: 'Kestrel Metal | Professional Metal Mesh & Fencing Manufacturer', meta_description: 'Premium metal mesh, chain link fence, gabion boxes and wire mesh solutions for global B2B customers.', meta_keywords: 'metal mesh, chain link fence, gabion, wire mesh, fencing manufacturer', og_image: '/images/og-default.jpg', canonical_url: 'https://kestrelmetal.com/', noindex: false },
+      { id: 2, page_url: '/products.html', title: 'Products | Kestrel Metal', meta_title: 'Metal Mesh Products | Kestrel Metal', meta_description: 'Explore our complete range of metal mesh and fencing products.', meta_keywords: 'metal mesh products, chain link, welded mesh, gabion', canonical_url: 'https://kestrelmetal.com/products.html', noindex: false },
+      { id: 3, page_url: '/contact.html', title: 'Contact Us | Kestrel Metal', meta_title: 'Contact Kestrel Metal for Quotes & Support', meta_description: 'Get in touch with Kestrel Metal for product quotes, technical support, and partnership opportunities.', noindex: false },
+    ]);
+
+    // Seed GEO data
+    setCollection('geo_questions', [
+      { id: 1, question: 'What is the difference between welded and woven wire mesh?', answer: 'Welded wire mesh has wires welded at intersections, while woven wire mesh has wires intertwined. Welded mesh offers higher structural strength, making it ideal for construction applications, while woven mesh is more flexible and better suited for fencing.', category: 'Product Knowledge', language: 'en', priority: 1, is_active: true },
+      { id: 2, question: 'How do I choose the right fence height?', answer: 'The appropriate fence height depends on your application. For residential privacy, 1.8-2.0m is typical. For agricultural livestock, heights range from 1.2-2.4m. High-security applications may require 2.4m or taller with razor wire additions.', category: 'Installation Guide', language: 'en', priority: 2, is_active: true },
+    ]);
+
+    setCollection('geo_templates', [
+      { id: 1, type: 'Product', name: 'Standard Product Schema', jsonld_template: '{"@context":"https://schema.org","@type":"Product","name":"{product_name}","description":"{description}","image":"{image}","offers":{"@type":"Offer","priceCurrency":"USD","price":"{price}","availability":"https://schema.org/InStock"}}', is_active: true },
+      { id: 2, type: 'FAQPage', name: 'FAQ Page Schema', jsonld_template: '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"{question}","acceptedAnswer":{"@type":"Answer","text":"{answer}"}}]}', is_active: true },
+      { id: 3, type: 'Article', name: 'Blog Article Schema', jsonld_template: '{"@context":"https://schema.org","@type":"Article","headline":"{title}","description":"{description}","image":"{image}","datePublished":"{date}","author":{"@type":"Organization","name":"Kestrel Metal"}}', is_active: true },
+    ]);
+
+    setCollection('geo_scores', [
+      { page_url: '/chain-link.html', score: 85, schema_completeness: 95, citation_friendliness: 80, fact_density: 82 },
+      { page_url: '/gabion-boxes.html', score: 78, schema_completeness: 88, citation_friendliness: 75, fact_density: 72 },
+      { page_url: '/welded-mesh-711.html', score: 65, schema_completeness: 70, citation_friendliness: 60, fact_density: 68 },
+    ]);
+
+    // Seed media
+    setCollection('media', [
+      { id: 1, name: 'chain-link-galvanized.webp', url: '/images/chain-link-galvanized.webp', size: 245000 },
+      { id: 2, name: 'welded-mesh-711.webp', url: '/images/welded-mesh-711.webp', size: 198000 },
+      { id: 3, name: 'gabion-mattress.webp', url: '/images/gabion-mattress.webp', size: 312000 },
+      { id: 4, name: 'btc-razor-wire.webp', url: '/images/btc-razor-wire.webp', size: 175000 },
+      { id: 5, name: 'hexagonal-wire.webp', url: '/images/hexagonal-wire.webp', size: 156000 },
+    ]);
+
+    // Seed settings
+    setStorage('site_settings', {
+      site_name: 'Kestrel Metal',
+      site_email: 'sales@kestrelmetal.com',
+      site_phone: '+61 400 000 000',
+      site_address: 'Sydney, Australia',
+      site_description: 'Professional metal mesh and fencing manufacturer serving global B2B customers.',
+      social_facebook: 'https://facebook.com/kestrelmetal',
+      social_twitter: 'https://twitter.com/kestrelmetal',
+      social_linkedin: 'https://linkedin.com/company/kestrelmetal',
+    });
+
+    // Seed admin user
+    setStorage('admin_users', [
+      { id: 1, username: 'admin', email: 'admin@kestrelmetal.com', password: 'admin123', role: 'admin', created_at: new Date().toISOString(), last_login_at: null }
+    ]);
+
+    // Seed operation logs
+    setCollection('admin_logs', [
+      { id: 1, admin_id: 1, action: 'login', resource_type: 'admin', resource_id: 1, ip_address: '127.0.0.1', created_at: new Date(Date.now() - 86400000).toISOString() },
+      { id: 2, admin_id: 1, action: 'create', resource_type: 'product', resource_id: 1, ip_address: '127.0.0.1', created_at: new Date(Date.now() - 86400000 * 2).toISOString() },
+      { id: 3, admin_id: 1, action: 'update', resource_type: 'blog', resource_id: 1, ip_address: '127.0.0.1', created_at: new Date(Date.now() - 86400000 * 3).toISOString() },
+    ]);
+
+    setStorage('seeded', true);
+  }
+
+  // Run seed
+  seedData();
+
+  // ==================== API Methods ====================
+
+  // Auth
+  async function login(username, password) {
+    await delay();
+    const users = getStorage('admin_users') || [];
+    const user = users.find(u => u.username === username && u.password === password);
+    if (!user) throw new Error('用户名或密码错误');
+    const token = 'mock_token_' + generateId();
+    setToken(token);
+    const userData = { id: user.id, username: user.username, email: user.email, role: user.role };
+    setUser(userData);
+    return { token, user: userData };
+  }
+
+  async function getMe() {
+    await delay();
+    const user = getUser();
+    if (!user) throw new Error('未登录');
+    return user;
+  }
+
+  async function changePassword(current_password, new_password) {
+    await delay();
+    API.toast('密码修改功能在纯静态模式下不可用，请升级到完整后端', 'info');
+    return { message: '功能开发中' };
+  }
+
+  // Generic CRUD
+  async function getAll(collection) {
+    await delay();
+    return getCollection(collection);
+  }
+
+  async function getById(collection, id) {
+    await delay();
+    const items = getCollection(collection);
+    return items.find(item => item.id == id) || null;
+  }
+
+  async function create(collection, data) {
+    await delay();
+    const items = getCollection(collection);
+    const newItem = { ...data, id: generateId(), created_at: new Date().toISOString() };
+    items.push(newItem);
+    setCollection(collection, items);
+    return newItem;
+  }
+
+  async function update(collection, id, data) {
+    await delay();
+    const items = getCollection(collection);
+    const index = items.findIndex(item => item.id == id);
+    if (index === -1) throw new Error('数据不存在');
+    items[index] = { ...items[index], ...data, id: items[index].id };
+    setCollection(collection, items);
+    return items[index];
+  }
+
+  async function remove(collection, id) {
+    await delay();
+    const items = getCollection(collection);
+    const filtered = items.filter(item => item.id != id);
+    setCollection(collection, filtered);
+    return { message: '删除成功' };
+  }
+
+  // Pagination helper
+  async function getPaginated(collection, page = 1, pageSize = 20, search = '', filters = {}) {
+    await delay();
+    let items = getCollection(collection);
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      items = items.filter(item =>
+        Object.values(item).some(val =>
+          typeof val === 'string' && val.toLowerCase().includes(searchLower)
+        )
+      );
+    }
+
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) {
+        items = items.filter(item => item[key] == value || item[key]?.toString().toLowerCase() === value.toString().toLowerCase());
+      }
+    }
+
+    const total = items.length;
+    const totalPages = Math.ceil(total / pageSize);
+    const start = (page - 1) * pageSize;
+    const data = items.slice(start, start + pageSize);
+
+    return { data, page, totalPages, total };
+  }
+
+  // Router
+  async function handleRequest(url, options = {}) {
+    const method = options.method || 'GET';
+    const body = options.body ? JSON.parse(options.body) : null;
+    const urlObj = new URL(url, window.location.origin);
+    const path = urlObj.pathname;
+    const params = new URLSearchParams(urlObj.search);
+    const segments = path.split('/').filter(Boolean);
+
+    // Dashboard
+    if (segments[0] === 'api' && segments[1] === 'dashboard' && segments[2] === 'summary') {
+      const analytics = getStorage('analytics_summary') || {};
+      const inquiries = getCollection('inquiries');
+      const products = getCollection('products');
+      const posts = getCollection('blog_posts');
+      const today = new Date();
+      const todayInquiries = inquiries.filter(i => new Date(i.created_at).toDateString() === today.toDateString()).length;
+
+      return {
+        today: {
+          pageviews: analytics.totals?.pageviews || 0,
+          visitors: analytics.totals?.visitors || 0,
+          inquiries: todayInquiries
+        },
+        total: {
+          pageviews: analytics.totals?.pageviews || 0,
+          visitors: analytics.totals?.visitors || 0,
+          inquiries: inquiries.length,
+          products: products.filter(p => p.is_active).length,
+          blogPosts: posts.filter(p => p.status === 'published').length
+        },
+        weekly: {
+          avgDuration: analytics.weekly?.avgDuration || 0,
+          bounceRate: analytics.weekly?.bounceRate || 0
+        }
+      };
+    }
+
+    // Products
+    if (segments[0] === 'api' && segments[1] === 'products') {
+      const id = segments[3];
+      if (segments[2] === 'admin' && segments[3] === 'list') {
+        const page = parseInt(params.get('page') || '1');
+        const pageSize = parseInt(params.get('pageSize') || '20');
+        const search = params.get('search') || '';
+        const category_id = params.get('category_id') || '';
+        return getPaginated('products', page, pageSize, search, category_id ? { category_id } : {});
+      }
+      if (id && method === 'PUT') return update('products', id, body);
+      if (id && method === 'DELETE') return remove('products', id);
+      if (id) return getById('products', id);
+      if (method === 'POST') return create('products', body);
+      return getCollection('products');
+    }
+
+    // Product Categories
+    if (segments[0] === 'api' && segments[1] === 'product-categories') {
+      const id = segments[3];
+      if (segments[2] === 'all') return getCollection('product_categories');
+      if (id && method === 'PUT') return update('product_categories', id, body);
+      if (id && method === 'DELETE') return remove('product_categories', id);
+      if (id) return getById('product_categories', id);
+      if (method === 'POST') return create('product_categories', body);
+      return getCollection('product_categories');
+    }
+
+    // Blog
+    if (segments[0] === 'api' && segments[1] === 'blog') {
+      const id = segments[2];
+      if (segments[2] === 'ai-publish') {
+        API.toast('AI 发布请求已提交（纯静态模式）', 'success');
+        return { message: '已提交' };
+      }
+      if (id && method === 'PUT') return update('blog_posts', id, body);
+      if (id && method === 'DELETE') return remove('blog_posts', id);
+      if (id) return getById('blog_posts', id);
+      const page = parseInt(params.get('page') || '1');
+      const pageSize = parseInt(params.get('pageSize') || '20');
+      const search = params.get('search') || '';
+      const status = params.get('status') || '';
+      return getPaginated('blog_posts', page, pageSize, search, status ? { status } : {});
+    }
+
+    // Cases
+    if (segments[0] === 'api' && segments[1] === 'cases') {
+      const id = segments[2];
+      if (id && method === 'PUT') return update('case_studies', id, body);
+      if (id && method === 'DELETE') return remove('case_studies', id);
+      if (id) return getById('case_studies', id);
+      const page = parseInt(params.get('page') || '1');
+      const pageSize = parseInt(params.get('pageSize') || '20');
+      const search = params.get('search') || '';
+      const status = params.get('status') || '';
+      return getPaginated('case_studies', page, pageSize, search, status ? { status } : {});
+    }
+
+    // FAQ
+    if (segments[0] === 'api' && segments[1] === 'faq') {
+      const id = segments[2];
+      if (segments[2] === 'all') return getCollection('faqs');
+      if (id && method === 'PUT') return update('faqs', id, body);
+      if (id && method === 'DELETE') return remove('faqs', id);
+      if (id) return getById('faqs', id);
+      if (method === 'POST') return create('faqs', body);
+      return getCollection('faqs');
+    }
+
+    // Glossary
+    if (segments[0] === 'api' && segments[1] === 'glossary') {
+      const id = segments[2];
+      if (segments[2] === 'all') return getCollection('glossary');
+      if (id && method === 'PUT') return update('glossary', id, body);
+      if (id && method === 'DELETE') return remove('glossary', id);
+      if (id) return getById('glossary', id);
+      if (method === 'POST') return create('glossary', body);
+      return getCollection('glossary');
+    }
+
+    // Inquiries
+    if (segments[0] === 'api' && segments[1] === 'inquiries') {
+      if (segments[2] === 'stats' && segments[3] === 'count') {
+        const inquiries = getCollection('inquiries');
+        return { pending: inquiries.filter(i => i.status === 'pending').length };
+      }
+      if (segments[2] === 'export' && segments[3] === 'csv') {
+        API.toast('CSV 导出在纯静态模式下生成模拟数据', 'info');
+        const inquiries = getCollection('inquiries');
+        let csv = 'ID,Name,Email,Company,Country,Product,Quantity,Status,Created At\n';
+        inquiries.forEach(i => {
+          csv += `${i.id},${i.name},${i.email},${i.company},${i.country},${i.product_name},${i.quantity},${i.status},${i.created_at}\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inquiries.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+        return { message: '导出成功' };
+      }
+      const id = segments[2];
+      if (id && segments[3] === 'replies' && method === 'POST') {
+        const inquiries = getCollection('inquiries');
+        const index = inquiries.findIndex(i => i.id == id);
+        if (index === -1) throw new Error('询盘不存在');
+        if (!inquiries[index].replies) inquiries[index].replies = [];
+        inquiries[index].replies.push({
+          admin: { username: 'admin' },
+          content: body.content,
+          created_at: new Date().toISOString()
+        });
+        inquiries[index].status = 'replied';
+        inquiries[index].replied_at = new Date().toISOString();
+        setCollection('inquiries', inquiries);
+        return inquiries[index];
+      }
+      if (id && method === 'PUT') return update('inquiries', id, body);
+      if (id && method === 'DELETE') return remove('inquiries', id);
+      if (id) return getById('inquiries', id);
+      const page = parseInt(params.get('page') || '1');
+      const pageSize = parseInt(params.get('pageSize') || '20');
+      const search = params.get('search') || '';
+      const status = params.get('status') || '';
+      return getPaginated('inquiries', page, pageSize, search, status ? { status } : {});
+    }
+
+    // Analytics
+    if (segments[0] === 'api' && segments[1] === 'analytics') {
+      if (segments[2] === 'summary') return getStorage('analytics_summary') || {};
+      if (segments[2] === 'pageviews' || segments[2] === 'visitors') {
+        const days = parseInt(params.get('days') || '30');
+        const data = [];
+        for (let i = days - 1; i >= 0; i--) {
+          const date = new Date(Date.now() - i * 86400000);
+          data.push({
+            date: date.toISOString().split('T')[0],
+            count: Math.floor(Math.random() * 1000) + 200
+          });
+        }
+        return data;
+      }
+      if (segments[2] === 'events') {
+        return [
+          { event_type: 'inquiry_submitted', page_url: '/contact.html', created_at: new Date(Date.now() - 3600000).toISOString() },
+          { event_type: 'download', page_url: '/downloads.html', created_at: new Date(Date.now() - 7200000).toISOString() },
+          { event_type: 'click', page_url: '/products.html', created_at: new Date(Date.now() - 10800000).toISOString() },
+          { event_type: 'inquiry_submitted', page_url: '/request-quote.html', created_at: new Date(Date.now() - 14400000).toISOString() },
+          { event_type: 'download', page_url: '/catalogs.html', created_at: new Date(Date.now() - 18000000).toISOString() },
+        ];
+      }
+    }
+
+    // i18n
+    if (segments[0] === 'api' && segments[1] === 'i18n') {
+      const id = segments[2];
+      if (segments[2] === 'all') return getCollection('i18n');
+      if (id && method === 'PUT') return update('i18n', id, body);
+      if (id && method === 'DELETE') return remove('i18n', id);
+      if (id) return getById('i18n', id);
+      if (method === 'POST') return create('i18n', body);
+      return getCollection('i18n');
+    }
+
+    // SEO
+    if (segments[0] === 'api' && segments[1] === 'seo') {
+      const id = segments[2];
+      if (segments[2] === 'generate' && segments[3] === 'sitemap') {
+        const pages = getCollection('seo');
+        API.toast('Sitemap 生成完成（共 ' + pages.length + ' 个页面）', 'success');
+        return { file_count: pages.length };
+      }
+      if (id && method === 'PUT') return update('seo', id, body);
+      if (id && method === 'DELETE') return remove('seo', id);
+      if (id) return getById('seo', id);
+      if (method === 'POST') return create('seo', body);
+      return getCollection('seo');
+    }
+
+    // GEO
+    if (segments[0] === 'api' && segments[1] === 'geo') {
+      if (segments[2] === 'questions') {
+        const id = segments[3];
+        if (id && method === 'PUT') return update('geo_questions', id, body);
+        if (id && method === 'DELETE') return remove('geo_questions', id);
+        if (id) return getById('geo_questions', id);
+        if (method === 'POST') return create('geo_questions', body);
+        return getCollection('geo_questions');
+      }
+      if (segments[2] === 'schema-templates') {
+        const id = segments[3];
+        if (id && method === 'PUT') return update('geo_templates', id, body);
+        if (id && method === 'DELETE') return remove('geo_templates', id);
+        if (id) return getById('geo_templates', id);
+        if (method === 'POST') return create('geo_templates', body);
+        return getCollection('geo_templates');
+      }
+      if (segments[2] === 'scores') {
+        const url = segments[3];
+        if (url && segments[4] === 'generate') {
+          const scores = getCollection('geo_scores');
+          const score = Math.floor(Math.random() * 30) + 65;
+          return { score, message: '评分完成' };
+        }
+        return getCollection('geo_scores');
+      }
+    }
+
+    // Media
+    if (segments[0] === 'api' && segments[1] === 'media') {
+      if (segments[2] === 'upload') {
+        API.toast('上传成功（模拟）', 'success');
+        return { id: generateId(), name: 'uploaded_file.png', url: '/images/uploaded.png', size: 125000 };
+      }
+      const id = segments[2];
+      if (id && method === 'DELETE') return remove('media', id);
+      if (id) return getById('media', id);
+      return getCollection('media');
+    }
+
+    // Settings
+    if (segments[0] === 'api' && segments[1] === 'settings') {
+      if (segments[2] === 'admins') {
+        const id = segments[3];
+        if (id && method === 'PUT') {
+          const users = getStorage('admin_users') || [];
+          const index = users.findIndex(u => u.id == id);
+          if (index === -1) throw new Error('管理员不存在');
+          users[index] = { ...users[index], ...body, id: users[index].id };
+          setStorage('admin_users', users);
+          return users[index];
+        }
+        if (id && method === 'DELETE') {
+          let users = getStorage('admin_users') || [];
+          users = users.filter(u => u.id != id);
+          setStorage('admin_users', users);
+          return { message: '删除成功' };
+        }
+        if (id) {
+          const users = getStorage('admin_users') || [];
+          return users.find(u => u.id == id) || null;
+        }
+        if (method === 'POST') {
+          const users = getStorage('admin_users') || [];
+          const newUser = { ...body, id: generateId(), created_at: new Date().toISOString() };
+          users.push(newUser);
+          setStorage('admin_users', users);
+          return newUser;
+        }
+        return getStorage('admin_users') || [];
+      }
+      if (segments[2] === 'logs') {
+        return getCollection('admin_logs');
+      }
+      const settings = getStorage('site_settings') || {};
+      if (method === 'PUT') {
+        setStorage('site_settings', { ...settings, ...body });
+        return { ...settings, ...body };
+      }
+      return settings;
+    }
+
+    throw new Error('未知的 API 路径: ' + path);
+  }
+
+  // Toast
+  function toast(msg, type = 'info') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  // Upload
+  async function upload(url, formData) {
+    await delay();
+    toast('文件上传成功（模拟）', 'success');
+    return { id: generateId(), name: 'uploaded_file', url: '/images/uploaded.png', size: 100000 };
   }
 
   return {
     // Auth
-    login: (username, password) =>
-      request('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ username, password })
-      }),
-    getMe: () => request('/api/auth/me'),
-    changePassword: (current_password, new_password) =>
-      request('/api/auth/password', {
-        method: 'PUT',
-        body: JSON.stringify({ current_password, new_password })
-      }),
+    login,
+    getMe,
+    changePassword,
 
-    // Dashboard
-    getDashboardSummary: () => request('/api/dashboard/summary'),
-
-    // Token & User 管理
+    // Token & User
     getToken, setToken, getUser, setUser, isLoggedIn, logout,
 
-    // 通用请求
-    get: (url) => request(url),
-    post: (url, body) => request(url, { method: 'POST', body: JSON.stringify(body) }),
-    put: (url, body) => request(url, { method: 'PUT', body: JSON.stringify(body) }),
-    patch: (url, body) => request(url, { method: 'PATCH', body: JSON.stringify(body) }),
-    delete: (url) => request(url, { method: 'DELETE' }),
+    // Generic
+    get: (url) => handleRequest(url),
+    post: (url, body) => handleRequest(url, { method: 'POST', body: JSON.stringify(body) }),
+    put: (url, body) => handleRequest(url, { method: 'PUT', body: JSON.stringify(body) }),
+    delete: (url) => handleRequest(url, { method: 'DELETE' }),
+    patch: (url, body) => handleRequest(url, { method: 'PATCH', body: JSON.stringify(body) }),
 
-    // 上传文件
-    upload: (url, formData) => fetch(url, {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + getToken() },
-      body: formData
-    }).then(r => r.json()),
+    // Upload
+    upload,
 
-    // Toast 通知
-    toast(msg, type = 'info') {
-      const t = document.createElement('div');
-      t.className = 'toast ' + type;
-      t.textContent = msg;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 3000);
-    }
+    // Toast
+    toast
   };
 })();

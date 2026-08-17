@@ -60,8 +60,36 @@ function handleContactSubmit(e) {
   var originalText = btn.textContent;
   btn.textContent = 'Sending...';
   btn.disabled = true;
+
+  var formData = new FormData(e.target);
+  var inquiryData = {
+    id: Date.now() + Math.floor(Math.random() * 1000),
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone') || '',
+    company: formData.get('company') || '',
+    country: formData.get('country') || '',
+    product_name: formData.get('product') || '',
+    quantity: '',
+    status: 'pending',
+    message: formData.get('message'),
+    source_page: window.location.pathname,
+    created_at: new Date().toISOString(),
+    replies: []
+  };
+
+  try {
+    var key = 'km_admin_inquiries';
+    var inquiries = JSON.parse(localStorage.getItem(key) || '[]');
+    inquiries.push(inquiryData);
+    localStorage.setItem(key, JSON.stringify(inquiries));
+    console.log('[Inquiry] Saved to Admin storage:', inquiryData);
+  } catch (err) {
+    console.error('[Inquiry] Failed to save:', err);
+  }
+
   setTimeout(function () {
-    btn.textContent = '\u2713 Message Sent!';
+    btn.textContent = '✓ Message Sent!';
     btn.style.background = '#28a745';
     setTimeout(function () {
       btn.textContent = originalText;
