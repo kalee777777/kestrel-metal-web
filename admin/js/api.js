@@ -216,7 +216,7 @@ const API = (function () {
     setStorage('site_settings', {
       site_name: 'Kestrel Metal',
       site_email: 'sales@kestrelmetal.com',
-      site_phone: '+61 400 000 000',
+      site_phone: '+86 178 3238 3339',
       site_address: 'Sydney, Australia',
       site_description: 'Professional metal mesh and fencing manufacturer serving global B2B customers.',
       social_facebook: 'https://facebook.com/kestrelmetal',

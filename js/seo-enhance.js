@@ -141,7 +141,7 @@
             },
             "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+61-400-000-000",
+                "telephone": "+86-17832383339",
                 "contactType": "sales",
                 "email": "sales@kestrelmetal.com",
                 "availableLanguage": ["English", "Chinese"]
@@ -218,7 +218,7 @@
             "description": "Professional metal products manufacturer specializing in wire mesh, fencing, and gabion products.",
             "image": DOMAIN + "/images/factory.jpg",
             "url": DOMAIN,
-            "telephone": "+61-400-000-000",
+            "telephone": "+86-17832383339",
             "email": "sales@kestrelmetal.com",
             "address": {
                 "@type": "PostalAddress",
