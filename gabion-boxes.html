@@ -48,6 +48,21 @@
     .article-hero-content .article-hero-desc { color: #ffffff; }
     .article-hero-content .article-hero-title { color: #ffffff; }
     .article-hero-content .article-hero-kicker { color: #ffffff; }
+    .quick-specs { display: flex; justify-content: center; gap: 0; max-width: 900px; margin: -2rem auto 0; padding: 0 1.5rem; position: relative; z-index: 10; }
+    .quick-specs .qs-item { flex: 1; text-align: center; padding: 1.1rem 0.5rem; background: var(--color-white); border: 1px solid #f0f0f0; }
+    .quick-specs .qs-item:first-child { border-radius: 14px 0 0 14px; }
+    .quick-specs .qs-item:last-child { border-radius: 0 14px 14px 0; }
+    .quick-specs .qs-val { font-family: var(--font-display); font-size: 1.4rem; color: var(--color-orange-primary); letter-spacing: 0.5px; line-height: 1.2; }
+    .quick-specs .qs-label { font-size: 0.72rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+    @media (max-width: 768px) { .quick-specs { flex-wrap: wrap; gap: 0.5rem; } .quick-specs .qs-item { flex: 0 0 calc(50% - 0.25rem); border-radius: 10px !important; } .quick-specs .qs-item:last-child { flex: 0 0 100%; border-radius: 10px !important; } }
+    .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+    .apps-grid .app-tile { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4 / 3; cursor: default; }
+    .apps-grid .app-tile img { width: 100%; height: 100%; object-fit: cover; }
+    .apps-grid .app-tile-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.12) 55%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px 22px; }
+    .apps-grid .app-tile-label { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: #fff; letter-spacing: .5px; text-transform: uppercase; }
+    .apps-grid .app-tile-desc { font-size: .86rem; color: rgba(255,255,255,.82); margin-top: 4px; line-height: 1.45; }
+    @media (max-width: 768px) { .apps-grid { grid-template-columns: repeat(2, 1fr); gap: .75rem; } .apps-grid .app-tile { aspect-ratio: 3 / 2; } }
+    @media (max-width: 480px) { .apps-grid { grid-template-columns: 1fr; } .apps-grid .app-tile { aspect-ratio: 16 / 10; } }
   </style>
   <script src="js/analytics-loader.js" async></script>
   <script src="js/seo-enhance.js" async></script>
@@ -80,6 +95,13 @@
       </div>
     </section>
 
+    <div class="quick-specs">
+      <div class="qs-item"><div class="qs-val">1×1×1 – 4×1×1 m</div><div class="qs-label">Box Sizes</div></div>
+      <div class="qs-item"><div class="qs-val">25–100 mm</div><div class="qs-label">Mesh Opening</div></div>
+      <div class="qs-item"><div class="qs-val">4.0–5.0 mm</div><div class="qs-label">Wire Diameter</div></div>
+      <div class="qs-item"><div class="qs-val">Galv / PVC</div><div class="qs-label">Coating Options</div></div>
+    </div>
+
     <!-- ============ 2. GABION BOX SPECIFICATIONS ============ -->
     <section class="product-section-light">
       <div class="article-container" style="max-width:1080px;">
@@ -104,6 +126,12 @@
               <tr><td>Type A — Standard</td><td>2000 × 1000 × 1000 mm</td><td>75 × 75 mm</td><td>4.0 mm</td><td>5.0 mm</td><td>100–250 mm</td></tr>
               <tr><td>Type B — Large</td><td>3000 × 1000 × 1000 mm</td><td>100 × 100 mm</td><td>4.0 mm</td><td>5.0 mm</td><td>100–300 mm</td></tr>
               <tr><td>Type C — Heavy Duty</td><td>2000 × 1000 × 1000 mm</td><td>50 × 50 mm</td><td>5.0 mm</td><td>6.0 mm</td><td>80–200 mm</td></tr>
+              <tr><td>Type D — Half Height</td><td>2000 × 1000 × 500 mm</td><td>75 × 75 mm</td><td>4.0 mm</td><td>5.0 mm</td><td>100–250 mm</td></tr>
+              <tr><td>Type E — Compact</td><td>1000 × 1000 × 1000 mm</td><td>50 × 50 mm</td><td>4.0 mm</td><td>5.0 mm</td><td>80–200 mm</td></tr>
+              <tr><td>Type F — High Wall</td><td>3000 × 1000 × 1500 mm</td><td>100 × 100 mm</td><td>5.0 mm</td><td>6.0 mm</td><td>150–350 mm</td></tr>
+              <tr><td>Type G — Narrow</td><td>2000 × 500 × 500 mm</td><td>50 × 50 mm</td><td>4.0 mm</td><td>5.0 mm</td><td>80–150 mm</td></tr>
+              <tr><td>Type H — Extra Large</td><td>4000 × 1000 × 1000 mm</td><td>100 × 100 mm</td><td>5.0 mm</td><td>6.0 mm</td><td>150–350 mm</td></tr>
+              <tr><td>Type I — Ultra Fine</td><td>2000 × 1000 × 1000 mm</td><td>25 × 25 mm</td><td>5.0 mm</td><td>6.0 mm</td><td>50–150 mm</td></tr>
             </tbody>
           </table>
         </div>
@@ -169,6 +197,41 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATION SCENARIOS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Where Gabion Boxes <span class="accent">Are Used</span></h2>
+        <p style="color:var(--color-gray-light);">Engineered for heavy-duty structural and environmental applications — from flood defense to architectural design.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="images/app-gabion-erosion-control.webp" alt="Gabion boxes used for riverbank and slope erosion control projects" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Erosion Control</div><div class="app-tile-desc">Riverbank and slope stabilization</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-gabion-retaining-walls.webp" alt="Gabion boxes stacked for retaining walls and flood defense barriers" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Retaining Walls</div><div class="app-tile-desc">Structural and flood defense barriers</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-gabion-landscaping.webp" alt="Gabion boxes used in landscaping and garden wall design projects" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Landscaping</div><div class="app-tile-desc">Garden walls and decorative features</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-gabion-architectural.webp" alt="Gabion boxes as architectural facade cladding and modern design elements" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Architecture</div><div class="app-tile-desc">Facade cladding and modern design</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-gabion-road-construction.webp" alt="Gabion boxes installed for road construction slope protection and culverts" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Road Construction</div><div class="app-tile-desc">Slope protection and culvert lining</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-gabion-military.webp" alt="Gabion boxes used for military fortification and blast protection barriers" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Military &amp; Defense</div><div class="app-tile-desc">Fortification and blast protection</div></div>
         </div>
       </div>
     </section>

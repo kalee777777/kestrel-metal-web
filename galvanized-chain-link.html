@@ -58,6 +58,21 @@
     .article-hero-content .article-hero-desc { color: #ffffff; }
     .article-hero-content .article-hero-title { color: #ffffff; }
     .article-hero-content .article-hero-kicker { color: #ffffff; }
+    .quick-specs { display: flex; justify-content: center; gap: 0; max-width: 900px; margin: -2rem auto 0; padding: 0 1.5rem; position: relative; z-index: 10; }
+    .quick-specs .qs-item { flex: 1; text-align: center; padding: 1.1rem 0.5rem; background: var(--color-white); border: 1px solid #f0f0f0; }
+    .quick-specs .qs-item:first-child { border-radius: 14px 0 0 14px; }
+    .quick-specs .qs-item:last-child { border-radius: 0 14px 14px 0; }
+    .quick-specs .qs-val { font-family: var(--font-display); font-size: 1.4rem; color: var(--color-orange-primary); letter-spacing: 0.5px; line-height: 1.2; }
+    .quick-specs .qs-label { font-size: 0.72rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+    @media (max-width: 768px) { .quick-specs { flex-wrap: wrap; gap: 0.5rem; } .quick-specs .qs-item { flex: 0 0 calc(50% - 0.25rem); border-radius: 10px !important; } .quick-specs .qs-item:last-child { flex: 0 0 100%; border-radius: 10px !important; } }
+    .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+    .apps-grid .app-tile { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4 / 3; cursor: default; }
+    .apps-grid .app-tile img { width: 100%; height: 100%; object-fit: cover; }
+    .apps-grid .app-tile-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.12) 55%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px 22px; }
+    .apps-grid .app-tile-label { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: #fff; letter-spacing: .5px; text-transform: uppercase; }
+    .apps-grid .app-tile-desc { font-size: .86rem; color: rgba(255,255,255,.82); margin-top: 4px; line-height: 1.45; }
+    @media (max-width: 768px) { .apps-grid { grid-template-columns: repeat(2, 1fr); gap: .75rem; } .apps-grid .app-tile { aspect-ratio: 3 / 2; } }
+    @media (max-width: 480px) { .apps-grid { grid-template-columns: 1fr; } .apps-grid .app-tile { aspect-ratio: 16 / 10; } }
   </style>
   <script src="js/analytics-loader.js" async></script>
   <script src="js/seo-enhance.js" async></script>
@@ -89,6 +104,13 @@
         <p class="article-hero-desc">Hot-dip or electro-galvanized finish providing excellent rust resistance with a silver metallic appearance. The most economical option for general-purpose fencing.</p>
       </div>
     </section>
+
+    <div class="quick-specs">
+      <div class="qs-item"><div class="qs-val">6–12.5</div><div class="qs-label">Wire Gauge (BWG)</div></div>
+      <div class="qs-item"><div class="qs-val">3/8″–2″</div><div class="qs-label">Mesh Opening</div></div>
+      <div class="qs-item"><div class="qs-val">3–12 ft</div><div class="qs-label">Heights Available</div></div>
+      <div class="qs-item"><div class="qs-val">240 g/m²</div><div class="qs-label">Zinc Coating Min.</div></div>
+    </div>
 
     <!-- ============ 2. SPECIFICATIONS ============ -->
     <section class="product-section-light">
@@ -215,6 +237,41 @@
             <h3>Container Loading</h3>
             <p>Rolls are loaded into 20ft or 40ft containers for secure, efficient ocean freight delivery worldwide.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATION SCENARIOS ============ -->
+    <section class="product-section-dark">
+      <div class="section-header" data-reveal>
+        <span class="category-tag" style="color:#fff;">Applications</span>
+        <h2 style="color:#fff;">Where Galvanized Chain Link <span class="accent">Fence Is Used</span></h2>
+        <p style="color:var(--color-gray-light);">Trusted across industries for reliable perimeter security, livestock containment, and public safety fencing.</p>
+      </div>
+      <div class="apps-grid">
+        <div class="app-tile">
+          <img src="images/app-galvanized-chain-link.png" alt="Galvanized chain link fence for perimeter security and industrial site protection" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Perimeter Security</div><div class="app-tile-desc">Industrial sites and commercial properties</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-pvc-chain-link.png" alt="PVC coated chain link fence for playgrounds parks and sports facilities" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Parks &amp; Playgrounds</div><div class="app-tile-desc">Public recreational areas and sports facilities</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-schools-parks.png" alt="Chain link fence installed around schools for student safety and campus boundary" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Schools &amp; Campuses</div><div class="app-tile-desc">Student safety and campus boundary demarcation</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-privacy-chain-link.png" alt="Privacy chain link fence with slats for residential and commercial screening" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Privacy Fencing</div><div class="app-tile-desc">Residential yards and commercial screening</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-warehouse.webp" alt="Chain link fence for warehouse and logistics yard security enclosure" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Warehouse &amp; Logistics</div><div class="app-tile-desc">Yard security and cargo area enclosure</div></div>
+        </div>
+        <div class="app-tile">
+          <img src="images/app-orchard-vineyard.webp" alt="Chain link fence protecting orchards and vineyards from wildlife intrusion" loading="lazy">
+          <div class="app-tile-overlay"><div class="app-tile-label">Agriculture</div><div class="app-tile-desc">Orchards, vineyards and crop protection</div></div>
         </div>
       </div>
     </section>
