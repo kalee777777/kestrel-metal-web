@@ -1,23 +1,61 @@
+/**
+ * Kestrel Metal 官网统计加载器(修复版)
+ * 修复:原版依赖管理台写入的 localStorage 配置,普通访客浏览器没有该配置,
+ *      导致 GA4/Umami 从未对真实访客加载(数据为零)。
+ * 本版:静态配置保底(所有访客生效),管理台 localStorage 仅作管理员本浏览器的临时覆盖。
+ * 用法:填好下方 KM_ANALYTICS 的两个 ID → 提交仓库 → Cloudflare 自动部署。
+ */
 (function () {
   'use strict';
+
+  // ===== 站点统计配置(部署前必填) =====
+  var KM_ANALYTICS = {
+    // GA4:analytics.google.com → Admin → Data Streams → Web → Measurement ID(G-开头)
+    ga4_measurement_id: 'G-Q5WHY8L8BN',
+    // Umami:cloud.umami.is → Settings → Websites → kestrelmetal.com → Website ID(UUID)
+    umami_website_id: 'a7ba74c4-ee31-414b-8a9c-2fa239ae7557',
+    // Umami 云版固定为 https://cloud.umami.is;自托管则填自己的域名
+    umami_domain: 'https://cloud.umami.is'
+  };
+
+  // 管理台本地设置仅覆盖管理员自己的浏览器(可选,普通访客不受影响)
   try {
     var s = localStorage.getItem('km_admin_site_settings');
-    if (!s) return;
-    var cfg = JSON.parse(s);
-    if (!cfg.ga4_measurement_id) return;
+    if (s) {
+      var over = JSON.parse(s);
+      if (over.ga4_measurement_id) KM_ANALYTICS.ga4_measurement_id = over.ga4_measurement_id;
+      if (over.umami_website_id) KM_ANALYTICS.umami_website_id = over.umami_website_id;
+      if (over.umami_domain) KM_ANALYTICS.umami_domain = over.umami_domain;
+    }
+  } catch (e) {}
 
-    var head = document.head || document.getElementsByTagName('head')[0];
+  var head = document.head || document.getElementsByTagName('head')[0];
 
-    var ga4 = document.createElement('script');
-    ga4.async = true;
-    ga4.src = 'https://www.googletagmanager.com/gtag/js?id=' + cfg.ga4_measurement_id;
-    head.appendChild(ga4);
+  // ---- GA4(修复:不再依赖 localStorage,所有访客加载) ----
+  try {
+    if (KM_ANALYTICS.ga4_measurement_id) {
+      var ga4 = document.createElement('script');
+      ga4.async = true;
+      ga4.src = 'https://www.googletagmanager.com/gtag/js?id=' + KM_ANALYTICS.ga4_measurement_id;
+      head.appendChild(ga4);
 
-    window.dataLayer = window.dataLayer || [];
-    var gtag = function () { window.dataLayer.push(arguments); };
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', cfg.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
+      window.dataLayer = window.dataLayer || [];
+      var gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', KM_ANALYTICS.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
+    }
+  } catch (e) {}
+
+  // ---- Umami(修复:同上) ----
+  try {
+    if (KM_ANALYTICS.umami_website_id) {
+      var umamiScript = document.createElement('script');
+      umamiScript.defer = true;
+      umamiScript.src = (KM_ANALYTICS.umami_domain || 'https://cloud.umami.is') + '/script.js';
+      umamiScript.setAttribute('data-website-id', KM_ANALYTICS.umami_website_id);
+      head.appendChild(umamiScript);
+    }
   } catch (e) {}
 })();
 
@@ -58,7 +96,7 @@
     var d = new Date();
     var y = d.getFullYear();
     var m = ('0' + (d.getMonth() + 1)).slice(-2);
-    var day = ('0' + d.getDate()).slice(-2);
+    var day = ('0' + (d.getDate())).slice(-2);
     return y + '-' + m + '-' + day;
   }
 
@@ -225,21 +263,4 @@
       trackPage();
     } catch (e) {}
   });
-})();
-
-(function () {
-  'use strict';
-  try {
-    var s = localStorage.getItem('km_admin_site_settings');
-    if (!s) return;
-    var cfg = JSON.parse(s);
-    if (!cfg.umami_website_id) return;
-    
-    var umamiScript = document.createElement('script');
-    umamiScript.defer = true;
-    umamiScript.src = (cfg.umami_domain || 'https://cloud.umami.is') + '/script.js';
-    umamiScript.setAttribute('data-website-id', cfg.umami_website_id);
-    var head = document.head || document.getElementsByTagName('head')[0];
-    head.appendChild(umamiScript);
-  } catch (e) {}
 })();
