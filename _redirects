@@ -1,3 +1,0 @@
-# 仅处理 http 到 https 的重定向（Cloudflare 自动处理 www 重定向）
-http://kestrelmetal.com/*    https://www.kestrelmetal.com/:splat    301!
-http://www.kestrelmetal.com/*    https://www.kestrelmetal.com/:splat    301!
