@@ -2,7 +2,7 @@
 
 > **项目**: Kestrel Metal 金属丝网制品企业官网（纯静态多页站点）
 > **技术**: 原生 HTML / CSS / JavaScript + three.js 3D 展示
-> **最后更新**: 2026-08-16
+> **最后更新**: 2026-08-19
 
 ---
 
@@ -56,7 +56,36 @@ git push github main origin main  # 同时推送双仓库（简写）
 | **Deploy command** | `npx wrangler deploy` |
 | Root directory | `/`（仓库根目录） |
 
-### 1.4 部署相关配置文件（仓库根目录）
+### 1.4 域名与 DNS 配置
+
+**访问地址**：
+- `https://www.kestrelmetal.com`（主域名）
+- `https://kestrelmetal.com`（apex 域名）
+- `https://kestrel-metal-web.1411044767.workers.dev`（Workers 默认地址）
+
+**Cloudflare DNS 记录**：
+
+| 类型 | 名称 | 内容 | 代理状态 |
+|------|------|------|----------|
+| A | @ | `192.0.2.1` | DNS only |
+| CNAME | www | `kestrelmetal.com` | Proxied |
+
+**Workers 域名路由配置**（Workers & Pages → kestrel-metal-web → Domains & Routes）：
+
+| 名称 | 类型 | 环境 |
+|------|------|------|
+| `kestrelmetal.com` | Custom Domain | Production |
+| `www.kestrelmetal.com/*` | Route | Production |
+
+> ⚠️ www 域名需要**同时配置 DNS CNAME 记录和 Worker Route**，仅配置 DNS 会导致 522 错误。详见 [PROJECT_DOCUMENT.md](../PROJECT_DOCUMENT.md) 第六节。
+
+### 1.5 SEO 与 GSC 配置
+
+- **sitemap.xml**：包含 190 个 URL，已提交至 Google Search Console
+- **robots.txt**：已配置 `Sitemap: https://www.kestrelmetal.com/sitemap.xml`
+- **GSC 验证状态**：sitemap 提交成功，Google 已开始抓取
+
+### 1.6 部署相关配置文件（仓库根目录）
 
 | 文件 | 作用 |
 |------|------|
@@ -64,7 +93,7 @@ git push github main origin main  # 同时推送双仓库（简写）
 | `.assetsignore` | wrangler 上传静态资源时的排除清单（node_modules、.git、配置文件等不部署） |
 | `.gitignore` | git 忽略清单（node_modules、.DS_Store、.wrangler 等不入库） |
 
-### 1.5 ⚠️ 重要限制与注意事项
+### 1.7 ⚠️ 重要限制与注意事项
 
 1. **单文件 25 MiB 上限**（Workers 静态资源限制）
    - 添加任何大文件前先检查体积：`ls -lh 文件名`
@@ -77,6 +106,8 @@ git push github main origin main  # 同时推送双仓库（简写）
    - 历史案例：`models/welded-gabion-box.glb` 曾因 32.6 MiB 导致部署失败，量化压缩至 16 MB 后解决
 2. **不要把 node_modules 提交进仓库**（已清理过一次，`.gitignore` 已配置防护）
 3. **产品/博客/案例页内的产品链接应指向具体产品子页**（如 `chain-link.html`），不要指向 `products.html` 汇总页——全站已统一修正过（2026-08），新增页面时注意遵循
+4. **不要创建 `_redirects` 文件**：Cloudflare Workers 静态资源不支持此文件格式，`/*` 通配符重定向会导致无限重定向循环，使整个网站无法访问
+5. **不要创建 `_headers` 文件**：Cloudflare Workers 会自动处理 MIME 类型，无需手动设置。如需自定义响应头，请使用 Cloudflare Dashboard 中的 Redirect Rules 或 Transform Rules
 
 ---
 
@@ -186,4 +217,5 @@ npx serve .
 |------|------|
 | `PROJECT_PROGRESS.md` | 早期开发进度记录（历史存档，进度信息已过时） |
 | `docs/issue-log.md` | 待修复问题记录（待替换图片、交互问题等） |
-| 本文档 `README.md` | 仓库配置 / 部署方法 / 项目内容总览 |
+| [PROJECT_DOCUMENT.md](../PROJECT_DOCUMENT.md) | 项目完整规划文档（设计规范、站点架构、SEO 规范、**域名配置与 GSC 提交**） |
+| 本文档 `README.md` | 仓库配置 / 部署方法 / 域名DNS / SEO / 项目内容总览 |
