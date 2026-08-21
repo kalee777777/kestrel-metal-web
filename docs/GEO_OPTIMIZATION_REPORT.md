@@ -63,12 +63,24 @@
 | 8 | 修改 | `/epoxy-coated-wire-mesh.html` | Hero 描述重写为自闭环定义句（环氧树脂涂层参数） |
 | 9 | 新建 | `/blog-fence-comparison-3d-chain-link-palisade.html` | GEO 对比博客：成本/抗攀爬/风载对比表 + 500MW 澳洲案例 + 4 条 FAQ |
 | 10 | 新建 | `/blog-ce-ukca-reach-wire-mesh-compliance.html` | GEO 合规博客：EN 标准表 + REACH SVHC 解读 + DoP + 8 项采购清单 + 4 条 FAQ |
+| 12 | 新建 | `/blog-nato22-vs-astm-razor-wire.html` | GEO 对比博客：NATO-22 vs ASTM F2781 剃刀网标准对比 + 盐雾测试数据 + 4 条 FAQ |
+| 13 | 新建 | `/blog-solar-farm-fence-specification-guide.html` | GEO 技术博客：太阳能农场围栏完整技术规范 + 500MW 澳洲案例 + 风载计算 + 4 条 FAQ |
+| 14 | 新建 | `/blog-hs-codes-wire-mesh-fencing-export.html` | GEO 贸易博客：HS 编码分类指南（7308.90/7314.41/7313.00 等）+ 关税税率 + RCEP 优惠 + 4 条 FAQ |
+| 15 | 新建 | `/factory-audit.html` | 工厂审计预约页面：含生产设施介绍、审计预约表单、访问信息、Schema.org LocalBusiness JSON-LD |
 
 ### 3.3 Admin 管理层变更
 
 | # | 变更类型 | 文件 | 变更内容 |
 |---|---------|------|---------|
 | 11 | 修改 | `/admin/js/pages/geo.js` | 新增「GEO 诊断」Tab：一键检查 robots.txt AI 爬虫放行、llms.txt 部署、sitemap.xml；展示基线测试 Prompt；支持导出 GEO 数据 |
+
+### 3.4 文档层变更
+
+| # | 变更类型 | 文件 | 变更内容 |
+|---|---------|------|---------|
+| 16 | 新建 | `/docs/GEO_OPTIMIZATION_REPORT.md` | GEO 优化完整报告（本文档） |
+| 17 | 新建 | `/docs/EXTERNAL_ENTITY_ALIGNMENT_GUIDE.md` | 站外实体对齐指南（Europages/Thomasnet/LinkedIn/Wikidata/Google Business/YouTube） |
+| 18 | 新建 | `/docs/GA4_AI_REFERRAL_MONITORING_GUIDE.md` | GA4 AI Referral 流量监控配置指南（过滤器/仪表板/告警/报告模板） |
 
 ---
 
@@ -525,10 +537,12 @@ curl -s https://www.kestrelmetal.com/robots.txt
 | ~~高~~ | ~~Cloudflare AI 爬虫放行~~ | ✅ 已完成 | 在控制台 Security → Bots → AI Crawlers 中配置 Search/Agent = Allow |
 | ~~高~~ | ~~Cloudflare robots.txt 管理~~ | ✅ 已完成 | 选择 Disable robots.txt configuration，使用自定义文件 |
 | ~~高~~ | ~~部署到生产环境~~ | ✅ 已完成 | 通过 GitHub → Cloudflare Pages 自动部署 |
-| 中 | 站外实体对齐 | ⏳ 待执行 | Europages/Thomasnet/Wikidata/LinkedIn 信息对齐 |
-| 中 | GA4 AI referral 监控 | ⏳ 待执行 | 在 GA4 中添加 chatgpt.com/perplexity.ai/claude.ai 过滤视图 |
-| 中 | 补充 3 篇对比博客 | ⏳ 待执行 | NATO-22 vs ASTM razor wire、Solar farm fence spec、HS code list |
-| 低 | 工厂审计预约页面 | ⏳ 待执行 | 为海外客户提供工厂参观和审计预约功能 |
+| ~~中~~ | ~~站外实体对齐~~ | ✅ 已完成 | 创建 Europages/Thomasnet/LinkedIn/Wikidata/Google Business/YouTube 配置指南 |
+| ~~中~~ | ~~GA4 AI referral 监控~~ | ✅ 已完成 | 创建 GA4 AI 流量监控配置指南（过滤器/仪表板/告警/报告模板） |
+| ~~中~~ | ~~补充 3 篇对比博客~~ | ✅ 已完成 | NATO-22 vs ASTM razor wire、Solar farm fence spec、HS code list |
+| ~~低~~ | ~~工厂审计预约页面~~ | ✅ 已完成 | 创建 factory-audit.html，含生产设施介绍、审计预约表单、访问信息 |
+| 中 | 站外实体实际配置执行 | ⏳ 待执行 | 按照 EXTERNAL_ENTITY_ALIGNMENT_GUIDE.md 在各平台创建/更新公司页面 |
+| 中 | GA4 实际配置执行 | ⏳ 待执行 | 按照 GA4_AI_REFERRAL_MONITORING_GUIDE.md 在 GA4 中配置过滤器和仪表板 |
 
 ---
 
@@ -562,7 +576,12 @@ curl -s https://www.kestrelmetal.com/robots.txt
 | 11 | Cloudflare：Training 阻止 AI 训练爬虫 | ✅ |
 | 12 | 生产环境部署：GitHub → Cloudflare Pages 自动部署 | ✅ |
 | 13 | 线上 curl 验证：8 个 AI 爬虫均返回 HTTP 200 | ✅ |
-| 14 | 站外：Europages/Thomasnet/Wikidata 对齐（待执行） | ⏳ |
+| 14 | 站外实体对齐指南：Europages/Thomasnet/LinkedIn/Wikidata/Google/YouTube | ✅ |
+| 15 | GA4 AI Referral 监控配置指南 | ✅ |
+| 16 | GEO 磁铁博客：5 篇（对比/合规/剃刀网/太阳能/HS 编码） | ✅ |
+| 17 | 工厂审计预约页面：factory-audit.html | ✅ |
+| 18 | 站外实体实际配置执行（待按指南操作） | ⏳ |
+| 19 | GA4 实际配置执行（待按指南操作） | ⏳ |
 
 ### 附录 B：GEO 磁铁博客列表
 
@@ -570,6 +589,9 @@ curl -s https://www.kestrelmetal.com/robots.txt
 |---------|-----|---------|
 | 3D Wire Panel vs Chain Link vs Palisade: Cost, Security & Applications Compared | blog-fence-comparison-3d-chain-link-palisade.html | 成本/抗攀爬对比表 + 500MW AU 案例 |
 | CE / UKCA / REACH Compliance Checklist for Wire Mesh & Fencing (2026 Guide) | blog-ce-ukca-reach-wire-mesh-compliance.html | EN 标准表 + REACH + DoP + 采购清单 |
+| NATO-22 vs ASTM Razor Wire: Standards, Specifications & Comparison Guide | blog-nato22-vs-astm-razor-wire.html | 剃刀网标准对比 + 盐雾测试数据 |
+| Solar Farm Perimeter Fence Specification Guide: Complete Technical Reference | blog-solar-farm-fence-specification-guide.html | 太阳能农场围栏技术规范 + 风载计算 |
+| HS Codes for Wire Mesh, Fencing & Razor Wire: Complete Export Classification Guide | blog-hs-codes-wire-mesh-fencing-export.html | HS 编码分类 + 关税税率 + RCEP 优惠 |
 
 ### 附录 C：文件变更清单
 
@@ -584,12 +606,19 @@ curl -s https://www.kestrelmetal.com/robots.txt
 [修改] epoxy-coated-wire-mesh.html
 [新建] blog-fence-comparison-3d-chain-link-palisade.html
 [新建] blog-ce-ukca-reach-wire-mesh-compliance.html
+[新建] blog-nato22-vs-astm-razor-wire.html
+[新建] blog-solar-farm-fence-specification-guide.html
+[新建] blog-hs-codes-wire-mesh-fencing-export.html
+[新建] factory-audit.html
 [修改] admin/js/pages/geo.js
+[新建] docs/GEO_OPTIMIZATION_REPORT.md
+[新建] docs/EXTERNAL_ENTITY_ALIGNMENT_GUIDE.md
+[新建] docs/GA4_AI_REFERRAL_MONITORING_GUIDE.md
 ```
 
 ---
 
 **报告完成**  
 编制日期：2026-08-21  
-更新日期：2026-08-21（同步 Cloudflare 配置结果 + 线上验证数据）  
+更新日期：2026-08-21（同步 Cloudflare 配置结果 + 线上验证数据 + 补充博客/工厂审计页/站外对齐指南/GA4 监控指南）  
 验证状态：✅ 全部通过（本地代码 + Cloudflare 边缘层 + 线上 curl 测试）
