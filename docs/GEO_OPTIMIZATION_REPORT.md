@@ -20,6 +20,9 @@
 - ✅ 重写 5 个核心产品页段首为自闭环定义句
 - ✅ 创建 2 篇 GEO 磁铁博客（对比指南 + 合规指南）
 - ✅ 更新 Admin GEO 管理页面增加诊断功能
+- ✅ Cloudflare 边缘层 AI Bot 策略配置完成
+- ✅ Cloudflare robots.txt 管理策略设置完成
+- ✅ 全量部署到生产环境并验证通过
 
 ---
 
@@ -315,7 +318,70 @@ async function runGeoAudit() {
 ]
 ```
 
-### 5.4 Admin GEO 诊断验证
+### 5.4 AI 爬虫可访问性验证（curl 测试）
+
+**验证时间**: 2026-08-21  
+**验证方式**: 使用 curl 模拟各 AI 爬虫 User-Agent 访问线上站点
+
+| 爬虫 UA | HTTP 状态 | 结果 |
+|---------|----------|------|
+| ClaudeBot | 200 | ✅ |
+| GPTBot | 200 | ✅ |
+| OAI-SearchBot | 200 | ✅ |
+| PerplexityBot | 200 | ✅ |
+| Google-Extended | 200 | ✅ |
+| Bingbot | 200 | ✅ |
+| CCBot | 200 | ✅ |
+| Bytespider | 200 | ✅ |
+
+### 5.5 robots.txt 线上验证
+
+**验证结果**: Cloudflare 正确返回自定义 robots.txt 内容，无覆盖。
+
+```bash
+curl -s https://www.kestrelmetal.com/robots.txt
+# 输出:
+# Content-Signal: search=yes,ai-input=yes,ai-train=no,use=full
+# User-agent: *
+# Allow: /
+# Disallow: /admin/
+# Disallow: /components/
+# Disallow: /api/
+#
+# User-agent: GPTBot
+# Allow: /
+# User-agent: OAI-SearchBot
+# Allow: /
+# User-agent: ClaudeBot
+# Allow: /
+# User-agent: PerplexityBot
+# Allow: /
+# User-agent: Google-Extended
+# Allow: /
+# User-agent: Bingbot
+# Allow: /
+# User-agent: Amazonbot
+# Allow: /
+# User-agent: Applebot-Extended
+# Allow: /
+#
+# Sitemap: https://www.kestrelmetal.com/sitemap.xml
+```
+
+### 5.6 线上内容验证
+
+| 页面 | 验证项 | 结果 |
+|------|--------|------|
+| /robots.txt | Content-Signal 完整 | ✅ |
+| /llms.txt | 机器可读公司档案正常返回 | ✅ |
+| /sitemap.xml | 站点地图正常 | ✅ |
+| /fence-security.html | 自包含定义句 "high-strength perimeter fencing system" | ✅ |
+| /chain-link.html | 自包含定义句 "diamond-pattern woven wire fence" | ✅ |
+| /gabion-boxes.html | 自包含定义句 "Welded gabion boxes" | ✅ |
+| /barbed-wire-concertina.html | 自包含定义句 "Concertina barbed wire" | ✅ |
+| /blog-fence-comparison-3d-chain-link-palisade.html | 4 个 FAQ 项 | ✅ |
+
+### 5.7 Admin GEO 诊断验证
 
 | 检查项 | 状态 | 结果 |
 |--------|------|------|
@@ -327,26 +393,118 @@ async function runGeoAudit() {
 
 ---
 
-## 六、Cloudflare 控制台待办事项
+## 六、Cloudflare 控制台配置（已完成 ✅）
 
-以下操作需在 Cloudflare Dashboard 手动完成：
+**配置日期**: 2026-08-21
 
-1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
-2. 选择站点 `kestrelmetal.com`
-3. 进入 Security → Bots → AI Crawlers
-4. 将以下爬虫状态改为 **Allow**:
-   - ClaudeBot
-   - Bytespider
-   - CCBot
-5. 部署后验证：
-   ```bash
-   curl -A "ClaudeBot" https://www.kestrelmetal.com/ -I
-   # 应返回 HTTP/2 200
-   ```
+### 6.1 Security → Bots → AI Crawlers 配置
+
+在 Cloudflare Dashboard 中完成以下配置：
+
+| 设置项 | 配置值 | 说明 |
+|--------|--------|------|
+| **Search** | Allow (do not block) | 允许 AI 搜索引擎（Perplexity、ChatGPT Search 等）索引网站 |
+| **Agent** | Allow (do not block) | 允许 AI 助手（ChatGPT、Claude 等）引用网站内容回答用户问题 |
+| **Training** | Block on pages with ads | 阻止 AI 训练爬虫抓取内容用于模型训练 |
+| **Block AI bots** | OFF（关闭） | 不在边缘层阻止 AI 爬虫，使用 robots.txt 精细控制 |
+| **AI Labyrinth** | OFF（关闭） | 不用蜜罐页面诱捕爬虫 |
+
+### 6.2 Security → Bots → Manage your robots.txt 配置
+
+| 设置项 | 配置值 | 说明 |
+|--------|--------|------|
+| **Robots.txt management** | Disable robots.txt configuration | 关闭 Cloudflare 的 robots.txt 管理，完全使用自定义文件 |
+
+**原因分析**:
+- Cloudflare 的 "Content Signals Policy" 和 "Instruct AI bots to not scrape content" 选项会**覆盖**自定义 robots.txt
+- "Instruct AI bots to not scrape content" 会自动给所有 AI 爬虫加 `Disallow: /`，与我们的 Allow 策略冲突
+- 选择 "Disable" 确保 Cloudflare 原样返回我们自定义的 robots.txt 文件
+
+### 6.3 Cloudflare 配置效果验证
+
+**验证时间**: 2026-08-21
+
+**curl 测试结果**:
+```bash
+# 所有 AI 爬虫均返回 HTTP 200
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "ClaudeBot" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "GPTBot" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "OAI-SearchBot" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "PerplexityBot" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "Google-Extended" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "Bingbot" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "CCBot" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+
+curl -s -o /dev/null -w "HTTP %{http_code}" -A "Bytespider" https://www.kestrelmetal.com/
+# → HTTP 200 ✅
+```
+
+**robots.txt 验证**:
+```bash
+curl -s https://www.kestrelmetal.com/robots.txt
+# 返回完整自定义内容：
+# Content-Signal: search=yes,ai-input=yes,ai-train=no,use=full
+# User-agent: GPTBot → Allow: /
+# User-agent: ClaudeBot → Allow: /
+# User-agent: PerplexityBot → Allow: /
+# ... (8 个 AI 爬虫均 Allow)
+```
+
+### 6.4 Cloudflare robots.txt 冲突问题及解决
+
+**问题描述**: Cloudflare 的 "Instruct AI bots to not scrape content" 和 "Content Signals Policy" 选项会**覆盖**自定义 robots.txt 文件。
+
+**冲突表现**:
+- Cloudflare 在自定义 robots.txt 前插入 Cloudflare Managed 规则块
+- 将 `Content-Signal` 从 `ai-input=yes,use=full` 改为 `use=reference`（丢失 ai-input 权限）
+- 给 ClaudeBot/GPTBot/Bytespider 等插入 `Disallow: /`，覆盖自定义的 `Allow: /`
+
+**解决方案**: 选择 **"Disable robots.txt configuration"**，关闭 Cloudflare 的 robots.txt 管理功能。
+
+**验证**: Cloudflare 正确返回自定义 robots.txt 文件内容，无覆盖、无注入。
+
+### 6.5 Cloudflare 配置截图参考
+
+**AI Crawlers 配置页面**:
+- Search: Allow (do not block) ✅
+- Agent: Allow (do not block) ✅
+- Training: Block on pages with ads ✅
+
+**Manage your robots.txt 页面**:
+- Disable robots.txt configuration ✅
 
 ---
 
-## 七、基线测试 Prompt（人工验证）
+## 七、部署记录
+
+**部署方式**: GitHub → Cloudflare Pages 自动部署  
+**部署时间**: 2026-08-21  
+**Git commit**: `cdeddbf` — "feat: GEO optimization for AI search engines"  
+**变更统计**: 12 files changed, 1267 insertions(+), 8 deletions(-)  
+**部署触发**: `git push github main` → Cloudflare Pages 自动触发部署  
+**部署验证**: curl 测试 8 个 AI 爬虫均返回 HTTP 200，robots.txt 内容正确
+
+**部署冲突解决**:
+1. Cloudflare 的 "Manage your robots.txt" 功能会覆盖自定义 robots.txt → 已切换为 "Disable robots.txt configuration"
+2. GitHub SSH 连接失败 → 改用 HTTPS 推送成功
+3. Cloudflare 缓存未更新 → 部署完成后自动刷新
+
+---
+
+## 八、基线测试 Prompt（人工验证）
 
 以下 3 个问题可在 Perplexity 和 ChatGPT（Search Enabled）中测试，记录答案中是否引用 `kestrelmetal.com`：
 
@@ -360,19 +518,21 @@ async function runGeoAudit() {
 
 ---
 
-## 八、后续待办事项
+## 九、后续待办事项
 
-| 优先级 | 事项 | 说明 |
-|--------|------|------|
-| 高 | Cloudflare AI 爬虫放行 | 在控制台操作（见第六节） |
-| 中 | 站外实体对齐 | Europages/Thomasnet/Wikidata/LinkedIn 信息对齐 |
-| 中 | GA4 AI referral 监控 | 在 GA4 中添加 chatgpt.com/perplexity.ai/claude.ai 过滤视图 |
-| 中 | 补充 3 篇对比博客 | NATO-22 vs ASTM razor wire、Solar farm fence spec、HS code list |
-| 低 | 工厂审计预约页面 | 为海外客户提供工厂参观和审计预约功能 |
+| 优先级 | 事项 | 状态 | 说明 |
+|--------|------|------|------|
+| ~~高~~ | ~~Cloudflare AI 爬虫放行~~ | ✅ 已完成 | 在控制台 Security → Bots → AI Crawlers 中配置 Search/Agent = Allow |
+| ~~高~~ | ~~Cloudflare robots.txt 管理~~ | ✅ 已完成 | 选择 Disable robots.txt configuration，使用自定义文件 |
+| ~~高~~ | ~~部署到生产环境~~ | ✅ 已完成 | 通过 GitHub → Cloudflare Pages 自动部署 |
+| 中 | 站外实体对齐 | ⏳ 待执行 | Europages/Thomasnet/Wikidata/LinkedIn 信息对齐 |
+| 中 | GA4 AI referral 监控 | ⏳ 待执行 | 在 GA4 中添加 chatgpt.com/perplexity.ai/claude.ai 过滤视图 |
+| 中 | 补充 3 篇对比博客 | ⏳ 待执行 | NATO-22 vs ASTM razor wire、Solar farm fence spec、HS code list |
+| 低 | 工厂审计预约页面 | ⏳ 待执行 | 为海外客户提供工厂参观和审计预约功能 |
 
 ---
 
-## 九、核心指标定义
+## 十、核心指标定义
 
 | 指标 | 定义 | 目标值 |
 |------|------|--------|
@@ -383,7 +543,7 @@ async function runGeoAudit() {
 
 ---
 
-## 十、附录
+## 十一、附录
 
 ### 附录 A：llms.txt / robots.txt / JSON-LD 落地核对清单
 
@@ -397,8 +557,12 @@ async function runGeoAudit() {
 | 6 | JSON-LD：博客页 FAQPage 含 4 条问答 | ✅ |
 | 7 | 产品页：5 个核心产品页段首为自闭环定义句 | ✅ |
 | 8 | Admin：GEO 诊断功能可用 | ✅ |
-| 9 | Cloudflare：AI 爬虫放行（待手动操作） | ⏳ |
-| 10 | 站外：Europages/Thomasnet/Wikidata 对齐（待执行） | ⏳ |
+| 9 | Cloudflare：AI 爬虫放行（Search/Agent = Allow） | ✅ |
+| 10 | Cloudflare：robots.txt 管理策略（Disable，使用自定义文件） | ✅ |
+| 11 | Cloudflare：Training 阻止 AI 训练爬虫 | ✅ |
+| 12 | 生产环境部署：GitHub → Cloudflare Pages 自动部署 | ✅ |
+| 13 | 线上 curl 验证：8 个 AI 爬虫均返回 HTTP 200 | ✅ |
+| 14 | 站外：Europages/Thomasnet/Wikidata 对齐（待执行） | ⏳ |
 
 ### 附录 B：GEO 磁铁博客列表
 
@@ -427,4 +591,5 @@ async function runGeoAudit() {
 
 **报告完成**  
 编制日期：2026-08-21  
-验证状态：✅ 全部通过
+更新日期：2026-08-21（同步 Cloudflare 配置结果 + 线上验证数据）  
+验证状态：✅ 全部通过（本地代码 + Cloudflare 边缘层 + 线上 curl 测试）
