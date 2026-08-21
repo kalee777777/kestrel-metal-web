@@ -1,0 +1,151 @@
+.video-banner {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 4rem 2rem;
+}
+
+.video-banner-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography%20close%20up&image_size=landscape_16_9');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.video-banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to right,
+    rgba(10, 10, 10, 0.85) 0%,
+    rgba(10, 10, 10, 0.6) 50%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
+}
+
+.video-banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.video-banner-text {
+  max-width: 700px;
+}
+
+.video-banner-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--color-white);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.video-banner-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+.video-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: all var(--transition-fast);
+}
+
+.play-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--color-orange-primary);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 107, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+  }
+}
+
+.video-play-btn:hover .play-icon-circle {
+  background: var(--color-orange-secondary);
+  transform: scale(1.1);
+}
+
+.play-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-white);
+  letter-spacing: 0.05em;
+}
+
+.video-play-btn:hover .play-text {
+  color: var(--color-orange-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .video-banner {
+    padding: 3rem 1.5rem;
+    min-height: 280px;
+  }
+
+  .play-icon-circle {
+    width: 38px;
+    height: 38px;
+  }
+
+  .play-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-banner {
+    padding: 2.5rem 1rem;
+  }
+
+  .video-play-btn {
+    gap: 0.75rem;
+  }
+}

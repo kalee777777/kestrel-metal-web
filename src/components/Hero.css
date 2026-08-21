@@ -1,0 +1,210 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  padding-bottom: 2.5rem;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=molten%20metal%20lava%20flowing%20industrial%20furnace%20orange%20glow%20dramatic%20lighting%20high%20quality%20photography&image_size=landscape_16_9');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.7) 0%,
+    rgba(10, 10, 10, 0.85) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px 2rem 0;
+  width: 100%;
+}
+
+.hero-main {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.hero-left {
+  max-width: 700px;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: fit-content;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  color: var(--color-white);
+  line-height: 1.05;
+  margin-bottom: 1.75rem;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+.hero-title .highlight {
+  color: var(--color-white);
+  display: block;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 600px;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: clamp(0.75rem, 1.8vw, 0.9rem) clamp(2rem, 3.5vw, 2.75rem);
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: clamp(0.85rem, 1.3vw, 0.95rem);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  min-width: 160px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-orange-primary) 0%, var(--color-orange-dark) 50%, #E53935 100%);
+  color: var(--color-white);
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-orange-primary);
+  background: rgba(255, 107, 0, 0.1);
+}
+
+.hero-projects {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2.5rem 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.project-item {
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.project-more {
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  color: var(--color-white);
+  font-weight: 700;
+  opacity: 0.9;
+  margin-left: auto;
+}
+
+@media (max-width: 1024px) {
+  .hero-main {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .hero-right {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding: 8rem 0 3rem;
+  }
+
+  .hero-main {
+    gap: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-right {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+
+  .hero-projects {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .project-more {
+    margin-left: 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-projects {
+    gap: 0.8rem;
+  }
+
+  .project-item {
+    font-size: 0.75rem;
+  }
+
+  .project-more {
+    font-size: 0.85rem;
+  }
+}

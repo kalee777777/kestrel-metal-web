@@ -1,0 +1,29 @@
+import { lazy, Suspense } from 'react';
+import Layout from './components/Layout';
+import Hero from './components/Hero';
+import GlobalMapSection from './components/DemoMap';
+import ProjectManagement from './components/ProjectManagement';
+import ProjectsShowcase from './components/ProjectsShowcase';
+import MetalProducts from './components/MetalProducts';
+import Evidence from './components/Evidence';
+import CompanyOverview from './components/CompanyOverview';
+import VideoBanner from './components/VideoBanner';
+
+function App() {
+  return (
+    <Layout>
+      <Hero />
+      <Suspense fallback={<div className="global-map-loading">Loading global map...</div>}>
+        <GlobalMapSection />
+      </Suspense>
+      <ProjectManagement />
+      <ProjectsShowcase />
+      <MetalProducts />
+      <Evidence />
+      <CompanyOverview />
+      <VideoBanner />
+    </Layout>
+  );
+}
+
+export default App;
