@@ -132,9 +132,12 @@
             "name": "Kestrel Metal",
             "url": DOMAIN,
             "logo": DOMAIN + "/images/logo.png",
-            "description": "Professional metal products manufacturer specializing in fence products, wire mesh and wire products.",
+            "description": "Kestrel Metal is a China-based manufacturer of security fences, wire mesh, gabions, razor wire, and barbed wire. Based in Anping, Hebei since 2014, with 200+ projects in 50+ countries.",
+            "foundingDate": "2014",
+            "numberOfEmployees": { "@type": "QuantitativeValue", "minValue": 60 },
             "address": {
                 "@type": "PostalAddress",
+                "streetAddress": "Anping Industrial Zone",
                 "addressLocality": "Anping",
                 "addressRegion": "Hebei",
                 "addressCountry": "CN"
@@ -146,6 +149,25 @@
                 "email": "sales@kestrelmetal.com",
                 "availableLanguage": ["English", "Chinese"]
             },
+            "knowsAbout": [
+                "Security fence manufacturing",
+                "Wire mesh production",
+                "Gabion boxes and mattresses",
+                "NATO-22 razor wire",
+                "Barbed wire",
+                "3D welded wire panels",
+                "Chain link fencing",
+                "Hot-dip galvanized steel",
+                "PVC coated wire mesh"
+            ],
+            "areaServed": [
+                { "@type": "Country", "name": "Australia" },
+                { "@type": "Country", "name": "United States" },
+                { "@type": "Country", "name": "United Kingdom" },
+                { "@type": "Country", "name": "Germany" },
+                { "@type": "Country", "name": "Canada" },
+                { "@type": "Country", "name": "New Zealand" }
+            ],
             "sameAs": [
                 "https://www.facebook.com/kestrelmetal",
                 "https://www.linkedin.com/company/kestrelmetal"
@@ -380,6 +402,13 @@
                 "url": DOMAIN
             },
             "category": category,
+            "additionalProperty": (specs || []).concat([
+                { "@type": "PropertyValue", "name": "Lead Time", "value": "15-25 days" },
+                { "@type": "PropertyValue", "name": "MOQ", "value": "100 panels" },
+                { "@type": "PropertyValue", "name": "Certification", "value": "ISO 9001:2015, CE, UKCA" },
+                { "@type": "PropertyValue", "name": "Incoterms", "value": "FOB Tianjin / Shanghai" },
+                { "@type": "PropertyValue", "name": "Payment", "value": "T/T, L/C at sight" }
+            ]),
             "offers": {
                 "@type": "Offer",
                 "url": DOMAIN + canonicalUrl,

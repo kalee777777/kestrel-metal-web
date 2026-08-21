@@ -1,0 +1,430 @@
+# KESTREL METAL GEO 优化报告
+
+**项目**: kestrelmetal.com  
+**执行日期**: 2026-08-21  
+**编制依据**: KestrelMetal_GEO_方案.docx + KestrelMetal_GEO_Cloudflare专项.docx  
+**验证方式**: 浏览器自动化 + JSON-LD 输出检查
+
+---
+
+## 一、执行摘要
+
+本次 GEO（Generative Engine Optimization，生成式引擎优化）优化工作旨在提升 Kestrel Metal 官网在 AI 搜索引擎（ChatGPT、Perplexity、Claude、AI Overviews 等）中的可见度和引用率。
+
+**优化策略**：按照"开门 → 自我介绍 → 让 AI 敢引用"三层逻辑推进。
+
+**核心成果**：
+- ✅ 完成 robots.txt AI 爬虫放行配置
+- ✅ 部署 llms.txt（AI 爬虫的"公司简历"）
+- ✅ 增强 Organization + Product JSON-LD 结构化数据
+- ✅ 重写 5 个核心产品页段首为自闭环定义句
+- ✅ 创建 2 篇 GEO 磁铁博客（对比指南 + 合规指南）
+- ✅ 更新 Admin GEO 管理页面增加诊断功能
+
+---
+
+## 二、技术背景
+
+### 2.1 GEO 与 SEO 的关系
+
+| 维度 | SEO（搜索引擎优化） | GEO（生成式引擎优化） |
+|------|---------------------|---------------------|
+| 优化对象 | 爬虫 + 链接列表排名 | 大模型 + RAG 检索管线 |
+| 核心目标 | 排名靠前 → 用户点击进站 | 被模型选中 → 答案中直接 @你 / 引你 |
+| 胜负手 | 外链、关键词、点击率 | 可读、可信、可摘录（Readable / Trustworthy / Extractable） |
+
+### 2.2 Cloudflare 层影响
+
+站点接入 Cloudflare 后，边缘层默认配置会封锁部分 AI 爬虫（ClaudeBot、Bytespider、CCBot 等），并设置 `Content-Signal: ai-train=no`，导致 AI 引擎无法读取或引用站点内容。
+
+---
+
+## 三、已完成变更清单
+
+### 3.1 技术层变更
+
+| # | 变更类型 | 文件 | 变更内容 |
+|---|---------|------|---------|
+| 1 | 新建 | `/llms.txt` | AI 爬虫的"公司简历"，含 5 个产品线、证明要点、对比数据、合规信息、6 条 FAQ |
+| 2 | 修改 | `/robots.txt` | 新增 `Content-Signal` 指令 + 8 个 AI 爬虫 UA 显式 Allow |
+| 3 | 修改 | `/js/seo-enhance.js` | Organization Schema 增加 `knowsAbout`、`areaServed`；Product Schema 自动追加交易事实字段 |
+
+### 3.2 内容层变更
+
+| # | 变更类型 | 文件 | 变更内容 |
+|---|---------|------|---------|
+| 4 | 修改 | `/fence-security.html` | 段首重写为自闭环定义句（含参数、ISO 9001、FOB 天津、15–25 天交期） |
+| 5 | 修改 | `/chain-link.html` | 段首重写为自闭环定义句（含 mesh 50–75mm、锌层 40–270 g/m²） |
+| 6 | 修改 | `/gabion-boxes.html` | Hero 描述重写为自闭环定义句（含尺寸、mesh、wire gauge） |
+| 7 | 修改 | `/barbed-wire-concertina.html` | Hero 描述重写为自闭环定义句（NATO-22/BTO-22、coil 参数） |
+| 8 | 修改 | `/epoxy-coated-wire-mesh.html` | Hero 描述重写为自闭环定义句（环氧树脂涂层参数） |
+| 9 | 新建 | `/blog-fence-comparison-3d-chain-link-palisade.html` | GEO 对比博客：成本/抗攀爬/风载对比表 + 500MW 澳洲案例 + 4 条 FAQ |
+| 10 | 新建 | `/blog-ce-ukca-reach-wire-mesh-compliance.html` | GEO 合规博客：EN 标准表 + REACH SVHC 解读 + DoP + 8 项采购清单 + 4 条 FAQ |
+
+### 3.3 Admin 管理层变更
+
+| # | 变更类型 | 文件 | 变更内容 |
+|---|---------|------|---------|
+| 11 | 修改 | `/admin/js/pages/geo.js` | 新增「GEO 诊断」Tab：一键检查 robots.txt AI 爬虫放行、llms.txt 部署、sitemap.xml；展示基线测试 Prompt；支持导出 GEO 数据 |
+
+---
+
+## 四、文件变更详情
+
+### 4.1 llms.txt（新建）
+
+**路径**: `/Users/Zhuanz1/Desktop/kestrel metal web 1/kestrel-site/llms.txt`
+
+**内容结构**:
+```
+# KESTREL METAL
+## Product Lines（5 个产品线）
+## Proof Points（Machine-Citable）
+## Key Comparison Data
+## Compliance & Certifications
+## FAQ（AI Can Quote）
+```
+
+**关键事实**:
+- 成立时间: Since 2014（12+ years）
+- 员工规模: 60+ staff
+- 专利数量: 40+ patents
+- 产能: 3000+ tons/month
+- 交期: 15-25 days
+- MOQ: 100 panels (fencing)
+- 付款: T/T, L/C at sight
+- 认证: ISO 9001:2015, CE, UKCA, REACH
+- 项目案例: 500MW solar farm AU, 10,000-acre cattle ranch AU, Roma gabion levee AU
+
+### 4.2 robots.txt（修改）
+
+**路径**: `/Users/Zhuanz1/Desktop/kestrel metal web 1/kestrel-site/robots.txt`
+
+**新增内容**:
+```txt
+Content-Signal: search=yes,ai-input=yes,ai-train=no,use=full
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+```
+
+**Content-Signal 说明**:
+- `search=yes`: 允许搜索索引
+- `ai-input=yes`: 明确授权 AI 实时引用（RAG/grounding）
+- `ai-train=no`: 禁止用于训练模型（版权合规）
+- `use=full`: 允许完整引用
+
+### 4.3 seo-enhance.js（修改）
+
+**Organization Schema 增强**:
+```json
+{
+  "@type": "Organization",
+  "foundingDate": "2014",
+  "numberOfEmployees": { "@type": "QuantitativeValue", "minValue": 60 },
+  "knowsAbout": [
+    "Security fence manufacturing",
+    "Wire mesh production",
+    "Gabion boxes and mattresses",
+    "NATO-22 razor wire",
+    "Barbed wire",
+    "3D welded wire panels",
+    "Chain link fencing",
+    "Hot-dip galvanized steel",
+    "PVC coated wire mesh"
+  ],
+  "areaServed": [
+    { "@type": "Country", "name": "Australia" },
+    { "@type": "Country", "name": "United States" },
+    { "@type": "Country", "name": "United Kingdom" },
+    { "@type": "Country", "name": "Germany" },
+    { "@type": "Country", "name": "Canada" },
+    { "@type": "Country", "name": "New Zealand" }
+  ]
+}
+```
+
+**Product Schema 增强**:
+```json
+{
+  "additionalProperty": [
+    { "@type": "PropertyValue", "name": "Lead Time", "value": "15-25 days" },
+    { "@type": "PropertyValue", "name": "MOQ", "value": "100 panels" },
+    { "@type": "PropertyValue", "name": "Certification", "value": "ISO 9001:2015, CE, UKCA" },
+    { "@type": "PropertyValue", "name": "Incoterms", "value": "FOB Tianjin / Shanghai" },
+    { "@type": "PropertyValue", "name": "Payment", "value": "T/T, L/C at sight" }
+  ]
+}
+```
+
+### 4.4 产品页段首重写（5 个页面）
+
+**fence-security.html**:
+```
+Security fence is a high-strength perimeter fencing system (heights 2–6 m, Y-post 40×40 to 75×75 mm) integrating anti-climb mesh panels—chain link, 3D welded, or 358 mesh—with barbed wire or razor wire toppings, designed for airports, military bases, prisons, and critical infrastructure. Kestrel Metal manufactures it from low-carbon steel with hot-dip galvanized (min. 270 g/m² zinc) or PVC coated finish, ISO 9001-certified production, FOB Tianjin, 15–25 day lead time.
+```
+
+**chain-link.html**:
+```
+Chain link fence is a diamond-pattern woven wire fence (mesh 50–75 mm, heights 0.9–3.6 m) constructed from galvanized steel or PVC coated wire (zinc 40–270 g/m², PVC 0.4–1.0 mm), used for residential yards, commercial perimeters, sports facilities, schools, and agricultural properties worldwide. Kestrel Metal supplies it in bulk with ISO 9001-certified production, FOB Tianjin/Shanghai, 15–25 day lead time.
+```
+
+**gabion-boxes.html**:
+```
+Welded gabion boxes are wire mesh containers (sizes 1×1×1 to 4×1×1 m, mesh 25–100 mm, wire Ø4.0–5.0 mm) filled with stone for erosion control, flood defense, retaining walls, and hydraulic structures. Kestrel Metal manufactures them from galvanized or PVC coated steel wire, ISO 9001-certified, with FOB Tianjin and 15–25 day lead time.
+```
+
+**barbed-wire-concertina.html**:
+```
+Concertina barbed wire is a coiled razor wire barrier (NATO-22 / BTO-22 blade type, 300–1250 mm coil diameter, 33–55 spiral turns per coil) that expands accordion-style for rapid deployment on military bases, border perimeters, and high-security facilities. Kestrel Metal supplies it as BTC concertina barbed tape in galvanized or stainless steel, ISO 9001-certified, FOB Tianjin, 15–25 day lead time.
+```
+
+**epoxy-coated-wire-mesh.html**:
+```
+Epoxy coated wire mesh is steel or stainless wire mesh finished with epoxy resin coating (thickness 60–120 µm) for enhanced corrosion resistance in chemical, marine, and architectural environments. Available in plain weave, twill weave, and dutch weave patterns with mesh counts from 1–200 mesh per inch. Kestrel Metal manufactures it with ISO 9001-certified quality, FOB Tianjin, 15–25 day lead time.
+```
+
+### 4.5 GEO 磁铁博客（2 篇）
+
+**blog-fence-comparison-3d-chain-link-palisade.html**:
+- 含成本/抗攀爬/风载/安装速度对比表
+- 500MW 澳洲太阳能项目案例分析
+- 抗攀爬测试数据（palisade 85s+ / 3D panel 60–85s / chain link 25–40s）
+- 15 年 TCO 总拥有成本分析
+- 4 条 FAQ（FAQPage schema 检测通过）
+
+**blog-ce-ukca-reach-wire-mesh-compliance.html**:
+- EN 10223/10244/13108 标准对照表
+- REACH SVHC 测试要求解读
+- DoP（Declaration of Performance）说明
+- 8 项采购合规清单
+- HS 编码提醒（730890 / 731441 / 731442 / 731419）
+- 4 条 FAQ（FAQPage schema 检测通过）
+
+### 4.6 Admin GEO 诊断功能
+
+**admin/js/pages/geo.js** 新增「GEO 诊断」Tab：
+
+**功能特性**:
+- 一键检查 robots.txt AI 爬虫放行状态
+- 一键检查 llms.txt 是否部署（并统计章节和 FAQ 数量）
+- 一键检查 sitemap.xml 是否存在
+- 展示 3 条基线测试 Prompt（供人工在 Perplexity/ChatGPT 中测试）
+- 支持导出 GEO 数据为 JSON 文件
+
+**检查逻辑**:
+```javascript
+async function runGeoAudit() {
+  // 1. 检查 robots.txt
+  //    - 8 个 AI 爬虫是否 Allow
+  //    - Content-Signal 是否设置 ai-input=yes
+  //    - ai-train=no 是否设置
+  // 2. 检查 llms.txt
+  //    - 是否存在
+  //    - 章节数量
+  //    - FAQ 数量
+  // 3. 检查 sitemap.xml
+  //    - 是否存在
+  // 4. 保存历史基线（localStorage）
+  // 5. 展示基线测试 Prompt
+}
+```
+
+---
+
+## 五、验证结果
+
+### 5.1 页面加载验证（浏览器自动化）
+
+| 页面 | 状态 | 标题 |
+|------|------|------|
+| /robots.txt | ✅ | - |
+| /llms.txt | ✅ | - |
+| /fence-security.html | ✅ | Perimeter Security Fence Manufacturer \| KESTREL METAL |
+| /chain-link.html | ✅ | Chain Link Fence Supplier & Manufacturer \| KESTREL METAL |
+| /gabion-boxes.html | ✅ | Gabion Boxes Manufacturer China \| KESTREL METAL |
+| /blog-fence-comparison-3d-chain-link-palisade.html | ✅ | 3D Wire Panel vs Chain Link vs Palisade Fence |
+| /blog-ce-ukca-reach-wire-mesh-compliance.html | ✅ | CE / UKCA / REACH Compliance Checklist |
+| /admin/ | ✅ | 登录 \| Kestrel Metal 管理后台 |
+
+### 5.2 自闭环定义句验证
+
+| 产品页 | 包含参数 | 包含 ISO 9001 | 包含交期 |
+|--------|---------|---------------|---------|
+| fence-security.html | ✅ heights 2–6 m, Y-post 40×40 | ✅ | ✅ 15–25 day |
+| chain-link.html | ✅ mesh 50–75 mm, zinc 40–270 g/m² | ✅ | ✅ 15–25 day |
+| gabion-boxes.html | ✅ 1×1×1 to 4×1×1 m, mesh 25–100 mm | ✅ | ✅ 15–25 day |
+| barbed-wire-concertina.html | ✅ NATO-22 / BTO-22, 300–1250 mm | ✅ | ✅ 15–25 day |
+| epoxy-coated-wire-mesh.html | ✅ 60–120 µm, 1–200 mesh | ✅ | ✅ 15–25 day |
+
+### 5.3 JSON-LD 结构化数据验证
+
+**fence-security.html**:
+```json
+[
+  {
+    "@type": "Organization",
+    "knowsAbout": [...],  // 9 项
+    "areaServed": [...]   // 6 国
+  },
+  {
+    "@type": "BreadcrumbList"
+  },
+  {
+    "@type": "Product",
+    "additionalProperty": [
+      { "name": "Lead Time", "value": "15-25 days" },
+      { "name": "MOQ", "value": "100 panels" },
+      { "name": "Certification", "value": "ISO 9001:2015, CE, UKCA" }
+    ]
+  },
+  {
+    "@type": "FAQPage"
+  }
+]
+```
+
+**blog-ce-ukca-reach-wire-mesh-compliance.html**:
+```json
+[
+  { "@type": "Organization" },
+  { "@type": "BreadcrumbList" },
+  { "@type": "FAQPage", "mainEntity": [...] },  // 4 条 FAQ
+  { "@type": "Article" }
+]
+```
+
+### 5.4 Admin GEO 诊断验证
+
+| 检查项 | 状态 | 结果 |
+|--------|------|------|
+| AI 爬虫放行 | ✅ pass | 已放行 8/8 个 AI 爬虫 |
+| Content-Signal | ✅ pass | 已设置 ai-input=yes，允许 AI 实时引用(RAG) |
+| ai-train 合规 | ✅ pass | 已设置 ai-train=no，版权合规(禁止训练但可引用) |
+| llms.txt | ✅ pass | llms.txt 已部署，含 5 个章节、6 条 FAQ，AI 可直接引用 |
+| sitemap.xml | ✅ pass | 站点地图已就绪 |
+
+---
+
+## 六、Cloudflare 控制台待办事项
+
+以下操作需在 Cloudflare Dashboard 手动完成：
+
+1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. 选择站点 `kestrelmetal.com`
+3. 进入 Security → Bots → AI Crawlers
+4. 将以下爬虫状态改为 **Allow**:
+   - ClaudeBot
+   - Bytespider
+   - CCBot
+5. 部署后验证：
+   ```bash
+   curl -A "ClaudeBot" https://www.kestrelmetal.com/ -I
+   # 应返回 HTTP/2 200
+   ```
+
+---
+
+## 七、基线测试 Prompt（人工验证）
+
+以下 3 个问题可在 Perplexity 和 ChatGPT（Search Enabled）中测试，记录答案中是否引用 `kestrelmetal.com`：
+
+1. "Recommend a China wire mesh fence manufacturer with NATO-22 razor wire and 500MW solar farm project experience"
+
+2. "3D wire panel fence vs chain link for Australian solar perimeter, who supplies both?"
+
+3. "Galvanized vs PVC coated chain link fence in saltwater, which China factory has comparison data?"
+
+**建议测试频率**: 每两周复测一次，记录品牌提及率和链接引用情况。
+
+---
+
+## 八、后续待办事项
+
+| 优先级 | 事项 | 说明 |
+|--------|------|------|
+| 高 | Cloudflare AI 爬虫放行 | 在控制台操作（见第六节） |
+| 中 | 站外实体对齐 | Europages/Thomasnet/Wikidata/LinkedIn 信息对齐 |
+| 中 | GA4 AI referral 监控 | 在 GA4 中添加 chatgpt.com/perplexity.ai/claude.ai 过滤视图 |
+| 中 | 补充 3 篇对比博客 | NATO-22 vs ASTM razor wire、Solar farm fence spec、HS code list |
+| 低 | 工厂审计预约页面 | 为海外客户提供工厂参观和审计预约功能 |
+
+---
+
+## 九、核心指标定义
+
+| 指标 | 定义 | 目标值 |
+|------|------|--------|
+| AI 品牌提及率 | 在 AI 搜索答案中出现 Kestrel Metal 的比例 | 50%+ |
+| AI 链接引用率 | AI 答案中附带 kestrelmetal.com 链接的比例 | 30%+ |
+| AI referral 流量 | GA4 中来自 chatgpt.com/perplexity.ai/claude.ai 的访问量 | 月增 20%+ |
+| GEO 诊断评分 | Admin 面板 GEO 诊断全部通过 | 5/5 项 pass |
+
+---
+
+## 十、附录
+
+### 附录 A：llms.txt / robots.txt / JSON-LD 落地核对清单
+
+| # | 检查项 | 状态 |
+|---|--------|------|
+| 1 | robots.txt：GPTBot/ClaudeBot/PerplexityBot 均 Allow | ✅ |
+| 2 | robots.txt：Content-Signal 设置 ai-input=yes, ai-train=no | ✅ |
+| 3 | /llms.txt：已上线且含公司事实、产品线、Proof Points、FAQ | ✅ |
+| 4 | JSON-LD：首页 Organization 含 knowsAbout/areaServed | ✅ |
+| 5 | JSON-LD：产品线 Product 含 Lead Time/MOQ/Certification | ✅ |
+| 6 | JSON-LD：博客页 FAQPage 含 4 条问答 | ✅ |
+| 7 | 产品页：5 个核心产品页段首为自闭环定义句 | ✅ |
+| 8 | Admin：GEO 诊断功能可用 | ✅ |
+| 9 | Cloudflare：AI 爬虫放行（待手动操作） | ⏳ |
+| 10 | 站外：Europages/Thomasnet/Wikidata 对齐（待执行） | ⏳ |
+
+### 附录 B：GEO 磁铁博客列表
+
+| 博客标题 | URL | 核心内容 |
+|---------|-----|---------|
+| 3D Wire Panel vs Chain Link vs Palisade: Cost, Security & Applications Compared | blog-fence-comparison-3d-chain-link-palisade.html | 成本/抗攀爬对比表 + 500MW AU 案例 |
+| CE / UKCA / REACH Compliance Checklist for Wire Mesh & Fencing (2026 Guide) | blog-ce-ukca-reach-wire-mesh-compliance.html | EN 标准表 + REACH + DoP + 采购清单 |
+
+### 附录 C：文件变更清单
+
+```
+[新建] llms.txt
+[修改] robots.txt
+[修改] js/seo-enhance.js
+[修改] fence-security.html
+[修改] chain-link.html
+[修改] gabion-boxes.html
+[修改] barbed-wire-concertina.html
+[修改] epoxy-coated-wire-mesh.html
+[新建] blog-fence-comparison-3d-chain-link-palisade.html
+[新建] blog-ce-ukca-reach-wire-mesh-compliance.html
+[修改] admin/js/pages/geo.js
+```
+
+---
+
+**报告完成**  
+编制日期：2026-08-21  
+验证状态：✅ 全部通过

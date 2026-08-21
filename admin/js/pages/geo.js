@@ -168,6 +168,163 @@ Router.register('/geo', async function (container) {
     }
   };
 
+  // 独立的 GEO 本地存储工具
+  function geoStorage(key, value) {
+    const fullKey = 'km_geo_' + key;
+    if (arguments.length === 1) {
+      try {
+        const raw = localStorage.getItem(fullKey);
+        return raw ? JSON.parse(raw) : null;
+      } catch { return null; }
+    }
+    if (value === null || value === undefined) {
+      localStorage.removeItem(fullKey);
+    } else {
+      try { localStorage.setItem(fullKey, JSON.stringify(value)); } catch {}
+    }
+  }
+
+  window.runGeoAudit = async () => {
+    const resultEl = document.getElementById('auditResult');
+    resultEl.innerHTML = '<div class="audit-loading">正在检查 GEO 配置...</div>';
+
+    const checks = [];
+
+    try {
+      const robotsResp = await fetch('/robots.txt');
+      const robotsText = await robotsResp.text();
+      const aiBots = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'OAI-SearchBot', 'Google-Extended', 'Bingbot'];
+      const aiBotsAllowed = aiBots.filter(b => {
+        const regex = new RegExp('User-agent:\\s*' + b + '[\\s\\S]*?(Allow|Disallow)', 'i');
+        const match = robotsText.match(regex);
+        return match && match[1] === 'Allow';
+      });
+      const hasContentSignal = robotsText.includes('ai-input=yes');
+      const hasAiTrainNo = robotsText.includes('ai-train=no');
+
+      checks.push({
+        name: 'AI 爬虫放行',
+        status: aiBotsAllowed.length >= 4 ? 'pass' : 'warn',
+        detail: `已放行 ${aiBotsAllowed.length}/${aiBots.length} 个 AI 爬虫: ${aiBotsAllowed.join(', ')}`
+      });
+      checks.push({
+        name: 'Content-Signal',
+        status: hasContentSignal ? 'pass' : 'warn',
+        detail: hasContentSignal ? '已设置 ai-input=yes，允许 AI 实时引用(RAG)' : '未检测到 ai-input=yes，AI 引用权限不明'
+      });
+      checks.push({
+        name: 'ai-train 合规',
+        status: hasAiTrainNo ? 'pass' : 'warn',
+        detail: hasAiTrainNo ? '已设置 ai-train=no，版权合规(禁止训练但可引用)' : '未设置 ai-train=no'
+      });
+    } catch (err) {
+      checks.push({ name: 'robots.txt', status: 'error', detail: '无法读取: ' + err.message });
+    }
+
+    try {
+      const llmsResp = await fetch('/llms.txt');
+      const exists = llmsResp.ok;
+      let llmsDetail = 'llms.txt 已部署，AI 可读取公司事实';
+      if (exists) {
+        try {
+          const text = await llmsResp.text();
+          const sections = (text.match(/^##\s+/gm) || []).length;
+          const faqs = (text.match(/^Q:\s/gm) || []).length;
+          llmsDetail = `llms.txt 已部署，含 ${sections} 个章节、${faqs} 条 FAQ，AI 可直接引用`;
+        } catch {}
+      }
+      checks.push({
+        name: 'llms.txt',
+        status: exists ? 'pass' : 'fail',
+        detail: exists ? llmsDetail : 'llms.txt 不存在，AI 无法快速了解公司信息'
+      });
+    } catch {
+      checks.push({ name: 'llms.txt', status: 'fail', detail: 'llms.txt 不存在' });
+    }
+
+    try {
+      const sitemapResp = await fetch('/sitemap.xml');
+      checks.push({
+        name: 'sitemap.xml',
+        status: sitemapResp.ok ? 'pass' : 'warn',
+        detail: sitemapResp.ok ? '站点地图已就绪' : '未找到 sitemap.xml'
+      });
+    } catch {
+      checks.push({ name: 'sitemap.xml', status: 'warn', detail: '未检测到 sitemap.xml' });
+    }
+
+    // 保存历史基线
+    try {
+      const baseline = geoStorage('visibility_baseline') || { results: [] };
+      baseline.results.push({ date: new Date().toISOString(), checks: JSON.parse(JSON.stringify(checks)) });
+      if (baseline.results.length > 12) baseline.results = baseline.results.slice(-12);
+      baseline.lastCheck = baseline.results[baseline.results.length - 1].date;
+      geoStorage('visibility_baseline', baseline);
+    } catch {}
+
+    const icons = { pass: '✅', warn: '⚠️', fail: '❌', error: '🚫' };
+    resultEl.innerHTML = `
+      <style>
+        .audit-loading { padding:2rem; text-align:center; color:var(--text-secondary); }
+        .audit-header { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; background:var(--surface-alt); border-radius:8px 8px 0 0; border-bottom:1px solid var(--border); font-size:1rem; }
+        .audit-date { font-size:0.8rem; color:var(--text-secondary); }
+        .audit-checks { display:grid; gap:0; }
+        .audit-check { display:flex; gap:0.8rem; padding:0.9rem 1.2rem; align-items:flex-start; border-bottom:1px solid var(--border); }
+        .audit-check:last-child { border-bottom:none; }
+        .audit-icon { font-size:1.1rem; flex-shrink:0; margin-top:2px; }
+        .audit-info { flex:1; display:flex; flex-direction:column; gap:0.2rem; }
+        .audit-name { font-weight:600; font-size:0.9rem; }
+        .audit-detail { font-size:0.82rem; color:var(--text-secondary); }
+        .audit-pass { background:rgba(34,197,94,0.04); }
+        .audit-warn { background:rgba(234,179,8,0.05); }
+        .audit-fail { background:rgba(239,68,68,0.05); }
+        .audit-error { background:rgba(239,68,68,0.08); }
+        .audit-checks { background:#fff; border-radius:8px; border:1px solid var(--border); overflow:hidden; }
+      </style>
+      <div class="audit-header">
+        <strong>GEO 诊断结果 · GEO Diagnostic Report</strong>
+        <span class="audit-date">${new Date().toLocaleString('zh-CN')}</span>
+      </div>
+      <div class="audit-checks">
+        ${checks.map(c => `
+          <div class="audit-check audit-${c.status}">
+            <span class="audit-icon">${icons[c.status]}</span>
+            <div class="audit-info">
+              <span class="audit-name">${c.name}</span>
+              <span class="audit-detail">${c.detail}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="audit-actions" style="margin-top:1rem;padding:1rem 1.2rem;background:var(--surface-alt);border-radius:8px;border:1px solid var(--border)">
+        <h4 style="margin-bottom:0.5rem">📋 基线测试 · Baseline Prompts</h4>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem">在 Perplexity 和 ChatGPT(Search Enabled) 中分别测试以下 3 类采购问题，记录答案引用中是否出现 kestrelmetal.com：</p>
+        <ol style="font-size:0.85rem;color:var(--text-secondary);padding-left:1.5rem;line-height:1.6">
+          <li>"Recommend a China wire mesh fence manufacturer with NATO-22 razor wire and 500MW solar farm project experience"</li>
+          <li>"3D wire panel fence vs chain link for Australian solar perimeter, who supplies both?"</li>
+          <li>"Galvanized vs PVC coated chain link fence in saltwater, which China factory has comparison data?"</li>
+        </ol>
+      </div>
+    `;
+  };
+
+  window.exportGeoData = () => {
+    const data = {
+      questions: questions,
+      templates: templates,
+      scores: scores,
+      exportDate: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'kestral-metal-geo-data-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    API.toast('GEO 数据已导出', 'success');
+  };
+
   let activeTab = 'questions';
   window.showGeoTab = (tab) => {
     activeTab = tab;
@@ -183,6 +340,7 @@ Router.register('/geo', async function (container) {
       <button class="geo-tab-btn active" data-tab="questions" onclick="showGeoTab('questions')">GEO 问答</button>
       <button class="geo-tab-btn" data-tab="templates" onclick="showGeoTab('templates')">Schema 模板</button>
       <button class="geo-tab-btn" data-tab="scores" onclick="showGeoTab('scores')">GEO 评分</button>
+      <button class="geo-tab-btn" data-tab="monitor" onclick="showGeoTab('monitor')">GEO 诊断</button>
     </div>
 
     <div id="questionsTab" class="geo-tab-content">
@@ -203,6 +361,14 @@ Router.register('/geo', async function (container) {
       <div class="table-wrap">
         <table><thead><tr><th>页面</th><th>GEO 评分</th><th>Schema 完整性</th><th>引用友好度</th><th>事实密度</th><th>操作</th></tr></thead><tbody id="scoreTable"></tbody></table>
       </div>
+    </div>
+
+    <div id="monitorTab" class="geo-tab-content hidden">
+      <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+        <button class="btn btn-primary" onclick="runGeoAudit()">🔍 运行 GEO 诊断</button>
+        <button class="btn" onclick="exportGeoData()">📥 导出 GEO 数据</button>
+      </div>
+      <div id="auditResult"></div>
     </div>
 
     <div id="templateModal" class="modal-overlay">

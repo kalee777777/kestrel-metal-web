@@ -1,7 +1,32 @@
 User-agent: *
+Content-Signal: search=yes,ai-input=yes,ai-train=no,use=full
 Allow: /
 Disallow: /admin/
 Disallow: /components/
 Disallow: /api/
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
 
 Sitemap: https://www.kestrelmetal.com/sitemap.xml
