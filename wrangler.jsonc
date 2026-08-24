@@ -1,7 +1,47 @@
 {
   "name": "kestrel-metal-web",
   "compatibility_date": "2026-08-16",
+  "main": "src/index.ts",
   "assets": {
-    "directory": "./"
+    "directory": "./",
+    "binding": "ASSETS"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "SEO_DATA",
+      "id": "REPLACE_WITH_KV_ID",
+      "preview_id": "seo_data_preview"
+    },
+    {
+      "binding": "CONTENT_QUEUE",
+      "id": "REPLACE_WITH_KV_ID",
+      "preview_id": "content_queue_preview"
+    },
+    {
+      "binding": "SCORE_LOG",
+      "id": "REPLACE_WITH_KV_ID",
+      "preview_id": "score_log_preview"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "kestrel-images",
+      "preview_bucket_name": "kestrel-images-preview"
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "0 19 * * *",
+      "30 19 * * *",
+      "0 20 * * 1",
+      "30 20 * * 1",
+      "0 21 * * 1",
+      "0 16 1 * *"
+    ]
+  },
+  "vars": {
+    "SITE_URL": "https://kestrelmetal.com",
+    "DEEPSEEK_MODEL": "deepseek-chat"
   }
 }

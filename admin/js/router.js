@@ -48,6 +48,7 @@ const Router = (function () {
       '/glossary': '术语表',
       '/inquiries': '询盘管理',
       '/analytics': '访客分析',
+      '/keywords': '关键词监控',
       '/i18n': '国际化',
       '/seo': 'SEO 管理',
       '/geo': 'GEO 优化',
