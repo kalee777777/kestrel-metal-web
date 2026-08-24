@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO 自动化工作流 · 进度文档</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,sans-serif;background:#f5f5f5;color:#333;line-height:1.6}
+.hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 100%);color:#fff;padding:40px 24px 32px}
+.hero h1{font-size:28px;margin-bottom:8px}
+.hero p{opacity:.8;font-size:15px}
+.hero .badge-group{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.hero .badge{background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);color:#ff8c5a;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:500}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.card h2{font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .icon{width:28px;height:28px;background:#ff6b35;color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:10px;top:4px;bottom:4px;width:2px;background:#e0e0e0}
+.timeline .step{position:relative;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0}
+.timeline .step:last-child{border-bottom:none;margin-bottom:0}
+.timeline .step::before{content:'';position:absolute;left:-22px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid #ccc;background:#fff}
+.timeline .step.done::before{background:#10b981;border-color:#10b981}
+.timeline .step.active::before{background:#ff6b35;border-color:#ff6b35;box-shadow:0 0 0 3px rgba(255,107,53,.2)}
+.timeline .step.pending::before{background:#fff;border-color:#ccc}
+.timeline .step-block{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.timeline .step-name{font-weight:600;font-size:15px}
+.timeline .step-status{font-size:12px;padding:2px 8px;border-radius:10px;font-weight:500}
+.timeline .step-status.done{background:#d1fae5;color:#065f46}
+.timeline .step-status.active{background:#fff7ed;color:#c2410c}
+.timeline .step-status.pending{background:#f3f4f6;color:#6b7280}
+.timeline .step-status.blocked{background:#fef2f2;color:#dc2626}
+.timeline .step-desc{font-size:14px;color:#555;margin-top:4px}
+.timeline .step-desc ul{margin:6px 0 0 16px}
+.timeline .step-desc li{margin-bottom:3px;font-size:13px}
+.timeline .step-desc li::marker{color:#ff6b35}
+.timeline .step-meta{font-size:12px;color:#999;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eee}
+th{background:#fafafa;font-weight:600;font-size:13px;color:#666}
+td{color:#333}
+.badge-sm{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600}
+.badge-sm.green{background:#d1fae5;color:#065f46}
+.badge-sm.orange{background:#fff7ed;color:#c2410c}
+.badge-sm.gray{background:#f3f4f6;color:#6b7280}
+.badge-sm.red{background:#fef2f2;color:#dc2626}
+.file-list{display:grid;gap:8px}
+.file-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f8f9fa;border-radius:8px;font-size:13px}
+.file-item .file-name{font-weight:600;color:#0a0a0a;min-width:200px}
+.file-item .file-desc{color:#666}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#f8f9fa;border-radius:8px;padding:16px;text-align:center}
+.stat .num{font-size:28px;font-weight:700;color:#ff6b35}
+.stat .label{font-size:13px;color:#666;margin-top:4px}
+.cmd{background:#0a0a0a;color:#a8e6cf;padding:14px 16px;border-radius:8px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;overflow-x:auto;white-space:pre;line-height:1.7}
+.cmd .comment{color:#666}
+.cmd .highlight{color:#ff8c5a}
+.note{background:#fff7ed;border-left:3px solid #ff6b35;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px;margin:12px 0}
+.note strong{color:#c2410c}
+.progress-bar{height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-top:8px}
+.progress-bar .fill{height:100%;border-radius:4px;transition:width .3s}
+.progress-bar .fill.green{background:linear-gradient(90deg,#10b981,#34d399)}
+.progress-bar .fill.orange{background:linear-gradient(90deg,#ff6b35,#ff8c5a)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SEO 自动化工作流</h1>
+  <p>Kestrel Metal 官网 · 自动化关键词监控与内容发布系统</p>
+  <div class="badge-group">
+    <span class="badge">Phase 01 ✅</span>
+    <span class="badge">Phase 02 ✅</span>
+    <span class="badge">Phase 03 🔜</span>
+    <span class="badge">Phase 04 🔜</span>
+    <span class="badge">Phase 05 🔜</span>
+    <span class="badge">Phase 06 🔜</span>
+    <span class="badge">Phase 07 🔜</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 总览 -->
+  <div class="card">
+    <h2>总览</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="num">9</div><div class="label">总阶段</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">已完成</div></div>
+      <div class="stat"><div class="num">7</div><div class="label">待实现</div></div>
+      <div class="stat"><div class="num">6</div><div class="label">Cron 定时任务</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">KV 命名空间</div></div>
+      <div class="stat"><div class="num">10+</div><div class="label">API 端点</div></div>
+    </div>
+    <div class="progress-bar"><div class="fill green" style="width:22%"></div></div>
+    <p style="text-align:center;font-size:13px;color:#999;margin-top:8px">整体进度 22%（Phase 01-02 完成）</p>
+  </div>
+
+  <!-- 阶段进度 -->
+  <div class="card">
+    <h2>阶段进度</h2>
+    <div class="timeline">
+
+      <div class="step done">
+        <div class="step-block">
+          <span class="step-name">Phase 01 · 基础设施</span>
+          <span class="step-status done">已完成</span>
+        </div>
+        <div class="step-desc">
+          Cloudflare Worker + KV + R2 + Cron 基础架构
+          <ul>
+            <li>wrangler.jsonc 配置 3 个 KV 命名空间 + 1 个 R2 桶</li>
+            <li>src/index.ts Worker 入口（fetch + scheduled）</li>
+            <li>src/router.ts API 路由注册表（10+ 端点）</li>
+            <li>src/lib/kv.ts / r2.ts 类型安全封装</li>
+            <li>6 个 Cron 任务 stub 模块</li>
+          </ul>
+        </div>
+        <div class="step-meta">2026-08-24 完成 · 提交 e5dd2ad</div>
+      </div>
+
+      <div class="step done">
+        <div class="step-block">
+          <span class="step-name">Phase 02 · GSC API 集成</span>
+          <span class="step-status done">已完成</span>
+        </div>
+        <div class="step-desc">
+          Google Search Console OAuth2 认证 + 关键词排名同步
+          <ul>
+            <li>src/lib/gsc.ts — OAuth2 token 自动刷新 + searchAnalytics.query</li>
+            <li>src/cron/gsc-sync.ts — 每日 03:00 UTC+8 自动拉取关键词数据</li>
+            <li>src/router.ts — /api/gsc/status + /api/trigger/gsc-sync</li>
+            <li>admin/js/pages/keywords.js — 后台关键词监控面板</li>
+            <li>OAuth2 认证流程完成（client_id + refresh_token 已获取）</li>
+          </ul>
+        </div>
+        <div class="step-meta">2026-08-25 完成 · 提交 c00e6f4</div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 03 · 关键词监控面板</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          Admin 后台关键词排名可视化面板
+          <ul>
+            <li>排名趋势图表（30 天）</li>
+            <li>按产品线分组统计</li>
+            <li>上升/下降趋势标记</li>
+            <li>手动刷新 + 历史对比</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 04 · 内容机会引擎</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          从 GSC 数据自动发现内容机会
+          <ul>
+            <li>高展示低点击 → 优化 title/meta</li>
+            <li>排名 11-20 → 新博客助推</li>
+            <li>有展示无排名 → 创建新页面</li>
+            <li>每周自动生成选题清单</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 05 · AI 内容生成</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          DeepSeek V4 Pro 自动生成文章
+          <ul>
+            <li>选题 → 大纲 → 正文（2000-3000 字）</li>
+            <li>HTML 模板自动装配</li>
+            <li>JSON-LD Article / FAQPage schema 生成</li>
+            <li>内链自动插入</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 06 · AI 图片生成</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          自动生成 Hero 大图 + 内容配图
+          <ul>
+            <li>Hero 大图 1280×720px（工业场景风格）</li>
+            <li>内容配图 800×600px ×2-4 张</li>
+            <li>WebP 压缩存入 R2</li>
+            <li>文件名含目标关键词</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 07 · SEO 评分 + 自动修复</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          30+ 项 SEO 检查 + 低分自动修复
+          <ul>
+            <li>Title / Meta / H1-H3 / 关键词密度检查</li>
+            <li>内链完整性 / Schema 校验</li>
+            <li>评分 ≥ 80 → 自动部署</li>
+            <li>评分 < 80 → AI 自动修改（最多 3 轮）</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 08 · 自动部署</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          评分达标后自动发布到生产环境
+          <ul>
+            <li>Git Push → GitHub → Cloudflare Pages 自动部署</li>
+            <li>Google Indexing API 请求索引</li>
+            <li>发布状态回写 KV</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-block">
+          <span class="step-name">Phase 09 · 效果追踪</span>
+          <span class="step-status pending">待实现</span>
+        </div>
+        <div class="step-desc">
+          排名数据回流 + 效果验证闭环
+          <ul>
+            <li>新文章排名变化追踪</li>
+            <li>AI Referral 流量监控</li>
+            <li>月度 SEO 报告自动生成</li>
+            <li>数据驱动选题优化</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 技术架构 -->
+  <div class="card">
+    <h2>技术架构</h2>
+    <table>
+      <thead><tr><th>组件</th><th>技术</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>后端运行时</td><td>Cloudflare Worker（V8 Isolates）</td><td><span class="badge-sm green">已部署</span></td></tr>
+        <tr><td>数据存储</td><td>Cloudflare KV（3 个命名空间）</td><td><span class="badge-sm green">已配置</span></td></tr>
+        <tr><td>图片存储</td><td>Cloudflare R2（kestrel-images）</td><td><span class="badge-sm green">已配置</span></td></tr>
+        <tr><td>定时任务</td><td>Cloudflare Cron Triggers（6 个）</td><td><span class="badge-sm green">已配置</span></td></tr>
+        <tr><td>SEO 数据源</td><td>Google Search Console API（OAuth2）</td><td><span class="badge-sm green">已集成</span></td></tr>
+        <tr><td>AI 内容生成</td><td>DeepSeek V4 Pro</td><td><span class="badge-sm gray">待接入</span></td></tr>
+        <tr><td>AI 图片生成</td><td>待定（SDXL / DALL-E 3 / Stability AI）</td><td><span class="badge-sm gray">待接入</span></td></tr>
+        <tr><td>自动部署</td><td>GitHub → Cloudflare Pages</td><td><span class="badge-sm gray">待实现</span></td></tr>
+        <tr><td>Admin 后台</td><td>纯静态 HTML + localStorage</td><td><span class="badge-sm green">已集成</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 文件清单 -->
+  <div class="card">
+    <h2>核心文件清单</h2>
+    <div class="file-list">
+      <div class="file-item"><span class="file-name">src/index.ts</span><span class="file-desc">Worker 入口 — fetch() + scheduled() + Env 类型定义</span></div>
+      <div class="file-item"><span class="file-name">src/router.ts</span><span class="file-desc">API 路由注册表 — 12 个端点</span></div>
+      <div class="file-item"><span class="file-name">src/lib/gsc.ts</span><span class="file-desc">GSC OAuth2 认证 + 关键词查询 + 分页 + 连接验证</span></div>
+      <div class="file-item"><span class="file-name">src/lib/kv.ts</span><span class="file-desc">KV 类型安全封装 — rankings / drafts / scores</span></div>
+      <div class="file-item"><span class="file-name">src/lib/r2.ts</span><span class="file-desc">R2 图片存储 — 上传 / 读取 / 删除 / 列表</span></div>
+      <div class="file-item"><span class="file-name">src/cron/gsc-sync.ts</span><span class="file-desc">每日 GSC 数据同步 — 关键词排名快照</span></div>
+      <div class="file-item"><span class="file-name">src/cron/opportunity.ts</span><span class="file-desc">内容机会分析（Phase 04 实现）</span></div>
+      <div class="file-item"><span class="file-name">src/cron/track.ts</span><span class="file-desc">效果追踪 + 月度报告（Phase 09 实现）</span></div>
+      <div class="file-item"><span class="file-name">src/cron/generate.ts</span><span class="file-desc">AI 内容生成（Phase 05 实现）</span></div>
+      <div class="file-item"><span class="file-name">src/cron/image-gen.ts</span><span class="file-desc">AI 图片生成（Phase 06 实现）</span></div>
+      <div class="file-item"><span class="file-name">src/cron/score.ts</span><span class="file-desc">SEO 评分 + 自动部署（Phase 07/08 实现）</span></div>
+      <div class="file-item"><span class="file-name">admin/js/pages/keywords.js</span><span class="file-desc">Admin 后台关键词监控页面</span></div>
+      <div class="file-item"><span class="file-name">wrangler.jsonc</span><span class="file-desc">Cloudflare Worker 配置 — KV / R2 / Cron</span></div>
+    </div>
+  </div>
+
+  <!-- API 端点 -->
+  <div class="card">
+    <h2>API 端点</h2>
+    <table>
+      <thead><tr><th>方法</th><th>路径</th><th>说明</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>GET</td><td>/api/health</td><td>健康检查</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>GET</td><td>/api/gsc/status</td><td>GSC 连接状态</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>GET</td><td>/api/keywords/rankings</td><td>关键词排名数据</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>GET</td><td>/api/keywords/trend</td><td>关键词趋势</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>GET</td><td>/api/opportunities</td><td>选题建议</td><td><span class="badge-sm orange">数据待生成</span></td></tr>
+        <tr><td>GET</td><td>/api/content/drafts</td><td>草稿列表</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>GET</td><td>/api/content/published</td><td>已发布列表</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>GET</td><td>/api/images/:key</td><td>R2 图片代理</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>POST</td><td>/api/trigger/gsc-sync</td><td>手动触发 GSC 同步</td><td><span class="badge-sm green">可用</span></td></tr>
+        <tr><td>POST</td><td>/api/trigger/:cron</td><td>手动触发其他 Cron</td><td><span class="badge-sm orange">部分实现</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Cron 时间表 -->
+  <div class="card">
+    <h2>Cron 定时任务时间表</h2>
+    <table>
+      <thead><tr><th>Cron</th><th>时间（北京时间）</th><th>任务</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td><code>0 19 * * *</code></td><td>每日 03:00</td><td>GSC 数据同步</td><td><span class="badge-sm green">已实现</span></td></tr>
+        <tr><td><code>30 19 * * *</code></td><td>每日 03:30</td><td>机会分析 + 效果追踪</td><td><span class="badge-sm gray">待实现</span></td></tr>
+        <tr><td><code>0 20 * * 1</code></td><td>每周一 04:00</td><td>AI 内容生成</td><td><span class="badge-sm gray">待实现</span></td></tr>
+        <tr><td><code>30 20 * * 1</code></td><td>每周一 04:30</td><td>AI 图片生成</td><td><span class="badge-sm gray">待实现</span></td></tr>
+        <tr><td><code>0 21 * * 1</code></td><td>每周一 05:00</td><td>SEO 评分 + 自动部署</td><td><span class="badge-sm gray">待实现</span></td></tr>
+        <tr><td><code>0 16 1 * *</code></td><td>每月 1 号 00:00</td><td>月度报告</td><td><span class="badge-sm gray">待实现</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 下一步 -->
+  <div class="card">
+    <h2>下一步行动</h2>
+    <table>
+      <thead><tr><th>优先级</th><th>任务</th><th>前置条件</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-sm red">P0</span></td><td>部署 Worker + 配置 Secrets</td><td>Cloudflare API Token</td></tr>
+        <tr><td><span class="badge-sm red">P0</span></td><td>验证 GSC API 连接 + 首次数据同步</td><td>Worker 部署完成</td></tr>
+        <tr><td><span class="badge-sm orange">P1</span></td><td>Phase 03 — 关键词排名可视化面板</td><td>Phase 02 数据可用</td></tr>
+        <tr><td><span class="badge-sm orange">P1</span></td><td>Phase 04 — 内容机会引擎</td><td>积累 2-4 周 GSC 数据</td></tr>
+        <tr><td><span class="badge-sm gray">P2</span></td><td>Phase 05 — DeepSeek AI 内容生成</td><td>DeepSeek API Key</td></tr>
+        <tr><td><span class="badge-sm gray">P2</span></td><td>Phase 06 — AI 图片生成</td><td>选择图片 API + API Key</td></tr>
+        <tr><td><span class="badge-sm gray">P3</span></td><td>Phase 07/08 — SEO 评分 + 自动部署</td><td>Phase 05/06 完成</td></tr>
+        <tr><td><span class="badge-sm gray">P3</span></td><td>Phase 09 — 效果追踪闭环</td><td>积累 4-8 周数据</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 部署命令 -->
+  <div class="card">
+    <h2>部署命令参考</h2>
+    <div class="note">
+      <strong>⚠️ 安全提醒</strong>：所有 Secret 命令在终端中逐条执行，不要在聊天中发送 Token / Secret 值。
+    </div>
+    <div class="cmd"><span class="comment"># 设置 Cloudflare API Token</span>
+export CLOUDFLARE_API_TOKEN="你的token"
+
+<span class="comment"># 进入项目目录</span>
+cd "/Users/Zhuanz1/Desktop/kestrel metal web 1/kestrel-site"
+
+<span class="comment"># 配置 Worker Secrets</span>
+npx wrangler secret put GOOGLE_CLIENT_ID
+npx wrangler secret put GOOGLE_CLIENT_SECRET
+npx wrangler secret put GSC_REFRESH_TOKEN
+npx wrangler secret put GSC_SITE_URL
+
+<span class="comment"># 部署 Worker</span>
+npx wrangler deploy
+
+<span class="comment"># 验证连接</span>
+curl https://your-worker.workers.dev/api/gsc/status</div>
+  </div>
+
+  <div style="text-align:center;padding:20px;color:#999;font-size:13px">
+    <p>Kestrel Metal SEO Automation · 文档生成于 2026-08-25</p>
+    <p>Commit: c00e6f4 · Gitee + GitHub 已同步</p>
+  </div>
+
+</div>
+</body>
+</html>
