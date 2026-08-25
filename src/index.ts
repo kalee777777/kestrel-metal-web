@@ -89,18 +89,6 @@ export default {
           });
           break;
 
-        // 每日 03:30 UTC+8 — 机会分析 + 效果追踪
-        case '30 19 * * *':
-          await runCronTask('opportunity', env, async () => {
-            const { default: opportunity } = await import('./cron/opportunity');
-            await opportunity(env);
-          });
-          await runCronTask('track', env, async () => {
-            const { default: track } = await import('./cron/track');
-            await track(env);
-          });
-          break;
-
         // 每周一 04:00 UTC+8 — AI 内容生成
         case '0 20 * * 1':
           await runCronTask('generate', env, async () => {

@@ -49,6 +49,7 @@ const Router = (function () {
       '/inquiries': '询盘管理',
       '/analytics': '访客分析',
       '/keywords': '关键词监控',
+      '/opportunities': '内容机会',
       '/i18n': '国际化',
       '/seo': 'SEO 管理',
       '/geo': 'GEO 优化',

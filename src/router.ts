@@ -113,9 +113,54 @@ route('GET', '/api/keywords/trend', async ({ env, url }) => {
 
 // 选题建议
 route('GET', '/api/opportunities', async ({ env }) => {
-  const { getJSON } = await import('./lib/kv');
-  const items = await getJSON(env.SEO_DATA, 'opportunities:weekly');
-  return jsonResponse({ opportunities: items ?? [] });
+  const { getRankings } = await import('./lib/kv');
+  const today = new Date().toISOString().split('T')[0];
+  const rankings = await getRankings(env.SEO_DATA, today);
+
+  if (!rankings || rankings.length === 0) {
+    return jsonResponse({ opportunities: [], message: 'No ranking data available yet' });
+  }
+
+  const { opportunities } = await import('./cron/opportunity');
+  const items = await opportunities(rankings);
+
+  return jsonResponse({ date: today, count: items.length, opportunities: items });
+});
+
+// 选题统计（Phase 04）
+route('GET', '/api/opportunities/stats', async ({ env }) => {
+  const { getRankings } = await import('./lib/kv');
+  const today = new Date().toISOString().split('T')[0];
+  const rankings = await getRankings(env.SEO_DATA, today);
+
+  if (!rankings || rankings.length === 0) {
+    return jsonResponse({ stats: null, message: 'No ranking data available yet' });
+  }
+
+  const { opportunities } = await import('./cron/opportunity');
+  const items = await opportunities(rankings);
+
+  const stats = {
+    total: items.length,
+    byType: {
+      low_ctr: items.filter((i) => i.type === 'low_ctr').length,
+      page_two: items.filter((i) => i.type === 'page_two').length,
+      new_opportunity: items.filter((i) => i.type === 'new_opportunity').length,
+      competitor_gap: items.filter((i) => i.type === 'competitor_gap').length,
+    },
+    byDifficulty: {
+      easy: items.filter((i) => i.estimatedDifficulty === 'easy').length,
+      medium: items.filter((i) => i.estimatedDifficulty === 'medium').length,
+      hard: items.filter((i) => i.estimatedDifficulty === 'hard').length,
+    },
+    topKeywords: items.slice(0, 10).map((i) => ({
+      keyword: i.keyword,
+      type: i.type,
+      action: i.suggestedAction,
+    })),
+  };
+
+  return jsonResponse({ date: today, stats });
 });
 
 // 草稿列表
@@ -133,6 +178,98 @@ route('GET', '/api/content/published', async ({ env }) => {
   const { getJSON } = await import('./lib/kv');
   const published = await getJSON(env.CONTENT_QUEUE, 'published:all');
   return jsonResponse({ published: published ?? [] });
+});
+
+// 关键词排名（最新）
+route('GET', '/api/keywords/rankings', async ({ env, url }) => {
+  const date = url.searchParams.get('date');
+  const todayStr = date ?? new Date().toISOString().split('T')[0];
+  const { getRankings } = await import('./lib/kv');
+  const rankings = await getRankings(env.SEO_DATA, todayStr);
+  return jsonResponse({ date: todayStr, rankings: rankings ?? [] });
+});
+
+// 关键词趋势（多日）
+route('GET', '/api/keywords/trend', async ({ env, url }) => {
+  const keyword = url.searchParams.get('keyword');
+  if (!keyword) {
+    return jsonResponse({ error: 'Missing keyword parameter' }, 400);
+  }
+  const days = parseInt(url.searchParams.get('days') ?? '30', 10);
+  const { getKeywordTrend } = await import('./lib/kv');
+  const trend = await getKeywordTrend(env.SEO_DATA, keyword, days);
+  return jsonResponse({ keyword, days, trend });
+});
+
+// 关键词排名（按日期范围查询，支持多日数据对比）
+route('GET', '/api/keywords/rankings/range', async ({ env, url }) => {
+  const startDate = url.searchParams.get('start');
+  const endDate = url.searchParams.get('end');
+
+  const end = endDate ?? new Date().toISOString().split('T')[0];
+  const start = startDate ?? new Date(Date.now() - 6 * 86400_000).toISOString().split('T')[0];
+
+  const { getRankings } = await import('./lib/kv');
+  const allRankings: Array<{ date: string; rankings: unknown[] }> = [];
+
+  const current = new Date(start);
+  const endDt = new Date(end);
+
+  while (current <= endDt) {
+    const dateStr = current.toISOString().split('T')[0];
+    const rankings = await getRankings(env.SEO_DATA, dateStr);
+    if (rankings && rankings.length > 0) {
+      allRankings.push({ date: dateStr, rankings });
+    }
+    current.setDate(current.getDate() + 1);
+  }
+
+  return jsonResponse({ start, end, data: allRankings });
+});
+
+// 关键词分析（按产品线分组 + 趋势）
+route('GET', '/api/keywords/analysis', async ({ env }) => {
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400_000).toISOString().split('T')[0];
+  const { getRankings } = await import('./lib/kv');
+
+  const todayRankings = await getRankings(env.SEO_DATA, today);
+  const yesterdayRankings = await getRankings(env.SEO_DATA, yesterday);
+
+  const todayMap = new Map((todayRankings ?? []).map((r) => [r.keyword, r]));
+  const yesterdayMap = new Map((yesterdayRankings ?? []).map((r) => [r.keyword, r]));
+
+  const allKeywords = new Set([...todayMap.keys(), ...yesterdayMap.keys()]);
+
+  const keywords = Array.from(allKeywords).map((keyword) => {
+    const todayData = todayMap.get(keyword);
+    const yesterdayData = yesterdayMap.get(keyword);
+    return {
+      keyword,
+      today: todayData ?? null,
+      yesterday: yesterdayData ?? null,
+      trend: todayData && yesterdayData 
+        ? (todayData.position < yesterdayData.position ? 'up' : todayData.position > yesterdayData.position ? 'down' : 'stable')
+        : 'new',
+      change: todayData && yesterdayData ? yesterdayData.position - todayData.position : 0,
+    };
+  });
+
+  keywords.sort((a, b) => {
+    const aPos = a.today?.position ?? 999;
+    const bPos = b.today?.position ?? 999;
+    return aPos - bPos;
+  });
+
+  const stats = {
+    total: keywords.length,
+    top10: keywords.filter((k) => (k.today?.position ?? 999) <= 10).length,
+    top20: keywords.filter((k) => (k.today?.position ?? 999) <= 20).length,
+    rising: keywords.filter((k) => k.trend === 'up').length,
+    falling: keywords.filter((k) => k.trend === 'down').length,
+  };
+
+  return jsonResponse({ today, yesterday, stats, keywords });
 });
 
 // R2 图片代理
