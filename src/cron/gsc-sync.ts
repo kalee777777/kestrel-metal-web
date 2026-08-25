@@ -21,11 +21,25 @@ export default async function gscSync(env: Env): Promise<void> {
   }
 
   const date = today();
-  const rows = await queryAllKeywords(
+
+  let rows = await queryAllKeywords(
     env,
     getDateDaysAgo(3),
     getDateDaysAgo(2),
   );
+
+  if (rows.length === 0) {
+    console.log('[gsc-sync] No data for 3-2 days ago, trying wider range...');
+    rows = await queryAllKeywords(
+      env,
+      getDateDaysAgo(28),
+      getDateDaysAgo(1),
+    );
+  }
+
+  if (rows.length === 0) {
+    console.log('[gsc-sync] No data found in GSC. Website may need more time to be indexed.');
+  }
 
   const rankings = rows.map((row) => ({
     keyword: row.keys[0] ?? '',
