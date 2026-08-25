@@ -1,17 +1,17 @@
 /**
  * Phase 06: AI 图片生成管线
  *
+ * 使用 Qwen3.8-max 模型生成产品图片
  * 功能：
  * - 生成 Hero 大图（1280×720px）
  * - 生成内容配图（800×600px ×2-4 张）
  * - 上传到 R2 存储
  * - 返回图片 URL
- *
- * 注意：当前为占位实现，需要用户提供真实的图片生成 API Token
  */
 
 export interface ImageGenEnv {
-  IMG_API_KEY?: string;
+  QWEN_API_KEY?: string;
+  QWEN_MODEL?: string;
   IMAGES?: R2Bucket;
 }
 
@@ -31,71 +31,88 @@ export interface GeneratedImage {
   type: 'hero' | 'content' | 'thumbnail';
 }
 
-const PLACEHOLDER_RESPONSE: GeneratedImage = {
-  key: 'placeholder.jpg',
-  url: '/images/placeholder.jpg',
-  width: 1280,
-  height: 720,
-  type: 'hero',
-};
+const QWEN_API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 
 async function generateSingleImage(
   env: ImageGenEnv,
   request: ImageRequest,
 ): Promise<GeneratedImage> {
-  if (!env.IMG_API_KEY) {
+  if (!env.QWEN_API_KEY) {
     console.log(`[image-gen] No API key configured, using placeholder`);
     return {
-      ...PLACEHOLDER_RESPONSE,
       key: `placeholders/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`,
+      url: '/images/placeholder.jpg',
+      width: request.width ?? 1280,
+      height: request.height ?? 720,
+      type: 'hero',
     };
   }
 
   const prompt = buildPrompt(request);
 
-  const resp = await fetch('https://api.example.com/v1/images/generations', {
+  const resp = await fetch(QWEN_API_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${env.IMG_API_KEY}`,
+      Authorization: `Bearer ${env.QWEN_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      prompt,
-      width: request.width ?? 1280,
-      height: request.height ?? 720,
-      format: 'webp',
-      quality: 80,
+      model: env.QWEN_MODEL || 'qwen3.8-max',
+      messages: [
+        {
+          role: 'user',
+          content: `Generate a professional industrial product image. Requirements: ${prompt}. Output format: High quality JPEG, ${request.width ?? 1280}x${request.height ?? 720} pixels.`,
+        },
+      ],
+      stream: false,
     }),
   });
 
   if (!resp.ok) {
     const errText = await resp.text();
-    throw new Error(`Image generation failed (${resp.status}): ${errText}`);
+    throw new Error(`Qwen API error (${resp.status}): ${errText}`);
   }
 
-  const data = (await resp.json()) as { image_url: string; image_base64?: string };
+  const data = (await resp.json()) as {
+    choices: Array<{ message: { content: string } }>;
+  };
+
+  const content = data.choices[0]?.message?.content ?? '';
 
   let imageBytes: ArrayBuffer;
 
-  if (data.image_base64) {
-    const binaryStr = atob(data.image_base64);
+  const base64Match = content.match(/data:image\/[^;]+;base64,([A-Za-z0-9+/=]+)/);
+  if (base64Match) {
+    const binaryStr = atob(base64Match[1]);
     const bytes = new Uint8Array(binaryStr.length);
     for (let i = 0; i < binaryStr.length; i++) {
       bytes[i] = binaryStr.charCodeAt(i);
     }
     imageBytes = bytes.buffer;
   } else {
-    const imgResp = await fetch(data.image_url);
-    if (!imgResp.ok) throw new Error('Failed to download generated image');
-    imageBytes = await imgResp.arrayBuffer();
+    const urlMatch = content.match(/(https?:\/\/[^\s"]+\.(jpg|jpeg|png|webp))/i);
+    if (urlMatch) {
+      const imgResp = await fetch(urlMatch[1]);
+      if (!imgResp.ok) throw new Error('Failed to download generated image');
+      imageBytes = await imgResp.arrayBuffer();
+    } else {
+      console.log(`[image-gen] No image data found in response, using placeholder`);
+      return {
+        key: `placeholders/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`,
+        url: '/images/placeholder.jpg',
+        width: request.width ?? 1280,
+        height: request.height ?? 720,
+        type: 'hero',
+      };
+    }
   }
 
-  const imageKey = `blog/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.webp`;
+  const imageKey = `blog/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`;
 
   if (env.IMAGES) {
     await env.IMAGES.put(imageKey, imageBytes, {
       httpMetadata: {
-        contentType: 'image/webp',
+        contentType: 'image/jpeg',
         cacheControl: 'public, max-age=31536000',
       },
     });
@@ -134,7 +151,7 @@ function buildPrompt(request: ImageRequest): string {
 
   const styleDesc = styleModifiers[request.style ?? 'industrial'] ?? styleModifiers.industrial;
 
-  return `${productDesc}, ${styleDesc}, ${baseStyle}, ${lighting}, ${quality}, kestrel metal brand quality`;
+  return `${productDesc}, ${styleDesc}, ${baseStyle}, ${lighting}, ${quality}`;
 }
 
 export async function generateArticleImages(

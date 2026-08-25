@@ -32,6 +32,7 @@ export interface Env {
   // Environment variables
   SITE_URL: string;
   DEEPSEEK_MODEL: string;
+  QWEN_MODEL: string;
   ADMIN_TOKEN: string;
 
   // Secrets (configured via wrangler secret put)
@@ -42,6 +43,7 @@ export interface Env {
   GSC_SITE_URL: string;
   GH_TOKEN: string;
   IMG_API_KEY: string;
+  QWEN_API_KEY: string;
 }
 
 // ─── fetch() — HTTP 请求处理 ───

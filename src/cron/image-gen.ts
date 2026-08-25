@@ -37,7 +37,8 @@ export default async function imageGen(env: Env): Promise<void> {
 
       const images = await generateArticleImages(
         {
-          IMG_API_KEY: env.IMG_API_KEY,
+          QWEN_API_KEY: env.QWEN_API_KEY,
+          QWEN_MODEL: env.QWEN_MODEL,
           IMAGES: env.IMAGES,
         },
         draft.keyword,

@@ -37,6 +37,7 @@
   },
   "vars": {
     "SITE_URL": "https://kestrelmetal.com",
-    "DEEPSEEK_MODEL": "deepseek-chat"
+    "DEEPSEEK_MODEL": "deepseek-chat",
+    "QWEN_MODEL": "qwen3.8-max"
   }
 }
