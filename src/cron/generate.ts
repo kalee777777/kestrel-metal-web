@@ -24,11 +24,6 @@ export default async function generate(env: Env): Promise<void> {
   const today = new Date().toISOString().split('T')[0];
   const rankings = await getRankings(env.SEO_DATA, today);
 
-  if (!rankings || rankings.length === 0) {
-    console.log('[generate] No ranking data available, skipping generation');
-    return;
-  }
-
   const opportunities = await env.SEO_DATA.get('opportunities:weekly');
   let items: Array<{ keyword: string; type: string; suggestedAction: string }> = [];
 
@@ -41,15 +36,23 @@ export default async function generate(env: Env): Promise<void> {
   }
 
   if (items.length === 0) {
-    const topKeywords = rankings
-      .sort((a, b) => b.impressions - a.impressions)
-      .slice(0, MAX_ARTICLES_PER_WEEK * 2)
-      .map((r) => ({
-        keyword: r.keyword,
-        type: 'auto',
-        suggestedAction: 'Create comprehensive blog article',
-      }));
-    items = topKeywords;
+    if (rankings && rankings.length > 0) {
+      const topKeywords = rankings
+        .sort((a, b) => b.impressions - a.impressions)
+        .slice(0, MAX_ARTICLES_PER_WEEK * 2)
+        .map((r) => ({
+          keyword: r.keyword,
+          type: 'auto',
+          suggestedAction: 'Create comprehensive blog article',
+        }));
+      items = topKeywords;
+    } else {
+      const defaultKeywords = [
+        { keyword: 'galvanized chain link fence', type: 'default', suggestedAction: 'Create comprehensive guide' },
+        { keyword: 'gabion boxes supplier', type: 'default', suggestedAction: 'Product comparison article' },
+      ];
+      items = defaultKeywords;
+    }
   }
 
   const selectedKeywords = items.slice(0, MAX_ARTICLES_PER_WEEK);

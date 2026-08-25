@@ -318,6 +318,24 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
     return jsonResponse({ message: 'GSC sync completed', siteUrl: env.GSC_SITE_URL });
   }
 
+  if (cronName === 'generate') {
+    const { default: generate } = await import('./cron/generate');
+    await generate(env);
+    return jsonResponse({ message: 'Content generation completed' });
+  }
+
+  if (cronName === 'image-gen') {
+    const { default: imageGen } = await import('./cron/image-gen');
+    await imageGen(env);
+    return jsonResponse({ message: 'Image generation completed' });
+  }
+
+  if (cronName === 'score') {
+    const { default: score } = await import('./cron/score');
+    await score(env);
+    return jsonResponse({ message: 'Score and deploy completed' });
+  }
+
   return jsonResponse({
     message: `Cron ${cronName} triggered`,
     note: 'This cron handler is not yet implemented',
