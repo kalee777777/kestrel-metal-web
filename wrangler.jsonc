@@ -9,18 +9,15 @@
   "kv_namespaces": [
     {
       "binding": "SEO_DATA",
-      "id": "REPLACE_WITH_KV_ID",
-      "preview_id": "seo_data_preview"
+      "id": "38d58d037ca147a4824db92938bd520b"
     },
     {
       "binding": "CONTENT_QUEUE",
-      "id": "REPLACE_WITH_KV_ID",
-      "preview_id": "content_queue_preview"
+      "id": "bff7d65e2d2c4512a70f24b5dae0c92f"
     },
     {
       "binding": "SCORE_LOG",
-      "id": "REPLACE_WITH_KV_ID",
-      "preview_id": "score_log_preview"
+      "id": "1ca4adf676cf4afe94ccfb163ac8c692"
     }
   ],
   "r2_buckets": [
