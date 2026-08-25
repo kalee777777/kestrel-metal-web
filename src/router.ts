@@ -336,6 +336,18 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
     return jsonResponse({ message: 'Score and deploy completed' });
   }
 
+  if (cronName === 'track') {
+    const { default: track } = await import('./cron/track');
+    await track(env);
+    return jsonResponse({ message: 'Performance tracking completed' });
+  }
+
+  if (cronName === 'monthly-report') {
+    const { default: monthlyReport } = await import('./cron/monthly-report');
+    await monthlyReport(env);
+    return jsonResponse({ message: 'Monthly report generated' });
+  }
+
   return jsonResponse({
     message: `Cron ${cronName} triggered`,
     note: 'This cron handler is not yet implemented',

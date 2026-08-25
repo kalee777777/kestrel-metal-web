@@ -118,8 +118,16 @@ export default {
         // 每月 1 号 00:00 UTC+8 — 月度报告
         case '0 16 1 * *':
           await runCronTask('monthly-report', env, async () => {
+            const { default: monthlyReport } = await import('./cron/monthly-report');
+            await monthlyReport(env);
+          });
+          break;
+
+        // 每周日 06:00 UTC+8 — 效果追踪
+        case '0 22 * * 0':
+          await runCronTask('track', env, async () => {
             const { default: track } = await import('./cron/track');
-            await track(env, { monthly: true });
+            await track(env);
           });
           break;
 

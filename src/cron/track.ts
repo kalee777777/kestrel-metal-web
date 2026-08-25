@@ -1,23 +1,21 @@
 /**
- * Cron: 效果追踪 — 每日 03:30 / 月度报告 每月 1 号 00:00
+ * Phase 09: 效果追踪 Cron 任务
  *
- * 将在 Phase 09 实现：
- * - 追踪新文章排名变化
- * - AI Referral 流量监控
- * - 月度 SEO 报告生成
+ * 每周日 06:00 UTC+8 执行：
+ * - 跟踪已发布文章的排名变化
+ * - 监控 AI Referral 流量
  */
 
 import type { Env } from '../index';
+import { trackArticlePerformance } from '../lib/tracking';
 
-export default async function track(
-  env: Env,
-  options?: { monthly?: boolean },
-): Promise<void> {
-  void env;
-  if (options?.monthly) {
-    console.log('[track] TODO: Phase 09 — Monthly SEO report');
-  } else {
-    console.log('[track] TODO: Phase 09 — Daily performance tracking');
+export default async function track(env: Env): Promise<void> {
+  console.log('[track] Starting weekly performance tracking...');
+
+  try {
+    await trackArticlePerformance(env);
+    console.log('[track] Completed successfully.');
+  } catch (err) {
+    console.error('[track] Failed:', err);
   }
-  // Phase 09 将实现
 }
