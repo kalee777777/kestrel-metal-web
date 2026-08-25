@@ -43,6 +43,7 @@ const Router = (function () {
       '/products': '产品列表',
       '/product-categories': '产品分类',
       '/blog': '博客文章',
+      '/content': 'AI 内容',
       '/cases': '案例研究',
       '/faq': 'FAQ 管理',
       '/glossary': '术语表',
