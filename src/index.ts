@@ -15,6 +15,7 @@
  */
 
 import { handleRoute, jsonResponse } from './router';
+import { injectSeoTags } from './lib/seo-inject';
 
 // ─── 环境变量类型定义 ───
 export interface Env {
@@ -71,7 +72,16 @@ export default {
     }
 
     // 其余请求交给静态资源 (ASSETS binding)
-    return env.ASSETS.fetch(request);
+    const response = await env.ASSETS.fetch(request);
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('text/html')) return response;
+
+    const html = await response.text();
+    const enhanced = injectSeoTags(html, url.pathname);
+    return new Response(enhanced, {
+      headers: response.headers,
+      status: response.status,
+    });
   },
 
   // ─── scheduled() — Cron Triggers 处理 ───
