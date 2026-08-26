@@ -11,5 +11,8 @@ package-lock.json
 .trae/
 .idea/
 
+# Build output
+dist/
+
 # Wrangler
 .wrangler/

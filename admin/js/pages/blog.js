@@ -22,10 +22,21 @@ Router.register('/blog', async function (container) {
     }
   }
 
+  function parseTags(val) {
+    if (Array.isArray(val)) return val;
+    if (typeof val !== 'string' || !val) return [];
+    try {
+      const parsed = JSON.parse(val);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return val.split(',').map(t => t.trim()).filter(Boolean);
+    }
+  }
+
   function renderTable() {
     const tbody = document.getElementById('blogTableBody');
     tbody.innerHTML = posts.map(p => {
-      const tags = p.tags ? JSON.parse(p.tags) : [];
+      const tags = parseTags(p.tags);
       return `
         <tr>
           <td>${p.id}</td>
@@ -77,7 +88,7 @@ Router.register('/blog', async function (container) {
     form.content_md.value = p.content_md || '';
     form.cover_image.value = p.cover_image || '';
     form.category.value = p.category || '';
-    form.tags.value = p.tags ? JSON.parse(p.tags).join(', ') : '';
+    form.tags.value = parseTags(p.tags).join(', ');
     form.section.value = p.section || '';
     form.author.value = p.author || '';
     form.read_time.value = p.read_time || '';

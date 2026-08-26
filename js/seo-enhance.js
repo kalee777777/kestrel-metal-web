@@ -41,6 +41,9 @@
         if (path === '/' || path.indexOf('index.html') !== -1) {
             return '/';
         }
+        if (path.endsWith('.html')) {
+            return path.slice(0, -5);
+        }
         return path;
     }
 

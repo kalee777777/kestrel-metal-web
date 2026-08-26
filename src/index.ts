@@ -78,6 +78,7 @@ export default {
 
     const html = await response.text();
     const enhanced = injectSeoTags(html, url.pathname);
+    if (enhanced === html) return response;
     return new Response(enhanced, {
       headers: response.headers,
       status: response.status,

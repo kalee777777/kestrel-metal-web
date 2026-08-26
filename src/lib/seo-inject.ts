@@ -210,6 +210,18 @@ interface SeoMeta {
   ogType: string;
 }
 
+function resolvePathname(pathname: string): string {
+  if (pathname === '/') return '/';
+  if (pathname.endsWith('.html')) return pathname;
+  return pathname + '.html';
+}
+
+function canonicalPath(pathname: string): string {
+  if (pathname === '/') return '/';
+  if (pathname.endsWith('.html')) return pathname.slice(0, -5);
+  return pathname;
+}
+
 function extractSeoMeta(html: string, pathname: string): SeoMeta | null {
   const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']/i)
@@ -225,7 +237,7 @@ function extractSeoMeta(html: string, pathname: string): SeoMeta | null {
     title,
     description,
     keywords,
-    canonical: `${DOMAIN}${pathname}`,
+    canonical: `${DOMAIN}${canonicalPath(pathname)}`,
     ogTitle: title,
     ogDescription: description,
     ogImage: DEFAULT_IMAGE,
@@ -257,11 +269,12 @@ function buildSeoHead(meta: SeoMeta): string {
 }
 
 export function injectSeoTags(html: string, pathname: string): string {
-  if (!pathname.endsWith('.html') && pathname !== '/') return html;
-  if (pathname.startsWith('/admin/')) return html;
-  if (pathname.startsWith('/blog.html')) return html;
+  const resolvedPath = resolvePathname(pathname);
+  if (!resolvedPath.endsWith('.html') && resolvedPath !== '/') return html;
+  if (resolvedPath.startsWith('/admin/')) return html;
+  if (resolvedPath.startsWith('/blog.html')) return html;
 
-  const meta = extractSeoMeta(html, pathname);
+  const meta = extractSeoMeta(html, resolvedPath);
   if (!meta) return html;
 
   if (html.includes('rel="canonical"') || html.includes("rel='canonical'")) return html;
