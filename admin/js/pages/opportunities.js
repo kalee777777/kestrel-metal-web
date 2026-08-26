@@ -112,7 +112,7 @@ Router.register('/opportunities', async function (container) {
                 </tbody>
               </table>
             </div>
-          ` : '<div class="empty-state"><p>暂无内容机会数据</p><p style="color:#999;font-size:13px">${data.message || '需要积累更多 GSC 数据才能生成机会建议'}</p></div>'}
+          ` : '<div class="empty-state"><p>暂无内容机会数据</p><p style="color:#999;font-size:13px">' + (data.message || '需要积累更多 GSC 数据才能生成机会建议') + '</p></div>'}
         </div>
       </div>`;
 

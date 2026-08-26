@@ -65,14 +65,18 @@ export default {
       });
     }
 
-    // /api/* 路由交给 Worker 处理
+    if (url.pathname === '/admin' || url.pathname === '/admin/') {
+      const adminUrl = new URL(request.url);
+      adminUrl.pathname = '/admin/index.html';
+      return env.ASSETS.fetch(new Request(adminUrl, request));
+    }
+
     if (url.pathname.startsWith('/api/')) {
       const response = await handleRoute(request, env);
       if (response) return response;
       return jsonResponse({ error: 'Not found' }, 404);
     }
 
-    // 其余请求交给静态资源 (ASSETS binding)
     const response = await env.ASSETS.fetch(request);
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('text/html')) return response;
