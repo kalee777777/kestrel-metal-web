@@ -24,13 +24,27 @@ Router.register('/blog', async function (container) {
 
   function parseTags(val) {
     if (Array.isArray(val)) return val;
-    if (typeof val !== 'string' || !val) return [];
+    if (typeof val !== 'string' || !val.trim()) return [];
     try {
       const parsed = JSON.parse(val);
       return Array.isArray(parsed) ? parsed : [];
     } catch {
       return val.split(',').map(t => t.trim()).filter(Boolean);
     }
+  }
+
+  // 把相对路径 /images/blog/xxx 或 images/blog/xxx 统一为从站点根可访问的 URL
+  function resolveAdminImage(src) {
+    if (!src || typeof src !== 'string') return '';
+    if (/^https?:\/\//i.test(src)) return src;
+    if (src.startsWith('data:')) return src;
+    var path = src.trim();
+    // admin 页面在 /admin/ 下，相对路径会拼接到 /admin/images/ 下
+    // 这里统一转成站点根绝对路径
+    if (!path.startsWith('/')) path = '/' + path;
+    // 处理形如 //images/... 的双斜杆
+    path = path.replace(/^\/+/, '/');
+    return path;
   }
 
   function renderTable() {
@@ -40,7 +54,7 @@ Router.register('/blog', async function (container) {
       return `
         <tr>
           <td>${p.id}</td>
-          <td>${p.cover_image ? `<img src="${p.cover_image}" style="width:60px;height:60px;border-radius:4px;object-fit:cover">` : ''}</td>
+          <td>${(function(p){ var s = resolveAdminImage(p.cover_image); return s ? '<img src="'+s+'" style="width:60px;height:60px;border-radius:4px;object-fit:cover;border:1px solid var(--border)" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'missing-img\',textContent:\'缺图\'}))">' : '<span class="missing-img" style="display:inline-block;width:60px;height:60px;line-height:60px;text-align:center;border-radius:4px;background:var(--primary-bg);color:var(--text-muted);font-size:12px">—</span>'; })(p)}</td>
           <td>${p.title}</td>
           <td>${p.category || '-'}</td>
           <td>${p.section || '-'}</td>
@@ -92,6 +106,7 @@ Router.register('/blog', async function (container) {
     form.section.value = p.section || '';
     form.author.value = p.author || '';
     form.read_time.value = p.read_time || '';
+    form.static_url.value = p.static_url || '';
     form.status.value = p.status || 'draft';
     document.getElementById('blogModalTitle').textContent = '编辑博客';
     document.getElementById('blogModal').classList.add('show');
@@ -134,8 +149,10 @@ Router.register('/blog', async function (container) {
       <div class="btn-group">
         <button class="btn btn-primary" onclick="openAddPost()">+ 新建文章</button>
         <button class="btn" onclick="openAiPublish()">🤖 AI 发布</button>
+        <button class="btn btn-success" onclick="generateStaticPage()">⚡ 生成静态列表页</button>
       </div>
     </div>
+    <div id="blogGenStats" style="margin-bottom:1rem;padding:0.75rem 1rem;background:var(--primary-bg);border-radius:var(--radius-md);font-size:0.8125rem;color:var(--primary-dark)"></div>
 
     <div class="filter-bar">
       <input type="text" id="searchInput" class="form-control search" placeholder="搜索文章标题..." onkeyup="handleSearch(event)">
@@ -217,6 +234,10 @@ Router.register('/blog', async function (container) {
               <div class="form-group">
                 <label>标签 (逗号分隔)</label>
                 <input type="text" name="tags" class="form-control" placeholder="tag1, tag2, tag3">
+              </div>
+              <div class="form-group" style="grid-column:1/-1">
+                <label>静态详情页 URL</label>
+                <input type="text" name="static_url" class="form-control" placeholder="如: blog-dual-fence-security.html（留空则自动按 slug 匹配）">
               </div>
             </div>
             <div class="form-group">
@@ -304,6 +325,7 @@ Router.register('/blog', async function (container) {
       section: formData.get('section') || null,
       author: formData.get('author') || null,
       read_time: formData.get('read_time') || null,
+      static_url: formData.get('static_url') || null,
       status: formData.get('status') || 'draft'
     };
 
@@ -370,6 +392,35 @@ Router.register('/blog', async function (container) {
     document.getElementById('statusFilter').value = '';
     loadPosts(1);
   };
+
+  window.generateStaticPage = () => {
+    try {
+      var result = BlogGenerator.generate();
+      var stats = BlogGenerator.getStats();
+      var msg = '静态列表页已生成并下载！' +
+        '（已映射 ' + stats.mapped + '/' + stats.total + ' 篇' +
+        (stats.unmapped > 0 ? '，未映射 ' + stats.unmapped + ' 篇未展示' : '') + '）';
+      API.toast(msg, 'success');
+      updateGenStats();
+    } catch (err) {
+      API.toast('生成失败: ' + err.message, 'error');
+    }
+  };
+
+  function updateGenStats() {
+    var el = document.getElementById('blogGenStats');
+    if (!el) return;
+    var stats = BlogGenerator.getStats();
+    var mapped = stats.mapped;
+    var total = stats.total;
+    var unmapped = stats.unmapped;
+    var color = unmapped > 0 ? 'var(--warning)' : 'var(--success)';
+    el.innerHTML = '<span style="color:' + color + ';font-weight:600">静态页映射</span> &middot; ' +
+      '已映射 ' + mapped + ' / ' + total + ' 篇' +
+      (unmapped > 0 ? ' &middot; 未映射 ' + unmapped + ' 篇（无对应静态详情页，不会展示）' : ' &middot; 全部可展示');
+  }
+
+  updateGenStats();
 
   await loadPosts();
 });

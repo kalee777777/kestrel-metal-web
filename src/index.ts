@@ -16,6 +16,7 @@
 
 import { handleRoute, jsonResponse } from './router';
 import { injectSeoTags } from './lib/seo-inject';
+import './api-blog';
 
 // ─── 环境变量类型定义 ───
 export interface Env {
