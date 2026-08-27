@@ -71,6 +71,12 @@ export default {
       return env.ASSETS.fetch(new Request(adminUrl, request));
     }
 
+    if (url.pathname === '/components/navbar' || url.pathname === '/components/footer') {
+      const componentUrl = new URL(request.url);
+      componentUrl.pathname += '.html';
+      return env.ASSETS.fetch(new Request(componentUrl, request));
+    }
+
     if (url.pathname.startsWith('/api/')) {
       const response = await handleRoute(request, env);
       if (response) return response;
