@@ -83,7 +83,22 @@ export default {
       return jsonResponse({ error: 'Not found' }, 404);
     }
 
-    const response = await env.ASSETS.fetch(request);
+    let assetRequest = request;
+    if (url.pathname === '/') {
+      const rootUrl = new URL(request.url);
+      rootUrl.pathname = '/index.html';
+      assetRequest = new Request(rootUrl, request);
+    }
+
+    let response = await env.ASSETS.fetch(assetRequest);
+    if (response.status === 404 && !url.pathname.includes('.')) {
+      const htmlUrl = new URL(request.url);
+      htmlUrl.pathname = url.pathname + '.html';
+      const htmlResponse = await env.ASSETS.fetch(new Request(htmlUrl, request));
+      if (htmlResponse.status !== 404) {
+        response = htmlResponse;
+      }
+    }
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('text/html')) return response;
 
