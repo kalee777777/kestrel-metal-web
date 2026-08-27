@@ -1,8 +1,6 @@
 import { route, jsonResponse, type RouteContext } from './router';
 import { listKeys, getJSON } from './lib/kv';
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-
 export interface BlogPostRecord {
   id: string;
   slug: string;
