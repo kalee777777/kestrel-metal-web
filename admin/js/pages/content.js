@@ -25,31 +25,22 @@ Router.register('/content', async function (container) {
   }
 
   async function loadDrafts() {
-    const response = await fetch('/api/content/drafts');
-    if (!response.ok) throw new Error('草稿加载失败');
-    const data = await response.json();
-    return data.drafts || [];
+    const data = await API.get('/api/content/drafts');
+    return (data && data.drafts) || [];
   }
 
   async function loadPublished() {
-    const response = await fetch('/api/content/published');
-    if (!response.ok) throw new Error('已发布内容加载失败');
-    const data = await response.json();
-    return data.published || [];
+    const data = await API.get('/api/content/published');
+    return (data && data.published) || [];
   }
 
   async function triggerGeneration() {
-    const response = await fetch('/api/trigger/generate', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer kestrel-admin-2026' }
-    });
-    if (!response.ok) throw new Error('触发生成失败');
-    return await response.json();
+    return await API.post('/api/trigger/generate', {});
   }
 
   async function load() {
     let content = '';
-    
+
     if (currentTab === 'drafts') {
       const drafts = await loadDrafts();
       content = `
@@ -59,7 +50,7 @@ Router.register('/content', async function (container) {
             <button class="btn btn-primary" id="triggerGenerate">生成新文章</button>
           </div>
         </div>
-        
+
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-label">总草稿数</div><div class="stat-value">${drafts.length}</div></div>
           <div class="stat-card"><div class="stat-label">待处理</div><div class="stat-value" style="color:#3b82f6">${drafts.filter(d => d.status === 'queued').length}</div></div>
@@ -95,7 +86,7 @@ Router.register('/content', async function (container) {
         <div class="page-header">
           <div><h1>已发布内容</h1><p class="text-muted">已部署到生产环境的文章</p></div>
         </div>
-        
+
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-label">已发布</div><div class="stat-value" style="color:#10b981">${published.length}</div></div>
         </div>
@@ -112,7 +103,7 @@ Router.register('/content', async function (container) {
                         <td><strong>${escapeHtml(item.title)}</strong></td>
                         <td>${escapeHtml(item.keyword)}</td>
                         <td>${item.score ? `${item.score}/100` : '-'}</td>
-                        <td>${new Date(item.publishedAt).toLocaleDateString()}</td>
+                        <td>${new Date(item.publishedAt || item.createdAt).toLocaleDateString()}</td>
                         <td><a href="https://kestrelmetal.com/blog/${escapeHtml(item.slug)}.html" target="_blank" class="btn btn-sm">查看</a></td>
                       </tr>
                     `).join('')}
@@ -140,7 +131,7 @@ Router.register('/content', async function (container) {
           API.toast('开始生成文章...', 'info');
           await triggerGeneration();
           API.toast('文章生成任务已触发', 'success');
-          setTimeout(() => load().catch(() => {}), 5000);
+          setTimeout(() => load().catch(() => {}), 2000);
         } catch (error) {
           API.toast(error.message, 'error');
         }
@@ -152,11 +143,50 @@ Router.register('/content', async function (container) {
 });
 
 window.previewDraft = async function(slug) {
-  const response = await fetch(`/api/content/drafts/${slug}`);
-  if (!response.ok) return;
-  const draft = await response.json();
-  
-  const win = window.open('', '_blank');
-  win.document.write(draft.html);
-  win.document.close();
+  try {
+    const draft = await API.get('/api/content/drafts/' + slug);
+    if (!draft) {
+      API.toast('草稿未找到', 'error');
+      return;
+    }
+
+    // Remove existing modal
+    const existing = document.getElementById('draftPreviewModal');
+    if (existing) existing.remove();
+
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'draftPreviewModal';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+
+    const modal = document.createElement('div');
+    modal.style.cssText = 'background:#fff;border-radius:8px;width:100%;max-width:800px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;';
+
+    const header = document.createElement('div');
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #e5e7eb;';
+    header.innerHTML = '<h3 style="margin:0;font-size:16px;">预览: ' + (draft.title || '') + '</h3>';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = 'border:none;background:none;font-size:20px;cursor:pointer;color:#666;padding:4px 8px;';
+    closeBtn.onclick = function() { overlay.remove(); };
+    header.appendChild(closeBtn);
+
+    const body = document.createElement('div');
+    body.style.cssText = 'padding:20px;overflow-y:auto;flex:1;';
+    body.innerHTML = draft.html || '<p>暂无内容</p>';
+
+    modal.appendChild(header);
+    modal.appendChild(body);
+    overlay.appendChild(modal);
+
+    // Close on overlay click
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.remove();
+    });
+
+    document.body.appendChild(overlay);
+  } catch (error) {
+    API.toast('预览失败: ' + error.message, 'error');
+  }
 };

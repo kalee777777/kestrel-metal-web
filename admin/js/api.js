@@ -102,7 +102,7 @@ const API = (function () {
 
   // ==================== Seed Data ====================
   function seedData() {
-    if (getStorage('seeded') && getCollection('blog_posts').length >= 36 && getCollection('case_studies').length >= 8 && getCollection('glossary').length >= 67) return;
+    if (getStorage('seeded') && getCollection('blog_posts').length >= 36 && getCollection('case_studies').length >= 8 && getCollection('glossary').length >= 67 && getCollection('content_drafts').length >= 1) return;
 
     // Seed categories
     setCollection('product_categories', [
@@ -357,8 +357,15 @@ const API = (function () {
       { id: 1, username: 'admin', email: 'admin@kestrelmetal.com', password: 'admin123', role: 'admin', created_at: new Date().toISOString(), last_login_at: null }
     ]);
 
+    // Seed content drafts
+    if (!getCollection('content_drafts').length) {
+      setCollection('content_drafts', [
+        { id: 1, title: 'How to Choose the Right Wire Mesh for Industrial Applications', keyword: 'industrial wire mesh', slug: 'how-to-choose-industrial-wire-mesh', status: 'queued', score: null, createdAt: new Date().toISOString(), html: '<h1>How to Choose the Right Wire Mesh for Industrial Applications</h1><p>Industrial wire mesh selection depends on material, aperture, wire diameter, and operating conditions.</p><h2>Key Selection Factors</h2><p>Consider corrosion resistance, tensile strength, opening size, and installation requirements before specifying a product.</p>' }
+      ]);
+    }
+
     // Seed operation logs
-    setCollection('admin_logs', [
+    setCollection('admin_logs', [ 
       { id: 1, admin_id: 1, action: 'login', resource_type: 'admin', resource_id: 1, ip_address: '127.0.0.1', created_at: new Date(Date.now() - 86400000).toISOString() },
       { id: 2, admin_id: 1, action: 'create', resource_type: 'product', resource_id: 1, ip_address: '127.0.0.1', created_at: new Date(Date.now() - 86400000 * 2).toISOString() },
       { id: 3, admin_id: 1, action: 'update', resource_type: 'blog', resource_id: 1, ip_address: '127.0.0.1', created_at: new Date(Date.now() - 86400000 * 3).toISOString() },
@@ -739,6 +746,41 @@ const API = (function () {
       if (id && method === 'DELETE') return remove('media', id);
       if (id) return getById('media', id);
       return getCollection('media');
+    }
+
+    // Content (AI-generated drafts)
+    if (segments[0] === 'api' && segments[1] === 'content') {
+      if (segments[2] === 'drafts') {
+        const slug = segments[3];
+        if (slug) {
+          const drafts = getCollection('content_drafts');
+          return drafts.find(d => d.slug === slug) || null;
+        }
+        return { drafts: getCollection('content_drafts') };
+      }
+      if (segments[2] === 'published') {
+        const drafts = getCollection('content_drafts').filter(d => d.status === 'published');
+        return { published: drafts };
+      }
+      throw new Error('未知的内容 API 路径');
+    }
+
+    // Trigger generation
+    if (segments[0] === 'api' && segments[1] === 'trigger' && segments[2] === 'generate') {
+      const drafts = getCollection('content_drafts');
+      const newDraft = {
+        id: generateId(),
+        title: 'AI Generated Article - ' + new Date().toLocaleDateString(),
+        keyword: 'wire mesh fencing',
+        slug: 'ai-draft-' + Date.now(),
+        status: 'queued',
+        score: null,
+        createdAt: new Date().toISOString(),
+        html: '<h1>Draft Pending Generation</h1><p>This article is queued for AI generation.</p>'
+      };
+      drafts.unshift(newDraft);
+      setCollection('content_drafts', drafts);
+      return { message: '生成任务已触发', draft: newDraft };
     }
 
     // Settings
