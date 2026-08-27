@@ -82,7 +82,7 @@ export default {
     if (!contentType.includes('text/html')) return response;
 
     const html = await response.text();
-    if (!url.pathname.startsWith('/admin/')) {
+    if (!url.pathname.startsWith('/admin/') && !url.pathname.startsWith('/components/')) {
       const enhanced = injectSeoTags(html, url.pathname);
       if (enhanced !== html) {
         return new Response(enhanced, {
