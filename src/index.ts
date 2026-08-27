@@ -82,12 +82,16 @@ export default {
     if (!contentType.includes('text/html')) return response;
 
     const html = await response.text();
-    const enhanced = injectSeoTags(html, url.pathname);
-    if (enhanced === html) return response;
-    return new Response(enhanced, {
-      headers: response.headers,
-      status: response.status,
-    });
+    if (!url.pathname.startsWith('/admin/')) {
+      const enhanced = injectSeoTags(html, url.pathname);
+      if (enhanced !== html) {
+        return new Response(enhanced, {
+          headers: response.headers,
+          status: response.status,
+        });
+      }
+    }
+    return response;
   },
 
   // ─── scheduled() — Cron Triggers 处理 ───
