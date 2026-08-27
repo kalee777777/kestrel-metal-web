@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="KESTREL METAL Case Studies - Explore real-world applications of our wire mesh and fencing solutions across water, flood control, mining, infrastructure, energy, agriculture, and more.">
   <title>KESTREL METAL - Case Studies</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/fonts.css">
 
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/navbar.css">
@@ -130,7 +127,7 @@
         var url = cs.static_url || cs.detail_url || '#';
         var cat = cs.category || 'other';
         var label = categoryLabels[cat] || cat;
-        var img = cs.cover_image || 'images/hero-case.jpg';
+        var img = cs.cover_image || 'images/hero-case.webp';
         var cardHtml = '<a href="' + url + '" class="casestudy-card" data-case-id="' + cs.id + '" data-category="' + cat + '" data-keywords="' + (cs.title + ' ' + (cs.description || '')).toLowerCase() + '" data-reveal>'
           + '<div class="casestudy-card-img"><img src="' + img + '" alt="' + cs.title + '" loading="lazy"></div>'
           + '<div class="casestudy-card-body">'

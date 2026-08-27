@@ -16,7 +16,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('../images/hero-downloads.jpg');
+  background-image: url('../images/hero-downloads.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -473,7 +473,7 @@
 .downloads-cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../images/hero-downloads.jpg');
+  background-image: url('../images/hero-downloads.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

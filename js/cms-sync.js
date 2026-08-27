@@ -185,7 +185,7 @@ var CMSSync = (function () {
       var cardHtml = '<article class="blog-card" data-post-id="' + post.id + '" data-reveal>'
         + '<a href="blog-detail.html?id=' + post.id + '" class="blog-card-link">'
         + '<div class="blog-card-image">'
-        + '<img src="' + escapeHtml(post.cover_image || 'images/hero-blog.jpg') + '" alt="' + escapeHtml(post.title) + '" loading="lazy">'
+        + '<img src="' + escapeHtml(post.cover_image || 'images/hero-blog.webp') + '" alt="' + escapeHtml(post.title) + '" loading="lazy">'
         + '<span class="blog-card-badge">' + escapeHtml(post.category || 'Uncategorized') + '</span>'
         + '</div>'
         + '<div class="blog-card-body">'
@@ -231,7 +231,7 @@ var CMSSync = (function () {
       var url = cs.static_url || cs.detail_url || '#';
       var cardHtml = '<a href="' + url + '" class="casestudy-card" data-case-id="' + cs.id + '" data-category="' + escapeHtml(cat) + '" data-keywords="' + escapeHtml((cs.title + ' ' + (cs.description || '')).toLowerCase()) + '" data-reveal>'
         + '<div class="casestudy-card-img">'
-        + '<img src="' + escapeHtml(cs.cover_image || 'images/hero-case.jpg') + '" alt="' + escapeHtml(cs.title) + '" loading="lazy">'
+        + '<img src="' + escapeHtml(cs.cover_image || 'images/hero-case.webp') + '" alt="' + escapeHtml(cs.title) + '" loading="lazy">'
         + '</div>'
         + '<div class="casestudy-card-body">'
         + '<span class="casestudy-card-tag">' + escapeHtml(label) + '</span>'

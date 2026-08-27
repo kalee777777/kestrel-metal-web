@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('../images/hero-blog.jpg');
+  background-image: url('../images/hero-blog.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -414,7 +414,7 @@
 .glossary-cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../images/hero-metal-finishing.jpg');
+  background-image: url('../images/hero-metal-finishing.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
