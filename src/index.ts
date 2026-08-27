@@ -101,18 +101,16 @@ export default {
     }
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('text/html')) return response;
+    if (url.pathname.startsWith('/admin/') || url.pathname.startsWith('/components/')) {
+      return response;
+    }
 
     const html = await response.text();
-    if (!url.pathname.startsWith('/admin/') && !url.pathname.startsWith('/components/')) {
-      const enhanced = injectSeoTags(html, url.pathname);
-      if (enhanced !== html) {
-        return new Response(enhanced, {
-          headers: response.headers,
-          status: response.status,
-        });
-      }
-    }
-    return response;
+    const enhanced = injectSeoTags(html, url.pathname);
+    return new Response(enhanced, {
+      headers: response.headers,
+      status: response.status,
+    });
   },
 
   // ─── scheduled() — Cron Triggers 处理 ───
