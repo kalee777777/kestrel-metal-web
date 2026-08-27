@@ -47,6 +47,17 @@ const API = (function () {
         return out;
       });
     }
+    if (key === 'glossary') {
+      patched = existing.map(item => {
+        const update = seedItems.find(s => s[idField] === item[idField]);
+        if (!update) return item;
+        const out = Object.assign({}, item);
+        if (update.term && item.term !== update.term) out.term = update.term;
+        if (update.definition && item.definition !== update.definition) out.definition = update.definition;
+        if (update.category && item.category !== update.category) out.category = update.category;
+        return out;
+      });
+    }
     if (patched !== existing || newItems.length > 0) {
       setCollection(key, [...patched, ...newItems]);
     }
@@ -91,7 +102,7 @@ const API = (function () {
 
   // ==================== Seed Data ====================
   function seedData() {
-    if (getStorage('seeded') && getCollection('blog_posts').length >= 36 && getCollection('case_studies').length >= 8) return;
+    if (getStorage('seeded') && getCollection('blog_posts').length >= 36 && getCollection('case_studies').length >= 8 && getCollection('glossary').length >= 67) return;
 
     // Seed categories
     setCollection('product_categories', [
@@ -174,12 +185,75 @@ const API = (function () {
     ]);
 
     // Seed glossary
-    setCollection('glossary', [
-      { id: 1, term: 'Chain Link Fence', definition: 'A type of woven fence made from galvanized steel wire that is twisted and linked together to form a diamond pattern.', category: 'Products', language: 'English', enabled: true },
-      { id: 2, term: 'Gabion', definition: 'A wire mesh box or basket filled with stones, used for erosion control, retaining walls, and decorative landscaping.', category: 'Products', language: 'English', enabled: true },
-      { id: 3, term: 'Razor Wire', definition: 'A type of barbed wire with sharp razor blades designed to deter trespassers and provide high-security perimeter protection.', category: 'Products', language: 'English', enabled: true },
-      { id: 4, term: 'Mesh Size', definition: 'The distance between the centers of adjacent openings in a wire mesh, typically measured in millimeters.', category: 'Technical', language: 'English', enabled: true },
-    ]);
+    mergeCollection('glossary', [
+      { id: 1, term: '3D Wire Panel Fence', definition: 'A security fencing system using V-profile cold-formed welded mesh panels with horizontal ribs for enhanced rigidity. Commonly used for industrial, military, and infrastructure perimeter protection.', category: 'fence', language: 'English', enabled: true },
+      { id: 2, term: 'Chain Link Fence', definition: 'Also known as diamond mesh fence or cyclone fence. A woven wire fence made from galvanized or PVC-coated steel wire in a diamond pattern, offering versatility and cost-effectiveness for residential, commercial, and industrial applications.', category: 'fence', language: 'English', enabled: true },
+      { id: 3, term: 'Airport Fence (Y-Post Security Fence)', definition: 'A high-security fencing system using Y-profile steel posts and welded mesh panels, designed specifically for airport perimeters and other high-security zones.', category: 'fence', language: 'English', enabled: true },
+      { id: 4, term: 'Hinge Joint Fence (Field Fence)', definition: 'A traditional agricultural fence using a "live knot" (hinge joint) connection that provides excellent elasticity and impact resistance. Ideal for boundary fencing and livestock grazing enclosures per ASTM A116.', category: 'fence', language: 'English', enabled: true },
+      { id: 5, term: 'S-Knot Fence', definition: 'A specialized fencing product featuring an S-shaped knot that provides smooth, safe surfaces for horse and livestock enclosures.', category: 'fence', language: 'English', enabled: true },
+      { id: 6, term: 'Fixed Knot Fence', definition: 'A high-strength agricultural fence with fixed knots that lock horizontal and vertical wires securely, suitable for deer fencing and large animal containment.', category: 'fence', language: 'English', enabled: true },
+      { id: 7, term: 'Temporary Fence / Crowd Control Barrier', definition: 'Interlocking steel panels with weighted bases for rapid deployment at construction sites, events, and public gatherings.', category: 'fence', language: 'English', enabled: true },
+      { id: 8, term: 'Palisade Fencing', definition: 'A high-security fencing system with vertical steel pales and pointed tops, commonly used for industrial facilities and government installations.', category: 'fence', language: 'English', enabled: true },
+      { id: 9, term: 'Welded Mesh Fence', definition: 'A fencing system using pre-fabricated welded wire mesh panels mounted on steel posts, offering quick installation and reliable perimeter security.', category: 'fence', language: 'English', enabled: true },
+      { id: 10, term: 'Crimps', definition: 'Special wire deformations that allow the fence to expand and contract due to changing weather conditions. When installing Field Fence, pull the wire so that about half of the curve is pulled out of the wire.', category: 'fence', language: 'English', enabled: true },
+      { id: 11, term: 'Graduated Spacing', definition: 'A fence design where vertical wires are spaced closer together at the bottom and gradually increase in spacing toward the top, keeping small animals out without wasting material.', category: 'fence', language: 'English', enabled: true },
+      { id: 12, term: 'Welded Wire Mesh', definition: 'A metal grid made by spot-welding intersecting steel wires at right angles. Available in galvanized, PVC-coated, and stainless steel variants for fencing, construction, and industrial screening applications.', category: 'mesh', language: 'English', enabled: true },
+      { id: 13, term: 'Hexagonal Wire Netting (Chicken Wire)', definition: 'A lightweight, hexagonal-pattern woven wire mesh, commonly known as chicken wire. Used for poultry enclosures, garden protection, and stucco reinforcement.', category: 'mesh', language: 'English', enabled: true },
+      { id: 14, term: 'Window Screen', definition: 'Fine mesh made from stainless steel, fiberglass, or aluminum, designed to allow airflow while preventing insects from entering buildings.', category: 'mesh', language: 'English', enabled: true },
+      { id: 15, term: 'V-Profile Welded Mesh Panel', definition: 'A welded mesh panel with V-shaped ribs pressed into the horizontal wires, providing enhanced structural rigidity and anti-climb properties.', category: 'mesh', language: 'English', enabled: true },
+      { id: 16, term: 'Wedge Wire Screen', definition: 'A precision-engineered screen with V-shaped wire profiles welded to support rods, used for water intake screening, dewatering, and particle classification.', category: 'mesh', language: 'English', enabled: true },
+      { id: 17, term: 'Gabion Mesh', definition: 'Double-twisted hexagonal wire mesh used to create stone-filled baskets (gabions) for retaining walls, erosion control, and slope stabilization.', category: 'mesh', language: 'English', enabled: true },
+      { id: 18, term: 'Barbed Wire', definition: 'A type of steel fencing wire with sharp barbs spaced at regular intervals. Available in single twist, double twist, and traditional twist configurations for agricultural and security fencing.', category: 'wire', language: 'English', enabled: true },
+      { id: 19, term: 'Razor Wire', definition: 'Also known as barbed tape. A high-security product made of sharp steel blades formed into a helical coil around a core wire. Available in BTO, CBT, and concertina configurations.', category: 'wire', language: 'English', enabled: true },
+      { id: 20, term: 'Concertina Razor Wire', definition: 'Razor wire formed into large-diameter coils that expand like a spring, creating an effective physical barrier for military, prison, and border security applications.', category: 'wire', language: 'English', enabled: true },
+      { id: 21, term: 'BTC Barbed Tape Concertina (NATO-22)', definition: 'A military-grade razor wire product conforming to NATO-22 (MIL-AA-55522A) standard, featuring fish-hook blade profiles for maximum deterrence.', category: 'wire', language: 'English', enabled: true },
+      { id: 22, term: 'Hot-Dip Galvanized (HDG)', definition: 'A corrosion protection process where steel is immersed in molten zinc, forming a metallurgically bonded zinc coating. Provides long-lasting protection per ASTM A123 and ISO 1461 standards.', category: 'material', language: 'English', enabled: true },
+      { id: 23, term: 'Electro-Galvanized', definition: 'A zinc coating applied by electroplating, producing a thinner and smoother finish compared to hot-dip galvanizing.', category: 'material', language: 'English', enabled: true },
+      { id: 24, term: 'PVC Coating', definition: 'A polyvinyl chloride plastic coating extruded over galvanized wire, providing additional corrosion resistance and color options for outdoor applications.', category: 'material', language: 'English', enabled: true },
+      { id: 25, term: 'PE Coating', definition: 'A polyethylene coating applied over galvanized wire for enhanced UV resistance and durability in agricultural and marine environments.', category: 'material', language: 'English', enabled: true },
+      { id: 26, term: 'Stainless Steel 304', definition: 'An austenitic stainless steel alloy containing 18% chromium and 8% nickel, offering good corrosion resistance for general-purpose applications.', category: 'material', language: 'English', enabled: true },
+      { id: 27, term: 'Stainless Steel 316 / 316L', definition: 'A molybdenum-bearing stainless steel alloy with superior chloride corrosion resistance, ideal for marine, chemical, and pharmaceutical applications.', category: 'material', language: 'English', enabled: true },
+      { id: 28, term: 'Powder Coating', definition: 'A dry finishing process where electrostatically charged powder is sprayed onto a surface and cured under heat, providing a durable and uniform protective layer.', category: 'material', language: 'English', enabled: true },
+      { id: 29, term: 'Copper Alloy', definition: 'A metal alloy (typically copper-zinc or copper-nickel) with natural anti-fouling properties, used in premium aquaculture mesh applications.', category: 'material', language: 'English', enabled: true },
+      { id: 30, term: 'Carbon Steel (Low Carbon Steel)', definition: 'A steel alloy with low carbon content (typically at most 0.22%), offering good weldability and formability for wire mesh and fencing products.', category: 'material', language: 'English', enabled: true },
+      { id: 31, term: 'Low Carbon Wire', definition: 'A type of wire that is thicker and more cost-effective, bending and flexing easily. Low carbon wire is ideal for temporary fencing or less demanding applications where flexibility is preferred over strength.', category: 'material', language: 'English', enabled: true },
+      { id: 32, term: 'High Tensile Wire', definition: 'A type of steel wire that is thin but strong and lightweight, with excellent tensile strength. Unlike low carbon wire, high tensile wire won\'t stretch out over time, making it ideal for permanent, long-lasting fence installations.', category: 'material', language: 'English', enabled: true },
+      { id: 33, term: 'Galvanization', definition: 'A corrosion protection process that coats steel with zinc to defend against rust. This protective layer helps reduce exposure to humidity, salt air, and other corrosive chemicals, extending the life of the fence.', category: 'material', language: 'English', enabled: true },
+      { id: 34, term: 'Wire Diameter', definition: 'The thickness of individual wires in a mesh or fence product, measured in millimeters (mm) or gauge (ga). A key parameter determining product strength and weight.', category: 'spec', language: 'English', enabled: true },
+      { id: 35, term: 'Mesh Size / Aperture', definition: 'The distance between adjacent parallel wires in a mesh, measured from center to center. Determines the mesh\'s filtering, screening, or containment capability.', category: 'spec', language: 'English', enabled: true },
+      { id: 36, term: 'Mesh Count', definition: 'The number of openings per linear inch or per square inch. Higher mesh counts indicate finer mesh with smaller openings.', category: 'spec', language: 'English', enabled: true },
+      { id: 37, term: 'Tensile Strength', definition: 'The maximum stress a material can withstand while being stretched before breaking, measured in MPa or psi. Critical for fencing and structural applications.', category: 'spec', language: 'English', enabled: true },
+      { id: 38, term: 'Zinc Coating Weight', definition: 'The mass of zinc coating per unit area (g/m²), indicating the thickness and quality of galvanized protection. Higher values provide longer corrosion life.', category: 'spec', language: 'English', enabled: true },
+      { id: 39, term: 'Porosity', definition: 'The percentage of open area in a mesh or porous material, determining flow rate and screening capability.', category: 'spec', language: 'English', enabled: true },
+      { id: 40, term: 'Filtration Rating', definition: 'The nominal or absolute particle size (in microns) that a filter element can reliably capture, indicating filtration precision.', category: 'spec', language: 'English', enabled: true },
+      { id: 41, term: 'Burst Pressure', definition: 'The maximum pressure differential a filter element can withstand before structural failure, a critical safety parameter for pressurized systems.', category: 'spec', language: 'English', enabled: true },
+      { id: 42, term: 'Gauge', definition: 'The thickness of the wire. The higher the number, the smaller/thinner the wire. Low gauge refers to thicker wire, while high gauge wire refers to lighter weight wire.', category: 'spec', language: 'English', enabled: true },
+      { id: 43, term: 'Loop Cap', definition: 'A metal fitting used to connect the top rail to line posts in chain link fence systems, providing a secure and clean connection point.', category: 'fitting', language: 'English', enabled: true },
+      { id: 44, term: 'Tension Band', definition: 'A galvanized steel band wrapped around terminal posts to distribute tension forces from the fence fabric evenly.', category: 'fitting', language: 'English', enabled: true },
+      { id: 45, term: 'Tension Bar', definition: 'A vertical bar woven through the chain link mesh end and attached to tension bands, used to stretch and secure the fence fabric.', category: 'fitting', language: 'English', enabled: true },
+      { id: 46, term: 'Barb Arm', definition: 'A metal bracket attached to fence posts for mounting barbed wire strands above the main fence line.', category: 'fitting', language: 'English', enabled: true },
+      { id: 47, term: 'End Post / Terminal Post', definition: 'A heavy-duty post installed at fence ends, corners, and gates, designed to withstand the full tension load of the fence fabric.', category: 'fitting', language: 'English', enabled: true },
+      { id: 48, term: 'Line Post', definition: 'An intermediate post installed between terminal posts to support the fence fabric at regular intervals.', category: 'fitting', language: 'English', enabled: true },
+      { id: 49, term: 'Corner Post', definition: 'A post installed at fence corners, typically braced to resist directional tension forces from both adjacent fence runs.', category: 'fitting', language: 'English', enabled: true },
+      { id: 50, term: 'Hog Rings', definition: 'Metal rings used to secure chain link fabric to the fence frame, providing a quick and reliable attachment method.', category: 'fitting', language: 'English', enabled: true },
+      { id: 51, term: 'Turnbuckle', definition: 'A threaded tensioning device used to adjust and maintain wire tension in fence systems.', category: 'fitting', language: 'English', enabled: true },
+      { id: 52, term: 'Post Cap / Dome Cap', definition: 'A decorative and protective cover fitted to the top of fence posts to prevent water ingress.', category: 'fitting', language: 'English', enabled: true },
+      { id: 53, term: 'Pull Out', definition: 'The distance between the last vertical wire and the next post, typically ranging from 6 to 16 inches. This spacing allows the fence to be stretched tight and secured properly to the post.', category: 'fitting', language: 'English', enabled: true },
+      { id: 54, term: 'MIG & TIG Welding', definition: 'Metal Inert Gas and Tungsten Inert Gas welding processes used to join metal components with high precision and structural integrity.', category: 'process', language: 'English', enabled: true },
+      { id: 55, term: 'Wire Drawing', definition: 'A metalworking process that reduces wire diameter by pulling the wire through a series of progressively smaller dies.', category: 'process', language: 'English', enabled: true },
+      { id: 56, term: 'Hot-Dip Galvanizing', definition: 'The process of dipping fabricated steel products into a bath of molten zinc (typically 450°C) to form a corrosion-resistant zinc-iron alloy coating.', category: 'process', language: 'English', enabled: true },
+      { id: 57, term: 'PVC Extrusion Coating', definition: 'A process where molten PVC is extruded over galvanized wire through a die, forming a uniform plastic coating that bonds to the zinc surface.', category: 'process', language: 'English', enabled: true },
+      { id: 58, term: 'Sintering', definition: 'A high-temperature process that bonds metal particles or wire mesh layers together through diffusion, creating porous materials with controlled permeability.', category: 'process', language: 'English', enabled: true },
+      { id: 59, term: 'CNC Cutting', definition: 'Computer Numerical Controlled cutting using laser, plasma, or waterjet technology for precise metal component fabrication.', category: 'process', language: 'English', enabled: true },
+      { id: 60, term: 'Passivation', definition: 'A chemical treatment for stainless steel that removes free iron from the surface and enhances the natural chromium oxide layer for improved corrosion resistance.', category: 'process', language: 'English', enabled: true },
+      { id: 61, term: 'Powder Coating Process', definition: 'An electrostatic spray finishing process where dry powder is applied to a grounded metal surface and cured in an oven to form a hard, durable finish.', category: 'process', language: 'English', enabled: true },
+      { id: 62, term: 'ASTM A123', definition: 'Standard specification for zinc (hot-dip galvanized) coatings on iron and steel products.', category: 'standard', language: 'English', enabled: true },
+      { id: 63, term: 'ASTM A116', definition: 'Standard specification for steel wire, zinc-coated (galvanized), for agricultural field fence.', category: 'standard', language: 'English', enabled: true },
+      { id: 64, term: 'BS EN 10244-2', definition: 'British/European standard for zinc or zinc alloy coatings on steel wire.', category: 'standard', language: 'English', enabled: true },
+      { id: 65, term: 'ISO 9001', definition: 'International standard for quality management systems, certifying consistent manufacturing and quality control processes.', category: 'standard', language: 'English', enabled: true },
+      { id: 66, term: 'ISO 1461', definition: 'International standard for hot dip galvanized coatings on fabricated iron and steel articles.', category: 'standard', language: 'English', enabled: true },
+      { id: 67, term: 'NATO-22 (MIL-AA-55522A)', definition: 'North Atlantic Treaty Organization military specification for barbed tape concertina, defining blade dimensions and performance requirements.', category: 'standard', language: 'English', enabled: true },
+    ], 'id');
 
     // Seed inquiries (only if empty - never overwrite frontend submissions)
     if (getCollection('inquiries').length === 0) {

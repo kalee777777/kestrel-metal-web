@@ -192,7 +192,7 @@ Router.register('/cases', async function (container) {
         </div>
         <div class="modal-footer">
           <button class="btn" onclick="closeCaseModal()">取消</button>
-          <button class="btn btn-primary" onclick="document.getElementById('caseForm').submit()">保存</button>
+          <button class="btn btn-primary" id="caseFormSubmitBtn">保存</button>
         </div>
       </div>
     </div>
@@ -227,6 +227,10 @@ Router.register('/cases', async function (container) {
     } catch (err) {
       API.toast('操作失败: ' + err.message, 'error');
     }
+  });
+
+  document.getElementById('caseFormSubmitBtn').addEventListener('click', () => {
+    document.getElementById('caseForm').requestSubmit();
   });
 
   window.handleSearch = (e) => {

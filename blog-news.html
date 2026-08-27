@@ -145,6 +145,86 @@
   </button>
 
   <script src="js/includes.js"></script>
+  <script src="admin/js/api.js"></script>
   <script src="js/blog-news.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var result = await API.get('/api/blog?status=published&pageSize=100');
+      var posts = (result && result.data) || [];
+      posts.sort(function(a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+
+      var featuredGrid = document.getElementById('featuredGrid');
+      featuredGrid.innerHTML = '';
+      posts.slice(0, 2).forEach(function(post) {
+        var url = post.static_url || post.detail_url || '#';
+        var img = post.cover_image || 'images/blog/default-blog.jpg';
+        var cat = post.category || 'News';
+        var date = new Date(post.created_at).toLocaleDateString();
+        var readTime = post.read_time || '5 min read';
+        featuredGrid.innerHTML += '<a href="' + url + '" class="featured-card" data-post-id="' + post.id + '"><div class="featured-card-img"><img src="' + img + '" alt="' + post.title + '" loading="lazy"><span class="featured-badge">Featured</span></div><div class="featured-card-body"><span class="post-card-tag">' + cat + '</span><h3 class="post-card-title">' + post.title + '</h3><div class="post-card-meta">' + date + ' &middot; ' + readTime + '</div><p>' + (post.description || '') + '</p></div></a>';
+      });
+
+      var categories = {};
+      posts.slice(2).forEach(function(post) {
+        var cat = post.category || 'Uncategorized';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(post);
+      });
+
+      var blogCategories = document.getElementById('blogCategories');
+      blogCategories.innerHTML = '';
+      var catIndex = 0;
+      Object.keys(categories).forEach(function(cat) {
+        var catPosts = categories[cat];
+        var sectionId = cat.toLowerCase().replace(/\s+/g, '-');
+        var gridId = 'grid-' + catIndex;
+        var paginationId = 'pagination-' + catIndex;
+        var perPage = 6;
+        var totalPages = Math.ceil(catPosts.length / perPage);
+
+        var html = '<div class="blog-category-section" id="cat-' + catIndex + '" data-section="' + sectionId + '">';
+        html += '<div class="blog-category-header"><h3 class="blog-category-title">' + cat + ' <span class="count-badge">' + catPosts.length + ' posts</span></h3></div>';
+        html += '<div class="posts-grid" id="' + gridId + '">';
+
+        catPosts.slice(0, perPage).forEach(function(post) {
+          var url = post.static_url || post.detail_url || '#';
+          var img = post.cover_image || 'images/blog/default-blog.jpg';
+          var date = new Date(post.created_at).toLocaleDateString();
+          var readTime = post.read_time || '5 min read';
+          html += '<a href="' + url + '" class="post-card" data-post-id="' + post.id + '"><div class="post-card-img"><img src="' + img + '" alt="' + post.title + '" loading="lazy"></div><div class="post-card-body"><span class="post-card-tag">' + (post.category || 'News') + '</span><h3>' + post.title + '</h3><div class="post-card-meta">' + date + ' &middot; ' + readTime + '</div><p>' + (post.description || '') + '</p></div></a>';
+        });
+
+        html += '</div>';
+
+        if (totalPages > 1) {
+          html += '<div class="blog-pagination" id="' + paginationId + '" data-total-pages="' + totalPages + '">';
+          html += '<button class="page-arrow" data-page="1" disabled>&laquo;</button>';
+          for (var p = 1; p <= totalPages; p++) {
+            html += '<button data-page="' + p + '"' + (p === 1 ? ' class="active"' : '') + '>' + p + '</button>';
+          }
+          html += '<button class="page-arrow" data-page="' + totalPages + '">&raquo;</button>';
+          html += '</div>';
+        }
+
+        for (var pg = 2; pg <= totalPages; pg++) {
+          var start = (pg - 1) * perPage;
+          var end = start + perPage;
+          html += '<template class="post-card-template" data-page="' + pg + '">';
+          catPosts.slice(start, end).forEach(function(post) {
+            var url = post.static_url || post.detail_url || '#';
+            var img = post.cover_image || 'images/blog/default-blog.jpg';
+            var date = new Date(post.created_at).toLocaleDateString();
+            var readTime = post.read_time || '5 min read';
+            html += '<a href="' + url + '" class="post-card" data-post-id="' + post.id + '"><div class="post-card-img"><img src="' + img + '" alt="' + post.title + '" loading="lazy"></div><div class="post-card-body"><span class="post-card-tag">' + (post.category || 'News') + '</span><h3>' + post.title + '</h3><div class="post-card-meta">' + date + ' &middot; ' + readTime + '</div><p>' + (post.description || '') + '</p></div></a>';
+          });
+          html += '</template>';
+        }
+
+        html += '</div>';
+        blogCategories.innerHTML += html;
+        catIndex++;
+      });
+    });
+  </script>
 </body>
 </html>

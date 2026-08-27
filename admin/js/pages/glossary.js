@@ -11,13 +11,20 @@ Router.register('/glossary', async function (container) {
     }
   }
 
+  const categoryNames = {
+    fence: 'Fence Products', mesh: 'Wire Mesh Products', wire: 'Wire Products',
+    material: 'Materials & Coatings', spec: 'Technical Specifications',
+    fitting: 'Fencing Components & Fittings', process: 'Manufacturing Processes',
+    standard: 'Standards & Certifications'
+  };
+
   function renderTable() {
     const tbody = document.getElementById('glossaryTableBody');
     tbody.innerHTML = terms.map(t => `
       <tr>
         <td>${t.term}</td>
         <td>${t.definition}</td>
-        <td>${t.category || '-'}</td>
+        <td>${categoryNames[t.category] || t.category || '-'}</td>
         <td>${t.language || 'English'}</td>
         <td><span class="badge ${t.enabled ? 'badge-success' : 'badge-gray'}">${t.enabled ? '启用' : '禁用'}</span></td>
         <td>
@@ -38,7 +45,7 @@ Router.register('/glossary', async function (container) {
     form.id.value = t.id;
     form.term.value = t.term;
     form.definition.value = t.definition || '';
-    form.category.value = t.category || '';
+    form.category.value = t.category || 'fence';
     form.language.value = t.language || 'English';
     form.enabled.checked = t.enabled !== false;
     document.getElementById('termModalTitle').textContent = '编辑术语';
@@ -118,7 +125,16 @@ Router.register('/glossary', async function (container) {
             </div>
             <div class="form-group">
               <label>分类</label>
-              <input type="text" name="category" class="form-control">
+              <select name="category" class="form-control">
+                <option value="fence">Fence Products</option>
+                <option value="mesh">Wire Mesh Products</option>
+                <option value="wire">Wire Products</option>
+                <option value="material">Materials &amp; Coatings</option>
+                <option value="spec">Technical Specifications</option>
+                <option value="fitting">Fencing Components &amp; Fittings</option>
+                <option value="process">Manufacturing Processes</option>
+                <option value="standard">Standards &amp; Certifications</option>
+              </select>
             </div>
             <div class="form-group">
               <label>语言</label>
@@ -134,11 +150,15 @@ Router.register('/glossary', async function (container) {
         </div>
         <div class="modal-footer">
           <button class="btn" onclick="closeTermModal()">取消</button>
-          <button class="btn btn-primary" onclick="document.getElementById('termForm').submit()">保存</button>
+          <button class="btn btn-primary" id="termFormSubmitBtn">保存</button>
         </div>
       </div>
     </div>
   `;
+
+  document.getElementById('termFormSubmitBtn').addEventListener('click', () => {
+    document.getElementById('termForm').requestSubmit();
+  });
 
   document.getElementById('termForm').addEventListener('submit', async (e) => {
     e.preventDefault();

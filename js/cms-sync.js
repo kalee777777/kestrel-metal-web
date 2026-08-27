@@ -203,22 +203,38 @@ var CMSSync = (function () {
   function renderCaseStudies() {
     var container = document.getElementById('caseStudiesGrid');
     if (!container) return;
+    if (container.dataset.dynamic === 'true') return;
+    if (container.dataset.casesRendered) return;
+    if (container.querySelector('.casestudy-card')) return;
 
     var cases = getCollection('case_studies').filter(function (c) {
       return c.status === 'published';
     });
 
     if (cases.length === 0) return;
+    container.dataset.casesRendered = '1';
+
+    cases.sort(function (a, b) {
+      return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    });
 
     cases.forEach(function (cs) {
       if (document.querySelector('[data-case-id="' + cs.id + '"]')) return;
 
-      var cardHtml = '<a href="case-detail.html?id=' + cs.id + '" class="casestudy-card" data-case-id="' + cs.id + '" data-category="' + escapeHtml(cs.category || '') + '" data-reveal>'
+      var categoryLabels = {
+        'water': 'Water & Wastewater', 'flood': 'Flood Control', 'mining': 'Mining & Quarry',
+        'infrastructure': 'Infrastructure', 'energy': 'Energy & Power', 'agriculture': 'Agriculture',
+        'oilgas': 'Oil & Gas', 'residential': 'Residential'
+      };
+      var cat = cs.category || 'other';
+      var label = categoryLabels[cat] || cs.category || 'Case Study';
+      var url = cs.static_url || cs.detail_url || '#';
+      var cardHtml = '<a href="' + url + '" class="casestudy-card" data-case-id="' + cs.id + '" data-category="' + escapeHtml(cat) + '" data-keywords="' + escapeHtml((cs.title + ' ' + (cs.description || '')).toLowerCase()) + '" data-reveal>'
         + '<div class="casestudy-card-img">'
         + '<img src="' + escapeHtml(cs.cover_image || 'images/hero-case.jpg') + '" alt="' + escapeHtml(cs.title) + '" loading="lazy">'
         + '</div>'
         + '<div class="casestudy-card-body">'
-        + '<span class="casestudy-card-tag">' + escapeHtml(cs.category || 'Case Study') + '</span>'
+        + '<span class="casestudy-card-tag">' + escapeHtml(label) + '</span>'
         + '<h3 class="casestudy-card-title">' + escapeHtml(cs.title) + '</h3>'
         + '<div class="casestudy-card-location">' + escapeHtml(cs.location || '') + '</div>'
         + '<p class="casestudy-card-excerpt">' + escapeHtml(cs.description || '') + '</p>'
