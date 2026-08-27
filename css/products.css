@@ -28,6 +28,26 @@
   background-repeat: no-repeat;
 }
 
+.products-hero--overview .products-hero-bg {
+  background-image: url('../images/welded-mesh-panel-overview.webp');
+}
+
+.products-hero--fence .products-hero-bg {
+  background-image: url('../images/fence-security-hero.webp');
+}
+
+.products-hero--woven .products-hero-bg {
+  background-image: url('../images/hexagonal-wire.webp');
+}
+
+.products-hero--welded .products-hero-bg {
+  background-image: url('../images/welded-wire-mesh-roll-hero.webp');
+}
+
+.products-hero--wire .products-hero-bg {
+  background-image: url('../images/wire-barbed-hero.webp');
+}
+
 .products-hero-overlay {
   position: absolute;
   inset: 0;
