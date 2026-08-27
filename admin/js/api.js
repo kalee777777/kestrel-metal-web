@@ -91,7 +91,7 @@ const API = (function () {
 
   // ==================== Seed Data ====================
   function seedData() {
-    if (getStorage('seeded') && getCollection('blog_posts').length >= 36) return;
+    if (getStorage('seeded') && getCollection('blog_posts').length >= 36 && getCollection('case_studies').length >= 8) return;
 
     // Seed categories
     setCollection('product_categories', [
@@ -154,10 +154,16 @@ const API = (function () {
     ], 'slug');
 
     // Seed cases
-    setCollection('case_studies', [
-      { id: 1, title: 'Solar Farm Perimeter Security', slug: 'solar-farm-security', client: 'GreenEnergy Corp', location: 'Australia', category: 'Security Fencing', description: 'High-security fencing for a 50MW solar farm', content_md: '# Solar Farm Security Project\n\n## Background\n\nGreenEnergy Corp needed to secure their new 50MW solar farm...\n\n## Solution\n\nWe installed high-security chain link fence with concertina razor wire...\n\n## Results\n\n- 100% perimeter coverage\n- Zero security breaches in 6 months\n- Easy maintenance access', cover_image: 'images/blog/app-perimeter-security.jpg', status: 'published', created_at: new Date(Date.now() - 86400000 * 30).toISOString() },
-      { id: 2, title: 'Cattle Ranch Fencing Solution', slug: 'cattle-ranch-fencing', client: 'Outback Farms', location: 'Queensland, Australia', category: 'Agricultural Fencing', description: 'Heavy-duty fencing for a 10,000-head cattle ranch', content_md: '# Cattle Ranch Project\n\n## Project Scope\n\nOutback Farms needed to fence 500 acres for their cattle operation...\n\n## Implementation\n\nInstalled heavy-duty ringlock fencing with steel posts...', cover_image: 'images/blog/app-cattle-livestock.png', status: 'published', created_at: new Date(Date.now() - 86400000 * 45).toISOString() },
-    ]);
+    mergeCollection('case_studies', [
+      { id: 1, title: 'Solar Farm Perimeter Security', slug: 'solar-farm-security', client: 'GreenEnergy Corp', location: 'Australia', category: 'energy', description: 'High-security fencing for a 50MW solar farm', content_md: '# Solar Farm Security Project\n\n## Background\n\nGreenEnergy Corp needed to secure their new 50MW solar farm...\n\n## Solution\n\nWe installed high-security chain link fence with concertina razor wire...\n\n## Results\n\n- 100% perimeter coverage\n- Zero security breaches in 6 months\n- Easy maintenance access', cover_image: 'images/blog/industry-energy.jpg', status: 'published', static_url: 'case-study-solar-farm-perimeter-security.html', created_at: new Date(Date.now() - 86400000 * 30).toISOString() },
+      { id: 2, title: 'Cattle Ranch Fencing Solution', slug: 'cattle-ranch-fencing', client: 'Outback Farms', location: 'Queensland, Australia', category: 'agriculture', description: 'Heavy-duty fencing for a 10,000-head cattle ranch', content_md: '# Cattle Ranch Project\n\n## Project Scope\n\nOutback Farms needed to fence 500 acres for their cattle operation...\n\n## Implementation\n\nInstalled heavy-duty ringlock fencing with steel posts...', cover_image: 'images/blog/app-cattle-livestock.png', status: 'published', static_url: 'case-study-cattle-ranch-fencing.html', created_at: new Date(Date.now() - 86400000 * 45).toISOString() },
+      { id: 3, title: 'Gabion System Enhances Wastewater Treatment', slug: 'wastewater-treatment', client: 'Municipal Water Authority', location: 'Australia', category: 'water', description: 'Four freestanding gabion walls acting as submerged baffles in a wastewater treatment lagoon upgrade, providing a durable and cost-effective solution for improved treatment efficiency.', content_md: '', cover_image: 'images/case-study-wastewater-treatment.webp', status: 'published', static_url: 'case-study-wastewater-treatment.html', created_at: '2026-01-15T00:00:00.000Z' },
+      { id: 4, title: 'Gabion Embankment Strengthens Flood Defence in Roma', slug: 'flood-defence-roma', client: 'Roma Regional Council', location: 'Australia', category: 'flood', description: '162 gabion baskets and 334 rock mattresses supplied for a Stage 2 flood levee project, protecting 51 additional properties from above-floor flooding.', content_md: '', cover_image: 'images/case-flood-defence-roma-hero.webp', status: 'published', static_url: 'case-study-flood-defence-roma.html', created_at: '2026-01-10T00:00:00.000Z' },
+      { id: 5, title: 'Mining Operation Vibrating Screen Replacement', slug: 'mining-vibrating-screen', client: 'Copper Range Mining', location: 'Australia', category: 'mining', description: 'Custom-manufactured wedge wire screens and heavy-duty welded mesh panels for a copper mining operation, improving screening efficiency by 35% and extending service life.', content_md: '', cover_image: 'images/blog/welded-wire-mesh-panel.jpg', status: 'published', static_url: 'case-study-mining-vibrating-screen-replacement.html', created_at: '2026-01-05T00:00:00.000Z' },
+      { id: 6, title: 'Highway Safety Barrier Installation Project', slug: 'highway-safety-barrier', client: 'State Dept of Transport', location: 'Australia', category: 'infrastructure', description: 'Supply and installation of 3D wire panel fencing and razor wire topping for a 200km highway safety upgrade, meeting AASHTO crash test standards.', content_md: '', cover_image: 'images/blog/airport-fencing.jpg', status: 'published', static_url: 'case-study-highway-safety-barrier.html', created_at: '2025-12-20T00:00:00.000Z' },
+      { id: 7, title: 'Petrochemical Plant Security Enclosure', slug: 'petrochemical-plant-security', client: 'Pacific Refineries', location: 'Australia', category: 'oilgas', description: 'High-security fencing for a petrochemical refinery, including welded mesh panels and blast-resistant perimeter barriers meeting ISA security standards.', content_md: '', cover_image: 'images/blog/industry-oilgas.jpg', status: 'published', static_url: 'case-study-petrochemical-plant-security.html', created_at: '2025-12-10T00:00:00.000Z' },
+      { id: 8, title: 'Luxury Residential Community Fencing', slug: 'residential-community-fencing', client: 'Prestige Estates', location: 'Australia', category: 'residential', description: 'Decorative powder-coated welded mesh panels, automated gates, and landscape-integrated design for a premium 2,000+ home residential development.', content_md: '', cover_image: 'images/blog/app-residential.png', status: 'published', static_url: 'case-study-residential-community-fencing.html', created_at: '2025-11-28T00:00:00.000Z' },
+    ], 'id');
 
     // Seed FAQ
     setCollection('faqs', [
@@ -490,6 +496,7 @@ const API = (function () {
       if (id && method === 'PUT') return update('case_studies', id, body);
       if (id && method === 'DELETE') return remove('case_studies', id);
       if (id) return getById('case_studies', id);
+      if (method === 'POST') return create('case_studies', body);
       const page = parseInt(params.get('page') || '1');
       const pageSize = parseInt(params.get('pageSize') || '20');
       const search = params.get('search') || '';
