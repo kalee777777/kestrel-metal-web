@@ -1,0 +1,21 @@
+{
+  "name": "KESTREL METAL",
+  "short_name": "KESTREL",
+  "description": "Professional metal products manufacturer specializing in fence products, wire mesh and wire products.",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FF6B35",
+  "background_color": "#0a0a0a",
+  "display": "standalone",
+  "start_url": "/"
+}
