@@ -31,32 +31,40 @@
 
   var head = document.head || document.getElementsByTagName('head')[0];
 
-  // ---- GA4(修复:不再依赖 localStorage,所有访客加载) ----
-  try {
-    if (KM_ANALYTICS.ga4_measurement_id) {
-      var ga4 = document.createElement('script');
-      ga4.async = true;
-      ga4.src = 'https://www.googletagmanager.com/gtag/js?id=' + KM_ANALYTICS.ga4_measurement_id;
-      head.appendChild(ga4);
+  function loadThirdPartyAnalytics() {
+    // ---- GA4(修复:不再依赖 localStorage,所有访客加载) ----
+    try {
+      if (KM_ANALYTICS.ga4_measurement_id) {
+        var ga4 = document.createElement('script');
+        ga4.async = true;
+        ga4.src = 'https://www.googletagmanager.com/gtag/js?id=' + KM_ANALYTICS.ga4_measurement_id;
+        head.appendChild(ga4);
 
-      window.dataLayer = window.dataLayer || [];
-      var gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', KM_ANALYTICS.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
-    }
-  } catch (e) {}
+        window.dataLayer = window.dataLayer || [];
+        var gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', KM_ANALYTICS.ga4_measurement_id, { send_page_view: true, cookie_flags: 'SameSite=None;Secure' });
+      }
+    } catch (e) {}
 
-  // ---- Umami(修复:同上) ----
-  try {
-    if (KM_ANALYTICS.umami_website_id) {
-      var umamiScript = document.createElement('script');
-      umamiScript.defer = true;
-      umamiScript.src = (KM_ANALYTICS.umami_domain || 'https://cloud.umami.is') + '/script.js';
-      umamiScript.setAttribute('data-website-id', KM_ANALYTICS.umami_website_id);
-      head.appendChild(umamiScript);
-    }
-  } catch (e) {}
+    // ---- Umami(修复:同上) ----
+    try {
+      if (KM_ANALYTICS.umami_website_id) {
+        var umamiScript = document.createElement('script');
+        umamiScript.defer = true;
+        umamiScript.src = (KM_ANALYTICS.umami_domain || 'https://cloud.umami.is') + '/script.js';
+        umamiScript.setAttribute('data-website-id', KM_ANALYTICS.umami_website_id);
+        head.appendChild(umamiScript);
+      }
+    } catch (e) {}
+  }
+
+  if (window.requestIdleCallback) {
+    window.requestIdleCallback(loadThirdPartyAnalytics, { timeout: 3000 });
+  } else {
+    window.setTimeout(loadThirdPartyAnalytics, 2000);
+  }
 })();
 
 (function () {

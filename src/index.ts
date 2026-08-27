@@ -68,18 +68,28 @@ export default {
     if (url.pathname === '/admin' || url.pathname === '/admin/') {
       const adminUrl = new URL(request.url);
       adminUrl.pathname = '/admin/index.html';
-      return env.ASSETS.fetch(new Request(adminUrl, request));
+      const response = await env.ASSETS.fetch(new Request(adminUrl, request));
+      const headers = new Headers(response.headers);
+      headers.set('Cache-Control', 'no-store');
+      return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
     }
 
     if (url.pathname === '/components/navbar' || url.pathname === '/components/footer') {
       const componentUrl = new URL(request.url);
       componentUrl.pathname += '.html';
-      return env.ASSETS.fetch(new Request(componentUrl, request));
+      const response = await env.ASSETS.fetch(new Request(componentUrl, request));
+      const headers = new Headers(response.headers);
+      headers.set('Cache-Control', 'no-cache');
+      return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
     }
 
     if (url.pathname.startsWith('/api/')) {
       const response = await handleRoute(request, env);
-      if (response) return response;
+      if (response) {
+        const headers = new Headers(response.headers);
+        headers.set('Cache-Control', 'no-store');
+        return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
+      }
       return jsonResponse({ error: 'Not found' }, 404);
     }
 
@@ -100,16 +110,32 @@ export default {
       }
     }
     const contentType = response.headers.get('content-type') || '';
+    const headers = new Headers(response.headers);
+    if (url.pathname.startsWith('/api/')) {
+      headers.set('Cache-Control', 'no-store');
+      return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
+    }
+    if (response.ok && /\.(?:avif|webp|png|jpe?g|gif|svg|ico|woff2?|ttf|otf|glb|gltf)$/.test(url.pathname)) {
+      headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+      return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
+    }
+    if (/\.(?:js|css)$/.test(url.pathname)) {
+      headers.set('Cache-Control', 'public, max-age=604800, must-revalidate');
+      return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
+    }
     if (!contentType.includes('text/html')) return response;
     if (url.pathname.startsWith('/admin/') || url.pathname.startsWith('/components/')) {
-      return response;
+      headers.set('Cache-Control', 'no-cache');
+      return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
     }
 
     const html = await response.text();
     const enhanced = injectSeoTags(html, url.pathname);
+    headers.set('Cache-Control', 'public, max-age=300, must-revalidate');
     return new Response(enhanced, {
-      headers: response.headers,
+      headers,
       status: response.status,
+      statusText: response.statusText,
     });
   },
 
