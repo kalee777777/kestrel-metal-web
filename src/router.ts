@@ -324,12 +324,6 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
     return jsonResponse({ message: 'Content generation completed' });
   }
 
-  if (cronName === 'image-gen') {
-    const { default: imageGen } = await import('./cron/image-gen');
-    await imageGen(env);
-    return jsonResponse({ message: 'Image generation completed' });
-  }
-
   if (cronName === 'score') {
     const { default: score } = await import('./cron/score');
     await score(env);

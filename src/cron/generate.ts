@@ -1,16 +1,18 @@
 /**
- * Phase 05: AI 内容生成 Cron 任务
+ * Phase 05 + 06: AI 内容 + 图片生成 Cron 任务
  *
  * 每周一 04:00 UTC+8 自动执行：
  * 1. 从机会列表中选择本周选题
  * 2. 使用 DeepSeek V4 Pro 生成大纲
  * 3. 生成完整文章（2000-3000 字）
  * 4. 保存到 KV 草稿存储
+ * 5. 为草稿文章生成配图（Qwen3.8-max）
  */
 
 import type { Env } from '../index';
 import { generateFullArticle } from '../lib/deepseek';
-import { saveDraft, getRankings } from '../lib/kv';
+import { generateArticleImages } from '../lib/image-gen';
+import { saveDraft, getRankings, listKeys, getJSON, setJSON } from '../lib/kv';
 
 const MAX_ARTICLES_PER_WEEK = 2;
 
@@ -100,4 +102,61 @@ export default async function generate(env: Env): Promise<void> {
   }
 
   console.log(`[generate] Completed. Generated ${generated} articles.`);
+
+  await generateImagesForDrafts(env);
+}
+
+async function generateImagesForDrafts(env: Env): Promise<void> {
+  console.log('[generate] Starting image generation for drafts...');
+
+  const keys = await listKeys(env.CONTENT_QUEUE, 'draft:');
+
+  if (keys.length === 0) {
+    console.log('[generate] No drafts found for image generation');
+    return;
+  }
+
+  let processed = 0;
+
+  for (const key of keys) {
+    const draft = await getJSON<{
+      slug: string;
+      keyword: string;
+      status: string;
+      images?: string[];
+    }>(env.CONTENT_QUEUE, key.name);
+
+    if (!draft || draft.status !== 'queued' || (draft.images && draft.images.length > 0)) {
+      continue;
+    }
+
+    try {
+      console.log(`[generate] Generating images for: ${draft.slug}`);
+
+      const images = await generateArticleImages(
+        {
+          QWEN_API_KEY: env.QWEN_API_KEY,
+          QWEN_MODEL: env.QWEN_MODEL,
+          IMAGES: env.IMAGES,
+        },
+        draft.keyword,
+      );
+
+      await setJSON(env.CONTENT_QUEUE, key.name, {
+        ...draft,
+        status: 'image_gen',
+        images: images.map((img) => img.url),
+        imageKeys: images.map((img) => img.key),
+      });
+
+      processed++;
+      console.log(`[generate] Generated ${images.length} images for ${draft.slug}`);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } catch (err) {
+      console.error(`[generate] Failed to generate images for ${draft.slug}:`, err);
+    }
+  }
+
+  console.log(`[generate] Image generation completed. Processed ${processed} drafts.`);
 }

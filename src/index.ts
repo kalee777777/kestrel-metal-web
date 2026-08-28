@@ -164,14 +164,6 @@ export default {
           });
           break;
 
-        // 每周一 04:30 UTC+8 — AI 图片生成
-        case '30 20 * * 1':
-          await runCronTask('image-gen', env, async () => {
-            const { default: imageGen } = await import('./cron/image-gen');
-            await imageGen(env);
-          });
-          break;
-
         // 每周一 05:00 UTC+8 — SEO 评分 + 自动部署
         case '0 21 * * 1':
           await runCronTask('score', env, async () => {
@@ -189,7 +181,7 @@ export default {
           break;
 
         // 每周日 06:00 UTC+8 — 效果追踪
-        case '0 22 * * 0':
+        case '0 22 * * 7':
           await runCronTask('track', env, async () => {
             const { default: track } = await import('./cron/track');
             await track(env);

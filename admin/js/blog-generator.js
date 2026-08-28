@@ -115,7 +115,7 @@ var BlogGenerator = (function () {
   }
 
   function getImage(post) {
-    return post.cover_image || post.image || 'images/hero-blog.jpg';
+    return post.cover_image || post.image || 'images/hero-blog.webp';
   }
 
   function getMappedPosts() {
