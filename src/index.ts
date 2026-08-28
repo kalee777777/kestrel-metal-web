@@ -17,6 +17,7 @@
 import { handleRoute, jsonResponse } from './router';
 import { injectSeoTags } from './lib/seo-inject';
 import './api-blog';
+import './api-inquiries';
 
 // ─── 环境变量类型定义 ───
 export interface Env {
@@ -24,6 +25,7 @@ export interface Env {
   SEO_DATA: KVNamespace;
   CONTENT_QUEUE: KVNamespace;
   SCORE_LOG: KVNamespace;
+  INQUIRIES: KVNamespace;
 
   // R2 bucket
   IMAGES: R2Bucket;
@@ -36,6 +38,7 @@ export interface Env {
   DEEPSEEK_MODEL: string;
   QWEN_MODEL: string;
   ADMIN_TOKEN: string;
+  INQUIRY_API_KEY: string;
 
   // Secrets (configured via wrangler secret put)
   DEEPSEEK_API_KEY: string;

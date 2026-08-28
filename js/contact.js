@@ -88,6 +88,9 @@ function handleContactSubmit(e) {
     console.error('[Inquiry] Failed to save:', err);
   }
 
+  // 同步到后端存储
+  syncToBackend(inquiryData);
+
   setTimeout(function () {
     btn.textContent = '✓ Message Sent!';
     btn.style.background = '#28a745';
@@ -102,4 +105,48 @@ function handleContactSubmit(e) {
     }, 2000);
   }, 1200);
   return false;
+}
+
+function syncToBackend(inquiryData) {
+  // 从本地存储获取API密钥
+  var apiKey = localStorage.getItem('km_inquiry_api_key');
+  if (!apiKey) {
+    console.warn('[Inquiry] No API key found, skipping backend sync');
+    return;
+  }
+
+  // 构建API请求
+  var apiUrl = '/api/inquiries';
+  var requestData = {
+    name: inquiryData.name,
+    email: inquiryData.email,
+    phone: inquiryData.phone,
+    company: inquiryData.company,
+    country: inquiryData.country,
+    product_name: inquiryData.product_name,
+    quantity: inquiryData.quantity,
+    message: inquiryData.message,
+    source_page: inquiryData.source_page
+  };
+
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey
+    },
+    body: JSON.stringify(requestData)
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      throw new Error('Backend sync failed: ' + response.status);
+    }
+    return response.json();
+  })
+  .then(function(data) {
+    console.log('[Inquiry] Synced to backend successfully:', data);
+  })
+  .catch(function(err) {
+    console.error('[Inquiry] Failed to sync to backend:', err);
+  });
 }

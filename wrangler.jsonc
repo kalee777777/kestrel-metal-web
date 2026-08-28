@@ -20,6 +20,10 @@
     {
       "binding": "SCORE_LOG",
       "id": "1ca4adf676cf4afe94ccfb163ac8c692"
+    },
+    {
+      "binding": "INQUIRIES",
+      "id": "INQUIRIES_KV_ID_PLACEHOLDER"
     }
   ],
   "r2_buckets": [
