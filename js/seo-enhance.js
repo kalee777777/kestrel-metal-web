@@ -51,12 +51,16 @@
         if (pathname === '/' || pathname.indexOf('index.html') !== -1) {
             return 'website';
         }
-        if (pathname.indexOf('blog-') !== -1 && pathname.indexOf('.html') !== -1) {
+        if (pathname.indexOf('blog-') !== -1 || pathname.indexOf('case-study-') !== -1) {
             return 'article';
+        }
+        if (pathname.indexOf('download-') !== -1 || pathname.indexOf('industry-') !== -1) {
+            return 'website';
         }
         var productPatterns = [
             'fence', 'mesh', 'wire', 'panel', 'post', 'gate', 'barrier',
-            'screen', 'roll', 'netting', 'coil', 'fastener', 'tie'
+            'screen', 'roll', 'netting', 'coil', 'fastener', 'tie',
+            'chain-link', 'gabion', 'acc-', 'galvaniz', 'coated'
         ];
         var lowerPath = pathname.toLowerCase();
         for (var i = 0; i < productPatterns.length; i++) {
@@ -475,7 +479,7 @@
 
     function injectArticleSchema(title, description, pathname) {
         var dateEl = document.querySelector('time, .post-date, .article-date, [datetime]');
-        var dateStr = dateEl ? (dateEl.getAttribute('datetime') || dateEl.textContent.trim()) : '2024-01-01';
+        var dateStr = dateEl ? (dateEl.getAttribute('datetime') || dateEl.textContent.trim()) : '';
 
         var schema = {
             "@context": "https://schema.org",
@@ -495,9 +499,11 @@
                 }
             },
             "url": DOMAIN + pathname,
-            "datePublished": dateStr,
             "image": DEFAULT_IMAGE
         };
+        if (dateStr) {
+            schema.datePublished = dateStr;
+        }
         injectJsonLd(schema);
     }
 
