@@ -29,7 +29,27 @@
         document.head.appendChild(tag);
     }
 
+    function hasJsonLdType(type) {
+        var scripts = document.querySelectorAll('script[type="application/ld+json"]');
+        for (var i = 0; i < scripts.length; i++) {
+            try {
+                var data = JSON.parse(scripts[i].textContent);
+                var items = Array.isArray(data) ? data : [data];
+                for (var j = 0; j < items.length; j++) {
+                    if (items[j] && items[j]['@type'] === type) {
+                        return true;
+                    }
+                }
+            } catch (e) { }
+        }
+        return false;
+    }
+
     function injectJsonLd(data) {
+        var type = data && data['@type'];
+        if (type && hasJsonLdType(type)) {
+            return;
+        }
         var script = document.createElement('script');
         script.type = 'application/ld+json';
         script.textContent = JSON.stringify(data, null, 2);
@@ -40,9 +60,6 @@
         var path = window.location.pathname;
         if (path === '/' || path.indexOf('index.html') !== -1) {
             return '/';
-        }
-        if (path.endsWith('.html')) {
-            return path.slice(0, -5);
         }
         return path;
     }
