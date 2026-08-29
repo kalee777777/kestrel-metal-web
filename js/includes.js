@@ -8,6 +8,16 @@
     BASE = depth > 0 ? '../'.repeat(depth) : '';
   } catch (e) {}
 
+  // ─── 询盘API密钥（部署后替换PLACEHOLDER为实际密钥） ───
+  var INQUIRY_API_KEY = localStorage.getItem('km_inquiry_api_key');
+  if (!INQUIRY_API_KEY) {
+    var KEY = 'PLACEHOLDER'; // ← 明天部署完成后，在此填入实际API密钥，格式: 64位十六进制字符串
+    if (KEY !== 'PLACEHOLDER') {
+      localStorage.setItem('km_inquiry_api_key', KEY);
+      INQUIRY_API_KEY = KEY;
+    }
+  }
+
   function loadComponent(url) {
     return fetch(BASE + url, { credentials: 'same-origin', cache: 'default' })
       .then(function (r) {
