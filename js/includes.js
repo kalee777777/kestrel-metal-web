@@ -11,7 +11,7 @@
   // ─── 询盘API密钥（部署后替换PLACEHOLDER为实际密钥） ───
   var INQUIRY_API_KEY = localStorage.getItem('km_inquiry_api_key');
   if (!INQUIRY_API_KEY) {
-    var KEY = 'PLACEHOLDER'; // ← 明天部署完成后，在此填入实际API密钥，格式: 64位十六进制字符串
+    var KEY = 'c73a2621683b6456423317f522f77f98bb57273ccbbda6853cee7fa27c5a6370';
     if (KEY !== 'PLACEHOLDER') {
       localStorage.setItem('km_inquiry_api_key', KEY);
       INQUIRY_API_KEY = KEY;
