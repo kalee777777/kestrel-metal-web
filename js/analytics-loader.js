@@ -48,6 +48,55 @@
       }
     } catch (e) {}
 
+    // ---- AI Referral 事件标记（GA4 指南 §4.2）----
+    try {
+      var AI_REFERRER_HOSTS = [
+        'chatgpt.com', 'chat.openai.com', 'perplexity.ai', 'pplx.ai',
+        'claude.ai', 'copilot.microsoft.com', 'gemini.google.com',
+        'ai.meta.com', 'grok.x.ai', 'grok.com', 'you.com', 'phind.com',
+        'kagi.com', 'chat.deepseek.com', 'chat.mistral.ai'
+      ];
+
+      function matchAiHost(ref) {
+        if (!ref) return null;
+        var host;
+        try { host = new URL(ref).hostname.replace(/^www\./, ''); } catch (e) { return null; }
+        for (var i = 0; i < AI_REFERRER_HOSTS.length; i++) {
+          var h = AI_REFERRER_HOSTS[i];
+          if (host === h || host.slice(-(h.length + 1)) === '.' + h) return h;
+        }
+        return null;
+      }
+
+      var aiHost = matchAiHost(document.referrer);
+      if (aiHost) {
+        var alreadySent = null;
+        try { alreadySent = sessionStorage.getItem('km_ai_referral'); } catch (e) {}
+        if (alreadySent !== aiHost) {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'ai_referral', {
+              ai_referral_source: aiHost,
+              ai_referral_page: window.location.pathname
+            });
+            try { sessionStorage.setItem('km_ai_referral', aiHost); } catch (e) {}
+          }
+          var umamiAttempts = 0;
+          var fireUmami = function () {
+            if (window.umami && typeof window.umami.track === 'function') {
+              window.umami.track('ai_referral', {
+                ai_referral_source: aiHost,
+                ai_referral_page: window.location.pathname
+              });
+            } else if (umamiAttempts < 10) {
+              umamiAttempts++;
+              setTimeout(fireUmami, 1000);
+            }
+          };
+          fireUmami();
+        }
+      }
+    } catch (e) {}
+
     // ---- Umami(修复:同上) ----
     try {
       if (KM_ANALYTICS.umami_website_id) {
