@@ -191,7 +191,8 @@
                 { "@type": "Country", "name": "Germany" },
                 { "@type": "Country", "name": "Canada" },
                 { "@type": "Country", "name": "New Zealand" }
-            ]
+            ],
+            "sameAs": ["https://www.linkedin.com/company/kestrelmetal"]
         };
         injectJsonLd(schema);
     }
@@ -278,7 +279,8 @@
                 "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
                 "opens": "08:00",
                 "closes": "18:00"
-            }
+            },
+            "sameAs": ["https://www.linkedin.com/company/kestrelmetal"]
         };
         injectJsonLd(schema);
     }
