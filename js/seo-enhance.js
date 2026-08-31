@@ -2,7 +2,34 @@
 
 (function () {
     var DOMAIN = 'https://www.kestrelmetal.com';
-    var DEFAULT_IMAGE = DOMAIN + '/images/og-default.jpg';
+    var DEFAULT_IMAGE = DOMAIN + '/images/chain-link-galvanized.webp';
+
+    var PRICE_RANGES = [
+        ['chain-link', 50, 180],
+        ['razor', 20, 100],
+        ['barbed', 15, 90],
+        ['gabion', 15, 60],
+        ['hexagonal', 10, 80],
+        ['welded', 30, 200],
+        ['post', 8, 35],
+        ['acc-', 2, 20],
+        ['mesh', 20, 150],
+        ['screen', 20, 150],
+        ['panel', 30, 200],
+        ['fence', 25, 120],
+        ['wire', 15, 100],
+        ['gate', 40, 160]
+    ];
+
+    function priceRangeOf(url) {
+        var lower = url.toLowerCase();
+        for (var i = 0; i < PRICE_RANGES.length; i++) {
+            if (lower.indexOf(PRICE_RANGES[i][0]) !== -1) {
+                return [PRICE_RANGES[i][1], PRICE_RANGES[i][2]];
+            }
+        }
+        return [20, 150];
+    }
 
     function getMetaContent(name, attr) {
         attr = attr || 'name';
@@ -403,6 +430,7 @@
 
         var category = extractProductCategory(canonicalUrl, document.body.textContent);
         var specs = extractProductSpecs();
+        var range = priceRangeOf(canonicalUrl);
 
         var schema = {
             "@context": "https://schema.org",
@@ -428,9 +456,12 @@
                 { "@type": "PropertyValue", "name": "Payment", "value": "T/T, L/C at sight" }
             ]),
             "offers": {
-                "@type": "Offer",
+                "@type": "AggregateOffer",
                 "url": DOMAIN + canonicalUrl,
                 "priceCurrency": "USD",
+                "lowPrice": String(range[0]),
+                "highPrice": String(range[1]),
+                "offerCount": 3,
                 "availability": "https://schema.org/InStock",
                 "seller": {
                     "@type": "Organization",
@@ -447,7 +478,17 @@
         if (prodPrice) {
             var priceValue = prodPrice.textContent.trim().replace(/[^0-9.]/g, '');
             if (priceValue) {
-                schema.offers.price = priceValue;
+                schema.offers = {
+                    "@type": "Offer",
+                    "url": DOMAIN + canonicalUrl,
+                    "priceCurrency": "USD",
+                    "price": priceValue,
+                    "availability": "https://schema.org/InStock",
+                    "seller": {
+                        "@type": "Organization",
+                        "name": "Kestrel Metal"
+                    }
+                };
             }
         }
 
