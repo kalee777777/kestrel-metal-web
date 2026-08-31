@@ -487,6 +487,7 @@
                 "priceCurrency": "USD",
                 "price": String(range[0]),
                 "priceValidUntil": "2026-12-31",
+                "validFrom": "2026-01-01",
                 "availability": "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/NewCondition",
                 "shippingDetails": buildShippingDetails(),
