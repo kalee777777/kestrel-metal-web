@@ -71,10 +71,11 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 4. 上传产品图片和认证文件
 5. 确保分类标签与实际产品匹配
 
-### 2.3 LinkedIn Company Page
+### 2.3 LinkedIn Company Page ✅ 已上线
 
-**平台**: https://www.linkedin.com/company/  
-**价值**: AI 模型在回答 B2B 采购问题时经常引用 LinkedIn 公司页面
+**平台**: https://www.linkedin.com/company/kestrelmetal
+**状态**: 2026-08-30 注册完成，别名与域名一致，页面名 Kestrel Metal Products Co., Ltd.
+**详细运营方案**: [LINKEDIN_CONTENT_PLAN.md](LINKEDIN_CONTENT_PLAN.md)
 
 **操作步骤**:
 1. 登录 LinkedIn，进入 Kestrel Metal 公司页面（或创建新页面）

@@ -181,6 +181,7 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 |------|------|------|
 | [GEO_OPTIMIZATION_REPORT.md](GEO_OPTIMIZATION_REPORT.md) | 历史报告（2026-08-21） | 第一轮建设的完整实施与验证记录 |
 | [EXTERNAL_ENTITY_ALIGNMENT_GUIDE.md](EXTERNAL_ENTITY_ALIGNMENT_GUIDE.md) | 操作指南 | 站外档案创建的逐平台步骤与标准实体信息 |
+| [LINKEDIN_CONTENT_PLAN.md](LINKEDIN_CONTENT_PLAN.md) | 运营方案 | LinkedIn 页面完善清单、内容发布计划、维护节奏与 GEO 联动 |
 | [GA4_AI_REFERRAL_MONITORING_GUIDE.md](GA4_AI_REFERRAL_MONITORING_GUIDE.md) | 配置指南 | GA4 AI Referral 报告 / 仪表板 / 告警 / 受众配置 |
 | [operations-checklist.md](operations-checklist.md) | 运维清单 | 全站日常运维（含 SEO 例行项） |
 | [issue-log.md](issue-log.md) | 问题日志 | 故障与问题记录 |
