@@ -184,16 +184,70 @@
         "@type": "PropertyValue",
         "name": "Payment",
         "value": "T/T, L/C at sight"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Price Range",
+        "value": "$20-$150 (wholesale, varies by specification)"
       }
     ],
     "offers": {
-      "@type": "AggregateOffer",
+      "@type": "Offer",
       "url": "https://www.kestrelmetal.com/woven-wire-mesh.html",
       "priceCurrency": "USD",
-      "lowPrice": "20",
-      "highPrice": "150",
-      "offerCount": 3,
+      "price": "20",
+      "priceValidUntil": "2026-12-31",
       "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "1500",
+          "currency": "USD"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": [
+            "US",
+            "AU",
+            "GB",
+            "DE",
+            "CA",
+            "NZ"
+          ]
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 5,
+            "maxValue": 10,
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 20,
+            "maxValue": 35,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": [
+          "US",
+          "AU",
+          "GB",
+          "DE",
+          "CA",
+          "NZ"
+        ],
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 30,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      },
       "seller": {
         "@type": "Organization",
         "name": "Kestrel Metal"

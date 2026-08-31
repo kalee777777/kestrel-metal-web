@@ -31,6 +31,32 @@
         return [20, 150];
     }
 
+    var SHIPPING_DEST_COUNTRIES = ['US', 'AU', 'GB', 'DE', 'CA', 'NZ'];
+
+    function buildShippingDetails() {
+        return {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "1500", "currency": "USD" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": SHIPPING_DEST_COUNTRIES },
+            "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": { "@type": "QuantitativeValue", "minValue": 5, "maxValue": 10, "unitCode": "DAY" },
+                "transitTime": { "@type": "QuantitativeValue", "minValue": 20, "maxValue": 35, "unitCode": "DAY" }
+            }
+        };
+    }
+
+    function buildReturnPolicy() {
+        return {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": SHIPPING_DEST_COUNTRIES,
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 30,
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/FreeReturn"
+        };
+    }
+
     function getMetaContent(name, attr) {
         attr = attr || 'name';
         var el = document.querySelector('meta[' + attr + '="' + name + '"]');
@@ -456,13 +482,15 @@
                 { "@type": "PropertyValue", "name": "Payment", "value": "T/T, L/C at sight" }
             ]),
             "offers": {
-                "@type": "AggregateOffer",
+                "@type": "Offer",
                 "url": DOMAIN + canonicalUrl,
                 "priceCurrency": "USD",
-                "lowPrice": String(range[0]),
-                "highPrice": String(range[1]),
-                "offerCount": 3,
+                "price": String(range[0]),
+                "priceValidUntil": "2026-12-31",
                 "availability": "https://schema.org/InStock",
+                "itemCondition": "https://schema.org/NewCondition",
+                "shippingDetails": buildShippingDetails(),
+                "hasMerchantReturnPolicy": buildReturnPolicy(),
                 "seller": {
                     "@type": "Organization",
                     "name": "Kestrel Metal"
@@ -478,17 +506,7 @@
         if (prodPrice) {
             var priceValue = prodPrice.textContent.trim().replace(/[^0-9.]/g, '');
             if (priceValue) {
-                schema.offers = {
-                    "@type": "Offer",
-                    "url": DOMAIN + canonicalUrl,
-                    "priceCurrency": "USD",
-                    "price": priceValue,
-                    "availability": "https://schema.org/InStock",
-                    "seller": {
-                        "@type": "Organization",
-                        "name": "Kestrel Metal"
-                    }
-                };
+                schema.offers.price = priceValue;
             }
         }
 
