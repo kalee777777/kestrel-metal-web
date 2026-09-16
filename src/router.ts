@@ -362,6 +362,53 @@ route('GET', '/api/seo/indexnow', async ({ env }) => {
   return jsonResponse({ last_submit: lastSubmit ?? null });
 });
 
+// GSC 重新授权：生成 Google 授权链接（需 ADMIN_TOKEN）
+route('GET', '/api/gsc/auth', async ({ env, request, url }) => {
+  if (request.headers.get('Authorization') !== `Bearer ${env.ADMIN_TOKEN}`) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  if (!env.GOOGLE_CLIENT_ID) {
+    return jsonResponse({ error: 'GOOGLE_CLIENT_ID not configured' }, 500);
+  }
+  const redirectUri = `${url.origin}/api/gsc/callback`;
+  const { buildGscAuthUrl } = await import('./lib/gsc');
+  return jsonResponse({
+    authorization_url: buildGscAuthUrl(env.GOOGLE_CLIENT_ID, redirectUri),
+    redirect_uri: redirectUri,
+    note: 'Add redirect_uri to Google Cloud Console → Credentials → Authorized redirect URIs if not yet registered',
+  });
+});
+
+// GSC OAuth 回调：code 换 refresh_token 并写入 KV（Google 浏览器跳转，无法带认证头）
+route('GET', '/api/gsc/callback', async ({ env, url }) => {
+  const code = url.searchParams.get('code');
+  const error = url.searchParams.get('error');
+  const redirectUri = `${url.origin}/api/gsc/callback`;
+
+  const render = (ok: boolean, message: string) => new Response(
+    `<!DOCTYPE html><html><head><meta charset="utf-8"><title>GSC Authorization</title></head>` +
+    `<body style="font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0a0a0a;color:#f0f0f0">` +
+    `<div style="text-align:center;max-width:520px;padding:32px"><h2 style="color:${ok ? '#4ade80' : '#f87171'}">${ok ? '✅ 授权成功' : '❌ 授权失败'}</h2>` +
+    `<p style="color:#999;line-height:1.6">${message}</p>` +
+    `<p style="color:#666;font-size:13px">可关闭此页面，回到 Admin 后台点击「刷新数据」。</p></div></body></html>`,
+    { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } },
+  );
+
+  if (error) {
+    return render(false, `Google 返回错误：${error}`);
+  }
+  if (!code) {
+    return render(false, '缺少授权码参数（code）');
+  }
+
+  const { exchangeGscCode } = await import('./lib/gsc');
+  const result = await exchangeGscCode(env, code, redirectUri);
+  if (!result.ok) {
+    return render(false, result.error ?? 'Unknown error');
+  }
+  return render(true, 'refresh_token 已保存，GSC 数据同步已恢复。每日 03:00 将自动同步关键词数据。');
+});
+
 // 手动触发 Cron 任务（需简单认证）
 route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   const auth = request.headers.get('Authorization');

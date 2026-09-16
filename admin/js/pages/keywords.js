@@ -1,6 +1,5 @@
 Router.register('/keywords', async function (container) {
   let date = new Date().toISOString().split('T')[0];
-  let analysisData = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>'"]/g, char => ({
@@ -30,27 +29,67 @@ Router.register('/keywords', async function (container) {
     return 'color:#6b7280';
   }
 
+  async function reauthorizeGsc() {
+    let token = sessionStorage.getItem('km_worker_token') || '';
+    if (!token) {
+      token = prompt('请输入 Worker 管理令牌（ADMIN_TOKEN）以发起 GSC 重新授权：') || '';
+      if (token) sessionStorage.setItem('km_worker_token', token);
+    }
+    if (!token) return;
+    try {
+      const resp = await fetch('/api/gsc/auth', { headers: { Authorization: 'Bearer ' + token } });
+      if (resp.status === 401) {
+        sessionStorage.removeItem('km_worker_token');
+        API.toast('管理令牌无效', 'error');
+        return;
+      }
+      const data = await resp.json();
+      if (data.authorization_url) {
+        window.open(data.authorization_url, '_blank');
+        API.toast('请在打开的 Google 页面完成授权，然后回到这里刷新数据', 'info');
+      } else {
+        API.toast(data.error || '获取授权链接失败', 'error');
+      }
+    } catch (err) {
+      API.toast('请求失败: ' + err.message, 'error');
+    }
+  }
+
+  window.reauthorizeGsc = reauthorizeGsc;
+
   async function load() {
     const [rankingResponse, analysisResponse, statusResponse] = await Promise.all([
       fetch(`/api/keywords/rankings?date=${encodeURIComponent(date)}`),
       fetch('/api/keywords/analysis'),
       fetch('/api/gsc/status')
     ]);
-    
+
     if (!rankingResponse.ok) throw new Error('关键词数据加载失败');
     const rankingData = await rankingResponse.json();
     const analysisJson = analysisResponse.ok ? await analysisResponse.json() : null;
     const statusData = statusResponse.ok ? await statusResponse.json() : {};
-    
-    analysisData = analysisJson;
+
     const rows = rankingData.rankings || [];
     const stats = analysisJson?.stats || { total: 0, top10: 0, top20: 0, rising: 0, falling: 0 };
-    
+
     const totalClicks = rows.reduce((sum, row) => sum + Number(row.clicks || 0), 0);
     const totalImpressions = rows.reduce((sum, row) => sum + Number(row.impressions || 0), 0);
     const averagePosition = rows.length ? rows.reduce((sum, row) => sum + Number(row.position || 0), 0) / rows.length : 0;
 
+    const authErrorBanner = !statusData.ok ? `
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-left:4px solid #ef4444;border-radius:8px;padding:14px 18px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div>
+            <strong style="color:#b91c1c">⚠ GSC 授权已失效，关键词数据已停止更新</strong>
+            <p style="color:#7f1d1d;font-size:13px;margin:4px 0 0">${escapeHtml(statusData.error || '未知错误')}</p>
+            <p style="color:#991b1b;font-size:12px;margin:4px 0 0">最近成功同步：${escapeHtml(statusData.lastSync || '无')}</p>
+          </div>
+          <button class="btn btn-primary" onclick="reauthorizeGsc()">重新授权 Google 账号</button>
+        </div>
+      </div>` : '';
+
     container.innerHTML = `
+      ${authErrorBanner}
       <div class="page-header">
         <div><h1>关键词监控</h1><p class="text-muted">Google Search Console · ${escapeHtml(date)}</p></div>
         <div class="btn-group"><input id="keywordDate" type="date" value="${escapeHtml(date)}"><button class="btn btn-primary" id="refreshKeywords">刷新数据</button></div>

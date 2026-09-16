@@ -34,7 +34,80 @@ export interface GscEnv {
 
 const GSC_API_BASE = 'https://www.googleapis.com/webmasters/v3';
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
+const AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
 const TOKEN_CACHE_KEY = 'gsc:access_token';
+const REFRESH_TOKEN_KV_KEY = 'gsc:refresh_token';
+export const GSC_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly';
+
+/**
+ * 获取 refresh_token：KV（重新授权后写入）优先，回退到 Secret
+ */
+async function getRefreshToken(env: GscEnv): Promise<string> {
+  const kvToken = await env.SEO_DATA.get(REFRESH_TOKEN_KV_KEY);
+  if (kvToken) return kvToken;
+  return env.GSC_REFRESH_TOKEN;
+}
+
+/**
+ * 生成 Google OAuth 授权 URL
+ * redirect_uri 必须与 Google Cloud Console 中注册的完全一致
+ */
+export function buildGscAuthUrl(clientId: string, redirectUri: string): string {
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: 'code',
+    scope: GSC_SCOPE,
+    access_type: 'offline',
+    prompt: 'consent',
+    include_granted_scopes: 'true',
+  });
+  return `${AUTH_URL}?${params.toString()}`;
+}
+
+/**
+ * 用授权码换取 token，并将 refresh_token 持久化到 KV
+ */
+export async function exchangeGscCode(
+  env: GscEnv,
+  code: string,
+  redirectUri: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const body = new URLSearchParams({
+    client_id: env.GOOGLE_CLIENT_ID,
+    client_secret: env.GOOGLE_CLIENT_SECRET,
+    code,
+    redirect_uri: redirectUri,
+    grant_type: 'authorization_code',
+  });
+
+  const resp = await fetch(TOKEN_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+
+  if (!resp.ok) {
+    const errText = await resp.text();
+    return { ok: false, error: `code exchange failed (${resp.status}): ${errText}` };
+  }
+
+  const data = (await resp.json()) as { refresh_token?: string; access_token: string; expires_in: number };
+
+  if (!data.refresh_token) {
+    return { ok: false, error: 'Google did not return a refresh_token (missing access_type=offline)' };
+  }
+
+  await env.SEO_DATA.put(REFRESH_TOKEN_KV_KEY, data.refresh_token);
+  await env.SEO_DATA.put(
+    TOKEN_CACHE_KEY,
+    JSON.stringify({ access_token: data.access_token, expires_at: Date.now() + data.expires_in * 1000 }),
+    { expirationTtl: Math.floor(data.expires_in / 2) },
+  );
+  await env.SEO_DATA.put('gsc:reauthorized_at', new Date().toISOString());
+
+  return { ok: true };
+}
 
 /**
  * 获取有效的 access_token
@@ -53,10 +126,12 @@ async function getAccessToken(env: GscEnv): Promise<string> {
     }
   }
 
+  const refreshToken = await getRefreshToken(env);
+
   const body = new URLSearchParams({
     client_id: env.GOOGLE_CLIENT_ID,
     client_secret: env.GOOGLE_CLIENT_SECRET,
-    refresh_token: env.GSC_REFRESH_TOKEN,
+    refresh_token: refreshToken,
     grant_type: 'refresh_token',
   });
 
