@@ -1,7 +1,46 @@
 Router.register('/seo', async function (container) {
   let metas = [];
+  let liveMode = false;
+
+  function getWorkerToken() {
+    return sessionStorage.getItem('km_worker_token') || '';
+  }
+
+  function ensureWorkerToken() {
+    let token = getWorkerToken();
+    if (!token) {
+      token = prompt('请输入 Worker 管理令牌（ADMIN_TOKEN）以启用线上写入：') || '';
+      if (token) sessionStorage.setItem('km_worker_token', token);
+    }
+    return token;
+  }
+
+  async function liveFetch(path, options = {}) {
+    const token = getWorkerToken();
+    if (token) {
+      options.headers = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token, ...(options.headers || {}) };
+    }
+    const resp = await fetch(path, options);
+    if (resp.status === 401) {
+      sessionStorage.removeItem('km_worker_token');
+      throw new Error('管理令牌无效或已过期');
+    }
+    if (!resp.ok) throw new Error('API 错误 ' + resp.status);
+    return resp.json();
+  }
 
   async function loadMetas() {
+    // 优先连接同源 Worker 真实 API，失败则回退本地模拟数据
+    try {
+      const resp = await fetch('/api/seo');
+      if (resp.ok) {
+        metas = await resp.json();
+        liveMode = true;
+        renderTable();
+        return;
+      }
+    } catch { /* 同源 API 不可用（本地静态预览），回退 */ }
+    liveMode = false;
     try {
       metas = await API.get('/api/seo');
       renderTable();
@@ -11,6 +50,10 @@ Router.register('/seo', async function (container) {
   }
 
   function renderTable() {
+    const modeBadge = liveMode
+      ? '<span class="badge badge-success" title="数据来自线上 Worker KV，修改后立即对全站生效">线上模式</span>'
+      : '<span class="badge badge-warning" title="数据为浏览器本地模拟，与线上无关">本地模拟</span>';
+    document.getElementById('seoModeBadge').innerHTML = modeBadge;
     const tbody = document.getElementById('seoTableBody');
     tbody.innerHTML = metas.map(m => `
       <tr>
@@ -50,7 +93,12 @@ Router.register('/seo', async function (container) {
   window.deleteMeta = async (id) => {
     if (!confirm('确定要删除这个 SEO 设置吗？')) return;
     try {
-      await API.delete(`/api/seo/${id}`);
+      if (liveMode) {
+        ensureWorkerToken();
+        await liveFetch('/api/seo/' + id, { method: 'DELETE' });
+      } else {
+        await API.delete(`/api/seo/${id}`);
+      }
       API.toast('SEO 删除成功', 'success');
       await loadMetas();
     } catch (err) {
@@ -71,8 +119,13 @@ Router.register('/seo', async function (container) {
 
   window.generateSitemap = async () => {
     try {
-      const res = await API.get('/api/seo/generate/sitemap');
-      API.toast('Sitemap 生成成功，共 ' + res.file_count + ' 个页面', 'success');
+      if (liveMode) {
+        const res = await liveFetch('/api/seo/generate/sitemap');
+        API.toast(`Sitemap 动态生成：共 ${res.file_count} 个 URL（静态 ${res.static_count} + 自动发布 ${res.dynamic_count}）`, 'success');
+      } else {
+        const res = await API.get('/api/seo/generate/sitemap');
+        API.toast('Sitemap 生成成功，共 ' + res.file_count + ' 个页面（本地模拟）', 'success');
+      }
     } catch (err) {
       API.toast('生成失败: ' + err.message, 'error');
     }
@@ -80,7 +133,7 @@ Router.register('/seo', async function (container) {
 
   container.innerHTML = `
     <div class="page-header">
-      <h1>SEO 管理</h1>
+      <h1>SEO 管理 <span id="seoModeBadge" style="font-size: 12px; vertical-align: middle;"></span></h1>
       <div>
         <button class="btn btn-primary" onclick="openAddMeta()">+ 新增 SEO 设置</button>
         <button class="btn" onclick="generateSitemap()">生成 Sitemap</button>
@@ -122,8 +175,15 @@ Router.register('/seo', async function (container) {
     const id = data.id;
     delete data.id;
     try {
-      if (id) await API.put(`/api/seo/${id}`, data);
-      else await API.post('/api/seo', data);
+      if (liveMode) {
+        ensureWorkerToken();
+        if (id) await liveFetch('/api/seo/' + id, { method: 'PUT', body: JSON.stringify(data) });
+        else await liveFetch('/api/seo', { method: 'POST', body: JSON.stringify(data) });
+      } else if (id) {
+        await API.put(`/api/seo/${id}`, data);
+      } else {
+        await API.post('/api/seo', data);
+      }
       API.toast(id ? 'SEO 更新成功' : 'SEO 创建成功', 'success');
       closeSeoModal();
       await loadMetas();

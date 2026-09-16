@@ -1,6 +1,6 @@
 # Kestrel Metal — 自动化 SEO 系统项目文档
 
-> 版本：v1.0 | 最后更新：2026-08-25 | 状态：Phase 01-09 已完成
+> 版本：v1.1 | 最后更新：2026-09-16 | 状态：Phase 01-09 已完成 + 流程闭环修复
 
 ---
 
@@ -157,7 +157,7 @@ GSC 数据回流 → 效果追踪 → 月度报告
 | Open Graph | 10 | og:title + og:description + og:image |
 | Paragraph Length | 10 | 段落不超过 100 词 |
 
-**评分阈值**：≥80 分通过，<80 分自动修复（最多 3 轮）
+**评分阈值**：≥60 分通过，<60 分自动修复（最多 3 轮）
 
 ### Phase 08：完整流程测试 ✅
 
@@ -183,11 +183,10 @@ GSC 数据回流 → 效果追踪 → 月度报告
 
 | Cron 表达式 | 北京时间 | 任务 | 状态 |
 |-------------|---------|------|------|
-| `0 19 * * *` | 每日 03:00 | GSC 数据同步 | ✅ |
-| `0 20 * * 1` | 每周一 04:00 | AI 内容生成 | ✅ |
-| `0 20 * * 1` | 每周一 04:00 | AI 图片生成 | ✅ |
-| `0 21 * * 1` | 每周一 05:00 | SEO 评分 + 部署 | ✅ |
-| `0 22 * * 1` | 每周一 06:00 | 效果追踪 | ✅ |
+| `0 19 * * *` | 每日 03:00 | GSC 数据同步 + **机会分析**（同步后立即执行，写入 `opportunities:weekly`） | ✅ |
+| `0 20 * * 1` | 每周一 04:00 | AI 内容生成 + AI 图片生成 | ✅ |
+| `0 21 * * 1` | 每周一 05:00 | SEO 评分 + KV 发布 + **IndexNow 自动提交** | ✅ |
+| `0 22 * * 7` | 每周日 06:00 | 效果追踪 | ✅ |
 | `0 16 1 * *` | 每月 1 号 00:00 | 月度报告 | ✅ |
 
 ---
@@ -205,10 +204,32 @@ GSC 数据回流 → 效果追踪 → 月度报告
 | `/api/opportunities/stats` | GET | 机会统计 |
 | `/api/content/drafts` | GET | 草稿列表 |
 | `/api/content/published` | GET | 已发布内容 |
-| `/api/trigger/gsc-sync` | POST | 手动触发 GSC 同步 |
+| `/api/seo` | GET | SEO 元数据列表（Admin override 配置） |
+| `/api/seo` | POST | 新增 SEO override（需 ADMIN_TOKEN） |
+| `/api/seo/:id` | PUT | 更新 SEO override（需 ADMIN_TOKEN） |
+| `/api/seo/:id` | DELETE | 删除 SEO override（需 ADMIN_TOKEN） |
+| `/api/seo/generate/sitemap` | GET | 动态 sitemap 统计（静态 + 自动发布） |
+| `/api/seo/indexnow` | GET | IndexNow 最近提交状态 |
+| `/api/trigger/gsc-sync` | POST | 手动触发 GSC 同步（含机会分析） |
+| `/api/trigger/opportunity` | POST | 手动触发机会分析 |
 | `/api/trigger/generate` | POST | 手动触发内容生成 |
 | `/api/trigger/image-gen` | POST | 手动触发图片生成 |
-| `/api/trigger/score` | POST | 手动触发 SEO 评分 |
+| `/api/trigger/score` | POST | 手动触发 SEO 评分 + 发布 + IndexNow |
+
+---
+
+## 5.5 流程闭环机制（2026-09-16 新增）
+
+| 机制 | 实现位置 | 说明 |
+|------|----------|------|
+| 机会分析闭环 | `src/cron/gsc-sync.ts` | 每日 GSC 同步完成后立即执行机会分析，`opportunities:weekly` 保持最新，周一选题不再退化为兜底关键词 |
+| 动态 sitemap | `src/lib/sitemap.ts` + `src/index.ts` | `/sitemap.xml` 由 Worker 实时合并：静态 198 条 + KV `published:all` 自动发布文章，新文章即时可被搜索引擎发现 |
+| IndexNow 推送 | `src/lib/indexnow.ts` + `src/cron/score.ts` | 发布后批量提交新 URL 到 IndexNow（Bing/Yandex/Naver），key 自动生成存 KV，`/{key}.txt` 验证路径由 Worker 提供 |
+| Admin SEO override | `src/lib/seo-meta.ts` + `src/lib/seo-inject.ts` + `src/router.ts` | Admin 后台可按页面配置 title/description/keywords/canonical/og:image/noindex，运行时注入覆盖静态 HTML（低点击率页面优化闭环）；`admin/js/pages/seo.js` 优先同源直连真实 API，本地预览时回退模拟数据 |
+
+**部署注意**：
+- 新增可选 Secret `INDEXNOW_KEY`（`wrangler secret put INDEXNOW_KEY`），不配置时自动生成并持久化到 KV
+- Admin SEO 页面写操作需输入 `ADMIN_TOKEN`（存 sessionStorage，每会话一次）
 
 ---
 

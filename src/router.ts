@@ -180,27 +180,6 @@ route('GET', '/api/content/published', async ({ env }) => {
   return jsonResponse({ published: published ?? [] });
 });
 
-// 关键词排名（最新）
-route('GET', '/api/keywords/rankings', async ({ env, url }) => {
-  const date = url.searchParams.get('date');
-  const todayStr = date ?? new Date().toISOString().split('T')[0];
-  const { getRankings } = await import('./lib/kv');
-  const rankings = await getRankings(env.SEO_DATA, todayStr);
-  return jsonResponse({ date: todayStr, rankings: rankings ?? [] });
-});
-
-// 关键词趋势（多日）
-route('GET', '/api/keywords/trend', async ({ env, url }) => {
-  const keyword = url.searchParams.get('keyword');
-  if (!keyword) {
-    return jsonResponse({ error: 'Missing keyword parameter' }, 400);
-  }
-  const days = parseInt(url.searchParams.get('days') ?? '30', 10);
-  const { getKeywordTrend } = await import('./lib/kv');
-  const trend = await getKeywordTrend(env.SEO_DATA, keyword, days);
-  return jsonResponse({ keyword, days, trend });
-});
-
 // 关键词排名（按日期范围查询，支持多日数据对比）
 route('GET', '/api/keywords/rankings/range', async ({ env, url }) => {
   const startDate = url.searchParams.get('start');
@@ -304,6 +283,85 @@ route('GET', '/api/gsc/status', async ({ env }) => {
   }
 });
 
+// ─── SEO 元数据管理（Admin 后台） ───
+
+function isAdminAuthorized(request: Request, env: Env): boolean {
+  return request.headers.get('Authorization') === `Bearer ${env.ADMIN_TOKEN}`;
+}
+
+// 列表（meta 数据为公开页面信息，允许匿名读取）
+route('GET', '/api/seo', async ({ env }) => {
+  const { listSeoMetas } = await import('./lib/seo-meta');
+  const metas = await listSeoMetas(env);
+  return jsonResponse(metas);
+});
+
+// 新增
+route('POST', '/api/seo', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<Partial<import('./lib/seo-meta').SeoMetaRecord>>().catch(() => null);
+  if (!body || !body.page_url) {
+    return jsonResponse({ error: 'page_url is required' }, 400);
+  }
+  const { createSeoMeta } = await import('./lib/seo-meta');
+  const record = await createSeoMeta(env, body);
+  if (!record) {
+    return jsonResponse({ error: 'Record already exists for this page' }, 409);
+  }
+  return jsonResponse(record, 201);
+});
+
+// 更新
+route('PUT', '/api/seo/:id', async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<Partial<import('./lib/seo-meta').SeoMetaRecord>>().catch(() => null);
+  if (!body) {
+    return jsonResponse({ error: 'Invalid JSON body' }, 400);
+  }
+  const { updateSeoMeta } = await import('./lib/seo-meta');
+  const record = await updateSeoMeta(env, Number(params.id), body);
+  if (!record) {
+    return jsonResponse({ error: 'Not found' }, 404);
+  }
+  return jsonResponse(record);
+});
+
+// 删除
+route('DELETE', '/api/seo/:id', async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { deleteSeoMeta } = await import('./lib/seo-meta');
+  const ok = await deleteSeoMeta(env, Number(params.id));
+  if (!ok) {
+    return jsonResponse({ error: 'Not found' }, 404);
+  }
+  return jsonResponse({ message: 'Deleted' });
+});
+
+// Sitemap 生成（动态合并：静态 URL + KV 自动发布文章）
+route('GET', '/api/seo/generate/sitemap', async ({ env }) => {
+  const { buildSitemap } = await import('./lib/sitemap');
+  const sitemap = await buildSitemap(env);
+  return jsonResponse({
+    file_count: sitemap.urlCount,
+    static_count: sitemap.urlCount - sitemap.dynamicCount,
+    dynamic_count: sitemap.dynamicCount,
+    note: 'sitemap.xml is served dynamically, always up to date',
+  });
+});
+
+// IndexNow 状态查询
+route('GET', '/api/seo/indexnow', async ({ env }) => {
+  const { getJSON } = await import('./lib/kv');
+  const lastSubmit = await getJSON(env.SEO_DATA, 'indexnow:last_submit');
+  return jsonResponse({ last_submit: lastSubmit ?? null });
+});
+
 // 手动触发 Cron 任务（需简单认证）
 route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   const auth = request.headers.get('Authorization');
@@ -315,7 +373,13 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   if (cronName === 'gsc-sync') {
     const { default: gscSync } = await import('./cron/gsc-sync');
     await gscSync(env);
-    return jsonResponse({ message: 'GSC sync completed', siteUrl: env.GSC_SITE_URL });
+    return jsonResponse({ message: 'GSC sync completed (opportunity analysis included)', siteUrl: env.GSC_SITE_URL });
+  }
+
+  if (cronName === 'opportunity') {
+    const { default: opportunityCron } = await import('./cron/opportunity');
+    await opportunityCron(env);
+    return jsonResponse({ message: 'Opportunity analysis completed' });
   }
 
   if (cronName === 'generate') {

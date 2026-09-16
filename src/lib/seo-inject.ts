@@ -1,3 +1,6 @@
+import type { Env } from '../index';
+import { listSeoMetas, findSeoMeta, type SeoMetaRecord } from './seo-meta';
+
 const DOMAIN = 'https://www.kestrelmetal.com';
 const DEFAULT_IMAGE = `${DOMAIN}/images/og-default.jpg`;
 
@@ -268,11 +271,114 @@ function buildSeoHead(meta: SeoMeta): string {
   return lines.join('\n');
 }
 
-export function injectSeoTags(html: string, pathname: string): string {
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function replaceMetaTag(html: string, name: string, content: string): string {
+  const pattern = new RegExp(
+    `<meta\\s+(?:name=["']${name}["']\\s+content=["'][^"']*["']|content=["'][^"']*["']\\s+name=["']${name}["'])\\s*/?>`,
+    'i',
+  );
+  const tag = `<meta name="${name}" content="${escapeAttr(content)}">`;
+  if (pattern.test(html)) {
+    return html.replace(pattern, tag);
+  }
+  const headClose = html.indexOf('</head>');
+  if (headClose === -1) return html;
+  return html.slice(0, headClose) + `    ${tag}\n` + html.slice(headClose);
+}
+
+function replacePropertyTag(html: string, prop: string, content: string): string {
+  const pattern = new RegExp(
+    `<meta\\s+(?:property=["']${prop}["']\\s+content=["'][^"']*["']|content=["'][^"']*["']\\s+property=["']${prop}["'])\\s*/?>`,
+    'i',
+  );
+  const tag = `<meta property="${prop}" content="${escapeAttr(content)}">`;
+  if (pattern.test(html)) {
+    return html.replace(pattern, tag);
+  }
+  const headClose = html.indexOf('</head>');
+  if (headClose === -1) return html;
+  return html.slice(0, headClose) + `    ${tag}\n` + html.slice(headClose);
+}
+
+function replaceCanonical(html: string, href: string): string {
+  const pattern = /<link\s+rel=["']canonical["']\s+href=["'][^"']*["']\s*\/?>/i;
+  const tag = `<link rel="canonical" href="${escapeAttr(href)}">`;
+  if (pattern.test(html)) {
+    return html.replace(pattern, tag);
+  }
+  const headClose = html.indexOf('</head>');
+  if (headClose === -1) return html;
+  return html.slice(0, headClose) + `    ${tag}\n` + html.slice(headClose);
+}
+
+function replaceTitle(html: string, title: string): string {
+  const pattern = /<title[^>]*>[\s\S]*?<\/title>/i;
+  const tag = `<title>${title.replace(/</g, '&lt;')}</title>`;
+  if (pattern.test(html)) {
+    return html.replace(pattern, tag);
+  }
+  const headClose = html.indexOf('</head>');
+  if (headClose === -1) return html;
+  return html.slice(0, headClose) + `    ${tag}\n` + html.slice(headClose);
+}
+
+/** 应用 Admin 后台配置的页面级 SEO override */
+function applyOverride(html: string, override: SeoMetaRecord): string {
+  let result = html;
+
+  if (override.meta_title) {
+    result = replaceTitle(result, override.meta_title);
+    result = replacePropertyTag(result, 'og:title', override.meta_title);
+  }
+  if (override.meta_description) {
+    result = replaceMetaTag(result, 'description', override.meta_description);
+    result = replacePropertyTag(result, 'og:description', override.meta_description);
+  }
+  if (override.meta_keywords) {
+    result = replaceMetaTag(result, 'keywords', override.meta_keywords);
+  }
+  if (override.canonical_url) {
+    result = replaceCanonical(result, override.canonical_url);
+  }
+  if (override.og_image) {
+    result = replacePropertyTag(result, 'og:image', override.og_image);
+  }
+  if (override.noindex) {
+    result = replaceMetaTag(result, 'robots', 'noindex, follow');
+  }
+
+  return result;
+}
+
+export async function injectSeoTags(
+  html: string,
+  pathname: string,
+  env?: Env,
+): Promise<string> {
   const resolvedPath = resolvePathname(pathname);
   if (!resolvedPath.endsWith('.html') && resolvedPath !== '/') return html;
   if (resolvedPath.startsWith('/admin/')) return html;
   if (resolvedPath.startsWith('/blog.html')) return html;
+
+  // Admin 后台配置的 override 优先级最高，且不受"已有 canonical 跳过"限制
+  if (env) {
+    try {
+      const metas = await listSeoMetas(env);
+      const override = findSeoMeta(metas, resolvedPath);
+      if (override) {
+        return applyOverride(html, override);
+      }
+    } catch {
+      // KV 读取失败时回退到默认注入逻辑
+    }
+  }
 
   const meta = extractSeoMeta(html, resolvedPath);
   if (!meta) return html;

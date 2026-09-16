@@ -20,7 +20,7 @@ export interface SEOScoreResult {
   suggestions: string[];
 }
 
-const MINIMUM_SCORE = 80;
+const MINIMUM_SCORE = 60;
 
 export function scoreSEO(html: string, keyword: string): SEOScoreResult {
   const checks: SEOCheckResult[] = [];

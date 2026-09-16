@@ -1,10 +1,10 @@
 /**
  * Phase 06: AI 图片生成管线
  *
- * 使用 Qwen3.8-max 模型生成产品图片
+ * 使用阿里云 DashScope 万相 wanx-v1 文生图 API
  * 功能：
- * - 生成 Hero 大图（1280×720px）
- * - 生成内容配图（800×600px ×2-4 张）
+ * - 生成 Hero 大图（1024×1024px）
+ * - 生成内容配图（1024×1024px ×2 张）
  * - 上传到 R2 存储
  * - 返回图片 URL
  */
@@ -21,6 +21,7 @@ export interface ImageRequest {
   style?: 'industrial' | 'product' | 'scene' | 'detail';
   width?: number;
   height?: number;
+  keyOverride?: string;
 }
 
 export interface GeneratedImage {
@@ -31,7 +32,88 @@ export interface GeneratedImage {
   type: 'hero' | 'content' | 'thumbnail';
 }
 
-const QWEN_API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+const DASHSCOPE_API_URL = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis';
+const DASHSCOPE_TASK_URL = 'https://dashscope.aliyuncs.com/api/v1/tasks';
+
+const POLL_INTERVAL_MS = 5000;
+const MAX_POLL_ATTEMPTS = 30; // 最多等 150 秒
+
+async function submitImageTask(
+  apiKey: string,
+  prompt: string,
+  size: string,
+): Promise<string> {
+  const resp = await fetch(DASHSCOPE_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+      'X-DashScope-Async': 'enable',
+    },
+    body: JSON.stringify({
+      model: 'wanx-v1',
+      input: { prompt },
+      parameters: {
+        style: '<photography>',
+        size,
+        n: 1,
+      },
+    }),
+  });
+
+  if (!resp.ok) {
+    const errText = await resp.text();
+    throw new Error(`DashScope submit error (${resp.status}): ${errText}`);
+  }
+
+  const data = (await resp.json()) as { output: { task_id: string } };
+  const taskId = data.output?.task_id;
+  if (!taskId) throw new Error('No task_id in response');
+  return taskId;
+}
+
+async function pollTaskResult(
+  apiKey: string,
+  taskId: string,
+): Promise<string[]> {
+  for (let i = 0; i < MAX_POLL_ATTEMPTS; i++) {
+    await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+
+    const resp = await fetch(`${DASHSCOPE_TASK_URL}/${taskId}`, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`DashScope poll error (${resp.status}): ${errText}`);
+    }
+
+    const data = (await resp.json()) as {
+      output: {
+        task_status: string;
+        results?: Array<{ url: string }>;
+        message?: string;
+      };
+    };
+
+    const status = data.output.task_status;
+    console.log(`[image-gen] Task ${taskId}: ${status} (attempt ${i + 1})`);
+
+    if (status === 'SUCCEEDED') {
+      const urls = data.output.results?.map((r) => r.url) ?? [];
+      if (urls.length === 0) throw new Error('Task succeeded but no image URLs returned');
+      return urls;
+    }
+
+    if (status === 'FAILED') {
+      throw new Error(`Task failed: ${data.output.message ?? 'unknown error'}`);
+    }
+
+    // PENDING / RUNNING: continue polling
+  }
+
+  throw new Error(`Task ${taskId} timed out after ${MAX_POLL_ATTEMPTS} polls`);
+}
 
 async function generateSingleImage(
   env: ImageGenEnv,
@@ -42,72 +124,29 @@ async function generateSingleImage(
     return {
       key: `placeholders/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`,
       url: '/images/placeholder.jpg',
-      width: request.width ?? 1280,
-      height: request.height ?? 720,
+      width: request.width ?? 1024,
+      height: request.height ?? 1024,
       type: 'hero',
     };
   }
 
   const prompt = buildPrompt(request);
+  const size = '1024*1024';
 
-  const resp = await fetch(QWEN_API_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.QWEN_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: env.QWEN_MODEL || 'qwen3.8-max',
-      messages: [
-        {
-          role: 'user',
-          content: `Generate a professional industrial product image. Requirements: ${prompt}. Output format: High quality JPEG, ${request.width ?? 1280}x${request.height ?? 720} pixels.`,
-        },
-      ],
-      stream: false,
-    }),
-  });
+  console.log(`[image-gen] Submitting task for: ${request.keyword}`);
+  const taskId = await submitImageTask(env.QWEN_API_KEY, prompt, size);
 
-  if (!resp.ok) {
-    const errText = await resp.text();
-    throw new Error(`Qwen API error (${resp.status}): ${errText}`);
-  }
+  console.log(`[image-gen] Polling task ${taskId}...`);
+  const imageUrls = await pollTaskResult(env.QWEN_API_KEY, taskId);
 
-  const data = (await resp.json()) as {
-    choices: Array<{ message: { content: string } }>;
-  };
+  // Download the first image
+  const imgResp = await fetch(imageUrls[0]);
+  if (!imgResp.ok) throw new Error('Failed to download generated image');
+  const imageBytes = await imgResp.arrayBuffer();
 
-  const content = data.choices[0]?.message?.content ?? '';
-
-  let imageBytes: ArrayBuffer;
-
-  const base64Match = content.match(/data:image\/[^;]+;base64,([A-Za-z0-9+/=]+)/);
-  if (base64Match) {
-    const binaryStr = atob(base64Match[1]);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) {
-      bytes[i] = binaryStr.charCodeAt(i);
-    }
-    imageBytes = bytes.buffer;
-  } else {
-    const urlMatch = content.match(/(https?:\/\/[^\s"]+\.(jpg|jpeg|png|webp))/i);
-    if (urlMatch) {
-      const imgResp = await fetch(urlMatch[1]);
-      if (!imgResp.ok) throw new Error('Failed to download generated image');
-      imageBytes = await imgResp.arrayBuffer();
-    } else {
-      console.log(`[image-gen] No image data found in response, using placeholder`);
-      return {
-        key: `placeholders/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`,
-        url: '/images/placeholder.jpg',
-        width: request.width ?? 1280,
-        height: request.height ?? 720,
-        type: 'hero',
-      };
-    }
-  }
-
-  const imageKey = `blog/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`;
+  const imageKey =
+    request.keyOverride ||
+    `blog/${request.keyword.replace(/\s+/g, '-')}-${Date.now()}.jpg`;
 
   if (env.IMAGES) {
     await env.IMAGES.put(imageKey, imageBytes, {
@@ -121,71 +160,88 @@ async function generateSingleImage(
   return {
     key: imageKey,
     url: `/images/${imageKey}`,
-    width: request.width ?? 1280,
-    height: request.height ?? 720,
+    width: request.width ?? 1024,
+    height: request.height ?? 1024,
     type: 'hero',
   };
 }
 
 function buildPrompt(request: ImageRequest): string {
-  const baseStyle = 'professional industrial photography, high-end commercial product photography';
-  const lighting = 'studio lighting with dramatic shadows, warm industrial tones';
-  const quality = '8k resolution, photorealistic, sharp focus, depth of field';
-
   const productPrompts: Record<string, string> = {
-    'chain-link': 'galvanized chain link fence installation, metallic silver steel mesh, industrial security fencing',
-    'gabion': 'gabion box wire mesh cage filled with natural stone, landscape retaining wall, erosion control',
-    'razor': 'razor wire concertina coil on top of security fence, industrial perimeter protection',
-    'welded': 'welded wire mesh panel fence, double wire construction, modern industrial fencing',
-    'high-security': 'high-security fence with barbed wire topping, anti-climb mesh, perimeter protection system',
+    'chain-link':
+      'galvanized chain link fence installation, metallic silver steel mesh, industrial security fencing on a construction site',
+    gabion:
+      'gabion box wire mesh cage filled with natural stone, landscape retaining wall, erosion control in outdoor setting',
+    razor:
+      'razor wire concertina coil on top of security fence, industrial perimeter protection, dramatic lighting',
+    welded:
+      'welded wire mesh panel fence, double wire construction, modern industrial fencing, clean professional look',
+    'high-security':
+      'high-security fence with barbed wire topping, anti-climb mesh, perimeter protection system at industrial facility',
   };
 
-  const productDesc = productPrompts[request.productLine ?? ''] ?? 'metal fencing products, industrial security solutions';
+  const productDesc =
+    productPrompts[request.productLine ?? ''] ??
+    'metal fencing products, industrial security solutions, wire mesh manufacturing';
 
   const styleModifiers: Record<string, string> = {
-    industrial: 'factory background, warehouse setting, large-scale installation',
-    product: 'product showcase, clean background, detailed close-up',
-    scene: 'real-world installation, outdoor setting, natural environment',
-    detail: 'extreme close-up, texture detail, material quality focus',
+    industrial: 'factory background, warehouse setting, large-scale installation, dramatic shadows',
+    product: 'product showcase, clean white background, detailed close-up, studio lighting',
+    scene: 'real-world installation, outdoor setting, natural environment, golden hour lighting',
+    detail: 'extreme close-up, texture detail, material quality focus, macro photography',
   };
 
-  const styleDesc = styleModifiers[request.style ?? 'industrial'] ?? styleModifiers.industrial;
+  const styleDesc =
+    styleModifiers[request.style ?? 'industrial'] ?? styleModifiers.industrial;
 
-  return `${productDesc}, ${styleDesc}, ${baseStyle}, ${lighting}, ${quality}`;
+  return `${productDesc}, ${styleDesc}, professional industrial photography, high-end commercial product photography, studio lighting, warm industrial tones, 8k resolution, photorealistic, sharp focus, depth of field`;
 }
 
 export async function generateArticleImages(
   env: ImageGenEnv,
   keyword: string,
+  slug?: string,
   productLine?: string,
 ): Promise<GeneratedImage[]> {
   const images: GeneratedImage[] = [];
 
-  const heroImage = await generateSingleImage(env, {
-    keyword,
-    productLine,
-    style: 'industrial',
-    width: 1280,
-    height: 720,
-  });
-  heroImage.type = 'hero';
-  images.push(heroImage);
+  // Generate hero image
+  const heroKey = slug ? `blog/${slug}-hero.webp` : undefined;
+  try {
+    const heroImage = await generateSingleImage(env, {
+      keyword,
+      productLine,
+      style: 'industrial',
+      width: 1280,
+      height: 720,
+      keyOverride: heroKey,
+    });
+    heroImage.type = 'hero';
+    images.push(heroImage);
+  } catch (err) {
+    console.error(`[image-gen] Hero image failed for ${keyword}:`, err);
+  }
 
+  // Generate content images
   const contentStyles: Array<{ style: ImageRequest['style']; width: number; height: number }> = [
     { style: 'product', width: 800, height: 600 },
     { style: 'scene', width: 800, height: 600 },
   ];
 
   for (const contentStyle of contentStyles) {
-    const contentImage = await generateSingleImage(env, {
-      keyword,
-      productLine,
-      style: contentStyle.style,
-      width: contentStyle.width,
-      height: contentStyle.height,
-    });
-    contentImage.type = 'content';
-    images.push(contentImage);
+    try {
+      const contentImage = await generateSingleImage(env, {
+        keyword,
+        productLine,
+        style: contentStyle.style,
+        width: contentStyle.width,
+        height: contentStyle.height,
+      });
+      contentImage.type = 'content';
+      images.push(contentImage);
+    } catch (err) {
+      console.error(`[image-gen] Content image failed for ${keyword}:`, err);
+    }
   }
 
   return images;

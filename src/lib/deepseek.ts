@@ -44,7 +44,7 @@ export interface GeneratedArticle {
   html: string;
   keyword: string;
   wordCount: number;
-  schema: object;
+  heroImage: string;
 }
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
@@ -181,86 +181,143 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
 
   const wordCount = htmlContent.split(/\s+/).length;
   const slug = slugify(outline.title);
+  const today = new Date().toISOString().split('T')[0];
+  const aiHeroImage = `images/blog/${slug}-hero.webp`;
+
+  // Fallback hero images from existing static assets (used when AI generation fails)
+  const keywordToHero: Record<string, string> = {
+    'gabion': 'images/blog/blog-gabion-market-hero.webp',
+    'chain-link': 'images/blog/blog-chain-link-yard-hero.webp',
+    'razor-wire': 'images/blog/blog-razor-coils-hero.avif',
+    'barbed-wire': 'images/blog/blog-barbed-cost-hero.webp',
+    'welded-wire': 'images/blog/welded-mesh-711.webp',
+    'hexagonal': 'images/blog/blog-hex-mesh-hero.webp',
+    'security-fence': 'images/blog/dual-fence-hero.webp',
+    'fence': 'images/blog/blog-gabion-market-hero.webp',
+    'wire-mesh': 'images/blog/epoxy-coated-wire-mesh.webp',
+  };
+
+  let heroFallback = 'images/blog/blog-gabion-market-hero.webp';
+  for (const [kw, img] of Object.entries(keywordToHero)) {
+    if (keyword.toLowerCase().includes(kw)) {
+      heroFallback = img;
+      break;
+    }
+  }
+
+  const heroImage = aiHeroImage;
+  const heroImageFallback = heroFallback;
+  const faqHtml = outline.faq.map(f => `
+      <details class="faq-detail">
+        <summary>${f.question}</summary>
+        <p>${f.answer}</p>
+      </details>`).join('\n');
 
   const articleHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${outline.title} | Kestrel Metal</title>
+  <title>${outline.title} | KESTREL METAL</title>
   <meta name="description" content="${outline.metaDescription}">
   <meta name="keywords" content="${keyword}, kestrel metal, metal fencing, industrial security">
-  <link rel="canonical" href="https://kestrelmetal.com/blog/${slug}.html">
-  <style>
-    :root { --primary: #ff6b35; --bg: #0a0a0a; --text: #333; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); line-height: 1.8; }
-    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-    h1 { font-size: clamp(28px, 4vw, 40px); margin-bottom: 20px; color: var(--bg); }
-    h2 { font-size: clamp(22px, 3vw, 28px); margin: 40px 0 16px; color: var(--bg); }
-    h3 { font-size: clamp(18px, 2.5vw, 22px); margin: 24px 0 12px; color: #444; }
-    p { margin-bottom: 16px; }
-    ul, ol { margin: 16px 0 16px 24px; }
-    li { margin-bottom: 8px; }
-    strong { color: var(--bg); }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-    th { background: #f5f5f5; }
-    .cta { background: var(--bg); color: white; padding: 24px; border-radius: 8px; margin-top: 40px; text-align: center; }
-    .cta a { color: var(--primary); text-decoration: none; font-weight: 600; }
-    .faq { margin-top: 40px; }
-    .faq-item { margin-bottom: 20px; }
-    .faq-item h3 { color: var(--primary); }
-  </style>
+  <link rel="canonical" href="https://www.kestrelmetal.com/${slug}.html">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/article.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <script src="js/analytics-loader.js" async></script>
+  <script src="js/seo-enhance.js" async></script>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="shortcut icon" href="favicon.ico">
+  <meta name="msapplication-TileColor" content="#FF6B35">
+  <meta name="theme-color" content="#FF6B35">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.kestrelmetal.com/"},
+      {"@type": "ListItem", "position": 2, "name": "Resources", "item": "https://www.kestrelmetal.com/resources.html"},
+      {"@type": "ListItem", "position": 3, "name": "Blog & News", "item": "https://www.kestrelmetal.com/blog-news.html"},
+      {"@type": "ListItem", "position": 4, "name": "${outline.title}", "item": "https://www.kestrelmetal.com/${slug}.html"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "${outline.title}",
+    "description": "${outline.metaDescription}",
+    "author": {"@type": "Organization", "name": "Kestrel Metal", "url": "https://www.kestrelmetal.com"},
+    "publisher": {"@type": "Organization", "name": "Kestrel Metal", "url": "https://www.kestrelmetal.com"},
+    "datePublished": "${today}",
+    "dateModified": "${today}",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.kestrelmetal.com/${slug}.html"},
+    "keywords": "${keyword}",
+    "wordCount": ${wordCount},
+    "image": "https://www.kestrelmetal.com/${heroImageFallback}"
+  }
+  </script>
 </head>
 <body>
-  <article class="container">
-    <h1>${outline.h1}</h1>
-    
-    ${htmlContent}
-    
-    <section class="faq">
-      <h2>Frequently Asked Questions</h2>
-      ${outline.faq.map(f => `
-      <div class="faq-item">
-        <h3>${f.question}</h3>
-        <p>${f.answer}</p>
-      </div>`).join('\n')}
+  <div id="navbar-placeholder"></div>
+  <main>
+    <section class="article-hero">
+      <div class="article-hero-bg" style="background-image:url('${heroImageFallback}');"></div>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-content" data-reveal>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="resources.html">Resources</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="blog-news.html">Blog &amp; News</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="current">${outline.h1}</span>
+        </nav>
+        <span class="article-hero-kicker">Industry Guide</span>
+        <h1 class="article-hero-title">${outline.h1}</h1>
+        <div class="article-hero-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${today}</span>
+          <span class="article-hero-unread"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${Math.ceil(wordCount / 250)} min read</span>
+        </div>
+      </div>
     </section>
-    
-    <div class="cta">
-      <h2>Ready to Discuss Your Project?</h2>
-      <p>Contact Kestrel Metal for customized solutions and competitive pricing.</p>
-      <a href="/contact.html">Get a Free Quote →</a>
-    </div>
-  </article>
+    <section class="article-body">
+      <div class="article-container">
+        <div class="article-grid">
+          <div class="article-main">
+            <a href="blog-news.html" class="article-back">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+              Back to Blog &amp; News
+            </a>
+            <article class="article-content">
+              ${htmlContent}
+            </article>
+            <section class="article-faq">
+              <h2>Frequently Asked Questions</h2>
+              ${faqHtml}
+            </section>
+            <div class="article-inquiry-cta">
+              <p>Looking for reliable ${keyword} solutions? At Kestrel Metal, we manufacture premium metal products with worldwide shipping and 24-hour quote response. <a class="inquiry-cta-link" href="contact.html">Request a Quote</a> today for customized specifications and competitive pricing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="footer-placeholder"></div>
+  <script src="js/includes.js"></script>
+  <script src="js/blog-detail.js"></script>
 </body>
 </html>`;
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: outline.title,
-    description: outline.metaDescription,
-    author: {
-      '@type': 'Organization',
-      name: 'Kestrel Metal',
-      url: 'https://kestrelmetal.com',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Kestrel Metal',
-      url: 'https://kestrelmetal.com',
-    },
-    datePublished: new Date().toISOString(),
-    dateModified: new Date().toISOString(),
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://kestrelmetal.com/blog/${slug}.html`,
-    },
-    keywords: keyword,
-    wordCount,
-  };
 
   return {
     slug,
@@ -269,7 +326,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
     html: articleHtml,
     keyword,
     wordCount,
-    schema,
+    heroImage,
   };
 }
 

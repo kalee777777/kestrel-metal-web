@@ -1,6 +1,7 @@
 import type { Env } from '../index';
 import { queryAllKeywords } from '../lib/gsc';
 import { saveRankings, today, now } from '../lib/kv';
+import { opportunities } from './opportunity';
 
 const DAY_MS = 86400_000;
 
@@ -59,4 +60,15 @@ export default async function gscSync(env: Env): Promise<void> {
   }));
 
   console.log(`[gsc-sync] Saved ${rankings.length} keyword rows for ${date}`);
+
+  // 同步完成后立即执行机会分析，供周一内容生成选题使用
+  if (rankings.length > 0) {
+    try {
+      const items = await opportunities(rankings);
+      await env.SEO_DATA.put('opportunities:weekly', JSON.stringify(items));
+      console.log(`[gsc-sync] Identified ${items.length} content opportunities`);
+    } catch (err) {
+      console.error('[gsc-sync] Opportunity analysis failed:', err);
+    }
+  }
 }

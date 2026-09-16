@@ -140,6 +140,7 @@ async function generateImagesForDrafts(env: Env): Promise<void> {
           IMAGES: env.IMAGES,
         },
         draft.keyword,
+        draft.slug,
       );
 
       await setJSON(env.CONTENT_QUEUE, key.name, {

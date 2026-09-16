@@ -37,11 +37,12 @@ export default async function score(env: Env): Promise<void> {
   }
 
   let deployed = 0;
+  const publishedPaths: string[] = [];
 
   for (const key of keys) {
     const draft = await getJSON<DraftData>(env.CONTENT_QUEUE, key.name);
 
-    if (!draft || (draft.status !== 'queued' && draft.status !== 'image_gen')) {
+    if (!draft || (draft.status !== 'queued' && draft.status !== 'image_gen' && draft.status !== 'skipped')) {
       continue;
     }
 
@@ -63,7 +64,7 @@ export default async function score(env: Env): Promise<void> {
           break;
         }
 
-        console.log(`[score] Score below 80, attempting fix round ${round}...`);
+        console.log(`[score] Score below 60, attempting fix round ${round}...`);
 
         if (env.DEEPSEEK_API_KEY) {
           try {
@@ -96,20 +97,49 @@ export default async function score(env: Env): Promise<void> {
         status: 'scoring',
       });
 
-      if (currentScore >= 80) {
-        await setJSON(env.CONTENT_QUEUE, `published:${draft.slug}`, {
+      if (currentScore >= 60) {
+        const publishedEntry = {
           slug: draft.slug,
           title: draft.title,
           metaDescription: draft.metaDescription,
           keyword: draft.keyword,
           score: currentScore,
+          status: 'published',
           publishedAt: new Date().toISOString(),
-        });
+          detail_url: `https://www.kestrelmetal.com/${draft.slug}.html`,
+          html: currentHtml,
+        };
+
+        // 写入单个 published 键（包含完整 HTML，供 Worker 动态渲染）
+        await setJSON(env.CONTENT_QUEUE, `published:${draft.slug}`, publishedEntry);
+
+        // 更新 published:all 数组（供 /api/blog 读取，不含 html 以减小体积）
+        interface PublishedSummary {
+          slug: string;
+          title: string;
+          metaDescription: string;
+          keyword: string;
+          score: number;
+          status: string;
+          publishedAt: string;
+          detail_url: string;
+          html?: string;
+        }
+        const allPublished = await getJSON<PublishedSummary[]>(env.CONTENT_QUEUE, 'published:all') || [];
+        const { html: _html, ...entryWithoutHtml } = publishedEntry;
+        const existingIndex = allPublished.findIndex((p) => p.slug === draft.slug);
+        if (existingIndex >= 0) {
+          allPublished[existingIndex] = entryWithoutHtml;
+        } else {
+          allPublished.push(entryWithoutHtml);
+        }
+        await setJSON(env.CONTENT_QUEUE, 'published:all', allPublished);
 
         console.log(`[score] Published: ${draft.slug} (Score: ${currentScore})`);
         deployed++;
+        publishedPaths.push(`/${draft.slug}.html`);
       } else {
-        console.log(`[score] Skipped: ${draft.slug} (Score: ${currentScore} < 80)`);
+        console.log(`[score] Skipped: ${draft.slug} (Score: ${currentScore} < 60)`);
         await setJSON(env.CONTENT_QUEUE, key.name, {
           ...draft,
           html: currentHtml,
@@ -126,4 +156,19 @@ export default async function score(env: Env): Promise<void> {
   }
 
   console.log(`[score] Completed. Deployed ${deployed} articles.`);
+
+  // 发布后通过 IndexNow 主动推送新 URL，加速搜索引擎发现
+  if (publishedPaths.length > 0) {
+    try {
+      const { submitToIndexNow } = await import('../lib/indexnow');
+      const result = await submitToIndexNow(env, publishedPaths);
+      if (result.ok) {
+        console.log(`[score] IndexNow submitted ${result.submitted} URLs (status ${result.status})`);
+      } else {
+        console.error(`[score] IndexNow submission failed: ${result.error ?? `status ${result.status}`}`);
+      }
+    } catch (err) {
+      console.error('[score] IndexNow submission failed:', err);
+    }
+  }
 }

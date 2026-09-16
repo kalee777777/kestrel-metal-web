@@ -49,6 +49,7 @@ export interface Env {
   GH_TOKEN: string;
   IMG_API_KEY: string;
   QWEN_API_KEY: string;
+  INDEXNOW_KEY?: string;
 }
 
 // ─── fetch() — HTTP 请求处理 ───
@@ -96,6 +97,34 @@ export default {
       return jsonResponse({ error: 'Not found' }, 404);
     }
 
+    // 动态 sitemap：静态 198 条 + KV 自动发布文章实时合并
+    if (url.pathname === '/sitemap.xml') {
+      const { buildSitemap } = await import('./lib/sitemap');
+      const sitemap = await buildSitemap(env);
+      return new Response(sitemap.xml, {
+        headers: {
+          'Content-Type': 'application/xml; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600, must-revalidate',
+        },
+        status: 200,
+      });
+    }
+
+    // IndexNow key 验证文件：/{key}.txt 返回 key 本身
+    if (url.pathname.endsWith('.txt')) {
+      const { getIndexNowKey } = await import('./lib/indexnow');
+      const key = await getIndexNowKey(env);
+      if (url.pathname === `/${key}.txt`) {
+        return new Response(key, {
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control': 'public, max-age=86400',
+          },
+          status: 200,
+        });
+      }
+    }
+
     let assetRequest = request;
     if (url.pathname === '/') {
       const rootUrl = new URL(request.url);
@@ -104,12 +133,45 @@ export default {
     }
 
     let response = await env.ASSETS.fetch(assetRequest);
-    if (response.status === 404 && !url.pathname.includes('.')) {
-      const htmlUrl = new URL(request.url);
-      htmlUrl.pathname = url.pathname + '.html';
-      const htmlResponse = await env.ASSETS.fetch(new Request(htmlUrl, request));
-      if (htmlResponse.status !== 404) {
-        response = htmlResponse;
+
+    // /images/ 路由：从 R2 读取 AI 生成的图片
+    if (response.status === 404 && url.pathname.startsWith('/images/')) {
+      const r2Key = url.pathname.replace('/images/', '');
+      const object = await env.IMAGES.get(r2Key);
+      if (object) {
+        const respHeaders = new Headers({
+          'Content-Type': object.httpMetadata?.contentType || 'image/webp',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        });
+        return new Response(object.body, { headers: respHeaders, status: 200 });
+      }
+    }
+
+    // 静态资源 404 时，尝试从 KV 读取动态发布的文章
+    if (response.status === 404) {
+      // 提取 slug（去掉开头的 / 和 .html 后缀）
+      let slug = url.pathname.replace(/^\//, '').replace(/\.html$/, '');
+      if (slug && !slug.includes('/') && !slug.includes('.')) {
+        const published = await env.CONTENT_QUEUE.get(`published:${slug}`, 'json') as { html?: string } | null;
+        if (published && published.html) {
+          return new Response(published.html, {
+            headers: {
+              'Content-Type': 'text/html; charset=utf-8',
+              'Cache-Control': 'public, max-age=3600, must-revalidate',
+            },
+            status: 200,
+          });
+        }
+      }
+
+      // 尝试加 .html 后缀
+      if (!url.pathname.includes('.')) {
+        const htmlUrl = new URL(request.url);
+        htmlUrl.pathname = url.pathname + '.html';
+        const htmlResponse = await env.ASSETS.fetch(new Request(htmlUrl, request));
+        if (htmlResponse.status !== 404) {
+          response = htmlResponse;
+        }
       }
     }
     const contentType = response.headers.get('content-type') || '';
@@ -133,7 +195,7 @@ export default {
     }
 
     const html = await response.text();
-    const enhanced = injectSeoTags(html, url.pathname);
+    const enhanced = await injectSeoTags(html, url.pathname, env);
     headers.set('Cache-Control', 'public, max-age=300, must-revalidate');
     return new Response(enhanced, {
       headers,
