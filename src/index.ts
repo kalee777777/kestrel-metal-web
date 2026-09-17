@@ -57,6 +57,15 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
+    // workers.dev 调试域名统一 301 到正式域名（保留 /api/ 调试通道），
+    // 消除第三重复内容源，避免被搜索引擎当作备用页面抓取
+    if (url.hostname.endsWith('.workers.dev') && !url.pathname.startsWith('/api/')) {
+      const redirectUrl = new URL(request.url);
+      redirectUrl.hostname = 'www.kestrelmetal.com';
+      redirectUrl.protocol = 'https:';
+      return Response.redirect(redirectUrl.toString(), 301);
+    }
+
     // CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
