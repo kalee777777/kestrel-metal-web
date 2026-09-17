@@ -1,5 +1,5 @@
 import { route, jsonResponse, type RouteContext } from './router';
-import { listKeys, getJSON } from './lib/kv';
+import { listKeys, getJSON, setJSON } from './lib/kv';
 
 export interface BlogPostRecord {
   id: string;
@@ -154,6 +154,52 @@ function register() {
     const params = parseSearchParams(ctx.url);
     const result = await loadBlogPosts(ctx.env, params);
     return jsonResponse(result);
+  });
+
+  route('DELETE', '/api/blog/:slug', async (ctx: RouteContext) => {
+    const auth = ctx.request.headers.get('Authorization');
+    if (!ctx.env.ADMIN_TOKEN || auth !== `Bearer ${ctx.env.ADMIN_TOKEN}`) {
+      return jsonResponse({ error: 'Unauthorized' }, 401);
+    }
+
+    const slug = (ctx.params.slug || '').trim().replace(/\.html$/i, '');
+    if (!slug || !/^[a-z0-9][a-z0-9-]*$/i.test(slug)) {
+      return jsonResponse({ error: 'Invalid slug' }, 400);
+    }
+
+    const result = {
+      slug,
+      removed_published_key: false,
+      removed_draft_key: false,
+      removed_from_list: false,
+    };
+
+    const publishedKey = `published:${slug}`;
+    if ((await ctx.env.CONTENT_QUEUE.get(publishedKey)) !== null) {
+      await ctx.env.CONTENT_QUEUE.delete(publishedKey);
+      result.removed_published_key = true;
+    }
+
+    const draftKey = `draft:${slug}`;
+    if ((await ctx.env.CONTENT_QUEUE.get(draftKey)) !== null) {
+      await ctx.env.CONTENT_QUEUE.delete(draftKey);
+      result.removed_draft_key = true;
+    }
+
+    const allPublished = await getJSON<BlogPostRecord[]>(ctx.env.CONTENT_QUEUE, 'published:all');
+    if (Array.isArray(allPublished)) {
+      const filtered = allPublished.filter((p) => p && p.slug !== slug);
+      if (filtered.length !== allPublished.length) {
+        await setJSON(ctx.env.CONTENT_QUEUE, 'published:all', filtered);
+        result.removed_from_list = true;
+      }
+    }
+
+    if (!result.removed_published_key && !result.removed_draft_key && !result.removed_from_list) {
+      return jsonResponse({ error: 'Not found', ...result }, 404);
+    }
+
+    return jsonResponse({ success: true, ...result });
   });
 }
 
