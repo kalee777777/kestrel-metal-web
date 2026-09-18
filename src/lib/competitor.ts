@@ -79,9 +79,11 @@ async function fetchWithTimeout(url: string, timeoutMs = 10000): Promise<string 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const resp = await fetch(url, { signal: controller.signal });
+    const resp = await fetch(url, { signal: controller.signal, redirect: 'follow' });
     if (!resp.ok) return null;
-    return await resp.text();
+    const text = await resp.text();
+    if (!text || text.trim().length === 0) return null;
+    return text;
   } catch {
     return null;
   } finally {
@@ -103,30 +105,43 @@ export async function fetchCompetitorSitemap(domain: string): Promise<string[]> 
   let xml: string | null = null;
   for (const url of candidates) {
     xml = await fetchWithTimeout(url);
-    if (xml && xml.trim().length > 0 && xml.includes('<')) break;
+    if (xml && xml.trim().length > 0 && xml.includes('<')) {
+      console.log(`[competitor] Sitemap found at ${url}, length: ${xml.length}`);
+      break;
+    }
   }
 
-  if (!xml) return [];
+  if (!xml) {
+    console.log(`[competitor] No sitemap found for ${domain}`);
+    return [];
+  }
 
   // 检查是否是 sitemap index
   if (xml.includes('<sitemapindex')) {
+    console.log(`[competitor] Detected sitemap index for ${domain}`);
     const locs = xml.match(/<loc>([^<]+)<\/loc>/g) || [];
-    const childUrls = locs.map(m => m.replace(/<\/?loc>/g, '')).filter(u => u.startsWith('http'));
+    const childUrls = locs.map(m => m.replace(/<\/?loc>/g, '').trim()).filter(u => u.startsWith('http'));
+    console.log(`[competitor] Found ${childUrls.length} child sitemaps`);
     // 最多取 3 个子 sitemap
     const allUrls: string[] = [];
     for (const childUrl of childUrls.slice(0, 3)) {
       const childXml = await fetchWithTimeout(childUrl);
       if (childXml) {
         const childLocs = childXml.match(/<loc>([^<]+)<\/loc>/g) || [];
-        allUrls.push(...childLocs.map(m => m.replace(/<\/?loc>/g, '')).filter(u => u.startsWith('http')));
+        const childPageUrls = childLocs.map(m => m.replace(/<\/?loc>/g, '').trim()).filter(u => u.startsWith('http'));
+        console.log(`[competitor] Child sitemap ${childUrl}: ${childPageUrls.length} URLs`);
+        allUrls.push(...childPageUrls);
       }
     }
+    console.log(`[competitor] Total URLs from sitemap index: ${allUrls.length}`);
     return allUrls;
   }
 
   // 普通 sitemap
   const locs = xml.match(/<loc>([^<]+)<\/loc>/g) || [];
-  return locs.map(m => m.replace(/<\/?loc>/g, '')).filter(u => u.startsWith('http'));
+  const urls = locs.map(m => m.replace(/<\/?loc>/g, '').trim()).filter(u => u.startsWith('http'));
+  console.log(`[competitor] Total URLs from sitemap: ${urls.length}`);
+  return urls;
 }
 
 // ─── 关键词提取 ───
