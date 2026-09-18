@@ -99,6 +99,18 @@ Router.register('/competitors', async function (container) {
 
   let gapData = [];
 
+  async function loadGapData() {
+    try {
+      const resp = await fetch('/api/competitors/gap');
+      if (resp.ok) {
+        const data = await resp.json();
+        gapData = data.gaps || [];
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   async function runGapAnalysis() {
     const btn = document.getElementById('runGapBtn');
     if (btn) { btn.disabled = true; btn.textContent = '分析中...'; }
@@ -211,6 +223,10 @@ Router.register('/competitors', async function (container) {
     if (filterInput) {
       filterInput.addEventListener('input', e => renderGapTable(e.target.value));
     }
+
+    // 自动加载缺口数据
+    await loadGapData();
+    renderGapTable();
   }
 
   // 暴露全局函数
