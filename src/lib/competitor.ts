@@ -77,10 +77,7 @@ const INDUSTRY_SEEDS = [
 
 async function fetchWithTimeout(url: string, _timeoutMs = 10000): Promise<string | null> {
   try {
-    const resp = await fetch(url, {
-      redirect: 'follow',
-      cf: { cacheTtl: 300 },
-    });
+    const resp = await fetch(url, { redirect: 'follow' });
     if (!resp.ok) {
       console.log(`[competitor] Fetch failed for ${url}: HTTP ${resp.status}`);
       return null;
@@ -216,15 +213,24 @@ export async function extractKeywordsFromUrls(
 ): Promise<CompetitorKeyword[]> {
   const keywords: CompetitorKeyword[] = [];
   const seen = new Set<string>();
+  let extractedCount = 0;
+  let filteredCount = 0;
 
   // 从 URL slug 提取
   for (const url of urls) {
     const kw = extractKeywordFromUrl(url);
-    if (kw && !seen.has(kw) && isIndustryRelevant(kw)) {
-      seen.add(kw);
-      keywords.push({ keyword: kw, url, source: 'sitemap' });
+    if (kw) {
+      extractedCount++;
+      if (!seen.has(kw) && isIndustryRelevant(kw)) {
+        seen.add(kw);
+        keywords.push({ keyword: kw, url, source: 'sitemap' });
+      } else {
+        filteredCount++;
+      }
     }
   }
+
+  console.log(`[competitor] URL extraction: ${extractedCount} raw keywords, ${filteredCount} filtered, ${keywords.length} kept`);
 
   // 从页面 title 提取（最多 10 个页面，并发 5）
   const titleUrls = urls.filter(u => {
