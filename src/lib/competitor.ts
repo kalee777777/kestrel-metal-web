@@ -168,7 +168,8 @@ function extractKeywordFromUrl(urlStr: string): string | null {
       .filter(w => w.length > 1 && !STOP_WORDS.has(w.toLowerCase()));
 
     if (words.length === 0) return null;
-    return words.join(' ').toLowerCase();
+    const keyword = words.join(' ').toLowerCase();
+    return keyword;
   } catch {
     return null;
   }
@@ -210,17 +211,19 @@ function isIndustryRelevant(keyword: string): boolean {
  */
 export async function extractKeywordsFromUrls(
   urls: string[],
-): Promise<CompetitorKeyword[]> {
+): Promise<{ keywords: CompetitorKeyword[]; extractedCount: number; filteredCount: number; sampleKeywords: string[] }> {
   const keywords: CompetitorKeyword[] = [];
   const seen = new Set<string>();
   let extractedCount = 0;
   let filteredCount = 0;
+  let sampleKeywords: string[] = [];
 
   // 从 URL slug 提取
   for (const url of urls) {
     const kw = extractKeywordFromUrl(url);
     if (kw) {
       extractedCount++;
+      if (sampleKeywords.length < 5) sampleKeywords.push(kw);
       if (!seen.has(kw) && isIndustryRelevant(kw)) {
         seen.add(kw);
         keywords.push({ keyword: kw, url, source: 'sitemap' });
@@ -231,6 +234,7 @@ export async function extractKeywordsFromUrls(
   }
 
   console.log(`[competitor] URL extraction: ${extractedCount} raw keywords, ${filteredCount} filtered, ${keywords.length} kept`);
+  console.log(`[competitor] Sample keywords: ${sampleKeywords.join(', ')}`);
 
   // 从页面 title 提取（最多 10 个页面，并发 5）
   const titleUrls = urls.filter(u => {
@@ -256,7 +260,7 @@ export async function extractKeywordsFromUrls(
     keywords.push(...results.filter(Boolean) as CompetitorKeyword[]);
   }
 
-  return keywords;
+  return { keywords, extractedCount, filteredCount, sampleKeywords };
 }
 
 // ─── 竞品管理 ───
@@ -312,15 +316,15 @@ export async function deleteCompetitor(
 export async function analyzeCompetitor(
   env: Env,
   domain: string,
-): Promise<{ keywordCount: number; error?: string; debug?: { urlCount: number } }> {
+): Promise<{ keywordCount: number; error?: string; debug?: { urlCount: number; extracted: number; filtered: number; samples: string[] } }> {
   const urls = await fetchCompetitorSitemap(domain);
   console.log(`[competitor] Sitemap fetch for ${domain}: ${urls.length} URLs`);
   if (urls.length === 0) {
     return { keywordCount: 0, error: '无法获取 sitemap，请确认域名正确且 sitemap 公开可访问' };
   }
 
-  const keywords = await extractKeywordsFromUrls(urls);
-  console.log(`[competitor] Keyword extraction for ${domain}: ${keywords.length} keywords`);
+  const { keywords, extractedCount, filteredCount, sampleKeywords } = await extractKeywordsFromUrls(urls);
+  console.log(`[competitor] Keyword extraction for ${domain}: ${keywords.length} keywords (${extractedCount} raw, ${filteredCount} filtered)`);
 
   await setJSON(env.SEO_DATA, `competitor:${domain}:keywords`, keywords);
 
@@ -332,7 +336,10 @@ export async function analyzeCompetitor(
     await setJSON(env.SEO_DATA, 'competitors:list', list);
   }
 
-  return { keywordCount: keywords.length, debug: { urlCount: urls.length } };
+  return { 
+    keywordCount: keywords.length, 
+    debug: { urlCount: urls.length, extracted: extractedCount, filtered: filteredCount, samples: sampleKeywords } 
+  };
 }
 
 // ─── 缺口计算 ───
