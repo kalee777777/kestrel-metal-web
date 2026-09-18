@@ -155,7 +155,7 @@ export async function fetchCompetitorSitemap(domain: string): Promise<string[]> 
 function extractKeywordFromUrl(urlStr: string): string | null {
   try {
     const url = new URL(urlStr);
-    const path = url.pathname.replace(/^\//, '').replace(/\.html?$/i, '');
+    const path = url.pathname.replace(/^\//, '').replace(/\/$/, '').replace(/\.html?$/i, '');
     if (!path) return null;
 
     const slug = path.split('/').pop() || '';
