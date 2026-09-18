@@ -102,12 +102,14 @@ Router.register('/competitors', async function (container) {
   async function loadGapData() {
     try {
       const resp = await fetch('/api/competitors/gap');
+      console.log('[competitors] gap API response:', resp.status);
       if (resp.ok) {
         const data = await resp.json();
         gapData = data.gaps || [];
+        console.log('[competitors] loaded gaps:', gapData.length);
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('[competitors] loadGapData error:', err);
     }
   }
 
@@ -131,6 +133,7 @@ Router.register('/competitors', async function (container) {
 
   function renderGapTable(filter = '') {
     const container = document.getElementById('gapTableBody');
+    console.log('[competitors] renderGapTable called, gapData:', gapData.length, 'container:', !!container);
     if (!container) return;
 
     const filtered = filter
@@ -225,8 +228,11 @@ Router.register('/competitors', async function (container) {
     }
 
     // 自动加载缺口数据
+    console.log('[competitors] render() starting auto-load');
     await loadGapData();
+    console.log('[competitors] after loadGapData, gapData:', gapData.length);
     renderGapTable();
+    console.log('[competitors] after renderGapTable');
   }
 
   // 暴露全局函数
