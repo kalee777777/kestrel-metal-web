@@ -103,7 +103,7 @@ export async function fetchCompetitorSitemap(domain: string): Promise<string[]> 
   let xml: string | null = null;
   for (const url of candidates) {
     xml = await fetchWithTimeout(url);
-    if (xml) break;
+    if (xml && xml.trim().length > 0 && xml.includes('<')) break;
   }
 
   if (!xml) return [];
@@ -287,11 +287,13 @@ export async function analyzeCompetitor(
   domain: string,
 ): Promise<{ keywordCount: number; error?: string; debug?: { urlCount: number } }> {
   const urls = await fetchCompetitorSitemap(domain);
+  console.log(`[competitor] Sitemap fetch for ${domain}: ${urls.length} URLs`);
   if (urls.length === 0) {
     return { keywordCount: 0, error: '无法获取 sitemap，请确认域名正确且 sitemap 公开可访问' };
   }
 
   const keywords = await extractKeywordsFromUrls(urls);
+  console.log(`[competitor] Keyword extraction for ${domain}: ${keywords.length} keywords`);
 
   await setJSON(env.SEO_DATA, `competitor:${domain}:keywords`, keywords);
 
