@@ -26,6 +26,28 @@ export default async function generate(env: Env): Promise<void> {
   const today = new Date().toISOString().split('T')[0];
   const rankings = await getRankings(env.SEO_DATA, today);
 
+  // 优先级 1：竞品缺口关键词（竞品有覆盖但我们没有的）
+  const gapData = await env.SEO_DATA.get('competitors:gap');
+  let gapItems: Array<{ keyword: string; type: string; suggestedAction: string }> = [];
+  if (gapData) {
+    try {
+      const parsed = JSON.parse(gapData) as { gaps?: Array<{ keyword: string; competitorCount: number }> };
+      if (parsed.gaps && parsed.gaps.length > 0) {
+        gapItems = parsed.gaps
+          .sort((a, b) => b.competitorCount - a.competitorCount)
+          .map((g) => ({
+            keyword: g.keyword,
+            type: 'competitor_gap',
+            suggestedAction: `Create article to cover competitor gap (${g.competitorCount} competitors)`,
+          }));
+        console.log(`[generate] Found ${gapItems.length} competitor gap keywords`);
+      }
+    } catch {
+      console.log('[generate] Failed to parse competitor gap data');
+    }
+  }
+
+  // 优先级 2：GSC 机会分析（排名靠后但有展示的关键词）
   const opportunities = await env.SEO_DATA.get('opportunities:weekly');
   let items: Array<{ keyword: string; type: string; suggestedAction: string }> = [];
 
@@ -37,7 +59,10 @@ export default async function generate(env: Env): Promise<void> {
     }
   }
 
-  if (items.length === 0) {
+  // 合并：竞品缺口优先，其次 GSC 机会
+  const allCandidates = [...gapItems, ...items];
+
+  if (allCandidates.length === 0) {
     if (rankings && rankings.length > 0) {
       const topKeywords = rankings
         .sort((a, b) => b.impressions - a.impressions)
@@ -55,6 +80,8 @@ export default async function generate(env: Env): Promise<void> {
       ];
       items = defaultKeywords;
     }
+  } else {
+    items = allCandidates;
   }
 
   const selectedKeywords = items.slice(0, MAX_ARTICLES_PER_WEEK);

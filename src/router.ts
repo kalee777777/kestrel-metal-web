@@ -474,10 +474,11 @@ route('POST', '/api/competitors/analyze', async ({ env, request }) => {
   return jsonResponse({ domain: body.domain, keywordCount: result.keywordCount });
 });
 
-// 缺口分析结果
+// 缺口分析结果（同时保存到 KV 供 Cron 任务读取）
 route('GET', '/api/competitors/gap', async ({ env }) => {
   const { computeGap } = await import('./lib/competitor');
   const gaps = await computeGap(env);
+  await env.SEO_DATA.put('competitors:gap', JSON.stringify({ gaps, generatedAt: new Date().toISOString() }));
   return jsonResponse({ gaps, generatedAt: new Date().toISOString() });
 });
 
