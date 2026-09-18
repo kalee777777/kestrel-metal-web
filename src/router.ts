@@ -409,6 +409,69 @@ route('GET', '/api/gsc/callback', async ({ env, url }) => {
   return render(true, 'refresh_token 已保存，GSC 数据同步已恢复。每日 03:00 将自动同步关键词数据。');
 });
 
+// ─── 竞品关键词缺口分析 ───
+
+// 竞品列表
+route('GET', '/api/competitors', async ({ env }) => {
+  const { getCompetitors } = await import('./lib/competitor');
+  const competitors = await getCompetitors(env);
+  return jsonResponse({ competitors });
+});
+
+// 添加竞品（需 ADMIN_TOKEN）
+route('POST', '/api/competitors', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<{ domain?: string; name?: string }>().catch(() => null);
+  if (!body || !body.domain) {
+    return jsonResponse({ error: 'domain is required' }, 400);
+  }
+  const { addCompetitor } = await import('./lib/competitor');
+  const entry = await addCompetitor(env, body.domain, body.name);
+  if (!entry) {
+    return jsonResponse({ error: 'Competitor already exists' }, 409);
+  }
+  return jsonResponse(entry, 201);
+});
+
+// 删除竞品（需 ADMIN_TOKEN）
+route('DELETE', '/api/competitors/:domain', async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { deleteCompetitor } = await import('./lib/competitor');
+  const ok = await deleteCompetitor(env, params.domain);
+  if (!ok) {
+    return jsonResponse({ error: 'Not found' }, 404);
+  }
+  return jsonResponse({ message: 'Deleted' });
+});
+
+// 触发竞品分析（需 ADMIN_TOKEN）
+route('POST', '/api/competitors/analyze', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<{ domain?: string }>().catch(() => null);
+  if (!body || !body.domain) {
+    return jsonResponse({ error: 'domain is required' }, 400);
+  }
+  const { analyzeCompetitor } = await import('./lib/competitor');
+  const result = await analyzeCompetitor(env, body.domain);
+  if (result.error) {
+    return jsonResponse({ domain: body.domain, keywordCount: result.keywordCount, error: result.error });
+  }
+  return jsonResponse({ domain: body.domain, keywordCount: result.keywordCount });
+});
+
+// 缺口分析结果
+route('GET', '/api/competitors/gap', async ({ env }) => {
+  const { computeGap } = await import('./lib/competitor');
+  const gaps = await computeGap(env);
+  return jsonResponse({ gaps, generatedAt: new Date().toISOString() });
+});
+
 // 手动触发 Cron 任务（需简单认证）
 route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   const auth = request.headers.get('Authorization');
