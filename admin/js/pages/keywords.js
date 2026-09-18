@@ -1,5 +1,8 @@
 Router.register('/keywords', async function (container) {
   let date = new Date().toISOString().split('T')[0];
+  let rangeMode = 'single'; // 'single' | '7days' | '28days' | 'custom'
+  let customStart = '';
+  let customEnd = '';
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>'"]/g, char => ({
@@ -13,6 +16,10 @@ Router.register('/keywords', async function (container) {
 
   function formatNumber(value) {
     return new Intl.NumberFormat('en-US').format(Number(value || 0));
+  }
+
+  function getDateDaysAgo(days) {
+    return new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
   }
 
   function getTrendIcon(trend) {
@@ -58,19 +65,93 @@ Router.register('/keywords', async function (container) {
   window.reauthorizeGsc = reauthorizeGsc;
 
   async function load() {
-    const [rankingResponse, analysisResponse, statusResponse] = await Promise.all([
-      fetch(`/api/keywords/rankings?date=${encodeURIComponent(date)}`),
-      fetch('/api/keywords/analysis'),
-      fetch('/api/gsc/status')
-    ]);
-
-    if (!rankingResponse.ok) throw new Error('关键词数据加载失败');
-    const rankingData = await rankingResponse.json();
-    const analysisJson = analysisResponse.ok ? await analysisResponse.json() : null;
+    const statusResponse = await fetch('/api/gsc/status');
     const statusData = statusResponse.ok ? await statusResponse.json() : {};
 
-    const rows = rankingData.rankings || [];
-    const stats = analysisJson?.stats || { total: 0, top10: 0, top20: 0, rising: 0, falling: 0 };
+    let rows = [];
+    let stats = { total: 0, top10: 0, top20: 0, rising: 0, falling: 0 };
+    let dateLabel = '';
+
+    if (rangeMode === 'single') {
+      // 单日模式
+      const [rankingResponse, analysisResponse] = await Promise.all([
+        fetch(`/api/keywords/rankings?date=${encodeURIComponent(date)}`),
+        fetch('/api/keywords/analysis')
+      ]);
+      if (!rankingResponse.ok) throw new Error('关键词数据加载失败');
+      const rankingData = await rankingResponse.json();
+      const analysisJson = analysisResponse.ok ? await analysisResponse.json() : null;
+      rows = rankingData.rankings || [];
+      stats = analysisJson?.stats || { total: 0, top10: 0, top20: 0, rising: 0, falling: 0 };
+      dateLabel = date;
+    } else {
+      // 范围模式
+      let start, end;
+      if (rangeMode === '7days') {
+        start = getDateDaysAgo(7);
+        end = getDateDaysAgo(1);
+        dateLabel = `近 7 天 (${start} ~ ${end})`;
+      } else if (rangeMode === '28days') {
+        start = getDateDaysAgo(28);
+        end = getDateDaysAgo(1);
+        dateLabel = `近 28 天 (${start} ~ ${end})`;
+      } else if (rangeMode === 'custom') {
+        if (!customStart || !customEnd) {
+          API.toast('请选择开始和结束日期', 'error');
+          return;
+        }
+        start = customStart;
+        end = customEnd;
+        dateLabel = `自定义 (${start} ~ ${end})`;
+      }
+
+      const rangeResponse = await fetch(`/api/keywords/rankings/range?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+      if (!rangeResponse.ok) throw new Error('关键词数据加载失败');
+      const rangeData = await rangeResponse.json();
+
+      // 聚合并计算每个关键词的汇总数据
+      const keywordMap = new Map();
+      (rangeData.data || []).forEach(dayData => {
+        (dayData.rankings || []).forEach(row => {
+          const kw = row.keyword;
+          if (!kw) return;
+          if (!keywordMap.has(kw)) {
+            keywordMap.set(kw, {
+              keyword: kw,
+              clicks: 0,
+              impressions: 0,
+              positionSum: 0,
+              positionCount: 0,
+              dates: []
+            });
+          }
+          const entry = keywordMap.get(kw);
+          entry.clicks += Number(row.clicks || 0);
+          entry.impressions += Number(row.impressions || 0);
+          entry.positionSum += Number(row.position || 0);
+          entry.positionCount += 1;
+          entry.dates.push(row.date);
+        });
+      });
+
+      rows = Array.from(keywordMap.values()).map(entry => ({
+        keyword: entry.keyword,
+        clicks: entry.clicks,
+        impressions: entry.impressions,
+        ctr: entry.impressions > 0 ? entry.clicks / entry.impressions : 0,
+        position: entry.positionCount > 0 ? entry.positionSum / entry.positionCount : 0,
+        date: entry.dates.length > 0 ? entry.dates[entry.dates.length - 1] : ''
+      }));
+
+      // 按展示次数降序排序
+      rows.sort((a, b) => b.impressions - a.impressions);
+
+      // 计算统计
+      stats.top10 = rows.filter(r => r.position <= 10).length;
+      stats.top20 = rows.filter(r => r.position <= 20).length;
+      stats.rising = 0;
+      stats.falling = 0;
+    }
 
     const totalClicks = rows.reduce((sum, row) => sum + Number(row.clicks || 0), 0);
     const totalImpressions = rows.reduce((sum, row) => sum + Number(row.impressions || 0), 0);
@@ -88,11 +169,28 @@ Router.register('/keywords', async function (container) {
         </div>
       </div>` : '';
 
+    const rangeSelector = `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button class="btn ${rangeMode === 'single' ? 'btn-primary' : 'btn-secondary'}" data-range="single">单日</button>
+        <button class="btn ${rangeMode === '7days' ? 'btn-primary' : 'btn-secondary'}" data-range="7days">近 7 天</button>
+        <button class="btn ${rangeMode === '28days' ? 'btn-primary' : 'btn-secondary'}" data-range="28days">近 28 天</button>
+        <button class="btn ${rangeMode === 'custom' ? 'btn-primary' : 'btn-secondary'}" data-range="custom">自定义</button>
+        ${rangeMode === 'single' ? `<input id="keywordDate" type="date" value="${escapeHtml(date)}" style="margin-left:8px">` : ''}
+        ${rangeMode === 'custom' ? `
+          <span style="margin-left:8px">从</span>
+          <input id="customStart" type="date" value="${escapeHtml(customStart)}">
+          <span>到</span>
+          <input id="customEnd" type="date" value="${escapeHtml(customEnd)}">
+        ` : ''}
+        <button class="btn btn-primary" id="refreshKeywords" style="margin-left:8px">刷新数据</button>
+      </div>
+    `;
+
     container.innerHTML = `
       ${authErrorBanner}
       <div class="page-header">
-        <div><h1>关键词监控</h1><p class="text-muted">Google Search Console · ${escapeHtml(date)}</p></div>
-        <div class="btn-group"><input id="keywordDate" type="date" value="${escapeHtml(date)}"><button class="btn btn-primary" id="refreshKeywords">刷新数据</button></div>
+        <div><h1>关键词监控</h1><p class="text-muted">Google Search Console · ${escapeHtml(dateLabel)}</p></div>
+        ${rangeSelector}
       </div>
       
       <div class="stats-grid">
@@ -129,11 +227,11 @@ Router.register('/keywords', async function (container) {
                 `).join('')}
               </div>
               <div style="flex:1;min-width:200px">
-                <h4 style="margin-bottom:8px;color:#666;font-size:13px">排名变化最大的关键词</h4>
-                ${(analysisJson?.keywords || []).filter(k => Math.abs(k.change) > 0).slice(0, 5).map(k => `
+                <h4 style="margin-bottom:8px;color:#666;font-size:13px">展示次数最多的关键词</h4>
+                ${rows.slice(0, 5).map(r => `
                   <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px">
-                    <span>${escapeHtml(k.keyword)}</span>
-                    <span style="${getTrendClass(k.trend)}">${getTrendIcon(k.trend)} ${k.change > 0 ? '+' : ''}${k.change}</span>
+                    <span>${escapeHtml(r.keyword)}</span>
+                    <span style="font-weight:600;color:#3b82f6">${formatNumber(r.impressions)}</span>
                   </div>
                 `).join('')}
               </div>
@@ -144,14 +242,34 @@ Router.register('/keywords', async function (container) {
       
       <div class="table-wrap">
         <table><thead><tr><th>关键词</th><th>点击</th><th>展示</th><th>CTR</th><th>平均排名</th><th>趋势</th><th>日期</th></tr></thead><tbody>
-          ${rows.length ? rows.map(row => `<tr><td><strong>${escapeHtml(row.keyword)}</strong></td><td>${formatNumber(row.clicks)}</td><td>${formatNumber(row.impressions)}</td><td>${(Number(row.ctr || 0) * 100).toFixed(2)}%</td><td>${Number(row.position || 0).toFixed(1)}</td><td>${getTrendIcon(analysisJson?.keywords?.find(k => k.keyword === row.keyword)?.trend || 'stable')}</td><td>${escapeHtml(row.date)}</td></tr>`).join('') : '<tr><td colspan="7"><div class="empty-state"><p>当前日期没有关键词数据</p><p style="color:#999;font-size:13px">数据通常在 Google 收录网站后 2-3 天开始出现</p></div></td></tr>'}
+          ${rows.length ? rows.map(row => `<tr><td><strong>${escapeHtml(row.keyword)}</strong></td><td>${formatNumber(row.clicks)}</td><td>${formatNumber(row.impressions)}</td><td>${(Number(row.ctr || 0) * 100).toFixed(2)}%</td><td>${Number(row.position || 0).toFixed(1)}</td><td>—</td><td>${escapeHtml(row.date)}</td></tr>`).join('') : '<tr><td colspan="7"><div class="empty-state"><p>当前日期没有关键词数据</p><p style="color:#999;font-size:13px">数据通常在 Google 收录网站后 2-3 天开始出现</p></div></td></tr>'}
         </tbody></table>
       </div>`;
 
-    document.getElementById('keywordDate').addEventListener('change', event => {
-      date = event.target.value;
-      load().catch(error => API.toast(error.message, 'error'));
+    // 绑定范围选择器事件
+    container.querySelectorAll('[data-range]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        rangeMode = btn.dataset.range;
+        load().catch(error => API.toast(error.message, 'error'));
+      });
     });
+
+    if (rangeMode === 'single') {
+      document.getElementById('keywordDate').addEventListener('change', event => {
+        date = event.target.value;
+        load().catch(error => API.toast(error.message, 'error'));
+      });
+    }
+
+    if (rangeMode === 'custom') {
+      document.getElementById('customStart').addEventListener('change', event => {
+        customStart = event.target.value;
+      });
+      document.getElementById('customEnd').addEventListener('change', event => {
+        customEnd = event.target.value;
+      });
+    }
+
     document.getElementById('refreshKeywords').addEventListener('click', () => {
       load().catch(error => API.toast(error.message, 'error'));
     });
