@@ -418,6 +418,15 @@ route('GET', '/api/competitors', async ({ env }) => {
   return jsonResponse({ competitors });
 });
 
+// 调试：测试 sitemap 抓取
+route('GET', '/api/competitors/debug', async ({ url }) => {
+  const domain = url.searchParams.get('domain');
+  if (!domain) return jsonResponse({ error: 'domain required' }, 400);
+  const { fetchCompetitorSitemap } = await import('./lib/competitor');
+  const urls = await fetchCompetitorSitemap(domain);
+  return jsonResponse({ domain, urlCount: urls.length, sample: urls.slice(0, 5) });
+});
+
 // 添加竞品（需 ADMIN_TOKEN）
 route('POST', '/api/competitors', async ({ env, request }) => {
   if (!isAdminAuthorized(request, env)) {
