@@ -98,6 +98,26 @@ export default async function score(env: Env): Promise<void> {
       });
 
       if (currentScore >= 60) {
+        // 为新增动态页面生成 Banner 图片（不影响已有静态页面）
+        let finalHtml = currentHtml;
+        try {
+          const { generateBannerImage } = await import('../lib/banner-gen');
+          const bannerUrl = await generateBannerImage(
+            { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
+            draft.keyword,
+            draft.slug,
+          );
+          if (bannerUrl) {
+            finalHtml = finalHtml.replace(
+              /background-image:url\('[^']*'\);/,
+              `background-image:url('${bannerUrl}');`,
+            );
+            console.log(`[score] Banner generated for ${draft.slug}: ${bannerUrl}`);
+          }
+        } catch (err) {
+          console.error(`[score] Banner generation failed for ${draft.slug}:`, err);
+        }
+
         const publishedEntry = {
           slug: draft.slug,
           title: draft.title,
@@ -107,7 +127,7 @@ export default async function score(env: Env): Promise<void> {
           status: 'published',
           publishedAt: new Date().toISOString(),
           detail_url: `https://www.kestrelmetal.com/${draft.slug}.html`,
-          html: currentHtml,
+          html: finalHtml,
         };
 
         // 写入单个 published 键（包含完整 HTML，供 Worker 动态渲染）

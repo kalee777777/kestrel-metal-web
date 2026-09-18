@@ -126,33 +126,11 @@ export default async function generate(env: Env): Promise<GenerateResult> {
         },
       );
 
-      // 为新增动态页面生成 Banner 图片（不影响已有静态页面）
-      let articleHtml = article.html;
-      try {
-        const { generateBannerImage } = await import('../lib/banner-gen');
-        const bannerUrl = await generateBannerImage(
-          { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
-          item.keyword,
-          article.slug,
-        );
-        if (bannerUrl) {
-          // 将文章 HTML 中的 fallback banner 替换为生成的 Banner
-          articleHtml = articleHtml.replace(
-            /background-image:url\('[^']*'\);/,
-            `background-image:url('${bannerUrl}');`,
-          );
-          console.log(`[generate] Banner generated for ${article.slug}: ${bannerUrl}`);
-        }
-      } catch (err) {
-        console.error(`[generate] Banner generation failed for ${article.slug}:`, err);
-        // 使用 fallback banner，不影响文章发布
-      }
-
       await saveDraft(env.CONTENT_QUEUE, {
         slug: article.slug,
         title: article.title,
         metaDescription: article.metaDescription,
-        html: articleHtml,
+        html: article.html,
         keyword: article.keyword,
         status: 'queued',
         createdAt: new Date().toISOString(),
