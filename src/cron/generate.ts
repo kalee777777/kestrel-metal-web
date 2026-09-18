@@ -87,12 +87,14 @@ export default async function generate(env: Env): Promise<void> {
   const selectedKeywords = items.slice(0, MAX_ARTICLES_PER_WEEK);
 
   console.log(`[generate] Selected ${selectedKeywords.length} keywords for generation`);
+  console.log(`[generate] Keywords: ${selectedKeywords.map(k => k.keyword).join(', ')}`);
 
   let generated = 0;
 
   for (const item of selectedKeywords) {
     try {
       console.log(`[generate] Processing keyword: ${item.keyword}`);
+      console.log(`[generate] DEEPSEEK_API_KEY configured: ${!!env.DEEPSEEK_API_KEY}`);
 
       const article = await generateFullArticle(
         {
