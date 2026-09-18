@@ -504,8 +504,8 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
 
   if (cronName === 'generate') {
     const { default: generate } = await import('./cron/generate');
-    await generate(env);
-    return jsonResponse({ message: 'Content generation completed' });
+    const result = await generate(env);
+    return jsonResponse({ message: 'Content generation completed', ...result });
   }
 
   if (cronName === 'score') {

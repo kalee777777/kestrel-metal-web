@@ -16,7 +16,23 @@ import { saveDraft, getRankings, listKeys, getJSON, setJSON } from '../lib/kv';
 
 const MAX_ARTICLES_PER_WEEK = 2;
 
-export default async function generate(env: Env): Promise<void> {
+export interface GenerateResult {
+  selectedKeywords: string[];
+  generated: number;
+  errors: string[];
+  gapCount: number;
+  opportunityCount: number;
+}
+
+export default async function generate(env: Env): Promise<GenerateResult> {
+  const result: GenerateResult = {
+    selectedKeywords: [],
+    generated: 0,
+    errors: [],
+    gapCount: 0,
+    opportunityCount: 0,
+  };
+
   if (!env.DEEPSEEK_API_KEY) {
     throw new Error('DeepSeek API key not configured');
   }
@@ -84,12 +100,14 @@ export default async function generate(env: Env): Promise<void> {
     items = allCandidates;
   }
 
+  result.gapCount = gapItems.length;
+  result.opportunityCount = items.length;
+
   const selectedKeywords = items.slice(0, MAX_ARTICLES_PER_WEEK);
+  result.selectedKeywords = selectedKeywords.map(k => k.keyword);
 
   console.log(`[generate] Selected ${selectedKeywords.length} keywords for generation`);
   console.log(`[generate] Keywords: ${selectedKeywords.map(k => k.keyword).join(', ')}`);
-
-  let generated = 0;
 
   for (const item of selectedKeywords) {
     try {
@@ -121,18 +139,22 @@ export default async function generate(env: Env): Promise<void> {
         images: [],
       });
 
-      generated++;
+      result.generated++;
       console.log(`[generate] Article saved: ${article.slug} (${article.wordCount} words)`);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     } catch (err) {
-      console.error(`[generate] Failed to generate article for "${item.keyword}":`, err);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      result.errors.push(`"${item.keyword}": ${errMsg}`);
+      console.error(`[generate] Failed to generate article for "${item.keyword}":`, errMsg);
     }
   }
 
-  console.log(`[generate] Completed. Generated ${generated} articles.`);
+  console.log(`[generate] Completed. Generated ${result.generated} articles. Errors: ${result.errors.length}`);
 
   await generateImagesForDrafts(env);
+
+  return result;
 }
 
 async function generateImagesForDrafts(env: Env): Promise<void> {
