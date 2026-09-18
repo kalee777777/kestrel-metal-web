@@ -285,7 +285,7 @@ export async function deleteCompetitor(
 export async function analyzeCompetitor(
   env: Env,
   domain: string,
-): Promise<{ keywordCount: number; error?: string }> {
+): Promise<{ keywordCount: number; error?: string; debug?: { urlCount: number } }> {
   const urls = await fetchCompetitorSitemap(domain);
   if (urls.length === 0) {
     return { keywordCount: 0, error: '无法获取 sitemap，请确认域名正确且 sitemap 公开可访问' };
@@ -303,7 +303,7 @@ export async function analyzeCompetitor(
     await setJSON(env.SEO_DATA, 'competitors:list', list);
   }
 
-  return { keywordCount: keywords.length };
+  return { keywordCount: keywords.length, debug: { urlCount: urls.length } };
 }
 
 // ─── 缺口计算 ───
