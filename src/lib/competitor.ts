@@ -75,25 +75,22 @@ const INDUSTRY_SEEDS = [
 
 // ─── Sitemap 抓取 ───
 
-async function fetchWithTimeout(url: string, timeoutMs = 10000): Promise<string | null> {
+async function fetchWithTimeout(url: string, _timeoutMs = 10000): Promise<string | null> {
   try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      const resp = await fetch(url, { signal: controller.signal, redirect: 'follow' });
-      if (!resp.ok) {
-        console.log(`[competitor] Fetch failed for ${url}: HTTP ${resp.status}`);
-        return null;
-      }
-      const text = await resp.text();
-      if (!text || text.trim().length === 0) {
-        console.log(`[competitor] Empty response for ${url}`);
-        return null;
-      }
-      return text;
-    } finally {
-      clearTimeout(timer);
+    const resp = await fetch(url, {
+      redirect: 'follow',
+      cf: { cacheTtl: 300 },
+    });
+    if (!resp.ok) {
+      console.log(`[competitor] Fetch failed for ${url}: HTTP ${resp.status}`);
+      return null;
     }
+    const text = await resp.text();
+    if (!text || text.trim().length === 0) {
+      console.log(`[competitor] Empty response for ${url}`);
+      return null;
+    }
+    return text;
   } catch (err) {
     console.log(`[competitor] Fetch error for ${url}: ${err instanceof Error ? err.message : String(err)}`);
     return null;
