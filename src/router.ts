@@ -482,6 +482,40 @@ route('GET', '/api/competitors/gap', async ({ env }) => {
   return jsonResponse({ gaps, generatedAt: new Date().toISOString() });
 });
 
+// 为指定已发布文章重新生成 Banner（需 ADMIN_TOKEN）
+route('POST', '/api/banner/regenerate', async ({ env, request }) => {
+  const auth = request.headers.get('Authorization');
+  if (auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+
+  const body = (await request.json()) as { slug?: string };
+  if (!body.slug) return jsonResponse({ error: 'slug is required' }, 400);
+
+  const published = await env.CONTENT_QUEUE.get(`published:${body.slug}`, 'json') as { html?: string; title?: string; keyword?: string } | null;
+  if (!published || !published.html) return jsonResponse({ error: 'Article not found' }, 404);
+
+  try {
+    const { generateBannerImage } = await import('./lib/banner-gen');
+    const bannerUrl = await generateBannerImage(
+      { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
+      published.keyword || '',
+      body.slug,
+    );
+    if (bannerUrl) {
+      const updatedHtml = published.html.replace(
+        /background-image:url\('[^']*'\);/,
+        `background-image:url('${bannerUrl}');`,
+      );
+      await env.CONTENT_QUEUE.put(`published:${body.slug}`, JSON.stringify({ ...published, html: updatedHtml }));
+      return jsonResponse({ ok: true, slug: body.slug, bannerUrl });
+    }
+    return jsonResponse({ ok: false, error: 'Banner generation returned no URL' });
+  } catch (err) {
+    return jsonResponse({ error: err instanceof Error ? err.message : String(err) }, 500);
+  }
+});
+
 // 手动触发 Cron 任务（需简单认证）
 route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   const auth = request.headers.get('Authorization');
