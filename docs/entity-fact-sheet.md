@@ -12,6 +12,7 @@
 | 字段 | 标准值 | 备注 |
 |------|--------|------|
 | 品牌名 | Kestrel Metal | 各平台 Company name 统一用这个 |
+| 标准 Tagline | Security Fencing & Perimeter Solutions \| Wire Mesh, Gabions & Razor Wire Manufacturer | 与 LinkedIn 线上一致,各平台标语统一 |
 | 英文法定名 | Kestrel Metal Products Co., Ltd. | LinkedIn 页面名已用此 |
 | 中文法定名 | 安平县凯瑞尔金属制品有限公司 | |
 | 成立年份 | 2014(12+ years) | |
@@ -68,15 +69,28 @@
 >
 > Website: https://www.kestrelmetal.com
 
-## 四、媒体资产
+## 四、中文资料(中文平台/工商用途)
 
-| 资产 | 位置 | 用途 |
-|------|------|------|
-| Logo | `kestrel-site/images/logo.svg` / `kestrelmetal.png` | 平台头像(与网站一致) |
-| 产品图 | `kestrel-site/images/blog/`、`kestrel-site/products/` | 平台产品目录(≥5 张) |
-| 认证证书 | `kestrel-site/files/`(下载页对应文件) | Thomasnet 等要求认证文件时 |
+| 字段 | 值 |
+|------|-----|
+| 中文法定名 | 安平县凯瑞尔金属制品有限公司 |
+| 中文地址(县级) | 河北省衡水市安平县 |
+| 中文详细街道地址 | ⏳ 待补充(用户提供后填入,勿臆写) |
 
-## 五、平台档案登记表(上线一个登记一个)
+**中文简介(短版)**:
+
+> 安平县凯瑞尔金属制品有限公司(Kestrel Metal)是中国专业的安全围栏与金属丝网制造商,总部位于"中国丝网之乡"河北安平。自 2014 年成立,已在全球 50 多个国家交付 200+ 项目,通过 ISO 9001:2015 认证,月产能 3000+ 吨。产品涵盖安全围栏、勾花网、电焊网、石笼网、刀片刺网(NATO-22)、刺绳等,支持 CE / UKCA / REACH 出口合规。
+
+## 五、媒体资产(平台上传从这里选)
+
+| 资产 | 具体文件 | 用途 |
+|------|---------|------|
+| Logo | `images/logo.svg`(矢量)/ `images/kestrelmetal.png`(位图) | 平台头像(与网站/LinkedIn 一致) |
+| 推荐产品图(≥5 张,已核验存在) | `images/app-pvc-chain-link.webp`(PVC 勾花网)、`images/app-gabion-military.webp`(石笼)、`images/barbed-wire-pvc-hero.webp`(刺绳)、`images/blog/blog-gabion-install-hero.webp`(施工)、`images/acc-c-rings.webp`(配件)、`products/` 目录按产品线各选一张 | Europages / Thomasnet / GBP 产品目录 |
+| 认证文件 | `files/Kestrel_ISO_9001_Certificate.pdf`、`files/Kestrel_CE_Declaration.pdf` | Thomasnet 等要求认证材料时 |
+| 技术资料(加分项) | `files/Kestrel_Coating_Specs_Guide.pdf`、`files/Kestrel_Fence_Panel_CAD.zip`、安装指南 PDF | 平台资料库/给采购的附件 |
+
+## 六、平台档案登记表(上线一个登记一个)
 
 | 平台 | 档案 URL | 状态 | 日期 |
 |------|---------|------|------|
@@ -89,7 +103,7 @@
 
 > 平台 URL 定稿后:① 更新本表 → ② 加入 sameAs 回加(ENT-05)→ ③ 同步 llms.txt Company Identity 段
 
-## 六、决策记录
+## 七、决策记录
 
 | 日期 | 决策 |
 |------|------|
