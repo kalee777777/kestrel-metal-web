@@ -134,6 +134,7 @@ Router.register('/keyword-groups', async function (container) {
         <div class="stat-card"><div class="stat-label">已归组</div><div class="stat-value">${formatNumber(groupedCount)}</div></div>
         <div class="stat-card" style="border-left:3px solid #ef4444"><div class="stat-label">未归组</div><div class="stat-value" style="color:#ef4444">${ungrouped.length}</div></div>
         ${cluster.filteredNonEnglish ? `<div class="stat-card" style="border-left:3px solid #8b5cf6"><div class="stat-label">已过滤非英文</div><div class="stat-value" style="color:#8b5cf6">${cluster.filteredNonEnglish}</div></div>` : ''}
+        ${cluster.filteredNoise ? `<div class="stat-card" style="border-left:3px solid #6b7280"><div class="stat-label">已过滤噪音页</div><div class="stat-value" style="color:#6b7280">${cluster.filteredNoise}</div></div>` : ''}
       </div>`;
 
     const upcomingCard = upcoming.length ? `

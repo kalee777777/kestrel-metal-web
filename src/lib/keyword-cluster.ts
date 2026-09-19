@@ -56,6 +56,8 @@ export interface ClusterResult {
   coveredGroupCount: number;
   /** 被语言过滤剔除非英文关键词数量（诊断用） */
   filteredNonEnglish?: number;
+  /** 被噪音过滤剔除的非产品页关键词数量（诊断用） */
+  filteredNoise?: number;
   generatedAt: string;
 }
 
@@ -91,13 +93,16 @@ const PRODUCT_GROUPS: ProductGroupDef[] = [
     id: 'chain-link',
     name: 'Chain Link Fence / 勾花网',
     productLine: 'chain-link',
-    patterns: ['chain link', 'chain-link', 'cyclone fence', 'diamond mesh fence'],
+    patterns: ['chain link', 'chain-link', 'cyclone fence', 'cyclone wire', 'diamond mesh fence'],
   },
   {
     id: 'welded-mesh',
     name: 'Welded Wire Mesh / 焊接网',
     productLine: 'welded-mesh',
-    patterns: ['welded wire mesh', 'welded mesh', 'weldmesh', 'welded panel', 'welded fence'],
+    patterns: [
+      'welded wire mesh', 'welded mesh', 'weldmesh', 'welded panel', 'welded fence',
+      'welded wire', 'masonry',
+    ],
   },
   {
     id: 'hexagonal-mesh',
@@ -116,9 +121,19 @@ const PRODUCT_GROUPS: ProductGroupDef[] = [
     name: 'Security Fence / 安全防护围栏',
     productLine: 'security-fence',
     patterns: [
-      'security fence', 'perimeter fence', 'prison fence', 'anti climb', 'anti-climb',
-      'crowd control', 'temporary fence', '358 fence', 'palisade', 'high security',
-      'airport fence', 'military',
+      'security fence', 'perimeter fence', 'perimeter fencing', 'prison fence', 'anti climb', 'anti-climb',
+      'crowd control', 'temporary fence', '358 fence', '358 mesh', 'palisade', 'high security',
+      'airport fence', 'airport perimeter', 'military', 'warehouse fencing', 'warehouse fence',
+    ],
+  },
+  {
+    id: 'fence-panel',
+    name: 'Fence Panels / 围栏网片（3D / BRC / 双丝）',
+    productLine: 'fence-panel',
+    patterns: [
+      '3d fence', '3d panel', 'panel fence', 'fence panel', 'brc fence', 'brc roll',
+      'brc wire', 'double wire', 'clear view', 'wire partition', 'partition panel',
+      'curved fence', 'v mesh',
     ],
   },
   {
@@ -137,17 +152,42 @@ const PRODUCT_GROUPS: ProductGroupDef[] = [
     id: 'wire-mesh',
     name: 'Wire Mesh / 金属网（通用）',
     productLine: 'wire-mesh',
-    patterns: ['wire mesh', 'steel mesh', 'metal mesh', 'mesh sheet', 'mesh roll', 'expanded metal'],
+    patterns: [
+      'wire mesh', 'steel mesh', 'metal mesh', 'mesh sheet', 'mesh roll', 'expanded metal',
+      'mesh fence', 'wire fence', 'steel fence', 'mesh fencing',
+    ],
   },
   {
     id: 'wire-products',
     name: 'Wire Products / 丝材',
     productLine: 'wire',
-    patterns: ['wire rod', 'steel wire', 'galvanized wire', 'binding wire', 'annealed wire', 'stainless wire'],
+    patterns: [
+      'wire rod', 'steel wire', 'galvanized wire', 'binding wire', 'annealed wire',
+      'stainless wire', 'oval wire', 'flat wire',
+    ],
   },
 ];
 
 const UNGROUPED_ID = 'ungrouped';
+
+/**
+ * 非产品页噪音：竞品 sitemap 里的品牌宣传、展会、视频、政策页。
+ * 这些词即使语言正确、也含产品词根，也不应进入选题池。
+ */
+const NOISE_PATTERNS = [
+  'privacy policy', 'terms of service', 'terms and conditions', 'cookie policy',
+  'about us', 'contact us', 'factory tour', 'company profile', 'our history',
+  'introduction video', 'product video', 'wholesale introduction',
+  'canton fair', 'trade show', 'exhibition', 'shengsen', 'new opportunities',
+  'weed mat', 'careers', 'job vacancy', 'download catalog',
+];
+
+/** 判断是否为可选题的产品关键词（排除品牌/展会/政策类噪音页） */
+export function isProductKeyword(keyword: string): boolean {
+  const kw = normalizeKeyword(keyword);
+  if (!kw) return false;
+  return !NOISE_PATTERNS.some((p) => kw.includes(p));
+}
 
 /** 每篇文章最多携带的变体词数量（主词 + N 个变体） */
 export const MAX_VARIANTS_PER_ARTICLE = 8;
@@ -325,10 +365,18 @@ export async function getPublishedKeywords(env: Env): Promise<Array<{ keyword: s
 /**
  * 汇总全部候选关键词：竞品缺口 + GSC 机会 + GSC 排名
  */
-export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[]; gapCount: number; opportunityCount: number; filteredNonEnglish: number }> {
+export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[]; gapCount: number; opportunityCount: number; filteredNonEnglish: number; filteredNoise: number }> {
   const items: KeywordItem[] = [];
   const seen = new Set<string>();
   let filteredNonEnglish = 0;
+  let filteredNoise = 0;
+
+  /** 语言 + 噪音两道过滤，返回 true 表示可用 */
+  const usable = (keyword: string): boolean => {
+    if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; return false; }
+    if (!isProductKeyword(keyword)) { filteredNoise++; return false; }
+    return true;
+  };
 
   // 来源 1：竞品缺口
   const gapData = await env.SEO_DATA.get('competitors:gap');
@@ -340,7 +388,7 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
         const keyword = normalizeKeyword(gap.keyword);
         if (!keyword) continue;
         // 竞品多语言 sitemap 会带进大量非英文 slug，先过滤再进入选题池
-        if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; continue; }
+        if (!usable(keyword)) continue;
         if (seen.has(keyword)) continue;
         seen.add(keyword);
         const competitorCount = Number(gap.competitorCount ?? 0);
@@ -369,7 +417,7 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
   for (const op of opportunities ?? []) {
     const keyword = normalizeKeyword(op.keyword);
     if (!keyword) continue;
-    if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; continue; }
+    if (!usable(keyword)) continue;
     if (seen.has(keyword)) continue;
     seen.add(keyword);
     const impressions = Number(op.impressions ?? 0);
@@ -391,7 +439,7 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
   for (const row of rankings) {
     const keyword = normalizeKeyword(row.keyword);
     if (!keyword) continue;
-    if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; continue; }
+    if (!usable(keyword)) continue;
     if (seen.has(keyword)) continue;
     seen.add(keyword);
     items.push({
@@ -408,18 +456,22 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
   if (filteredNonEnglish > 0) {
     console.log(`[cluster] Filtered out ${filteredNonEnglish} non-English keywords`);
   }
-  return { items, gapCount, opportunityCount, filteredNonEnglish };
+  if (filteredNoise > 0) {
+    console.log(`[cluster] Filtered out ${filteredNoise} non-product noise keywords`);
+  }
+  return { items, gapCount, opportunityCount, filteredNonEnglish, filteredNoise };
 }
 
 /**
  * 完整聚类流程：采集 → 过滤非英文 → 归组 → 标记覆盖
  */
 export async function runClustering(env: Env): Promise<ClusterResult> {
-  const { items, filteredNonEnglish } = await collectCandidates(env);
+  const { items, filteredNonEnglish, filteredNoise } = await collectCandidates(env);
   const overrides = await loadOverrides(env);
   const publishedKeywords = await getPublishedKeywords(env);
   const result = buildKeywordGroups(items, overrides, publishedKeywords);
   result.filteredNonEnglish = filteredNonEnglish;
+  result.filteredNoise = filteredNoise;
   await cacheCluster(env, result);
   return result;
 }
