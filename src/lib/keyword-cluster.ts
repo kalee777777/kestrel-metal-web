@@ -11,6 +11,7 @@
 
 import type { Env } from '../index';
 import { getJSON, setJSON, getRankings } from './kv';
+import { isEnglishKeyword } from './lang-filter';
 
 // ─── 类型定义 ───
 
@@ -53,6 +54,8 @@ export interface ClusterResult {
   ungrouped: KeywordItem[];
   totalKeywords: number;
   coveredGroupCount: number;
+  /** 被语言过滤剔除非英文关键词数量（诊断用） */
+  filteredNonEnglish?: number;
   generatedAt: string;
 }
 
@@ -322,9 +325,10 @@ export async function getPublishedKeywords(env: Env): Promise<Array<{ keyword: s
 /**
  * 汇总全部候选关键词：竞品缺口 + GSC 机会 + GSC 排名
  */
-export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[]; gapCount: number; opportunityCount: number }> {
+export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[]; gapCount: number; opportunityCount: number; filteredNonEnglish: number }> {
   const items: KeywordItem[] = [];
   const seen = new Set<string>();
+  let filteredNonEnglish = 0;
 
   // 来源 1：竞品缺口
   const gapData = await env.SEO_DATA.get('competitors:gap');
@@ -334,7 +338,10 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
       const parsed = JSON.parse(gapData) as { gaps?: Array<{ keyword: string; competitorCount: number }> };
       for (const gap of parsed.gaps ?? []) {
         const keyword = normalizeKeyword(gap.keyword);
-        if (!keyword || seen.has(keyword)) continue;
+        if (!keyword) continue;
+        // 竞品多语言 sitemap 会带进大量非英文 slug，先过滤再进入选题池
+        if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; continue; }
+        if (seen.has(keyword)) continue;
         seen.add(keyword);
         const competitorCount = Number(gap.competitorCount ?? 0);
         items.push({
@@ -361,7 +368,9 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
   let opportunityCount = 0;
   for (const op of opportunities ?? []) {
     const keyword = normalizeKeyword(op.keyword);
-    if (!keyword || seen.has(keyword)) continue;
+    if (!keyword) continue;
+    if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; continue; }
+    if (seen.has(keyword)) continue;
     seen.add(keyword);
     const impressions = Number(op.impressions ?? 0);
     items.push({
@@ -381,7 +390,9 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
   const rankings = (await getRankings(env.SEO_DATA, today)) ?? [];
   for (const row of rankings) {
     const keyword = normalizeKeyword(row.keyword);
-    if (!keyword || seen.has(keyword)) continue;
+    if (!keyword) continue;
+    if (!isEnglishKeyword(keyword)) { filteredNonEnglish++; continue; }
+    if (seen.has(keyword)) continue;
     seen.add(keyword);
     items.push({
       keyword,
@@ -394,17 +405,21 @@ export async function collectCandidates(env: Env): Promise<{ items: KeywordItem[
     });
   }
 
-  return { items, gapCount, opportunityCount };
+  if (filteredNonEnglish > 0) {
+    console.log(`[cluster] Filtered out ${filteredNonEnglish} non-English keywords`);
+  }
+  return { items, gapCount, opportunityCount, filteredNonEnglish };
 }
 
 /**
- * 完整聚类流程：采集 → 归组 → 标记覆盖
+ * 完整聚类流程：采集 → 过滤非英文 → 归组 → 标记覆盖
  */
 export async function runClustering(env: Env): Promise<ClusterResult> {
-  const { items } = await collectCandidates(env);
+  const { items, filteredNonEnglish } = await collectCandidates(env);
   const overrides = await loadOverrides(env);
   const publishedKeywords = await getPublishedKeywords(env);
   const result = buildKeywordGroups(items, overrides, publishedKeywords);
+  result.filteredNonEnglish = filteredNonEnglish;
   await cacheCluster(env, result);
   return result;
 }

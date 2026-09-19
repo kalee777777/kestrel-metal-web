@@ -7,6 +7,7 @@
 
 import type { Env } from '../index';
 import { getJSON, setJSON, getRankings } from './kv';
+import { isEnglishKeyword } from './lang-filter';
 
 // ─── 类型定义 ───
 
@@ -218,13 +219,14 @@ export async function extractKeywordsFromUrls(
   let filteredCount = 0;
   let sampleKeywords: string[] = [];
 
-  // 从 URL slug 提取
+  // 从 URL slug 提取（竞品多语言 sitemap 会混入西语/意语/印尼语等版本，
+  // 这里直接丢弃非英文词，避免污染缺口池）
   for (const url of urls) {
     const kw = extractKeywordFromUrl(url);
     if (kw) {
       extractedCount++;
       if (sampleKeywords.length < 5) sampleKeywords.push(kw);
-      if (!seen.has(kw) && isIndustryRelevant(kw)) {
+      if (!seen.has(kw) && isEnglishKeyword(kw) && isIndustryRelevant(kw)) {
         seen.add(kw);
         keywords.push({ keyword: kw, url, source: 'sitemap' });
       } else {
@@ -250,7 +252,7 @@ export async function extractKeywordsFromUrls(
         const html = await fetchWithTimeout(url, 8000);
         if (!html) return null;
         const kw = extractKeywordFromTitle(html);
-        if (kw && !seen.has(kw) && isIndustryRelevant(kw)) {
+        if (kw && !seen.has(kw) && isEnglishKeyword(kw) && isIndustryRelevant(kw)) {
           seen.add(kw);
           return { keyword: kw, url, source: 'title' as const };
         }
@@ -386,6 +388,8 @@ export async function computeGap(env: Env): Promise<GapResult[]> {
 
     for (const kw of keywords) {
       const normalized = kw.keyword.toLowerCase().trim();
+      // 存量 KV 里可能还留着早期未过滤的多语言词，这里再兜一层
+      if (!normalized || !isEnglishKeyword(normalized)) continue;
       if (!keywordMap.has(normalized)) {
         keywordMap.set(normalized, []);
       }
