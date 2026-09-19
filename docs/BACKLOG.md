@@ -15,7 +15,7 @@
 
 | ID | 事项 | 说明 | 状态 |
 |----|------|------|------|
-| DEC-1 | LinkedIn slug 定稿 | 候选 `kestrelmetal`(线上已验证存在)。**用户 2026-09-21 提供**;定稿前各平台不填 LinkedIn 链接 | 🔄 |
+| DEC-1 | LinkedIn slug 定稿 | ✅ 2026-09-20 定稿 **kestrelmetal**(https://www.linkedin.com/company/kestrelmetal,无痕窗口公开访问验证通过) | ✅ 09-20 |
 | DEC-2 | 公司地址英文写法定稿 | ✅ 2026-09-20 定为 "Anping Industrial Zone, Anping County, Hengshui, Hebei 053600, China"(与站内 schema 一致) | ✅ 09-20 |
 | DEC-3 | YouTube 频道建或不建 | ✅ 2026-09-20 定为**暂保留**(档案待建;建好前不进任何平台链接/sameAs) | ✅ 09-20 |
 
@@ -27,7 +27,8 @@
 |----|------|----------------|------|------|
 | GEO-01 | 首轮基线测试 | 10 条 Prompt(推荐/对比/合规各 3-4)× ChatGPT(联网)/Perplexity/Gemini;结果录入管理台「基线验证」。验收:产出第一份引用率基线 | 人工测试 + AI 记录 | ☐ |
 | GEO-02 | 生产/本地 sitemap 差异修复 | 线上 207 vs 本地 198,找出多出的 9 个页面并同步本地副本。验收:差异清单 + 本地补齐,消除部署覆盖风险 | AI | ☐ |
-| ENT-00 | 创建统一信息包 entity-fact-sheet.md | ✅ 2026-09-20 已创建([entity-fact-sheet.md](entity-fact-sheet.md)),含定稿字段 + 三版公司描述 + 平台登记表;**剩 LinkedIn slug 待 DEC-1 定稿后补最终值** | AI | 🔄 |
+| ENT-00 | 创建统一信息包 entity-fact-sheet.md | ✅ 2026-09-20 完整定稿([entity-fact-sheet.md](entity-fact-sheet.md)):DEC-1/2/3 全部关闭,字段 + 三版描述 + 平台登记表齐备 | AI | ✅ 09-20 |
+| ENT-06 | LinkedIn 页面补全 | 管理后台待办:添加地点(信息包地址)+ 有效邮箱域名(kestrelmetal.com)+ 行业归类(现显示"建筑材料批发业",建议改 Manufacturing)+ 按内容计划发前 3 篇。验收:后台无待办提示 | 人工 | ☐ |
 | SITE-01 | 站内 schema 联系信息对齐 | 电话格式 `+86-17832383339` → `+86 17832383339`、schema 邮箱 `sales@` → `kalee@`(主)、员工 60-100 → 51-100;改动点:`perf-scripts/static-jsonld.js` + `js/seo-enhance.js`,随下次 schema 重建/部署一并执行(数字主体不变,不紧急) | AI | ☐ |
 | GEO-03 | GA4 ai_referral 数据首查 | 确认事件在积累、自定义维度可查,定型月度查看路径 | 人工 | ☐ |
 

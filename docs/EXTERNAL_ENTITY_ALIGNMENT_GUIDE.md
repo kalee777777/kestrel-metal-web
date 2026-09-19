@@ -3,7 +3,7 @@
 **目的**: 确保 Kestrel Metal 在所有主流 B2B 平台、目录网站和知识图谱中的实体信息一致，提升 AI 搜索引擎（ChatGPT、Perplexity、Claude）对公司实体的认知准确度。
 
 **执行日期**: 2026-08-21
-**⚠️ 2026-09-20 更新**: 所有字段的标准值以 **[entity-fact-sheet.md](entity-fact-sheet.md)(统一信息包)** 为准,本文仅保留操作步骤。已定稿:地址(Anping Industrial Zone)/电话(+86 17832383339)/主邮箱(kalee@kestrelmetal.com)/员工规模(51-100);YouTube 暂保留但档案待建(建好前不得写入平台链接或 sameAs);LinkedIn slug 待定稿后更新。
+**⚠️ 2026-09-20 更新**: 所有字段的标准值以 **[entity-fact-sheet.md](entity-fact-sheet.md)(统一信息包)** 为准,本文仅保留操作步骤。已定稿:地址(Anping Industrial Zone)/电话(+86 17832383339)/主邮箱(kalee@kestrelmetal.com)/员工规模(51-100);**LinkedIn slug 定稿为 kestrelmetal**(本文旧写法 kestrel-metal 作废);YouTube 暂保留但档案待建(建好前不得写入平台链接或 sameAs)。
 
 ---
 

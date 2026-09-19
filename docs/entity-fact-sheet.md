@@ -21,7 +21,7 @@
 | 邮箱(备用) | info@kestrelmetal.com / sales@kestrelmetal.com | 仅平台要求备用邮箱时使用 |
 | 员工规模 | 51-100 | **DEC 已定 2026-09-20**;平台下拉选 51-100;站内 schema 为 60-100(数字区间不冲突,随 SITE-01 顺手对齐) |
 | 官网 | https://www.kestrelmetal.com | |
-| LinkedIn | ⏳ **待定稿**(用户 2026-09-21 提供) | 候选:`linkedin.com/company/kestrelmetal`(线上已验证存在)。定稿前任何平台不得填写 LinkedIn 链接 |
+| LinkedIn | https://www.linkedin.com/company/kestrelmetal | **DEC-1 已定稿 2026-09-20**(无痕窗口公开访问验证通过;LinkedIn 自定义 URL 仅允许字母数字,无连字符) |
 | YouTube | 暂保留,**档案待建** | DEC-3 已定 2026-09-20;档案建好前 **不得** 写入任何平台链接或 sameAs |
 | 认证 | ISO 9001:2015 / CE(EN 10223, EN 10244) / UKCA / REACH | |
 | 年产能 | 3,000+ metric tons/month | |
@@ -80,7 +80,7 @@
 
 | 平台 | 档案 URL | 状态 | 日期 |
 |------|---------|------|------|
-| LinkedIn | ⏳ 待定稿(页面已上线) | ✅ 2026-08-30 | 上线 |
+| LinkedIn | https://www.linkedin.com/company/kestrelmetal | ✅ 已上线(slug 定稿 2026-09-20;页面待补全,见 ENT-06) | 2026-08-30 |
 | Europages | — | ☐ 未建 | |
 | Thomasnet | — | ☐ 未建 | |
 | Google Business Profile | — | ☐ 未建 | |
@@ -97,4 +97,4 @@
 | 2026-09-20 | 电话统一为 +86 17832383339;邮箱主用 kalee@kestrelmetal.com |
 | 2026-09-20 | 员工规模 51-100 |
 | 2026-09-20 | DEC-3 YouTube 暂保留(档案待建,建好前不进 sameAs) |
-| 2026-09-21(待) | DEC-1 LinkedIn slug 待用户提供后定稿 |
+| 2026-09-20 | DEC-1 LinkedIn slug 定稿为 **kestrelmetal**(https://www.linkedin.com/company/kestrelmetal,公开访问验证通过) |
