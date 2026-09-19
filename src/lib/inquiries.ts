@@ -221,28 +221,27 @@ export async function addReply(
 /** 获取询盘统计信息 */
 export async function getInquiryStats(
   kv: KVNamespace
-): Promise<{ total: number; pending: number; replied: number; closed: number }> {
-  const statsKey = 'inquiries:stats';
-  const data = await kv.get(statsKey, 'json');
-  if (data) return data as { total: number; pending: number; replied: number; closed: number };
-
-  // 如果没有缓存，计算统计
+): Promise<{ total: number; pending: number; replied: number; closed: number; today: number }> {
+  // 统计中的「今日数量」随日期变化，因此直接实时计算，避免读取过期缓存
   return await updateInquiryStats(kv);
 }
 
 /** 更新询盘统计 */
 async function updateInquiryStats(
   kv: KVNamespace
-): Promise<{ total: number; pending: number; replied: number; closed: number }> {
+): Promise<{ total: number; pending: number; replied: number; closed: number; today: number }> {
   const listKey = 'inquiries:list';
   const listData = await kv.get(listKey, 'json');
   const inquiries: Inquiry[] = listData ? (listData as Inquiry[]) : [];
+
+  const todayStr = new Date().toISOString().split('T')[0];
 
   const stats = {
     total: inquiries.length,
     pending: inquiries.filter(i => i.status === 'pending').length,
     replied: inquiries.filter(i => i.status === 'replied').length,
-    closed: inquiries.filter(i => i.status === 'closed').length
+    closed: inquiries.filter(i => i.status === 'closed').length,
+    today: inquiries.filter(i => i.created_at?.split('T')[0] === todayStr).length
   };
 
   const statsKey = 'inquiries:stats';

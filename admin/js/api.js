@@ -408,6 +408,31 @@ const API = (function () {
 
   // Auth
   async function login(username, password) {
+    // 优先使用真实 ADMIN_TOKEN 登录（password 即 ADMIN_TOKEN）
+    // 用需要鉴权的 /api/inquiries 做探针，避免健康检查接口不校验密钥导致任意密码通过
+    let probe = null;
+    try {
+      probe = await fetch('/api/inquiries?page=1&pageSize=1', {
+        headers: { 'Authorization': `Bearer ${password}` }
+      });
+    } catch (e) {
+      probe = null; // Worker 不可达，回退本地 mock
+    }
+
+    if (probe) {
+      if (probe.ok) {
+        setToken(password);
+        const userData = { id: 1, username: username, email: `${username}@kestrelmetal.com`, role: 'admin' };
+        setUser(userData);
+        return { token: password, user: userData };
+      }
+      if (probe.status === 401) {
+        throw new Error('密码错误：ADMIN_TOKEN 不匹配');
+      }
+      throw new Error('登录失败：服务端返回 ' + probe.status);
+    }
+
+    // 回退：本地 mock 认证（仅当 Worker 不可达时）
     await delay();
     const users = getStorage('admin_users') || [];
     const user = users.find(u => u.username === username && u.password === password);
@@ -512,12 +537,36 @@ const API = (function () {
     if (segments[0] === 'api' && segments[1] === 'dashboard' && segments[2] === 'summary') {
       const tracked = getStorage('analytics_data') || {};
       const trackedLog = getStorage('visitor_log') || [];
-      const inquiries = getCollection('inquiries');
       const products = getCollection('products');
       const posts = getCollection('blog_posts');
       const today = new Date();
       const todayStr = today.toDateString();
-      const todayInquiries = inquiries.filter(i => new Date(i.created_at).toDateString() === todayStr).length;
+
+      // 询盘数据以 Worker KV 为准，Worker 不可用时回退本地缓存
+      let totalInquiries = 0;
+      let todayInquiries = 0;
+      let loadedFromWorker = false;
+      const adminToken = localStorage.getItem('km_admin_token');
+      if (adminToken) {
+        try {
+          const res = await fetch('/api/inquiries/stats/count', {
+            headers: { 'Authorization': `Bearer ${adminToken}` }
+          });
+          if (res.ok) {
+            const stats = await res.json();
+            totalInquiries = stats.total || 0;
+            todayInquiries = stats.today || 0;
+            loadedFromWorker = true;
+          }
+        } catch (e) {
+          loadedFromWorker = false;
+        }
+      }
+      if (!loadedFromWorker) {
+        const inquiries = getCollection('inquiries');
+        totalInquiries = inquiries.length;
+        todayInquiries = inquiries.filter(i => new Date(i.created_at).toDateString() === todayStr).length;
+      }
 
       const realToday = tracked.today || {};
       const realDaily = (tracked.dailyHistory || {});
@@ -540,7 +589,7 @@ const API = (function () {
         total: {
           pageviews: totalPageviews,
           visitors: totalVisitors,
-          inquiries: inquiries.length,
+          inquiries: totalInquiries,
           products: products.filter(p => p.is_active).length,
           blogPosts: posts.filter(p => p.status === 'published').length
         },
@@ -634,20 +683,35 @@ const API = (function () {
       return getCollection('glossary');
     }
 
-    // Inquiries
+    // Inquiries - 使用真实 Worker API
     if (segments[0] === 'api' && segments[1] === 'inquiries') {
-      if (segments[2] === 'stats' && segments[3] === 'count') {
-        const inquiries = getCollection('inquiries');
-        return { pending: inquiries.filter(i => i.status === 'pending').length };
+      const adminToken = localStorage.getItem('km_admin_token');
+      if (!adminToken) {
+        throw new Error('未登录或登录已过期');
       }
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${adminToken}`
+      };
+
+      // 构建完整的 API 路径
+      const apiPath = '/' + segments.join('/');
+      const queryString = params.toString();
+      const fullUrl = queryString ? `${apiPath}?${queryString}` : apiPath;
+
+      // 统计接口
+      if (segments[2] === 'stats' && segments[3] === 'count') {
+        const response = await fetch(fullUrl, { method: 'GET', headers });
+        if (!response.ok) throw new Error('获取统计失败: ' + response.status);
+        return await response.json();
+      }
+
+      // CSV 导出
       if (segments[2] === 'export' && segments[3] === 'csv') {
-        API.toast('CSV 导出在纯静态模式下生成模拟数据', 'info');
-        const inquiries = getCollection('inquiries');
-        let csv = 'ID,Name,Email,Company,Country,Product,Quantity,Status,Created At\n';
-        inquiries.forEach(i => {
-          csv += `${i.id},${i.name},${i.email},${i.company},${i.country},${i.product_name},${i.quantity},${i.status},${i.created_at}\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv' });
+        const response = await fetch(fullUrl, { method: 'GET', headers });
+        if (!response.ok) throw new Error('导出失败: ' + response.status);
+        const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -656,30 +720,51 @@ const API = (function () {
         URL.revokeObjectURL(url);
         return { message: '导出成功' };
       }
+
+      // 回复询盘
       const id = segments[2];
       if (id && segments[3] === 'replies' && method === 'POST') {
-        const inquiries = getCollection('inquiries');
-        const index = inquiries.findIndex(i => i.id == id);
-        if (index === -1) throw new Error('询盘不存在');
-        if (!inquiries[index].replies) inquiries[index].replies = [];
-        inquiries[index].replies.push({
-          admin: { username: 'admin' },
-          content: body.content,
-          created_at: new Date().toISOString()
+        const response = await fetch(fullUrl, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(body)
         });
-        inquiries[index].status = 'replied';
-        inquiries[index].replied_at = new Date().toISOString();
-        setCollection('inquiries', inquiries);
-        return inquiries[index];
+        if (!response.ok) throw new Error('回复失败: ' + response.status);
+        return await response.json();
       }
-      if (id && method === 'PUT') return update('inquiries', id, body);
-      if (id && method === 'DELETE') return remove('inquiries', id);
-      if (id) return getById('inquiries', id);
-      const page = parseInt(params.get('page') || '1');
-      const pageSize = parseInt(params.get('pageSize') || '20');
-      const search = params.get('search') || '';
-      const status = params.get('status') || '';
-      return getPaginated('inquiries', page, pageSize, search, status ? { status } : {});
+
+      // 更新询盘
+      if (id && method === 'PUT') {
+        const response = await fetch(fullUrl, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(body)
+        });
+        if (!response.ok) throw new Error('更新失败: ' + response.status);
+        return await response.json();
+      }
+
+      // 删除询盘
+      if (id && method === 'DELETE') {
+        const response = await fetch(fullUrl, {
+          method: 'DELETE',
+          headers
+        });
+        if (!response.ok) throw new Error('删除失败: ' + response.status);
+        return await response.json();
+      }
+
+      // 获取单条询盘详情
+      if (id) {
+        const response = await fetch(fullUrl, { method: 'GET', headers });
+        if (!response.ok) throw new Error('获取详情失败: ' + response.status);
+        return await response.json();
+      }
+
+      // 获取询盘列表（分页）
+      const response = await fetch(fullUrl, { method: 'GET', headers });
+      if (!response.ok) throw new Error('获取询盘列表失败: ' + response.status);
+      return await response.json();
     }
 
     // Analytics

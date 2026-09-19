@@ -140,7 +140,7 @@ Router.register('/inquiries', async function (container) {
     <div class="page-header">
       <h1>询盘管理</h1>
       <div class="btn-group">
-        <a href="/api/inquiries/export/csv" class="btn" download>📥 导出 CSV</a>
+        <button class="btn" onclick="exportInquiries()">📥 导出 CSV</button>
       </div>
     </div>
 
@@ -260,6 +260,15 @@ Router.register('/inquiries', async function (container) {
     document.getElementById('searchInput').value = '';
     document.getElementById('statusFilter').value = '';
     loadInquiries(1);
+  };
+
+  window.exportInquiries = async () => {
+    try {
+      await API.get('/api/inquiries/export/csv');
+      API.toast('导出成功', 'success');
+    } catch (err) {
+      API.toast('导出失败: ' + err.message, 'error');
+    }
   };
 
   await loadInquiries();

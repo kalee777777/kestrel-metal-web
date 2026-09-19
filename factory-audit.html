@@ -609,6 +609,9 @@
       console.error('[Audit] Failed to save:', err);
     }
 
+    // 同步到后端 KV 存储
+    syncToBackend(auditData);
+
     setTimeout(function () {
       btn.textContent = 'Request Received!';
       btn.style.background = '#28a745';
@@ -621,6 +624,46 @@
       }, 2000);
     }, 1200);
     return false;
+  }
+
+  function syncToBackend(auditData) {
+    var apiKey = localStorage.getItem('km_inquiry_api_key');
+    if (!apiKey) {
+      console.warn('[Audit] No API key found, skipping backend sync');
+      return;
+    }
+
+    var apiUrl = '/api/inquiries';
+    var requestData = {
+      name: auditData.name,
+      email: auditData.email,
+      phone: auditData.phone,
+      company: auditData.company,
+      country: '',
+      product_name: 'Factory Audit Request',
+      quantity: auditData.visitors || '',
+      message: 'Visit Date: ' + auditData.visit_date + '\nPurpose: ' + auditData.purpose + '\n' + (auditData.message || ''),
+      source_page: auditData.source_page
+    };
+
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify(requestData)
+    })
+    .then(function(response) {
+      if (!response.ok) throw new Error('Backend sync failed: ' + response.status);
+      return response.json();
+    })
+    .then(function(data) {
+      console.log('[Audit] Synced to backend:', data);
+    })
+    .catch(function(err) {
+      console.error('[Audit] Failed to sync to backend:', err);
+    });
   }
   </script>
 </body>
