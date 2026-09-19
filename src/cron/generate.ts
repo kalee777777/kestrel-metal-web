@@ -2,19 +2,39 @@
  * Phase 05 + 06: AI 内容 + 图片生成 Cron 任务
  *
  * 每周一 04:00 UTC+8 自动执行：
- * 1. 从机会列表中选择本周选题
- * 2. 使用 DeepSeek V4 Pro 生成大纲
- * 3. 生成完整文章（2000-3000 字）
- * 4. 保存到 KV 草稿存储
- * 5. 为草稿文章生成配图（Qwen3.8-max）
+ * 1. 把关键词池按产品线聚类（keyword-cluster）
+ * 2. 排除已被已发布文章覆盖的组（去重）
+ * 3. 选出本周要写的 N 个产品组
+ * 4. 每组生成一篇支柱文章：主词 + 同组变体词
+ * 5. 保存到 KV 草稿存储
+ * 6. 为草稿文章生成配图（Qwen3.8-max）
+ *
+ * 变更记录：
+ * - 旧逻辑是「1 关键词 → 1 篇文章」，同产品近义词被拆成多篇互相抢排名
+ * - 新逻辑是「1 产品组 → 1 篇文章」，同组变体词合并覆盖
  */
 
 import type { Env } from '../index';
 import { generateFullArticle } from '../lib/deepseek';
 import { generateArticleImages } from '../lib/image-gen';
-import { saveDraft, getRankings, listKeys, getJSON, setJSON } from '../lib/kv';
+import { saveDraft, listKeys, getJSON, setJSON } from '../lib/kv';
+import {
+  runClustering,
+  selectGroups,
+  pickArticleKeywords,
+  type KeywordGroup,
+} from '../lib/keyword-cluster';
 
-const MAX_ARTICLES_PER_WEEK = 2;
+/** 每周生成文章数（现在等于「产品组」数，而非关键词数） */
+const MAX_GROUPS_PER_WEEK = 2;
+
+export interface GeneratedGroupInfo {
+  groupId: string;
+  groupName: string;
+  primaryKeyword: string;
+  variants: string[];
+  slug: string;
+}
 
 export interface GenerateResult {
   selectedKeywords: string[];
@@ -22,6 +42,15 @@ export interface GenerateResult {
   errors: string[];
   gapCount: number;
   opportunityCount: number;
+  /** 本周选中的产品组（聚类后的选题结果） */
+  groups: GeneratedGroupInfo[];
+  /** 聚类概览，便于排查选题 */
+  cluster: {
+    totalGroups: number;
+    coveredGroups: number;
+    totalKeywords: number;
+    ungroupedCount: number;
+  };
 }
 
 export default async function generate(env: Env): Promise<GenerateResult> {
@@ -31,6 +60,8 @@ export default async function generate(env: Env): Promise<GenerateResult> {
     errors: [],
     gapCount: 0,
     opportunityCount: 0,
+    groups: [],
+    cluster: { totalGroups: 0, coveredGroups: 0, totalKeywords: 0, ungroupedCount: 0 },
   };
 
   if (!env.DEEPSEEK_API_KEY) {
@@ -39,80 +70,41 @@ export default async function generate(env: Env): Promise<GenerateResult> {
 
   console.log('[generate] Starting weekly content generation...');
 
-  const today = new Date().toISOString().split('T')[0];
-  const rankings = await getRankings(env.SEO_DATA, today);
+  // ① 关键词聚类：竞品缺口 + GSC 机会 + GSC 排名 → 按产品线分组
+  const clusterResult = await runClustering(env);
+  result.cluster = {
+    totalGroups: clusterResult.groups.length,
+    coveredGroups: clusterResult.coveredGroupCount,
+    totalKeywords: clusterResult.totalKeywords,
+    ungroupedCount: clusterResult.ungrouped.length,
+  };
+  result.gapCount = clusterResult.groups.reduce((sum, g) => sum + g.gapCount, 0);
+  result.opportunityCount = clusterResult.groups.reduce((sum, g) => sum + g.opportunityCount, 0);
 
-  // 优先级 1：竞品缺口关键词（竞品有覆盖但我们没有的）
-  const gapData = await env.SEO_DATA.get('competitors:gap');
-  let gapItems: Array<{ keyword: string; type: string; suggestedAction: string }> = [];
-  if (gapData) {
-    try {
-      const parsed = JSON.parse(gapData) as { gaps?: Array<{ keyword: string; competitorCount: number }> };
-      if (parsed.gaps && parsed.gaps.length > 0) {
-        gapItems = parsed.gaps
-          .sort((a, b) => b.competitorCount - a.competitorCount)
-          .map((g) => ({
-            keyword: g.keyword,
-            type: 'competitor_gap',
-            suggestedAction: `Create article to cover competitor gap (${g.competitorCount} competitors)`,
-          }));
-        console.log(`[generate] Found ${gapItems.length} competitor gap keywords`);
-      }
-    } catch {
-      console.log('[generate] Failed to parse competitor gap data');
-    }
+  console.log(
+    `[generate] Clustered ${clusterResult.totalKeywords} keywords into ${clusterResult.groups.length} groups ` +
+    `(${clusterResult.coveredGroupCount} already covered)`,
+  );
+
+  // ② 选组：跳过已覆盖组，按权重降序
+  let selectedGroups = selectGroups(clusterResult, MAX_GROUPS_PER_WEEK);
+
+  // ③ 兜底：关键词池为空时用默认产品线选题
+  if (selectedGroups.length === 0) {
+    console.log('[generate] No cluster candidates, falling back to default keyword groups');
+    selectedGroups = buildFallbackGroups();
   }
 
-  // 优先级 2：GSC 机会分析（排名靠后但有展示的关键词）
-  const opportunities = await env.SEO_DATA.get('opportunities:weekly');
-  let items: Array<{ keyword: string; type: string; suggestedAction: string }> = [];
+  result.selectedKeywords = selectedGroups.map((g) => g.primaryKeyword);
+  console.log(`[generate] Selected ${selectedGroups.length} keyword groups`);
+  console.log(`[generate] Groups: ${selectedGroups.map((g) => `${g.id}(${g.keywords.length} kw)`).join(', ')}`);
 
-  if (opportunities) {
+  for (const group of selectedGroups) {
     try {
-      items = JSON.parse(opportunities);
-    } catch {
-      console.log('[generate] Failed to parse opportunities, using rankings directly');
-    }
-  }
+      const { primary, variants } = pickArticleKeywords(group);
 
-  // 合并：竞品缺口优先，其次 GSC 机会
-  const allCandidates = [...gapItems, ...items];
-
-  if (allCandidates.length === 0) {
-    if (rankings && rankings.length > 0) {
-      const topKeywords = rankings
-        .sort((a, b) => b.impressions - a.impressions)
-        .slice(0, MAX_ARTICLES_PER_WEEK * 2)
-        .map((r) => ({
-          keyword: r.keyword,
-          type: 'auto',
-          suggestedAction: 'Create comprehensive blog article',
-        }));
-      items = topKeywords;
-    } else {
-      const defaultKeywords = [
-        { keyword: 'galvanized chain link fence', type: 'default', suggestedAction: 'Create comprehensive guide' },
-        { keyword: 'gabion boxes supplier', type: 'default', suggestedAction: 'Product comparison article' },
-      ];
-      items = defaultKeywords;
-    }
-  } else {
-    items = allCandidates;
-  }
-
-  result.gapCount = gapItems.length;
-  result.opportunityCount = items.length;
-
-  const selectedKeywords = items.slice(0, MAX_ARTICLES_PER_WEEK);
-  result.selectedKeywords = selectedKeywords.map(k => k.keyword);
-
-  console.log(`[generate] Selected ${selectedKeywords.length} keywords for generation`);
-  console.log(`[generate] Keywords: ${selectedKeywords.map(k => k.keyword).join(', ')}`);
-
-  for (const item of selectedKeywords) {
-    try {
-      console.log(`[generate] Processing keyword: ${item.keyword}`);
-      console.log(`[generate] DEEPSEEK_API_KEY configured: ${!!env.DEEPSEEK_API_KEY}`);
+      console.log(`[generate] Processing group "${group.id}"`);
+      console.log(`[generate] Primary: "${primary}" | Variants: ${variants.join(', ') || '(none)'}`);
 
       const article = await generateFullArticle(
         {
@@ -120,8 +112,9 @@ export default async function generate(env: Env): Promise<GenerateResult> {
           DEEPSEEK_MODEL: env.DEEPSEEK_MODEL || 'deepseek-chat',
         },
         {
-          keyword: item.keyword,
-          productLine: 'metal-fencing',
+          keyword: primary,
+          variants,
+          productLine: group.productLine,
           targetAudience: 'B2B buyers, contractors, security professionals',
         },
       );
@@ -132,6 +125,8 @@ export default async function generate(env: Env): Promise<GenerateResult> {
         metaDescription: article.metaDescription,
         html: article.html,
         keyword: article.keyword,
+        groupId: group.id,
+        variants: article.variants ?? variants,
         status: 'queued',
         createdAt: new Date().toISOString(),
         score: undefined,
@@ -140,13 +135,21 @@ export default async function generate(env: Env): Promise<GenerateResult> {
       });
 
       result.generated++;
-      console.log(`[generate] Article saved: ${article.slug} (${article.wordCount} words)`);
+      result.groups.push({
+        groupId: group.id,
+        groupName: group.name,
+        primaryKeyword: primary,
+        variants,
+        slug: article.slug,
+      });
+
+      console.log(`[generate] Article saved: ${article.slug} (${article.wordCount} words, covers ${variants.length + 1} keywords)`);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      result.errors.push(`"${item.keyword}": ${errMsg}`);
-      console.error(`[generate] Failed to generate article for "${item.keyword}":`, errMsg);
+      result.errors.push(`group "${group.id}": ${errMsg}`);
+      console.error(`[generate] Failed to generate article for group "${group.id}":`, errMsg);
     }
   }
 
@@ -155,6 +158,54 @@ export default async function generate(env: Env): Promise<GenerateResult> {
   await generateImagesForDrafts(env);
 
   return result;
+}
+
+/**
+ * 关键词池为空时的兜底选题：用默认种子词构造两个产品组
+ */
+function buildFallbackGroups(): KeywordGroup[] {
+  const mk = (id: string, name: string, productLine: string, primary: string, variants: string[]): KeywordGroup => {
+    const keywords = [primary, ...variants].map((keyword, index) => ({
+      keyword,
+      source: 'gsc_ranking' as const,
+      impressions: 0,
+      clicks: 0,
+      position: 100,
+      competitorCount: 0,
+      weight: 100 - index * 5,
+    }));
+    return {
+      id,
+      name,
+      productLine,
+      primaryKeyword: primary,
+      keywords,
+      totalWeight: keywords.reduce((s, k) => s + k.weight, 0),
+      totalImpressions: 0,
+      gapCount: 0,
+      opportunityCount: 0,
+      covered: false,
+      coveredBy: null,
+      coveredKeywords: [],
+    };
+  };
+
+  return [
+    mk(
+      'chain-link',
+      'Chain Link Fence / 勾花网',
+      'chain-link',
+      'galvanized chain link fence',
+      ['chain link fence supplier', 'chain link fence price', 'chain link mesh roll'],
+    ),
+    mk(
+      'gabion',
+      'Gabion / 石笼网',
+      'gabion',
+      'gabion boxes supplier',
+      ['gabion basket manufacturer', 'welded gabion box', 'gabion retaining wall'],
+    ),
+  ];
 }
 
 async function generateImagesForDrafts(env: Env): Promise<void> {

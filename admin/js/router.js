@@ -50,6 +50,7 @@ const Router = (function () {
       '/inquiries': '询盘管理',
       '/analytics': '访客分析',
       '/keywords': '关键词监控',
+      '/keyword-groups': '关键词分组',
       '/competitors': '竞品关键词',
       '/opportunities': '内容机会',
       '/i18n': '国际化',

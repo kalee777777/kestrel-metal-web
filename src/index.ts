@@ -5,13 +5,15 @@
  * 1. fetch() — 处理 HTTP 请求：/api/* 路由由 Worker 处理，其余交给静态资源
  * 2. scheduled() — 处理 Cron Triggers，按时间触发 SEO 自动化工作流
  *
- * Cron 时间表 (UTC+8)：
- *   03:00 daily  — GSC 数据同步
- *   03:30 daily  — 机会分析 + 效果追踪
- *   04:00 Monday — AI 内容生成
- *   04:30 Monday — AI 图片生成
- *   05:00 Monday — SEO 评分 + 自动部署
- *   00:00 1st    — 月度报告
+ * Cron 时间表（Cloudflare Cron 用 UTC，下表已换算为北京时间 UTC+8）：
+ *   03:00 daily  — GSC 数据同步          (0 19 * * *)
+ *   04:00 Monday — AI 内容 + 图片生成      (0 20 * * 0)
+ *   05:00 Monday — SEO 评分 + 自动部署     (0 21 * * 0)
+ *   06:00 Sunday — 效果追踪               (0 22 * * 6)
+ *   08:00 1st    — 月度报告               (0 0 1 * *)
+ *
+ * 注意：UTC 比北京时间晚 8 小时，周一 04:00 (UTC+8) 对应 UTC 周日 20:00，
+ * 因此周一任务的 cron 星期位必须写 0（周日），写成 1 会整体延后一天。
  */
 
 import { handleRoute, jsonResponse } from './router';
@@ -230,32 +232,32 @@ export default {
           });
           break;
 
-        // 每周一 04:00 UTC+8 — AI 内容生成
-        case '0 20 * * 1':
+        // 每周一 04:00 UTC+8 = UTC 周日 20:00 — AI 内容生成
+        case '0 20 * * 0':
           await runCronTask('generate', env, async () => {
             const { default: generate } = await import('./cron/generate');
             await generate(env);
           });
           break;
 
-        // 每周一 05:00 UTC+8 — SEO 评分 + 自动部署
-        case '0 21 * * 1':
+        // 每周一 05:00 UTC+8 = UTC 周日 21:00 — SEO 评分 + 自动部署
+        case '0 21 * * 0':
           await runCronTask('score', env, async () => {
             const { default: score } = await import('./cron/score');
             await score(env);
           });
           break;
 
-        // 每月 1 号 00:00 UTC+8 — 月度报告
-        case '0 16 1 * *':
+        // 每月 1 号 08:00 UTC+8 = UTC 1 号 00:00 — 月度报告
+        case '0 0 1 * *':
           await runCronTask('monthly-report', env, async () => {
             const { default: monthlyReport } = await import('./cron/monthly-report');
             await monthlyReport(env);
           });
           break;
 
-        // 每周日 06:00 UTC+8 — 效果追踪
-        case '0 22 * * 7':
+        // 每周日 06:00 UTC+8 = UTC 周六 22:00 — 效果追踪
+        case '0 22 * * 6':
           await runCronTask('track', env, async () => {
             const { default: track } = await import('./cron/track');
             await track(env);

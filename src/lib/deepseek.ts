@@ -15,6 +15,8 @@ export interface DeepSeekEnv {
 
 export interface ArticleRequest {
   keyword: string;
+  /** 同产品组的变体词，会与主词一起写进同一篇文章（关键词聚类用） */
+  variants?: string[];
   title?: string;
   productLine?: string;
   targetAudience?: string;
@@ -43,6 +45,8 @@ export interface GeneratedArticle {
   metaDescription: string;
   html: string;
   keyword: string;
+  /** 同组变体词，随主词一起被文章覆盖 */
+  variants: string[];
   wordCount: number;
   heroImage: string;
 }
@@ -95,7 +99,12 @@ export async function generateOutline(
 ): Promise<ArticleOutline> {
   const systemPrompt = `You are an expert B2B SEO content writer specializing in metal fencing, gabion boxes, razor wire, and industrial security products. You write for an international audience (English). Always respond in valid JSON format.`;
 
-  const userPrompt = `Create a detailed SEO blog article outline for the target keyword: "${request.keyword}"
+  const variantList = (request.variants ?? []).filter(Boolean);
+  const variantBlock = variantList.length > 0
+    ? `\nSecondary keywords (same product family, must be woven into this single article):\n${variantList.map((v) => `- ${v}`).join('\n')}\n\nWhen structuring sections, allocate at least one H2 or H3 to each secondary keyword so the article ranks for the whole keyword group instead of a single phrase.`
+    : '';
+
+  const userPrompt = `Create a detailed SEO blog article outline for the target keyword: "${request.keyword}"${variantBlock}
 
 Requirements:
 1. Title should be compelling, include the keyword, and be under 60 characters
@@ -144,6 +153,7 @@ export async function generateArticle(
   env: DeepSeekEnv,
   outline: ArticleOutline,
   keyword: string,
+  variants: string[] = [],
 ): Promise<GeneratedArticle> {
   const systemPrompt = `You are an expert B2B SEO content writer for Kestrel Metal (kestrelmetal.com), a leading manufacturer of metal fencing, gabion boxes, razor wire, and industrial security products. Write comprehensive, SEO-optimized content in English. Always respond with valid HTML content only (no markdown, no code blocks).`;
 
@@ -163,10 +173,11 @@ ${s.content}
 FAQ Section:
 ${outline.faq.map(f => `Q: ${f.question}\nA: ${f.answer}`).join('\n\n')}
 
+${variants.length > 0 ? `\nSecondary keywords to cover in this same article (each at least 1-2 times, ideally as its own subsection heading):\n${variants.map((v) => `- ${v}`).join('\n')}\n` : ''}
 Requirements:
 1. Write in professional B2B English
-2. Include the target keyword naturally 8-12 times
-3. Use semantic variations of the keyword
+2. Include the target keyword "${keyword}" naturally 8-12 times
+3. Use semantic variations of the keyword${variants.length > 0 ? ' and cover every secondary keyword listed above' : ''}
 4. Include specific product specifications where relevant
 5. Add practical tips and industry insights
 6. Each section should be 300-500 words
@@ -220,7 +231,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${outline.title} | KESTREL METAL</title>
   <meta name="description" content="${outline.metaDescription}">
-  <meta name="keywords" content="${keyword}, kestrel metal, metal fencing, industrial security">
+  <meta name="keywords" content="${[keyword, ...variants].join(', ')}, kestrel metal, metal fencing, industrial security">
   <link rel="canonical" href="https://www.kestrelmetal.com/${slug}.html">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -260,7 +271,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
     "datePublished": "${today}",
     "dateModified": "${today}",
     "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.kestrelmetal.com/${slug}.html"},
-    "keywords": "${keyword}",
+    "keywords": "${[keyword, ...variants].join(', ')}",
     "wordCount": ${wordCount},
     "image": "https://www.kestrelmetal.com/${heroImageFallback}"
   }
@@ -325,6 +336,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
     metaDescription: outline.metaDescription,
     html: articleHtml,
     keyword,
+    variants,
     wordCount,
     heroImage,
   };
@@ -338,7 +350,8 @@ export async function generateFullArticle(
   const outline = await generateOutline(env, request);
 
   console.log(`[deepseek] Generating article: ${outline.title}`);
-  const article = await generateArticle(env, outline, request.keyword);
+  const article = await generateArticle(env, outline, request.keyword, request.variants ?? []);
+  article.variants = request.variants ?? [];
 
   console.log(`[deepseek] Article generated: ${article.wordCount} words`);
   return article;

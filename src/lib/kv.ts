@@ -36,6 +36,10 @@ export interface ContentDraft {
   metaDescription: string;
   html: string;
   keyword: string;
+  /** 所属关键词组（聚类用） */
+  groupId?: string;
+  /** 同组变体词，随本文一起被覆盖 */
+  variants?: string[];
   status: 'queued' | 'generating' | 'image_gen' | 'scoring' | 'deploying' | 'published' | 'skipped';
   createdAt: string;
   publishedAt?: string;

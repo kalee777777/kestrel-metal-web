@@ -482,6 +482,102 @@ route('GET', '/api/competitors/gap', async ({ env }) => {
   return jsonResponse({ gaps, generatedAt: new Date().toISOString() });
 });
 
+// ─── 关键词分组管理（聚类） ───
+
+// 分组定义（供 Admin 下拉选择）
+route('GET', '/api/keyword-groups/defs', async () => {
+  const { listGroupDefs } = await import('./lib/keyword-cluster');
+  return jsonResponse({ groups: listGroupDefs() });
+});
+
+// 聚类结果（?refresh=1 强制重算）
+route('GET', '/api/keyword-groups', async ({ env, url }) => {
+  const { runClustering, loadCachedCluster, selectGroups } = await import('./lib/keyword-cluster');
+  const forceRefresh = url.searchParams.get('refresh') === '1';
+  const result = forceRefresh ? await runClustering(env) : ((await loadCachedCluster(env)) ?? await runClustering(env));
+  const upcoming = selectGroups(result, 2).map((g) => ({
+    id: g.id,
+    name: g.name,
+    primaryKeyword: g.primaryKeyword,
+    keywordCount: g.keywords.length,
+  }));
+  return jsonResponse({ ...result, upcoming });
+});
+
+// 强制重新聚类（需 ADMIN_TOKEN）
+route('POST', '/api/keyword-groups/rebuild', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { runClustering } = await import('./lib/keyword-cluster');
+  const result = await runClustering(env);
+  return jsonResponse({ message: 'Clustering rebuilt', totalGroups: result.groups.length, ...result });
+});
+
+// 手动把某个关键词指定到某个组（需 ADMIN_TOKEN）
+route('POST', '/api/keyword-groups/assign', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<{ keyword?: string; groupId?: string }>().catch(() => null);
+  if (!body?.keyword || !body?.groupId) {
+    return jsonResponse({ error: 'keyword and groupId are required' }, 400);
+  }
+  const { loadOverrides, saveOverrides, normalizeKeyword, isValidGroupId } = await import('./lib/keyword-cluster');
+  if (!isValidGroupId(body.groupId)) {
+    return jsonResponse({ error: `Unknown groupId: ${body.groupId}` }, 400);
+  }
+  const overrides = await loadOverrides(env);
+  overrides.assign = overrides.assign ?? {};
+  const keyword = normalizeKeyword(body.keyword);
+  overrides.assign[keyword] = body.groupId;
+  overrides.exclude = (overrides.exclude ?? []).filter((k) => normalizeKeyword(k) !== keyword);
+  await saveOverrides(env, overrides);
+  const { runClustering } = await import('./lib/keyword-cluster');
+  await runClustering(env);
+  return jsonResponse({ message: 'Assigned', keyword, groupId: body.groupId });
+});
+
+// 排除某个关键词，不参与选题（需 ADMIN_TOKEN）
+route('POST', '/api/keyword-groups/exclude', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<{ keyword?: string }>().catch(() => null);
+  if (!body?.keyword) {
+    return jsonResponse({ error: 'keyword is required' }, 400);
+  }
+  const { loadOverrides, saveOverrides, normalizeKeyword } = await import('./lib/keyword-cluster');
+  const overrides = await loadOverrides(env);
+  const keyword = normalizeKeyword(body.keyword);
+  overrides.exclude = Array.from(new Set([...(overrides.exclude ?? []), keyword]));
+  if (overrides.assign) delete overrides.assign[keyword];
+  await saveOverrides(env, overrides);
+  const { runClustering } = await import('./lib/keyword-cluster');
+  await runClustering(env);
+  return jsonResponse({ message: 'Excluded', keyword });
+});
+
+// 清除某个关键词的人工调整（需 ADMIN_TOKEN）
+route('DELETE', '/api/keyword-groups/override', async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const keyword = url.searchParams.get('keyword');
+  if (!keyword) {
+    return jsonResponse({ error: 'keyword is required' }, 400);
+  }
+  const { loadOverrides, saveOverrides, normalizeKeyword } = await import('./lib/keyword-cluster');
+  const overrides = await loadOverrides(env);
+  const normalized = normalizeKeyword(keyword);
+  overrides.exclude = (overrides.exclude ?? []).filter((k) => normalizeKeyword(k) !== normalized);
+  if (overrides.assign) delete overrides.assign[normalized];
+  await saveOverrides(env, overrides);
+  const { runClustering } = await import('./lib/keyword-cluster');
+  await runClustering(env);
+  return jsonResponse({ message: 'Override cleared', keyword: normalized });
+});
+
 // 为指定已发布文章重新生成 Banner（需 ADMIN_TOKEN）
 route('POST', '/api/banner/regenerate', async ({ env, request }) => {
   const auth = request.headers.get('Authorization');

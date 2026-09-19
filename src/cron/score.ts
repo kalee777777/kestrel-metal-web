@@ -20,6 +20,8 @@ interface DraftData {
   metaDescription: string;
   html: string;
   keyword: string;
+  groupId?: string;
+  variants?: string[];
   status: string;
   score?: number;
   scoreRound?: number;
@@ -123,6 +125,8 @@ export default async function score(env: Env): Promise<void> {
           title: draft.title,
           metaDescription: draft.metaDescription,
           keyword: draft.keyword,
+          groupId: draft.groupId ?? null,
+          variants: draft.variants ?? [],
           score: currentScore,
           status: 'published',
           publishedAt: new Date().toISOString(),
@@ -139,6 +143,8 @@ export default async function score(env: Env): Promise<void> {
           title: string;
           metaDescription: string;
           keyword: string;
+          groupId?: string | null;
+          variants?: string[];
           score: number;
           status: string;
           publishedAt: string;
