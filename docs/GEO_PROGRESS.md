@@ -64,6 +64,7 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 ### 第五轮：2026-09-19 — Admin GEO/国际化板块数据链路打通（✅ 本轮完成）
 
 > 定位：Admin 两板块从"孤立录入 UI"改造为"录入 → 导出/同步到静态站"模式（方案 A）
+> 📄 完整改进记录与经验总结：[admin-i18n-geo-upgrade.md](admin-i18n-geo-upgrade.md)
 
 - **GEO 问答并入 faqs 集合（单一数据源）**：Admin「GEO 优化 → GEO 问答」与「FAQ 管理」共享同一数据，`/api/geo/questions` 路由改为 faqs 别名；旧 `geo_questions` 存量经幂等迁移并入 faqs（按问题文本去重）；表单 `priority` 字段统一为 `sort_order`
 - **站点渲染同步收紧**：`js/cms-sync.js` 过滤 `language=zh` 条目（站点英文单语，中文条目不再泄漏到 faq.html），faq.html 引用加 `?v=20260919`
@@ -76,7 +77,15 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
   - **XSS 防护**：`api.js` 新增 `API.escapeHtml` / `API.safeUrl`（http(s) + 站内相对路径白名单），i18n/GEO 两页全部 innerHTML 插值统一转义，动作按钮改索引传参（实测 `<img onerror>` / `<script>` 注入均被转义）
   - **诊断历史可视化**：每次诊断结果存 localStorage 滚动基线（12 次），GEO 诊断 Tab 新增历史表格（时间/通过/警告/失败/需关注项）
   - **空状态**：i18n / GEO 问答 / Schema 模板 / GEO 评分四表空数据时显示引导提示
-- 待办（P2）：问答与 FAQ 模块 UI 合并或「同步到 FAQ」、基线 Prompt 管理 + AI 引用结果记录、llms.txt/sitemap 查看器、ai_referral 数据面板
+- **P2 补齐（同日完成）**：
+  - **基线验证 Tab（新）**：GEO「效果验证」模块（模块 6，原 0%）的落地工具——基线 Prompt 可增删（默认 3 条采购问题存 localStorage）、逐条记录 AI 引用测试结果（引擎 / 是否引用 kestrelmetal.com / 引用位置 / 日期 / 备注）、按引擎汇总引用率；诊断报告的基线块改为动态读取 Prompt 列表 + 一键跳转
+  - **全站 JSON-LD 校验**：诊断 Tab 新增按钮，抓取 sitemap 全部页面解析 JSON-LD——实测 198 页全部有 Schema、0 解析失败，类型分布 Organization×198 / BreadcrumbList×197 / Product×88 / Article×60 / FAQPage×23 等，与线上实际一致
+  - **llms.txt 查看 / 编辑**：诊断 Tab 新增查看器（行数 / 章节 / FAQ 统计 + 可编辑 + 下载替换站点根文件）
+  - **sitemap 查看器**：198 个 URL 列表 + 关键字过滤（实测 razor 过滤出 14 条）
+  - **i18n 板块功能补齐**：搜索 / 按模块筛选 / 只看缺失 / 分页（20 条每页）；key 重复检测与命名规范提醒（非阻断确认）；module 改 datalist 约束；JSON 语言包导入（覆盖同名 key、新 key 归 import 模块）；语言列表数据驱动（「+ 添加语言」即时扩展表格列 / 导出按钮 / 表单字段，实测添加 es）
+  - **FAQ 管理页**补共享数据源提示（与 GEO 问答互指）
+  - **延后项**：GA4 ai_referral 数据面板需 OAuth / 后端凭据，纯静态 Admin 无法落地，待接真后端时一并实现
+- 待办：ai_referral 面板（依赖真后端）；可考虑把 Geo 诊断基线历史从 localStorage 升级为可导出
 
 ---
 
@@ -211,4 +220,4 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 |------|---------|
 | 2026-08-30 | 创建本进度文档；收录三轮工作（08-21 基础建设 / 08-27~30 审计修复与数据闭环 / 08-30 实体一致性），梳理待办与维护指南 |
 | 2026-08-30 | 第四轮：LinkedIn 上线（kestrelmetal 别名）+ sameAs 三层回加（196 文件 198 块）+ llms.txt 补 LinkedIn 行 |
-| 2026-09-19 | 第五轮：Admin GEO 板块数据链路打通——GEO 问答并入 faqs 单一数据源（含幂等迁移）、cms-sync 过滤 zh 条目、i18n 语言包导出（en/zh.json）、Schema 模板导出 + JSON 保存校验；P1 修正同日完成——GEO 评分真实计算（198 页全站实测）、robots 分组解析、escapeHtml/safeUrl 全量转义、诊断历史可视化、四表空状态 |
+| 2026-09-19 | 第五轮：Admin GEO 板块数据链路打通——GEO 问答并入 faqs 单一数据源（含幂等迁移）、cms-sync 过滤 zh 条目、i18n 语言包导出（en/zh.json）、Schema 模板导出 + JSON 保存校验；P1 修正同日完成——GEO 评分真实计算（198 页全站实测）、robots 分组解析、escapeHtml/safeUrl 全量转义、诊断历史可视化、四表空状态；P2 补齐同日完成——基线验证 Tab（Prompt 管理 + AI 引用记录，落地模块 6）、全站 JSON-LD 校验、llms.txt/sitemap 查看器、i18n 搜索筛选分页/导入/动态语言 |

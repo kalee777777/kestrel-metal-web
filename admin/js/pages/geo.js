@@ -665,13 +665,12 @@ Router.register('/geo', async function (container) {
         `).join('')}
       </div>
       <div class="audit-actions" style="margin-top:1rem;padding:1rem 1.2rem;background:var(--surface-alt);border-radius:8px;border:1px solid var(--border)">
-        <h4 style="margin-bottom:0.5rem">📋 基线测试 · Baseline Prompts</h4>
-        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem">在 Perplexity 和 ChatGPT(Search Enabled) 中分别测试以下 3 类采购问题，记录答案引用中是否出现 kestrelmetal.com：</p>
+        <h4 style="margin-bottom:0.5rem">📋 基线测试 · Baseline Prompts(共 ${getPrompts().length} 条)</h4>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem">在 Perplexity 和 ChatGPT(Search Enabled) 中测试以下采购问题,然后到「基线验证」标签记录答案是否引用 kestrelmetal.com:</p>
         <ol style="font-size:0.85rem;color:var(--text-secondary);padding-left:1.5rem;line-height:1.6">
-          <li>"Recommend a China wire mesh fence manufacturer with NATO-22 razor wire and 500MW solar farm project experience"</li>
-          <li>"3D wire panel fence vs chain link for Australian solar perimeter, who supplies both?"</li>
-          <li>"Galvanized vs PVC coated chain link fence in saltwater, which China factory has comparison data?"</li>
+          ${getPrompts().map(p => `<li style="margin-bottom:0.2rem">"${API.escapeHtml(p)}"</li>`).join('')}
         </ol>
+        <button class="btn btn-sm" onclick="showGeoTab('baseline')">前往基线验证 →</button>
       </div>
     `;
   };
@@ -930,8 +929,30 @@ Router.register('/geo', async function (container) {
     }
   });
 
+  document.getElementById('citationForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    const idx = Number(data.prompt_idx);
+    const prompts = getPrompts();
+    const cites = getCitations();
+    cites.push({
+      prompt_idx: idx,
+      prompt_text: prompts[idx] || '',
+      engine: data.engine,
+      cited: data.cited,
+      rank: data.rank ? Number(data.rank) : null,
+      date: data.date || new Date().toISOString().slice(0, 10),
+      note: (data.note || '').trim()
+    });
+    setCitations(cites);
+    closeCitationModal();
+    renderBaseline();
+    API.toast('记录已保存', 'success');
+  });
+
   await loadQuestions();
   await loadTemplates();
   await loadScores();
   renderAuditHistory();
+  renderBaseline();
 });

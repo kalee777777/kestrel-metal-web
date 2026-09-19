@@ -73,6 +73,9 @@ Router.register('/faq', async function (container) {
       <h1>FAQ 管理</h1>
       <button class="btn btn-primary" onclick="openAddFAQ()">+ 新增 FAQ</button>
     </div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem">
+      ℹ️ 本列表与「GEO 优化 → GEO 问答」共享同一数据源(faqs 集合),两边编辑实时同步;站点 faq.html 自动渲染 <strong>启用 + 非中文</strong> 的条目。
+    </p>
     <div class="table-wrap">
       <table>
         <thead>
