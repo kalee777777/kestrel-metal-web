@@ -182,6 +182,8 @@ const API = (function () {
       { id: 2, question: 'Do you offer free samples?', answer: 'Yes, we offer free samples for our standard products. Please contact our sales team with your requirements.', category: 'Products', language: 'en', sort_order: 2, is_active: true },
       { id: 3, question: 'What are your minimum order quantities?', answer: 'Minimum order quantities vary by product. Standard chain link fence starts from 1 roll, while custom fabricated products may have higher MOQs.', category: 'Orders', language: 'en', sort_order: 3, is_active: true },
       { id: 4, question: 'How do you ensure product quality?', answer: 'All products undergo strict quality testing according to ISO 9001 standards. We provide material test reports and third-party inspection on request.', category: 'Quality', language: 'en', sort_order: 4, is_active: true },
+      { id: 5, question: 'What is the difference between welded and woven wire mesh?', answer: 'Welded wire mesh has wires welded at intersections, while woven wire mesh has wires intertwined. Welded mesh offers higher structural strength, making it ideal for construction applications, while woven mesh is more flexible and better suited for fencing.', category: 'Product Knowledge', language: 'en', sort_order: 10, is_active: true },
+      { id: 6, question: 'How do I choose the right fence height?', answer: 'The appropriate fence height depends on your application. For residential privacy, 1.8-2.0m is typical. For agricultural livestock, heights range from 1.2-2.4m. High-security applications may require 2.4m or taller with razor wire additions.', category: 'Installation Guide', language: 'en', sort_order: 11, is_active: true },
     ]);
 
     // Seed glossary
@@ -310,23 +312,14 @@ const API = (function () {
       { id: 3, page_url: '/contact.html', title: 'Contact Us | Kestrel Metal', meta_title: 'Contact Kestrel Metal for Quotes & Support', meta_description: 'Get in touch with Kestrel Metal for product quotes, technical support, and partnership opportunities.', noindex: false },
     ]);
 
-    // Seed GEO data
-    setCollection('geo_questions', [
-      { id: 1, question: 'What is the difference between welded and woven wire mesh?', answer: 'Welded wire mesh has wires welded at intersections, while woven wire mesh has wires intertwined. Welded mesh offers higher structural strength, making it ideal for construction applications, while woven mesh is more flexible and better suited for fencing.', category: 'Product Knowledge', language: 'en', priority: 1, is_active: true },
-      { id: 2, question: 'How do I choose the right fence height?', answer: 'The appropriate fence height depends on your application. For residential privacy, 1.8-2.0m is typical. For agricultural livestock, heights range from 1.2-2.4m. High-security applications may require 2.4m or taller with razor wire additions.', category: 'Installation Guide', language: 'en', priority: 2, is_active: true },
-    ]);
-
+    // Seed GEO schema templates (GEO 问答已并入 faqs 集合,与 FAQ 管理/站点 faq.html 单一数据源)
     setCollection('geo_templates', [
       { id: 1, type: 'Product', name: 'Standard Product Schema', jsonld_template: '{"@context":"https://schema.org","@type":"Product","name":"{product_name}","description":"{description}","image":"{image}","offers":{"@type":"Offer","priceCurrency":"USD","price":"{price}","availability":"https://schema.org/InStock"}}', is_active: true },
       { id: 2, type: 'FAQPage', name: 'FAQ Page Schema', jsonld_template: '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"{question}","acceptedAnswer":{"@type":"Answer","text":"{answer}"}}]}', is_active: true },
       { id: 3, type: 'Article', name: 'Blog Article Schema', jsonld_template: '{"@context":"https://schema.org","@type":"Article","headline":"{title}","description":"{description}","image":"{image}","datePublished":"{date}","author":{"@type":"Organization","name":"Kestrel Metal"}}', is_active: true },
     ]);
 
-    setCollection('geo_scores', [
-      { page_url: '/chain-link.html', score: 85, schema_completeness: 95, citation_friendliness: 80, fact_density: 82 },
-      { page_url: '/gabion-boxes.html', score: 78, schema_completeness: 88, citation_friendliness: 75, fact_density: 72 },
-      { page_url: '/welded-mesh-711.html', score: 65, schema_completeness: 70, citation_friendliness: 60, fact_density: 68 },
-    ]);
+    // GEO 评分不设假种子:由 GEO 页抓取真实页面计算后写入(setCollection 历史假数据经 migrateLegacyGeoScores 清理)
 
     // Seed media
     setCollection('media', [
@@ -376,6 +369,40 @@ const API = (function () {
 
   // Run seed
   seedData();
+
+  // 一次性迁移:旧版 GEO 问答(geo_questions 集合)并入 faqs,按问题文本去重,迁移后清空旧集合
+  function migrateLegacyGeoQuestions() {
+    const legacy = getCollection('geo_questions');
+    if (!legacy || legacy.length === 0) return;
+    const faqs = getCollection('faqs');
+    legacy.forEach(q => {
+      if (faqs.some(f => f.question === q.question)) return;
+      faqs.push({
+        id: generateId(),
+        question: q.question,
+        answer: q.answer || '',
+        category: q.category || '',
+        language: q.language || 'en',
+        sort_order: q.priority || 0,
+        is_active: q.is_active !== false,
+        created_at: new Date().toISOString()
+      });
+    });
+    setCollection('faqs', faqs);
+    setCollection('geo_questions', []);
+  }
+  migrateLegacyGeoQuestions();
+
+  // 一次性迁移:旧版 GEO 评分为随机假数据(页面 URL 不存在),清空待 GEO 页真实评分重写
+  function migrateLegacyGeoScores() {
+    const scores = getCollection('geo_scores');
+    if (!scores || scores.length === 0) return;
+    const fakeUrls = ['/chain-link.html', '/gabion-boxes.html', '/welded-mesh-711.html'];
+    if (scores.some(s => fakeUrls.includes(s.page_url) || typeof s.score !== 'number')) {
+      setCollection('geo_scores', []);
+    }
+  }
+  migrateLegacyGeoScores();
 
   // ==================== API Methods ====================
 
@@ -707,15 +734,15 @@ const API = (function () {
       return getCollection('seo');
     }
 
-    // GEO
+    // GEO (questions 为 faqs 的别名 —— GEO 问答与 FAQ 单一数据源)
     if (segments[0] === 'api' && segments[1] === 'geo') {
       if (segments[2] === 'questions') {
         const id = segments[3];
-        if (id && method === 'PUT') return update('geo_questions', id, body);
-        if (id && method === 'DELETE') return remove('geo_questions', id);
-        if (id) return getById('geo_questions', id);
-        if (method === 'POST') return create('geo_questions', body);
-        return getCollection('geo_questions');
+        if (id && method === 'PUT') return update('faqs', id, body);
+        if (id && method === 'DELETE') return remove('faqs', id);
+        if (id) return getById('faqs', id);
+        if (method === 'POST') return create('faqs', body);
+        return getCollection('faqs');
       }
       if (segments[2] === 'schema-templates') {
         const id = segments[3];
@@ -727,10 +754,23 @@ const API = (function () {
       }
       if (segments[2] === 'scores') {
         const url = segments[3];
-        if (url && segments[4] === 'generate') {
+        if (method === 'POST') {
+          // 真实评分落库:按 page_url upsert(评分计算在 geo.js 客户端完成,page_url 走 body)
+          const pageUrl = String(body.page_url || '').trim();
+          if (!pageUrl.startsWith('/') || pageUrl.startsWith('//')) throw new Error('page_url 必须是站内相对路径');
+          ['score', 'schema_completeness', 'citation_friendliness', 'fact_density'].forEach(k => {
+            if (typeof body[k] !== 'number' || body[k] < 0 || body[k] > 100) throw new Error(k + ' 必须是 0-100 的数字');
+          });
           const scores = getCollection('geo_scores');
-          const score = Math.floor(Math.random() * 30) + 65;
-          return { score, message: '评分完成' };
+          const existing = scores.findIndex(s => s.page_url === pageUrl);
+          const record = { page_url: pageUrl, score: body.score, schema_completeness: body.schema_completeness, citation_friendliness: body.citation_friendliness, fact_density: body.fact_density, scored_at: new Date().toISOString() };
+          if (existing === -1) scores.push(record); else scores[existing] = { ...scores[existing], ...record };
+          setCollection('geo_scores', scores);
+          return record;
+        }
+        if (url && method === 'DELETE') {
+          setCollection('geo_scores', getCollection('geo_scores').filter(s => s.page_url !== decodeURIComponent(url)));
+          return { message: '删除成功' };
         }
         return getCollection('geo_scores');
       }
@@ -837,6 +877,24 @@ const API = (function () {
     setTimeout(() => t.remove(), 3000);
   }
 
+  // HTML 转义:管理台各页面 innerHTML 插值统一走这里,防存储型 XSS/布局破坏
+  function escapeHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // URL 白名单:仅允许 http(s) 与站内相对路径,防 javascript: 注入
+  function safeUrl(url) {
+    const s = String(url ?? '').trim();
+    if (/^(https?:)?\/\//i.test(s)) return /^https?:/i.test(s) ? s : '';
+    if (s.startsWith('/') && !s.startsWith('//')) return s;
+    return '';
+  }
+
   // Upload
   async function upload(url, formData) {
     await delay();
@@ -864,6 +922,10 @@ const API = (function () {
     upload,
 
     // Toast
-    toast
+    toast,
+
+    // Helpers
+    escapeHtml,
+    safeUrl
   };
 })();

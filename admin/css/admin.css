@@ -710,6 +710,7 @@ select.form-control {
 }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
+.toast.warning { background: var(--warning); }
 
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }

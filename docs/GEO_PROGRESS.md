@@ -2,7 +2,7 @@
 
 > **文档性质**: 滚动更新（活文档），每次 GEO 相关工作完成后更新本文件
 > **创建日期**: 2026-08-30
-> **最后更新**: 2026-08-30
+> **最后更新**: 2026-09-19
 > **定位**: GEO 工作进度总览与维护入口。单轮工作的详细实施与验证记录见《GEO 优化报告》，本文件回答"现在到哪了、接下来做什么"
 
 ---
@@ -60,6 +60,23 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 - 3 个证书下载页 + `js/downloads.js` 公司全称统一为 **Kestrel Metal Products Co., Ltd.**（全站 `Industrial Co., Ltd.` 残留 0 处，规范名 21 处 / 10 文件一致）
 - llms.txt 新增 `## Company Identity` 段：品牌名 ↔ 英文法律全称 ↔ 中文全称（安平县凯瑞尔金属制品有限公司）三者关联
 - Git commit `e2b2dd4`，已推送 Gitee（部署源）+ GitHub（镜像）
+
+### 第五轮：2026-09-19 — Admin GEO/国际化板块数据链路打通（✅ 本轮完成）
+
+> 定位：Admin 两板块从"孤立录入 UI"改造为"录入 → 导出/同步到静态站"模式（方案 A）
+
+- **GEO 问答并入 faqs 集合（单一数据源）**：Admin「GEO 优化 → GEO 问答」与「FAQ 管理」共享同一数据，`/api/geo/questions` 路由改为 faqs 别名；旧 `geo_questions` 存量经幂等迁移并入 faqs（按问题文本去重）；表单 `priority` 字段统一为 `sort_order`
+- **站点渲染同步收紧**：`js/cms-sync.js` 过滤 `language=zh` 条目（站点英文单语，中文条目不再泄漏到 faq.html），faq.html 引用加 `?v=20260919`
+- **i18n 语言包导出**：Admin「国际化管理」新增「导出 en.json / zh.json」——扁平 key→value、仅启用条目，缺失/重复在 toast 汇总；导出文件放置 `kestrel-site/js/locales/`（站点多语言上线前作翻译资产管理）
+- **Schema 模板导出 + 校验**：「GEO 优化 → Schema 模板」新增「导出模板 JSON」（含占位符提取 + jsonld 预解析，非法 JSON 标记 parse_error），目标位置 `perf-scripts/geo-schema-templates.json` 作为 static-jsonld.js 后续类型扩展输入；保存时强制 JSON.parse 校验
+- **验证**：本地冒烟测试通过——i18n 导出内容正确、GEO 问答经别名 API 写入 faqs、前台 faq.html 渲染合并条目且 zh 条目被过滤、模板非法 JSON 拦截生效、GEO 诊断 5 项全过
+- **P1 修正（同日完成）**：
+  - **GEO 评分改真实计算**：替代原随机数——「从 sitemap 拉取并全站评分」解析 sitemap.xml（生产域名统一取 pathname 本域抓取），逐页分析 JSON-LD 类型覆盖（权重 40%）、可引用结构（定义句/meta/标题层级/FAQ/列表，30%）、事实密度（带单位数字/千字符，30%），经 `/api/geo/scores` POST upsert 落库（0-100 校验），低分置顶；全站 198 页实测 100% 成功（高 32 / 中 93 / 低 73）；旧随机假数据一次性迁移清空
+  - **robots.txt 解析按规范重写**：按 user-agent 分组解析（连续 UA 行合并同组），bot 未显式列出时回落 `*` 组判定，消除旧正则跨组错配/隐式放行误报；诊断详情逐 bot 输出判定来源（显式组 / `*` 组回落）
+  - **XSS 防护**：`api.js` 新增 `API.escapeHtml` / `API.safeUrl`（http(s) + 站内相对路径白名单），i18n/GEO 两页全部 innerHTML 插值统一转义，动作按钮改索引传参（实测 `<img onerror>` / `<script>` 注入均被转义）
+  - **诊断历史可视化**：每次诊断结果存 localStorage 滚动基线（12 次），GEO 诊断 Tab 新增历史表格（时间/通过/警告/失败/需关注项）
+  - **空状态**：i18n / GEO 问答 / Schema 模板 / GEO 评分四表空数据时显示引导提示
+- 待办（P2）：问答与 FAQ 模块 UI 合并或「同步到 FAQ」、基线 Prompt 管理 + AI 引用结果记录、llms.txt/sitemap 查看器、ai_referral 数据面板
 
 ---
 
@@ -194,3 +211,4 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 |------|---------|
 | 2026-08-30 | 创建本进度文档；收录三轮工作（08-21 基础建设 / 08-27~30 审计修复与数据闭环 / 08-30 实体一致性），梳理待办与维护指南 |
 | 2026-08-30 | 第四轮：LinkedIn 上线（kestrelmetal 别名）+ sameAs 三层回加（196 文件 198 块）+ llms.txt 补 LinkedIn 行 |
+| 2026-09-19 | 第五轮：Admin GEO 板块数据链路打通——GEO 问答并入 faqs 单一数据源（含幂等迁移）、cms-sync 过滤 zh 条目、i18n 语言包导出（en/zh.json）、Schema 模板导出 + JSON 保存校验；P1 修正同日完成——GEO 评分真实计算（198 页全站实测）、robots 分组解析、escapeHtml/safeUrl 全量转义、诊断历史可视化、四表空状态 |

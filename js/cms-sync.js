@@ -39,7 +39,8 @@ var CMSSync = (function () {
     if (!container) return;
 
     var faqs = getCollection('faqs').filter(function (f) {
-      return f.is_active !== false;
+      // 站点为英文单语,Admin 录入的中文条目(language=zh)不渲染
+      return f.is_active !== false && f.language !== 'zh';
     });
 
     if (faqs.length === 0) return;
