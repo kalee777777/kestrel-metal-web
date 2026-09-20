@@ -156,7 +156,15 @@ export async function fetchCompetitorSitemap(domain: string): Promise<string[]> 
 function extractKeywordFromUrl(urlStr: string): string | null {
   try {
     const url = new URL(urlStr);
-    const path = url.pathname.replace(/^\//, '').replace(/\/$/, '').replace(/\.html?$/i, '');
+    // pathname 保留百分号编码，需解码后再提取；否则多语言 slug 会变成
+    // "%d1%87%d1%82%d0%be" 这类看着像 ASCII 的乱码
+    let rawPath = url.pathname;
+    try {
+      rawPath = decodeURIComponent(rawPath);
+    } catch {
+      // 非法编码序列时退回原始 pathname
+    }
+    const path = rawPath.replace(/^\//, '').replace(/\/$/, '').replace(/\.html?$/i, '');
     if (!path) return null;
 
     const slug = path.split('/').pop() || '';

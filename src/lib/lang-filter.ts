@@ -79,8 +79,24 @@ const WEAK_THRESHOLD = 2;
  * @returns true = 英文（保留）；false = 非英文（应过滤）
  */
 export function isEnglishKeyword(keyword: string): boolean {
-  const text = String(keyword ?? '').toLowerCase().trim();
+  let text = String(keyword ?? '').toLowerCase().trim();
   if (!text) return false;
+
+  // 百分号编码：竞品 URL slug 常保留原始编码，例如西里尔语的
+  // "%d1%87%d1%82%d0%be" 看起来全是 ASCII，解码后其实是俄语 "что"。
+  // 必须先解码再判定，否则这类词会绕过下面的非拉丁字符检测。
+  // 英文关键词不会出现百分号，凡含 % 一律视为编码字符串处理
+  if (text.includes('%')) {
+    let decoded: string;
+    try {
+      decoded = decodeURIComponent(text);
+    } catch {
+      return false; // 非法编码序列（如 %zz）
+    }
+    if (/[^\x00-\x7F]/.test(decoded)) return false;
+    if (decoded.includes('%')) return false; // 解码后仍有 % ，说明是畸形串
+    text = decoded;
+  }
 
   // 非拉丁字符（中文、西里尔、阿拉伯、日文等）直接判非英文
   if (/[^\x00-\x7F]/.test(text)) return false;
