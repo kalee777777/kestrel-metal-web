@@ -100,6 +100,14 @@ const API = (function () {
     setUser(null);
   }
 
+  function redirectToLogin() {
+    try {
+      if (window.location.pathname.indexOf('/admin/login') === -1) {
+        window.location.href = '/admin/login.html';
+      }
+    } catch (e) {}
+  }
+
   // ==================== Seed Data ====================
   function seedData() {
     if (getStorage('seeded') && getCollection('blog_posts').length >= 36 && getCollection('case_studies').length >= 8 && getCollection('glossary').length >= 67 && getCollection('content_drafts').length >= 1) return;
@@ -687,12 +695,22 @@ const API = (function () {
     if (segments[0] === 'api' && segments[1] === 'inquiries') {
       const adminToken = localStorage.getItem('km_admin_token');
       if (!adminToken) {
+        redirectToLogin();
         throw new Error('未登录或登录已过期');
       }
 
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${adminToken}`
+      };
+
+      // 401 = token 失效/错误：清除并跳回登录页，而非停留在报错状态
+      const checkAuth = (response) => {
+        if (response.status === 401) {
+          setToken(null);
+          redirectToLogin();
+          throw new Error('登录已过期或令牌错误，请重新登录');
+        }
       };
 
       // 构建完整的 API 路径
@@ -703,6 +721,7 @@ const API = (function () {
       // 统计接口
       if (segments[2] === 'stats' && segments[3] === 'count') {
         const response = await fetch(fullUrl, { method: 'GET', headers });
+        checkAuth(response);
         if (!response.ok) throw new Error('获取统计失败: ' + response.status);
         return await response.json();
       }
@@ -710,6 +729,7 @@ const API = (function () {
       // CSV 导出
       if (segments[2] === 'export' && segments[3] === 'csv') {
         const response = await fetch(fullUrl, { method: 'GET', headers });
+        checkAuth(response);
         if (!response.ok) throw new Error('导出失败: ' + response.status);
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
@@ -729,6 +749,7 @@ const API = (function () {
           headers,
           body: JSON.stringify(body)
         });
+        checkAuth(response);
         if (!response.ok) throw new Error('回复失败: ' + response.status);
         return await response.json();
       }
@@ -740,6 +761,7 @@ const API = (function () {
           headers,
           body: JSON.stringify(body)
         });
+        checkAuth(response);
         if (!response.ok) throw new Error('更新失败: ' + response.status);
         return await response.json();
       }
@@ -750,6 +772,7 @@ const API = (function () {
           method: 'DELETE',
           headers
         });
+        checkAuth(response);
         if (!response.ok) throw new Error('删除失败: ' + response.status);
         return await response.json();
       }
@@ -757,12 +780,14 @@ const API = (function () {
       // 获取单条询盘详情
       if (id) {
         const response = await fetch(fullUrl, { method: 'GET', headers });
+        checkAuth(response);
         if (!response.ok) throw new Error('获取详情失败: ' + response.status);
         return await response.json();
       }
 
       // 获取询盘列表（分页）
       const response = await fetch(fullUrl, { method: 'GET', headers });
+      checkAuth(response);
       if (!response.ok) throw new Error('获取询盘列表失败: ' + response.status);
       return await response.json();
     }
