@@ -40,7 +40,7 @@
     const password = document.getElementById('password').value;
 
     if (!username || !password) {
-      errEl.textContent = '请填写用户名和管理令牌';
+      errEl.textContent = '请填写用户名和密码';
       return;
     }
 
