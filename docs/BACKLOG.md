@@ -26,10 +26,12 @@
 | ID | 事项 | 说明 / 验收标准 | 负责 | 状态 |
 |----|------|----------------|------|------|
 | GEO-01 | 首轮基线测试 | 10 条 Prompt(推荐/对比/合规各 3-4)× ChatGPT(联网)/Perplexity/Gemini;结果录入管理台「基线验证」。验收:产出第一份引用率基线 | 人工测试 + AI 记录 | ☐ |
-| GEO-02 | 生产/本地 sitemap 差异修复 | 线上 207 vs 本地 198,找出多出的 9 个页面并同步本地副本。验收:差异清单 + 本地补齐,消除部署覆盖风险 | AI | ☐ |
+| GEO-02 | 生产/本地 sitemap 差异修复 | ✅ 2026-09-20 完成——9 个线上独有页面为 SEO 文章流水线直传生产、未进仓库(见 SITE-02),已全部回收入库 + sitemap 207 对齐 + 修复 1 篇错误 canonical + 9 篇补齐 og/JSON-LD(commit 121877d)。**遗留内部链接问题转 SITE-03** | AI | ✅ 09-20 |
 | ENT-00 | 创建统一信息包 entity-fact-sheet.md | ✅ 2026-09-20 完整定稿([entity-fact-sheet.md](entity-fact-sheet.md)):DEC-1/2/3 全部关闭,字段 + 三版描述 + 平台登记表齐备 | AI | ✅ 09-20 |
 | ENT-06 | LinkedIn 页面补全 | ✅ 2026-09-20:概述(长简介)、专业领域、地点(Anping Industrial Zone)、行业 已更新完成。**剩余**:有效邮箱域名添加(kestrelmetal.com,后台提醒项)+ 按内容计划发前 3 篇帖子([LINKEDIN_CONTENT_PLAN.md](LINKEDIN_CONTENT_PLAN.md)) | 人工 | 🔄 |
 | SITE-01 | 站内 schema 联系信息对齐 | 电话格式 `+86-17832383339` → `+86 17832383339`、schema 邮箱 `sales@` → `kalee@`(主)、员工 60-100 → 51-100;改动点:`perf-scripts/static-jsonld.js` + `js/seo-enhance.js`,随下次 schema 重建/部署一并执行(数字主体不变,不紧急) | AI | ☐ |
+| SITE-02 | **发布渠道分歧调查(需要用户说明)** | 9 篇 SEO 文章 + banner 图是"直接发布到生产"的(生产 207 页 > 仓库 198 页,sitemap 也不是仓库版),**谁/什么流程发布的?**(admin 博客生成器直传?另一台机器?第三方工具?)不查清则仓库与生产会持续漂移,下次从仓库部署可能删掉线上内容。验收:明确唯一发布渠道并写入 operations-checklist.md | 人工说明 + AI 整理 | ☐ |
+| SITE-03 | 9 篇回收文章补内部链接 | 这些文章目前是孤儿页(blog.html / blog-news.html 均未引用,内部链接为 0);补:博客索引加卡片 + 相关文章互链 + 从对应产品页挂入口。验收:每篇 ≥2 个内链 | AI + 人工审核 | ☐ |
 | GEO-03 | GA4 ai_referral 数据首查 | 确认事件在积累、自定义维度可查,定型月度查看路径 | 人工 | ☐ |
 
 ## P1 · 30 天
