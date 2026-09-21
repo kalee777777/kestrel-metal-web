@@ -148,6 +148,47 @@ const PRODUCT_GROUPS: ProductGroupDef[] = [
     productLine: 'fence-accessories',
     patterns: ['fence post', 't post', 'y post', 'gate', 'tension wire', 'fence clamp', 'tie wire'],
   },
+  // 丝材先判：避免 "stainless steel wire"（丝）被不锈钢网组抢走
+  {
+    id: 'wire-products',
+    name: 'Wire Products / 丝材',
+    productLine: 'wire',
+    patterns: [
+      'wire rod', 'steel wire', 'galvanized wire', 'binding wire', 'annealed wire',
+      'stainless wire', 'stainless steel wire', 'oval wire', 'flat wire',
+    ],
+  },
+  // ── 工业过滤网 / 特种合金网系列 ──
+  // 必须排在通用 wire-mesh 之前：
+  // "stainless steel mesh" 同时命中 "steel mesh"，顺序反了会被通用组吞掉。
+  {
+    id: 'stainless-mesh',
+    name: 'Stainless Steel Mesh / 不锈钢网',
+    productLine: 'stainless-mesh',
+    patterns: ['stainless steel', 'stainless', 'steel screen'],
+  },
+  {
+    id: 'nickel-mesh',
+    name: 'Nickel Mesh / 镍网',
+    productLine: 'nickel-mesh',
+    patterns: ['nickel'],
+  },
+  {
+    id: 'copper-brass-mesh',
+    name: 'Copper & Brass Mesh / 铜网黄铜网',
+    productLine: 'copper-brass-mesh',
+    patterns: ['copper', 'brass', 'bronze'],
+  },
+  {
+    id: 'filter-mesh',
+    name: 'Filter & Screen Mesh / 过滤网筛网',
+    productLine: 'filter-mesh',
+    patterns: [
+      'filter mesh', 'filter screen', 'filtration', 'filter disc', 'filter',
+      'sieve', 'screening', 'screen mesh', 'epoxy coated', 'epoxy',
+      'fine mesh', 'dutch twill',
+    ],
+  },
   {
     id: 'wire-mesh',
     name: 'Wire Mesh / 金属网（通用）',
@@ -155,15 +196,6 @@ const PRODUCT_GROUPS: ProductGroupDef[] = [
     patterns: [
       'wire mesh', 'steel mesh', 'metal mesh', 'mesh sheet', 'mesh roll', 'expanded metal',
       'mesh fence', 'wire fence', 'steel fence', 'mesh fencing',
-    ],
-  },
-  {
-    id: 'wire-products',
-    name: 'Wire Products / 丝材',
-    productLine: 'wire',
-    patterns: [
-      'wire rod', 'steel wire', 'galvanized wire', 'binding wire', 'annealed wire',
-      'stainless wire', 'oval wire', 'flat wire',
     ],
   },
 ];
@@ -180,12 +212,21 @@ const NOISE_PATTERNS = [
   'introduction video', 'product video', 'wholesale introduction',
   'canton fair', 'trade show', 'exhibition', 'shengsen', 'new opportunities',
   'weed mat', 'careers', 'job vacancy', 'download catalog',
+  // 竞品站内页：质量巡检、深加工介绍等，不是可选题的产品词
+  'quality inspection', 'further processing', 'yingkaimo',
 ];
 
-/** 判断是否为可选题的产品关键词（排除品牌/展会/政策类噪音页） */
+/** 整体即噪音的单词（"products" 单独出现是栏目页，但 "wire mesh products" 是有效词） */
+const NOISE_EXACT = new Set([
+  'products', 'product', 'home', 'about', 'contact', 'service', 'services',
+  'news', 'blog', 'faq', 'gallery', 'video', 'download', 'index',
+]);
+
+/** 判断是否为可选题的产品关键词（排除品牌/展会/政策/栏目类噪音页） */
 export function isProductKeyword(keyword: string): boolean {
   const kw = normalizeKeyword(keyword);
   if (!kw) return false;
+  if (NOISE_EXACT.has(kw)) return false;
   return !NOISE_PATTERNS.some((p) => kw.includes(p));
 }
 
