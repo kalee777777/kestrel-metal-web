@@ -90,6 +90,43 @@ route('GET', '/api/health', async ({ env }) => {
   });
 });
 
+// Cron 任务执行状态（self-check：判断定时调度到底有没有真的触发）
+//
+// 关键点：/api/trigger/:cron 手动触发走的是裸函数，不写 cron:last_run，
+// 所以本端点出现记录 == 该任务确实被 Cloudflare 定时调度唤起过。
+route('GET', '/api/cron/status', async ({ env }) => {
+  const { listKeys, getJSON } = await import('./lib/kv');
+  const keys = await listKeys(env.SEO_DATA, 'cron:last_run:');
+
+  const tasks = await Promise.all(
+    keys.map(async (k) => {
+      const name = k.name.replace('cron:last_run:', '');
+      const record = await getJSON<{ timestamp: string; duration: number; success: boolean; error?: string }>(
+        env.SEO_DATA,
+        k.name,
+      );
+      return {
+        name,
+        lastRun: record?.timestamp ?? null,
+        ageHours: record?.timestamp
+          ? Math.round(((Date.now() - new Date(record.timestamp).getTime()) / 3600_000) * 10) / 10
+          : null,
+        durationMs: record?.duration ?? null,
+        success: record?.success ?? null,
+        error: record?.error ?? null,
+      };
+    }),
+  );
+
+  tasks.sort((a, b) => (a.lastRun && b.lastRun ? (a.lastRun < b.lastRun ? 1 : -1) : 0));
+
+  return jsonResponse({
+    now: new Date().toISOString(),
+    note: '出现记录即代表该任务被定时调度唤起过；手动 /api/trigger 不写此记录。',
+    tasks,
+  });
+});
+
 // 关键词排名（最新）
 route('GET', '/api/keywords/rankings', async ({ env, url }) => {
   const date = url.searchParams.get('date');
