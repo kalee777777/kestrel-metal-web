@@ -339,12 +339,20 @@ export async function analyzeCompetitor(
   await setJSON(env.SEO_DATA, `competitor:${domain}:keywords`, keywords);
 
   // 更新 lastAnalyzed
+  //
+  // 注意：KV 是最终一致的。刚添加竞品就立刻点分析时，competitors:list 可能
+  // 还没传播到当前边缘节点，find 会落空，导致后台一直显示「从未分析」。
+  // 因此这里用 upsert 语义：找不到就直接补一条记录。
+  const nowIso = new Date().toISOString();
   const list = await getCompetitors(env);
-  const entry = list.find(c => c.domain === domain);
-  if (entry) {
-    entry.lastAnalyzed = new Date().toISOString();
-    await setJSON(env.SEO_DATA, 'competitors:list', list);
+  const index = list.findIndex(c => c.domain === domain);
+  if (index >= 0) {
+    list[index].lastAnalyzed = nowIso;
+  } else {
+    console.log(`[competitor] ${domain} missing from list (KV eventual consistency), upserting`);
+    list.push({ domain, name: domain, addedAt: nowIso, lastAnalyzed: nowIso });
   }
+  await setJSON(env.SEO_DATA, 'competitors:list', list);
 
   return { 
     keywordCount: keywords.length, 
