@@ -139,7 +139,7 @@ Router.register('/keyword-groups', async function (container) {
 
     const upcomingCard = upcoming.length ? `
       <div class="card">
-        <div class="card-header"><h2>下周选题预告</h2><span class="badge badge-info">每周 2 组</span></div>
+        <div class="card-header"><h2>下次选题预告</h2><span class="badge badge-info">每日 1 组</span></div>
         <div class="card-body">
           ${upcoming.map(g => `
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px">

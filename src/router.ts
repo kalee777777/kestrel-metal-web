@@ -538,7 +538,8 @@ route('GET', '/api/keyword-groups', async ({ env, url }) => {
   const { runClustering, loadCachedCluster, selectGroups } = await import('./lib/keyword-cluster');
   const forceRefresh = url.searchParams.get('refresh') === '1';
   const result = forceRefresh ? await runClustering(env) : ((await loadCachedCluster(env)) ?? await runClustering(env));
-  const upcoming = selectGroups(result, 2).map((g) => ({
+  // 与 generate 的 MAX_GROUPS_PER_RUN 保持一致：当前每天 1 组
+  const upcoming = selectGroups(result, 1).map((g) => ({
     id: g.id,
     name: g.name,
     primaryKeyword: g.primaryKeyword,

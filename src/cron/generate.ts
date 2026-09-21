@@ -1,17 +1,22 @@
 /**
  * Phase 05 + 06: AI 内容 + 图片生成 Cron 任务
  *
- * 每周一 04:00 UTC+8 自动执行：
+ * 每日 04:00 UTC+8 自动执行（每天 1 个产品组 = 1 篇文章）：
  * 1. 把关键词池按产品线聚类（keyword-cluster）
  * 2. 排除已被已发布文章覆盖的组（去重）
- * 3. 选出本周要写的 N 个产品组
- * 4. 每组生成一篇支柱文章：主词 + 同组变体词
+ * 3. 选出本次要写的 1 个产品组
+ * 4. 该组生成一篇支柱文章：主词 + 同组变体词
  * 5. 保存到 KV 草稿存储
  * 6. 为草稿文章生成配图（Qwen3.8-max）
  *
  * 变更记录：
  * - 旧逻辑是「1 关键词 → 1 篇文章」，同产品近义词被拆成多篇互相抢排名
  * - 新逻辑是「1 产品组 → 1 篇文章」，同组变体词合并覆盖
+ * - 2026-09-21：节奏由「每周 2 组」改为「每日 1 组」
+ *
+ * 注意：每天一组会快速消耗关键词池。当前 10 个有词的组约 10 天就会全部
+ * 覆盖一遍，之后依靠 selectGroups 的 partially-covered 回补（同组写新变体），
+ * 产出质量会下降 —— 需要定期跑竞品缺口分析补充新词。
  */
 
 import type { Env } from '../index';
@@ -25,8 +30,8 @@ import {
   type KeywordGroup,
 } from '../lib/keyword-cluster';
 
-/** 每周生成文章数（现在等于「产品组」数，而非关键词数） */
-const MAX_GROUPS_PER_WEEK = 2;
+/** 每次运行生成的文章数（等于「产品组」数，而非关键词数） */
+const MAX_GROUPS_PER_RUN = 1;
 
 export interface GeneratedGroupInfo {
   groupId: string;
@@ -87,7 +92,7 @@ export default async function generate(env: Env): Promise<GenerateResult> {
   );
 
   // ② 选组：跳过已覆盖组，按权重降序
-  let selectedGroups = selectGroups(clusterResult, MAX_GROUPS_PER_WEEK);
+  let selectedGroups = selectGroups(clusterResult, MAX_GROUPS_PER_RUN);
 
   // ③ 兜底：关键词池为空时用默认产品线选题
   if (selectedGroups.length === 0) {

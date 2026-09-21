@@ -7,7 +7,7 @@
  *
  * Cron 时间表（Cloudflare Cron 用 UTC，下表已换算为北京时间 UTC+8）：
  *   03:00 daily  — GSC 数据同步          (0 19 * * *)
- *   04:00 daily  — AI 内容生成（仅周一执行） (0 20 * * *)
+ *   04:00 daily  — AI 内容生成（每天 1 组） (0 20 * * *)
  *   05:00 daily  — SEO 评分 + 自动部署    (0 21 * * *)
  *   06:00 daily  — 效果追踪（仅周日执行）   (0 22 * * *)
  *   08:00 daily  — 月度报告（仅每月 1 号）  (0 0 * * *)
@@ -55,6 +55,14 @@ export interface Env {
   IMG_API_KEY: string;
   QWEN_API_KEY: string;
   INDEXNOW_KEY?: string;
+}
+
+// ─── 规范形态跳转 ───
+// 全站规范形态是 .html，无扩展名请求统一 301 过去，保证同一页面只有一个可索引入口
+function redirectToCanonical(url: URL): Response {
+  const target = new URL(`${url.pathname}.html`, url.origin);
+  target.search = url.search;
+  return Response.redirect(target.toString(), 301);
 }
 
 // ─── fetch() — HTTP 请求处理 ───
@@ -146,7 +154,7 @@ export default {
       assetRequest = new Request(rootUrl, request);
     }
 
-    let response = await env.ASSETS.fetch(assetRequest);
+    const response = await env.ASSETS.fetch(assetRequest);
 
     // /images/ 路由：从 R2 读取 AI 生成的图片
     if (response.status === 404 && url.pathname.startsWith('/images/')) {
@@ -164,10 +172,14 @@ export default {
     // 静态资源 404 时，尝试从 KV 读取动态发布的文章
     if (response.status === 404) {
       // 提取 slug（去掉开头的 / 和 .html 后缀）
-      let slug = url.pathname.replace(/^\//, '').replace(/\.html$/, '');
+      const slug = url.pathname.replace(/^\//, '').replace(/\.html$/, '');
+      // 全站规范形态是 .html，无扩展名请求一律 301 过去，
+      // 否则同一篇文章会同时存在 /slug 和 /slug.html 两个返回 200 的入口（重复内容）
+      const needsCanonical = !url.pathname.endsWith('.html');
       if (slug && !slug.includes('/') && !slug.includes('.')) {
         const published = await env.CONTENT_QUEUE.get(`published:${slug}`, 'json') as { html?: string } | null;
         if (published && published.html) {
+          if (needsCanonical) return redirectToCanonical(url);
           return new Response(published.html, {
             headers: {
               'Content-Type': 'text/html; charset=utf-8',
@@ -178,13 +190,13 @@ export default {
         }
       }
 
-      // 尝试加 .html 后缀
-      if (!url.pathname.includes('.')) {
+      // 无扩展名请求命中静态 .html 文件时（如新增页面未登记进 _redirects），同样 301 到规范形态
+      if (needsCanonical && !url.pathname.includes('.')) {
         const htmlUrl = new URL(request.url);
         htmlUrl.pathname = url.pathname + '.html';
         const htmlResponse = await env.ASSETS.fetch(new Request(htmlUrl, request));
         if (htmlResponse.status !== 404) {
-          response = htmlResponse;
+          return redirectToCanonical(url);
         }
       }
     }
@@ -235,10 +247,9 @@ export default {
           });
           break;
 
-        // 每日 04:00 UTC+8，仅周一真正执行 — AI 内容生成
+        // 每日 04:00 UTC+8 — AI 内容生成（每天 1 个产品组 = 1 篇文章）
         case '0 20 * * *':
           await runCronTask('generate', env, async () => {
-            if (!isBeijingWeekday(1)) return `跳过：今天不是周一（北京周 ${beijingDay()}）`;
             const { default: generate } = await import('./cron/generate');
             await generate(env);
           });
