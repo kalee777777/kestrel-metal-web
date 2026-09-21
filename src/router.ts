@@ -101,10 +101,14 @@ route('GET', '/api/cron/status', async ({ env }) => {
   const tasks = await Promise.all(
     keys.map(async (k) => {
       const name = k.name.replace('cron:last_run:', '');
-      const record = await getJSON<{ timestamp: string; duration: number; success: boolean; error?: string }>(
-        env.SEO_DATA,
-        k.name,
-      );
+      const record = await getJSON<{
+        timestamp: string;
+        duration: number;
+        success: boolean;
+        skipped?: boolean;
+        skipReason?: string;
+        error?: string;
+      }>(env.SEO_DATA, k.name);
       return {
         name,
         lastRun: record?.timestamp ?? null,
@@ -113,6 +117,8 @@ route('GET', '/api/cron/status', async ({ env }) => {
           : null,
         durationMs: record?.duration ?? null,
         success: record?.success ?? null,
+        skipped: record?.skipped ?? false,
+        skipReason: record?.skipReason ?? null,
         error: record?.error ?? null,
       };
     }),

@@ -7,13 +7,16 @@
  *
  * Cron 时间表（Cloudflare Cron 用 UTC，下表已换算为北京时间 UTC+8）：
  *   03:00 daily  — GSC 数据同步          (0 19 * * *)
- *   04:00 Monday — AI 内容 + 图片生成      (0 20 * * 0)
- *   05:00 Monday — SEO 评分 + 自动部署     (0 21 * * 0)
- *   06:00 Sunday — 效果追踪               (0 22 * * 6)
- *   08:00 1st    — 月度报告               (0 0 1 * *)
+ *   04:00 daily  — AI 内容生成（仅周一执行） (0 20 * * *)
+ *   05:00 daily  — SEO 评分 + 自动部署    (0 21 * * *)
+ *   06:00 daily  — 效果追踪（仅周日执行）   (0 22 * * *)
+ *   08:00 daily  — 月度报告（仅每月 1 号）  (0 0 * * *)
  *
- * 注意：UTC 比北京时间晚 8 小时，周一 04:00 (UTC+8) 对应 UTC 周日 20:00，
- * 因此周一任务的 cron 星期位必须写 0（周日），写成 1 会整体延后一天。
+ * 重要：所有 trigger 都是「每日」，星期/日期判断放在代码里做。
+ * 实测带星期字段的 trigger（0 20 * * 0 等）在这套 Git 集成部署下不可靠 ——
+ * 周级任务曾连续 7 天未被唤起，而每日 trigger 一直正常。
+ * 改成每日触发后，每次调度都会写入 cron:last_run，既能确认调度活着，
+ * 也能通过 skipped 标记区分「唤起了但今天不该跑」。
  */
 
 import { handleRoute, jsonResponse } from './router';
@@ -224,7 +227,7 @@ export default {
       // 根据 cron 表达式分发到对应的处理函数
       // 各 cron handler 将在后续 Phase 中实现
       switch (cron) {
-        // 每日 03:00 UTC+8 (19:00 UTC 前一天) — GSC 数据同步
+        // 每日 03:00 UTC+8 — GSC 数据同步
         case '0 19 * * *':
           await runCronTask('gsc-sync', env, async () => {
             const { default: gscSync } = await import('./cron/gsc-sync');
@@ -232,33 +235,36 @@ export default {
           });
           break;
 
-        // 每周一 04:00 UTC+8 = UTC 周日 20:00 — AI 内容生成
-        case '0 20 * * 0':
+        // 每日 04:00 UTC+8，仅周一真正执行 — AI 内容生成
+        case '0 20 * * *':
           await runCronTask('generate', env, async () => {
+            if (!isBeijingWeekday(1)) return `跳过：今天不是周一（北京周 ${beijingDay()}）`;
             const { default: generate } = await import('./cron/generate');
             await generate(env);
           });
           break;
 
-        // 每周一 05:00 UTC+8 = UTC 周日 21:00 — SEO 评分 + 自动部署
-        case '0 21 * * 0':
+        // 每日 05:00 UTC+8 — SEO 评分 + 发布（有草稿才处理，空转开销极低）
+        case '0 21 * * *':
           await runCronTask('score', env, async () => {
             const { default: score } = await import('./cron/score');
             await score(env);
           });
           break;
 
-        // 每月 1 号 08:00 UTC+8 = UTC 1 号 00:00 — 月度报告
-        case '0 0 1 * *':
+        // 每日 08:00 UTC+8，仅每月 1 号真正执行 — 月度报告
+        case '0 0 * * *':
           await runCronTask('monthly-report', env, async () => {
+            if (beijingDate() !== 1) return `跳过：今天不是 1 号（北京日期 ${beijingDate()}）`;
             const { default: monthlyReport } = await import('./cron/monthly-report');
             await monthlyReport(env);
           });
           break;
 
-        // 每周日 06:00 UTC+8 = UTC 周六 22:00 — 效果追踪
-        case '0 22 * * 6':
+        // 每日 06:00 UTC+8，仅周日真正执行 — 效果追踪
+        case '0 22 * * *':
           await runCronTask('track', env, async () => {
+            if (!isBeijingWeekday(0)) return `跳过：今天不是周日（北京周 ${beijingDay()}）`;
             const { default: track } = await import('./cron/track');
             await track(env);
           });
@@ -273,27 +279,70 @@ export default {
   },
 };
 
+// ─── 北京时间（UTC+8）工具 ───
+//
+// 星期/日期判断放在代码里而不是 cron 表达式里：实测带星期字段的 trigger
+// 在这套 Git 集成部署下不可靠（周级任务曾连续 7 天未被唤起），
+// 而每日 trigger 一直正常。改为每日触发 + 代码判断后，既可靠又可留痕。
+function beijingNow(): Date {
+  return new Date(Date.now() + 8 * 3600_000);
+}
+
+/** 北京时间星期几：0 = 周日 … 6 = 周六 */
+function beijingDay(): number {
+  return beijingNow().getUTCDay();
+}
+
+/** 北京时间日期（1-31） */
+function beijingDate(): number {
+  return beijingNow().getUTCDate();
+}
+
+function isBeijingWeekday(day: number): boolean {
+  return beijingDay() === day;
+}
+
 /**
  * Cron 任务执行器 — 统一的错误处理和日志记录
  * 使用动态 import 确保尚未实现的模块不会阻塞构建
+ *
+ * fn 返回字符串表示「本次跳过」，仍会写入 last_run，便于区分
+ * 「调度没唤起」和「唤起了但条件不满足」。
  */
 async function runCronTask(
   name: string,
   env: Env,
-  fn: () => Promise<void>,
+  fn: () => Promise<string | void>,
 ): Promise<void> {
   const start = Date.now();
   console.log(`[Cron:${name}] Starting...`);
 
   try {
-    await fn();
+    const skipReason = await fn();
     const duration = Date.now() - start;
+
+    if (skipReason) {
+      console.log(`[Cron:${name}] ${skipReason}`);
+      await env.SEO_DATA.put(
+        `cron:last_run:${name}`,
+        JSON.stringify({
+          name,
+          timestamp: new Date().toISOString(),
+          duration,
+          success: true,
+          skipped: true,
+          skipReason,
+        }),
+      );
+      return;
+    }
+
     console.log(`[Cron:${name}] Completed in ${duration}ms`);
 
     // 记录执行日志到 KV
     await env.SEO_DATA.put(
       `cron:last_run:${name}`,
-      JSON.stringify({ name, timestamp: new Date().toISOString(), duration, success: true }),
+      JSON.stringify({ name, timestamp: new Date().toISOString(), duration, success: true, skipped: false }),
     );
   } catch (err) {
     const duration = Date.now() - start;
