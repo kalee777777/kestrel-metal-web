@@ -98,7 +98,7 @@ export async function trackArticlePerformance(env: Env): Promise<void> {
       const trackingData: TrackingData = {
         slug: article.slug,
         keyword: article.keyword,
-        url: `https://kestrelmetal.com/blog/${article.slug}.html`,
+        url: `https://www.kestrelmetal.com/${article.slug}.html`,
         impressions: totalImpressions,
         clicks: totalClicks,
         avgPosition: positionCount > 0 ? totalPosition / positionCount : 0,

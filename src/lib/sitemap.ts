@@ -31,7 +31,7 @@ function normalizePath(loc: string): string {
 export async function buildSitemap(env: Env): Promise<SitemapResult> {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>';
 
-  const staticResp = await env.ASSETS.fetch('https://kestrelmetal.com/sitemap.xml');
+  const staticResp = await env.ASSETS.fetch('https://www.kestrelmetal.com/sitemap.xml');
   if (staticResp.ok) {
     xml = await staticResp.text();
   }
