@@ -33,6 +33,12 @@ export interface GapResult {
 
 // ─── 常量 ───
 
+/** 子 sitemap 里属于「产品/品类」的名称特征，用于决定抓取优先级 */
+const PRODUCT_SITEMAP_HINTS = ['product', 'wire', 'mesh', 'category', 'catalog', 'collection', 'shop'];
+
+/** sitemap index 下最多抓取的子 sitemap 数量 */
+const MAX_CHILD_SITEMAPS = 6;
+
 const STOP_WORDS = new Set([
   'the', 'a', 'an', 'for', 'of', 'to', 'in', 'and', 'with', 'or',
   'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has',
@@ -126,9 +132,22 @@ export async function fetchCompetitorSitemap(domain: string): Promise<string[]> 
     const locs = xml.match(/<loc>([^<]+)<\/loc>/g) || [];
     const childUrls = locs.map(m => m.replace(/<\/?loc>/g, '').trim()).filter(u => u.startsWith('http'));
     console.log(`[competitor] Found ${childUrls.length} child sitemaps`);
-    // 最多取 3 个子 sitemap
+
+    // 子 sitemap 按「产品相关性」排序后再取。
+    // 竞站（尤其 WordPress + Yoast）常有 post / page / product / category 等多个子 sitemap，
+    // 直接按原顺序截断会把产品页漏掉 —— 例如 wiremeshcloth.com 共 6 个，
+    // 只取前 3 个就错过了 wiremesh-sitemap.xml。
+    const ranked = childUrls
+      .map((url) => {
+        const lower = url.toLowerCase();
+        const hits = PRODUCT_SITEMAP_HINTS.reduce((sum, h) => (lower.includes(h) ? sum + 1 : sum), 0);
+        return { url, hits };
+      })
+      .sort((a, b) => b.hits - a.hits)
+      .map((x) => x.url);
+
     const allUrls: string[] = [];
-    for (const childUrl of childUrls.slice(0, 3)) {
+    for (const childUrl of ranked.slice(0, MAX_CHILD_SITEMAPS)) {
       const childXml = await fetchWithTimeout(childUrl);
       if (childXml) {
         const childLocs = childXml.match(/<loc>([^<]+)<\/loc>/g) || [];
