@@ -708,12 +708,26 @@ route('POST', '/api/banner/regenerate', async ({ env, request }) => {
       body.slug,
     );
     if (bannerUrl) {
-      const updatedHtml = published.html.replace(
-        /background-image:url\('[^']*'\);/,
-        `background-image:url('${bannerUrl}');`,
-      );
-      await env.CONTENT_QUEUE.put(`published:${body.slug}`, JSON.stringify({ ...published, html: updatedHtml }));
-      return jsonResponse({ ok: true, slug: body.slug, bannerUrl });
+      const hasSlot = /background-image:url\('[^']*'\);/.test(published.html);
+      if (hasSlot) {
+        const updatedHtml = published.html.replace(
+          /background-image:url\('[^']*'\);/,
+          `background-image:url('${bannerUrl}');`,
+        );
+        await env.CONTENT_QUEUE.put(`published:${body.slug}`, JSON.stringify({ ...published, html: updatedHtml }));
+        return jsonResponse({ ok: true, slug: body.slug, bannerUrl, inserted: true });
+      }
+
+      // 文章没有 hero 结构时（早期模板产物）无法就地插入，仍然返回图片地址，
+      // 由调用方自行补 HTML 结构。另外注意：凡同时存在静态 .html 的文章，
+      // 页面由 ASSETS 直出，改 KV 不会生效，必须同步改静态文件。
+      return jsonResponse({
+        ok: true,
+        slug: body.slug,
+        bannerUrl,
+        inserted: false,
+        reason: 'no background-image slot in stored html; hero section missing',
+      });
     }
     return jsonResponse({ ok: false, error: 'Banner generation returned no URL' });
   } catch (err) {
