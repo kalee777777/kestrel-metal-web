@@ -18,8 +18,7 @@
 | 成立年份 | 2014(12+ years) | |
 | 地址(英文,统一) | Anping Industrial Zone, Anping County, Hengshui, Hebei 053600, China | **DEC-2 已定稿 2026-09-20**;与站内 schema 一致 |
 | 电话(统一) | +86 17832383339 | **用户定稿 2026-09-20**;站内 schema 现为 `+86-17832383339`(数字相同,仅分隔符差异,见 SITE-01) |
-| 邮箱(主) | kalee@kestrelmetal.com | **用户定稿 2026-09-20**;站内 schema 现为 `sales@kestrelmetal.com`,待对齐(见 SITE-01) |
-| 邮箱(备用) | info@kestrelmetal.com / sales@kestrelmetal.com | 仅平台要求备用邮箱时使用 |
+| 邮箱(统一) | kalee@kestrelmetal.com | **用户定稿 2026-09-20**;站内已于 2026-09-22 全量对齐(sales@/info@/privacy@ 均统一为 kalee@) |
 | 员工规模 | 51-100 | **DEC 已定 2026-09-20**;平台下拉选 51-100;站内 schema 为 60-100(数字区间不冲突,随 SITE-01 顺手对齐) |
 | 官网 | https://www.kestrelmetal.com | |
 | LinkedIn | https://www.linkedin.com/company/kestrelmetal | **DEC-1 已定稿 2026-09-20**(无痕窗口公开访问验证通过;LinkedIn 自定义 URL 仅允许字母数字,无连字符) |

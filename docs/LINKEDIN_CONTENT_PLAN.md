@@ -64,7 +64,7 @@ QUALITY YOU CAN VERIFY
 Factory audits welcome — video tours, third-party inspection (SGS), and material test reports available on request.
 
 🌐 Website: https://www.kestrelmetal.com
-📧 sales@kestrelmetal.com
+📧 kalee@kestrelmetal.com
 📞 +86 178 3238 3339
 ```
 
