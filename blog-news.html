@@ -76,7 +76,7 @@
       "@type": "ContactPoint",
       "telephone": "+86-17832383339",
       "contactType": "sales",
-      "email": "sales@kestrelmetal.com",
+      "email": "kalee@kestrelmetal.com",
       "availableLanguage": [
         "English",
         "Chinese"
@@ -306,77 +306,85 @@
       var posts = (result && result.data) || [];
       posts.sort(function(a, b) { return new Date(b.created_at) - new Date(a.created_at); });
 
-      var featuredGrid = document.getElementById('featuredGrid');
-      featuredGrid.innerHTML = '';
-      posts.slice(0, 2).forEach(function(post) {
-        var url = post.static_url || post.detail_url || '#';
-        var img = post.cover_image || 'images/blog/blog-hex-mesh-hero.webp';
-        var cat = post.category || 'News';
-        var date = new Date(post.created_at).toLocaleDateString();
-        var readTime = post.read_time || '5 min read';
-        featuredGrid.innerHTML += '<a href="' + url + '" class="featured-card" data-post-id="' + post.id + '"><div class="featured-card-img"><img src="' + img + '" alt="' + post.title + '" loading="lazy"><span class="featured-badge">Featured</span></div><div class="featured-card-body"><span class="post-card-tag">' + cat + '</span><h3 class="post-card-title">' + post.title + '</h3><div class="post-card-meta">' + date + ' &middot; ' + readTime + '</div><p>' + (post.description || '') + '</p></div></a>';
-      });
+      var SECTION_ORDER = ['product-posts', 'tips', 'featured', 'product-info'];
+      var SECTION_LABELS = {
+        'product-posts': 'Product Posts',
+        'tips': 'Tips &amp; Inspiration',
+        'featured': 'Featured',
+        'product-info': 'Product Information'
+      };
 
-      var categories = {};
-      posts.slice(2).forEach(function(post) {
-        var cat = post.category || 'Uncategorized';
-        if (!categories[cat]) categories[cat] = [];
-        categories[cat].push(post);
-      });
+      var BLOG_FILES = {"blog-358-fence-complete-guide":1,"blog-architectural-wire-mesh":1,"blog-barb-wire-gates-tips":1,"blog-barbed-wire-cost-calculation":1,"blog-border-razor-wire-deployment":1,"blog-chain-link-evolution":1,"blog-chain-link-replace":1,"blog-chain-link-selection":1,"blog-chain-link-yard":1,"blog-dual-fence-security":1,"blog-epoxy-vs-galvanised-woven-wire-mesh":1,"blog-fence-liability-escaped-animals":1,"blog-field-fence-installation":1,"blog-gabion-boxes-market-report-2034":1,"blog-galvanized-vs-pvc":1,"blog-hexagonal-vs-gabion-mesh":1,"blog-hexagonal-wire-mesh-global-impact":1,"blog-how-to-install-welded-gabion-boxes":1,"blog-installation-mistakes":1,"blog-materials-welded-wire-mesh":1,"blog-nato22-razor-wire":1,"blog-new-manufacturing-facility":1,"blog-plain-vs-twill-weave":1,"blog-razor-coils-7-things":1,"blog-sintered-filters":1,"blog-specification-sheet":1,"blog-squirrel-proof-wire-mesh":1,"blog-ss-welded-wire-mesh-guide":1,"blog-steel-mesh-plastering":1,"blog-sustainable-infrastructure":1,"blog-versatile-wire-mesh-products":1,"blog-weld-strength-matters":1,"blog-welded-mesh-711-714":1,"blog-welded-mesh-715":1,"blog-welded-vs-twisted-gabion":1,"gabion-boxes-supplier-find-the-best-for-your-project":1,"gabion-boxes-supplier-your-b2b-sourcing-guide":1,"gabion-boxes-supplier-your-guide-to-quality-cost":1,"gabion-boxes-supplier-your-trusted-b2b-partner":1,"galvanized-chain-link-fence-b2b-buyer-s-guide":1,"galvanized-chain-link-fence-specs-benefits-buying-guide":1,"galvanized-chain-link-fence-the-b2b-buyer-s-guide":1,"galvanized-chain-link-fence-ultimate-b2b-buying-guide":1,"galvanized-wire-the-ultimate-b2b-buying-guide":1,"galvanized-wire-ultimate-b2b-buying-guide-2025":1,"top-10-welded-wire-mesh-manufacturers-china-2024-updated":1,"top-10-wire-mesh-manufacturers-china-comprehensive-guide":1,"razor-wire-guide-high-security-perimeter-fencing":1,"358-fence-complete-guide-high-security-mesh-fencing":1,"cattle-fence-roll-durable-livestock-fencing-guide":1,"install-3d-panel-fence-expert-guide-for-b2b":1};
+      function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+      function postUrl(p) {
+        if (p.static_url) return p.static_url;
+        if (p.detail_url) return p.detail_url;
+        if (p.slug && BLOG_FILES[p.slug]) return p.slug + '.html';
+        return null;
+      }
+      function fmtDate(d) { var t = new Date(d); return isNaN(t.getTime()) ? '' : t.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+      function cardHtml(p, featured) {
+        var url = postUrl(p);
+        if (!url) return '';
+        var img = p.cover_image || 'images/blog/blog-hex-mesh-hero.webp';
+        var tag = p.category || 'News', date = fmtDate(p.created_at), rt = p.read_time || '5 min read';
+        if (featured) {
+          return '<a href="' + esc(url) + '" class="featured-card" data-post-id="' + esc(p.id) + '"><div class="featured-card-img"><img src="' + esc(img) + '" alt="' + esc(p.title) + '" loading="lazy"><span class="featured-badge">Featured</span></div><div class="featured-card-body"><span class="post-card-tag">' + esc(tag) + '</span><h3 class="post-card-title">' + esc(p.title) + '</h3><div class="post-card-meta">' + esc(date) + ' &middot; ' + esc(rt) + '</div><p>' + esc(p.description || '') + '</p></div></a>';
+        }
+        return '<a href="' + esc(url) + '" class="post-card" data-post-id="' + esc(p.id) + '"><div class="post-card-img"><img src="' + esc(img) + '" alt="' + esc(p.title) + '" loading="lazy"></div><div class="post-card-body"><span class="post-card-tag">' + esc(tag) + '</span><h3>' + esc(p.title) + '</h3><div class="post-card-meta">' + esc(date) + ' &middot; ' + esc(rt) + '</div><p>' + esc(p.description || '') + '</p></div></a>';
+      }
+
+      var featuredPool = posts.filter(function(p) { return p.section === 'featured' && postUrl(p); });
+      var featuredGrid = document.getElementById('featuredGrid');
+      var gridPosts = featuredPool.slice(0, 2);
+      if (featuredGrid && gridPosts.length) {
+        featuredGrid.innerHTML = gridPosts.map(function(p) { return cardHtml(p, true); }).join('');
+      }
 
       var blogCategories = document.getElementById('blogCategories');
-      blogCategories.innerHTML = '';
+      if (!blogCategories) return;
+      var featuredRest = featuredPool.slice(2);
+      var perPage = 6;
+      var html = '';
       var catIndex = 0;
-      Object.keys(categories).forEach(function(cat) {
-        var catPosts = categories[cat];
-        var sectionId = cat.toLowerCase().replace(/\s+/g, '-');
-        var gridId = 'grid-' + catIndex;
-        var paginationId = 'pagination-' + catIndex;
-        var perPage = 6;
+
+      SECTION_ORDER.forEach(function(sectionKey) {
+        var catPosts = sectionKey === 'featured'
+          ? featuredRest
+          : posts.filter(function(p) { return p.section === sectionKey && postUrl(p); });
+        if (!catPosts.length) return;
+        var label = SECTION_LABELS[sectionKey] || sectionKey;
         var totalPages = Math.ceil(catPosts.length / perPage);
 
-        var html = '<div class="blog-category-section" id="cat-' + catIndex + '" data-section="' + sectionId + '">';
-        html += '<div class="blog-category-header"><h3 class="blog-category-title">' + cat + ' <span class="count-badge">' + catPosts.length + ' posts</span></h3></div>';
-        html += '<div class="posts-grid" id="' + gridId + '">';
-
-        catPosts.slice(0, perPage).forEach(function(post) {
-          var url = post.static_url || post.detail_url || '#';
-          var img = post.cover_image || 'images/blog/blog-hex-mesh-hero.webp';
-          var date = new Date(post.created_at).toLocaleDateString();
-          var readTime = post.read_time || '5 min read';
-          html += '<a href="' + url + '" class="post-card" data-post-id="' + post.id + '"><div class="post-card-img"><img src="' + img + '" alt="' + post.title + '" loading="lazy"></div><div class="post-card-body"><span class="post-card-tag">' + (post.category || 'News') + '</span><h3>' + post.title + '</h3><div class="post-card-meta">' + date + ' &middot; ' + readTime + '</div><p>' + (post.description || '') + '</p></div></a>';
-        });
-
+        html += '<div class="blog-category-section" id="cat-' + catIndex + '" data-section="' + esc(sectionKey) + '">';
+        html += '<div class="blog-category-header"><h3 class="blog-category-title">' + label + ' <span class="count-badge">' + catPosts.length + ' posts</span></h3></div>';
+        html += '<div class="posts-grid" id="grid-' + catIndex + '">';
+        catPosts.slice(0, perPage).forEach(function(p) { html += cardHtml(p, false); });
         html += '</div>';
 
         if (totalPages > 1) {
-          html += '<div class="blog-pagination" id="' + paginationId + '" data-total-pages="' + totalPages + '">';
+          html += '<div class="blog-pagination" id="pagination-' + catIndex + '" data-total-pages="' + totalPages + '">';
           html += '<button class="page-arrow" data-page="1" disabled>&laquo;</button>';
-          for (var p = 1; p <= totalPages; p++) {
-            html += '<button data-page="' + p + '"' + (p === 1 ? ' class="active"' : '') + '>' + p + '</button>';
+          for (var pg = 1; pg <= totalPages; pg++) {
+            html += '<button data-page="' + pg + '"' + (pg === 1 ? ' class="active"' : '') + '>' + pg + '</button>';
           }
           html += '<button class="page-arrow" data-page="' + totalPages + '">&raquo;</button>';
           html += '</div>';
+        } else {
+          html += '<div class="blog-pagination" id="pagination-' + catIndex + '" data-total-pages="1"></div>';
         }
 
-        for (var pg = 2; pg <= totalPages; pg++) {
-          var start = (pg - 1) * perPage;
-          var end = start + perPage;
-          html += '<template class="post-card-template" data-page="' + pg + '">';
-          catPosts.slice(start, end).forEach(function(post) {
-            var url = post.static_url || post.detail_url || '#';
-            var img = post.cover_image || 'images/blog/blog-hex-mesh-hero.webp';
-            var date = new Date(post.created_at).toLocaleDateString();
-            var readTime = post.read_time || '5 min read';
-            html += '<a href="' + url + '" class="post-card" data-post-id="' + post.id + '"><div class="post-card-img"><img src="' + img + '" alt="' + post.title + '" loading="lazy"></div><div class="post-card-body"><span class="post-card-tag">' + (post.category || 'News') + '</span><h3>' + post.title + '</h3><div class="post-card-meta">' + date + ' &middot; ' + readTime + '</div><p>' + (post.description || '') + '</p></div></a>';
-          });
+        for (var page = 2; page <= totalPages; page++) {
+          html += '<template class="post-card-template" data-page="' + page + '">';
+          catPosts.slice((page - 1) * perPage, page * perPage).forEach(function(p) { html += cardHtml(p, false); });
           html += '</template>';
         }
 
         html += '</div>';
-        blogCategories.innerHTML += html;
         catIndex++;
       });
+
+      if (html) blogCategories.innerHTML = html;
     });
   </script>
 </body>

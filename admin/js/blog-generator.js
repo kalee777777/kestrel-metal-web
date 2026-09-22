@@ -103,8 +103,9 @@ var BlogGenerator = (function () {
   }
 
   function getSectionLabel(post) {
+    // 白名单兜底：未知 section 不再原样显示，避免脏数据变成新分组标题
     var section = post.section || '';
-    return SECTION_LABELS[section] || section || 'Latest Articles';
+    return SECTION_LABELS[section] || 'Latest Articles';
   }
 
   function formatDate(dateStr) {
@@ -210,16 +211,19 @@ var BlogGenerator = (function () {
     var rest = posts.slice(2);
     if (!rest.length) return '';
 
+    // 白名单归一：未知/脏 section 一律归入 product-info，按固定版块顺序输出。
+    // 历史事故：自由文本 section（如 'Global'）直接变成新分组标题，
+    // 冲掉 blog-news.html 的固定四版块结构。
+    var SECTION_ORDER = ['product-posts', 'tips', 'featured', 'product-info'];
     var groups = {};
     rest.forEach(function (p) {
-      var key = p.section || 'other';
-      if (!groups[key]) groups[key] = { label: p.sectionLabel, posts: [] };
+      var key = SECTION_LABELS[p.section] ? p.section : 'product-info';
+      if (!groups[key]) groups[key] = { label: SECTION_LABELS[key], posts: [] };
       groups[key].posts.push(p);
     });
 
-    var sections = Object.keys(groups);
     var index = 0;
-    return sections.map(function (key) {
+    return SECTION_ORDER.filter(function (key) { return groups[key]; }).map(function (key) {
       var group = groups[key];
       var html = renderCategorySection(group.posts, key, group.label, index);
       index++;
