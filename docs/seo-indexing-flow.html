@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kestrel Metal — SEO 全链路流程图(人工 vs 自动)</title>
+<style>
+  :root {
+    --auto: #16a34a; --auto-bg: #f0fdf4; --auto-bd: #bbf7d0;
+    --manual: #ea580c; --manual-bg: #fff7ed; --manual-bd: #fed7aa;
+    --hybrid: #2563eb; --hybrid-bg: #eff6ff; --hybrid-bd: #bfdbfe;
+    --danger: #dc2626; --danger-bg: #fef2f2; --danger-bd: #fecaca;
+    --ink: #1e293b; --muted: #64748b; --line: #cbd5e1;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Segoe UI',sans-serif; background:#f8fafc; color:var(--ink); padding:40px 20px; line-height:1.6; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:26px; margin-bottom:6px; }
+  .sub { color:var(--muted); margin-bottom:24px; font-size:14px; }
+  .legend { display:flex; gap:18px; flex-wrap:wrap; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 18px; margin-bottom:28px; font-size:13px; }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .dot { width:12px; height:12px; border-radius:3px; display:inline-block; }
+  .dot.auto{background:var(--auto)} .dot.manual{background:var(--manual)} .dot.hybrid{background:var(--hybrid)} .dot.warn{background:var(--danger)}
+
+  .stage { background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-bottom:22px; }
+  .stage-head { display:flex; align-items:baseline; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .stage-num { font-size:13px; font-weight:700; color:#fff; background:var(--ink); border-radius:6px; padding:2px 10px; }
+  .stage-head h2 { font-size:18px; }
+  .stage-head .tag { font-size:12px; color:var(--muted); }
+  .row { display:flex; align-items:stretch; gap:0; flex-wrap:wrap; }
+  .node { border-radius:10px; padding:12px 14px; font-size:13px; flex:1; min-width:180px; position:relative; border:1.5px solid; }
+  .node b { display:block; font-size:14px; margin-bottom:3px; }
+  .node .who { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+  .node .note { font-size:12px; color:var(--muted); margin-top:4px; }
+  .auto   { background:var(--auto-bg);   border-color:var(--auto-bd);   } .auto .who   { color:var(--auto); }
+  .manual { background:var(--manual-bg); border-color:var(--manual-bd); } .manual .who { color:var(--manual); }
+  .hybrid { background:var(--hybrid-bg); border-color:var(--hybrid-bd); } .hybrid .who { color:var(--hybrid); }
+  .warn   { background:var(--danger-bg); border-color:var(--danger-bd); } .warn .who   { color:var(--danger); }
+
+  .arrow { display:flex; align-items:center; color:var(--muted); font-size:20px; padding:0 10px; }
+  .down { text-align:center; font-size:22px; color:var(--muted); margin:-8px 0 12px; }
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .lane { border-radius:12px; padding:16px; border:1.5px dashed var(--line); }
+  .lane h3 { font-size:14px; margin-bottom:10px; }
+  .lane .node { margin-bottom:10px; min-width:0; }
+  .lane .node:last-child { margin-bottom:0; }
+  .varrow { text-align:center; color:var(--muted); font-size:18px; margin:4px 0; }
+
+  .google { border:2px solid #4285f4; }
+  .google .stage-num { background:#4285f4; }
+  .gflow { display:flex; align-items:stretch; gap:0; flex-wrap:wrap; }
+  .gstep { flex:1; min-width:150px; background:#f8fbff; border:1.5px solid #c7dbff; border-radius:10px; padding:12px; font-size:13px; position:relative; }
+  .gstep b { display:block; font-size:13.5px; margin-bottom:3px; }
+  .gstep .who { font-size:11px; font-weight:700; color:#4285f4; text-transform:uppercase; letter-spacing:.5px; }
+  .gstep .note { font-size:12px; color:var(--muted); margin-top:4px; }
+  .badge-you { display:inline-block; background:#fef9c3; border:1px solid #fde047; color:#854d0e; font-size:11px; border-radius:4px; padding:1px 6px; margin-top:5px; font-weight:600; }
+
+  .foot { font-size:12.5px; color:var(--muted); background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 18px; margin-top:6px; }
+  .foot b { color:var(--ink); }
+  @media (max-width:760px){ .split{grid-template-columns:1fr} .arrow{transform:rotate(90deg); padding:6px 0; justify-content:center} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>SEO 全链路流程图 — 从内容生产到谷歌收录</h1>
+  <p class="sub">Kestrel Metal · 生成日期 2026-09-23 · 依据当前真实流程绘制(含 SEO 自动化工作流直传现状)</p>
+
+  <div class="legend">
+    <span><i class="dot auto"></i> 🤖 自动(系统/爬虫执行)</span>
+    <span><i class="dot manual"></i> 👤 人工(必须你来操作)</span>
+    <span><i class="dot hybrid"></i> 🤖+👤 AI 辅助(让 AI 跑,你审核)</span>
+    <span><i class="dot warn"></i> ⚠️ 流程缺口(当前痛点)</span>
+  </div>
+
+  <!-- 阶段一 -->
+  <div class="stage">
+    <div class="stage-head"><span class="stage-num">阶段 1</span><h2>内容生产</h2><span class="tag">全自动 · 定时触发</span></div>
+    <div class="row">
+      <div class="node auto"><span class="who">🤖 自动(Cron)</span><b>关键词簇分析</b><span class="note">GSC 查询数据聚类 → 选出产品关键词簇</span></div>
+      <div class="arrow">→</div>
+      <div class="node auto"><span class="who">🤖 自动</span><b>AI 文章生成</b><span class="note">一簇一篇对比/采购指南,含 meta/canonical/JSON-LD</span></div>
+      <div class="arrow">→</div>
+      <div class="node auto"><span class="who">🤖 自动</span><b>AI 配图生成</b><span class="note">banner 头图 1280×720</span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <!-- 阶段二 -->
+  <div class="stage">
+    <div class="stage-head"><span class="stage-num">阶段 2</span><h2>发布上线(当前双轨,存在缺口)</h2><span class="tag">⚠️ 工作流只走 A 轨,B 轨靠事后补</span></div>
+    <div class="split">
+      <div class="lane">
+        <h3>A 轨 · SEO 工作流直传生产</h3>
+        <div class="node auto"><span class="who">🤖 自动</span><b>上传 HTML + 图片 + sitemap</b><span class="note">页面立即可访问,Google 可抓</span></div>
+        <div class="varrow">↓</div>
+        <div class="node warn"><span class="who">⚠️ 缺口(三处)</span><b>不进 git 仓库 · 不挂博客索引 · 缺 og 标签</b><span class="note">→ 内容成"孤儿页",元数据不齐</span></div>
+      </div>
+      <div class="lane">
+        <h3>B 轨 · 仓库回收与修复(目前事后执行)</h3>
+        <div class="node hybrid"><span class="who">🤖+👤 AI 辅助</span><b>回收脚本</b><span class="note">下载页面/图 → 修 canonical/og → 补 sitemap/内链 → git 提交</span></div>
+        <div class="varrow">↓</div>
+        <div class="node auto"><span class="who">🤖 自动</span><b>推 Gitee → 部署</b><span class="note">Gitee 为部署源,推送后生产更新</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <!-- 阶段三 -->
+  <div class="stage">
+    <div class="stage-head"><span class="stage-num">阶段 3</span><h2>谷歌发现内容(三条入口)</h2><span class="tag">可加速,不能跳过</span></div>
+    <div class="row">
+      <div class="node auto"><span class="who">🤖 自动</span><b>入口① sitemap 抓取</b><span class="note">Googlebot 周期性读 sitemap.xml 发现新 URL(慢,数天~数周)</span></div>
+      <div class="node manual"><span class="who">👤 人工(强烈建议)</span><b>入口② GSC 请求索引</b><span class="note">Search Console → 网址检查 → "请求编入索引",当天触发抓取<span class="badge-you">你的操作 · 每篇 1 分钟</span></span></div>
+      <div class="node hybrid"><span class="who">🤖+👤 AI 辅助</span><b>入口③ 内链引导</b><span class="note">博客索引卡片/文章互链/产品页入口(回收脚本自动补,审核靠人)</span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <!-- 阶段四:谷歌内部 -->
+  <div class="stage google">
+    <div class="stage-head"><span class="stage-num">Google</span><h2>谷歌内部处理(全自动,你只能影响输入质量)</h2><span class="tag">典型耗时:抓取后 1~7 天</span></div>
+    <div class="gflow">
+      <div class="gstep"><span class="who">🤖 自动</span><b>① Googlebot 抓取</b><span class="note">读 HTML 源码(不执行 JS)→ 无 JS 可读是硬门槛</span></div>
+      <div class="arrow">→</div>
+      <div class="gstep"><span class="who">🤖 自动</span><b>② 渲染与解析</b><span class="note">canonical 判定 → 重复/规范 URL 归一</span></div>
+      <div class="arrow">→</div>
+      <div class="gstep"><span class="who">🤖 自动</span><b>③ 索引评估</b><span class="note">质量评分:内容唯一性/结构化数据/内链权重<span class="badge-you">你能影响的:内容质量+schema+内链</span></span></div>
+      <div class="arrow">→</div>
+      <div class="gstep"><span class="who">🤖 自动</span><b>④ 收录</b><span class="note">进入索引,site: 查询可见,GSC 覆盖报告出现</span></div>
+      <div class="arrow">→</div>
+      <div class="gstep"><span class="who">🤖 自动</span><b>⑤ 排名</b><span class="note">按查询匹配排序,周期性更新</span></div>
+    </div>
+  </div>
+
+  <div class="down">↓</div>
+
+  <!-- 阶段五 -->
+  <div class="stage">
+    <div class="stage-head"><span class="stage-num">阶段 5</span><h2>效果监控与迭代(月度循环)</h2><span class="tag">≈2 小时/月</span></div>
+    <div class="row">
+      <div class="node manual"><span class="who">👤 人工</span><b>GSC 数据查看</b><span class="note">收录覆盖/排名/点击 → 发现未收录页补推</span></div>
+      <div class="node manual"><span class="who">👤 人工</span><b>GA4 流量 + ai_referral</b><span class="note">AI 引用带来的会话监控</span></div>
+      <div class="node manual"><span class="who">👤 人工</span><b>基线 Prompt 测试</b><span class="note">ChatGPT/Perplexity 测 10 条 → Admin 基线验证记录引用率</span></div>
+      <div class="node hybrid"><span class="who">🤖+👤 AI 辅助</span><b>低分页补内容</b><span class="note">Admin 评分排序 → AI 补定义句/数据点 → 人审核</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>人工必须做的 4 件事:</b>① GSC 请求索引(每篇新文章,加速收录的关键一步);② GA4/GSC 月度查看;③ 基线 Prompt 测试;④ 发布新内容后知会 AI 跑回收脚本。<br>
+    <b>全自动的部分:</b>内容生产、A 轨直传、Gitee 部署、Google 抓取→收录→排名全过程。<br>
+    <b>当前最大缺口(A 轨):</b>工作流直传不进仓库/不挂索引/缺 og —— 每次发布后需 B 轨回收补救;建议后续改造工作流把"git 提交 + 博客索引"纳入自动步骤。
+  </div>
+</div>
+</body>
+</html>
