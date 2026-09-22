@@ -565,6 +565,85 @@ route('POST', '/api/blog/backfill-groups', async ({ env, request }) => {
   return jsonResponse({ message: 'Backfill completed', ...result });
 });
 
+// 待提交 Google 的 URL 清单
+//
+// IndexNow 只覆盖 Bing / Yandex，Google 不参与该协议，也没有面向普通文章的
+// Indexing API，所以每次发布后把新 URL 记进 gsc:pending，
+// 供人工在 Search Console 里批量请求编入索引。
+route('GET', '/api/gsc/pending', async ({ env }) => {
+  const { getJSON } = await import('./lib/kv');
+  const data = await getJSON<{ urls: Array<{ url: string; slug: string; publishedAt: string }>; updatedAt?: string }>(
+    env.SEO_DATA,
+    'gsc:pending',
+  );
+  const urls = data?.urls ?? [];
+  return jsonResponse({
+    count: urls.length,
+    updatedAt: data?.updatedAt ?? null,
+    urls,
+    plain: urls.map((u) => u.url).join('\n'),
+  });
+});
+
+// 把已发布文章补进清单（首次启用时用，需 ADMIN_TOKEN）
+// ?days=N 只补最近 N 天发布的；不传则补齐全部
+route('POST', '/api/gsc/pending/seed', async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+
+  interface PendingRow { url: string; slug: string; publishedAt: string }
+  interface PublishedRow { slug: string; publishedAt?: string }
+
+  const days = Number(url.searchParams.get('days') ?? 0);
+  const cutoff = days > 0 ? Date.now() - days * 86400_000 : 0;
+
+  const published = (await getJSON<PublishedRow[]>(env.CONTENT_QUEUE, 'published:all')) ?? [];
+  const existing = (await getJSON<{ urls: PendingRow[] }>(env.SEO_DATA, 'gsc:pending')) ?? { urls: [] };
+  const bySlug = new Map(existing.urls.map((row) => [row.slug, row]));
+  let added = 0;
+
+  for (const row of published) {
+    if (!row.slug) continue;
+    if (bySlug.has(row.slug)) continue;
+    const publishedAt = row.publishedAt ?? new Date().toISOString();
+    if (cutoff && new Date(publishedAt).getTime() < cutoff) continue;
+    bySlug.set(row.slug, {
+      url: `https://www.kestrelmetal.com/${row.slug}.html`,
+      slug: row.slug,
+      publishedAt,
+    });
+    added++;
+  }
+
+  const urls = Array.from(bySlug.values()).sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+  await setJSON(env.SEO_DATA, 'gsc:pending', { urls, updatedAt: new Date().toISOString() });
+  return jsonResponse({ message: 'Seeded', added, count: urls.length });
+});
+
+// 清空整份清单，或移除指定 slug（需 ADMIN_TOKEN）
+route('DELETE', '/api/gsc/pending', async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const slug = url.searchParams.get('slug');
+
+  if (!slug) {
+    await setJSON(env.SEO_DATA, 'gsc:pending', { urls: [], updatedAt: new Date().toISOString() });
+    return jsonResponse({ message: 'Cleared', count: 0 });
+  }
+
+  const data = await getJSON<{ urls: Array<{ url: string; slug: string; publishedAt: string }> }>(
+    env.SEO_DATA,
+    'gsc:pending',
+  );
+  const urls = (data?.urls ?? []).filter((row) => row.slug !== slug);
+  await setJSON(env.SEO_DATA, 'gsc:pending', { urls, updatedAt: new Date().toISOString() });
+  return jsonResponse({ message: 'Removed', slug, count: urls.length });
+});
+
 // 触发竞品分析（需 ADMIN_TOKEN）
 route('POST', '/api/competitors/analyze', async ({ env, request }) => {
   if (!isAdminAuthorized(request, env)) {

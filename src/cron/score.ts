@@ -40,6 +40,7 @@ export default async function score(env: Env): Promise<void> {
 
   let deployed = 0;
   const publishedPaths: string[] = [];
+  const publishedSlugs: string[] = [];
 
   for (const key of keys) {
     const draft = await getJSON<DraftData>(env.CONTENT_QUEUE, key.name);
@@ -164,6 +165,7 @@ export default async function score(env: Env): Promise<void> {
         console.log(`[score] Published: ${draft.slug} (Score: ${currentScore})`);
         deployed++;
         publishedPaths.push(`/${draft.slug}.html`);
+        publishedSlugs.push(draft.slug);
       } else {
         console.log(`[score] Skipped: ${draft.slug} (Score: ${currentScore} < 60)`);
         await setJSON(env.CONTENT_QUEUE, key.name, {
@@ -196,5 +198,36 @@ export default async function score(env: Env): Promise<void> {
     } catch (err) {
       console.error('[score] IndexNow submission failed:', err);
     }
+
+    // IndexNow 只覆盖 Bing / Yandex 等，Google 不参与该协议，
+    // 也没有面向普通文章的 Indexing API。所以额外维护一份清单，
+    // 供人工在 Search Console 里批量请求编入索引。
+    try {
+      await recordPendingGscUrls(env, publishedPaths, publishedSlugs);
+    } catch (err) {
+      console.error('[score] Failed to record pending GSC urls:', err);
+    }
   }
+}
+
+/** 把刚发布的文章记入「待提交 Google」清单（按 slug 去重，保留最新的 200 条） */
+async function recordPendingGscUrls(env: Env, paths: string[], slugs: string[]): Promise<void> {
+  const { getJSON, setJSON } = await import('../lib/kv');
+
+  interface PendingRow { url: string; slug: string; publishedAt: string }
+  const existing = (await getJSON<{ urls: PendingRow[] }>(env.SEO_DATA, 'gsc:pending')) ?? { urls: [] };
+  const bySlug = new Map(existing.urls.map((row) => [row.slug, row]));
+  const now = new Date().toISOString();
+
+  paths.forEach((path, index) => {
+    const slug = slugs[index] ?? path.replace(/^\//, '').replace(/\.html$/, '');
+    if (!slug) return;
+    if (!bySlug.has(slug)) {
+      bySlug.set(slug, { url: `https://www.kestrelmetal.com${path.startsWith('/') ? '' : '/'}${path}`, slug, publishedAt: now });
+    }
+  });
+
+  const urls = Array.from(bySlug.values()).slice(-200);
+  await setJSON(env.SEO_DATA, 'gsc:pending', { urls, updatedAt: now });
+  console.log(`[score] GSC pending list now holds ${urls.length} URLs`);
 }

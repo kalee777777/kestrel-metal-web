@@ -153,6 +153,7 @@ Router.register('/blog', async function (container) {
       </div>
     </div>
     <div id="blogGenStats" style="margin-bottom:1rem;padding:0.75rem 1rem;background:var(--primary-bg);border-radius:var(--radius-md);font-size:0.8125rem;color:var(--primary-dark)"></div>
+    <div id="gscPendingBox" style="margin-bottom:1rem"></div>
 
     <div class="filter-bar">
       <input type="text" id="searchInput" class="form-control search" placeholder="搜索文章标题..." onkeyup="handleSearch(event)">
@@ -420,7 +421,67 @@ Router.register('/blog', async function (container) {
       (unmapped > 0 ? ' &middot; 未映射 ' + unmapped + ' 篇（无对应静态详情页，不会展示）' : ' &middot; 全部可展示');
   }
 
+  // ─── 待提交 Google 收录 ───
+  // IndexNow 推送只覆盖 Bing / Yandex，Google 不参与该协议，
+  // 也没有面向普通文章的 Indexing API，所以发布后把新 URL 攒成清单，
+  // 由人工在 Search Console 里批量请求编入索引。
+  let gscPlain = '';
+
+  async function renderGscPending() {
+    const box = document.getElementById('gscPendingBox');
+    if (!box) return;
+    try {
+      const res = await API.get('/api/gsc/pending');
+      gscPlain = res.plain || '';
+      if (!res.count) {
+        box.innerHTML = '<div style="padding:0.7rem 1rem;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;font-size:0.8125rem;color:#047857">'
+          + '✅ Google 待提交清单为空 —— 所有已发布文章都已标记为提交过</div>';
+        return;
+      }
+      box.innerHTML = `
+        <div style="border:1px solid #fde68a;background:#fffbeb;border-radius:8px;padding:0.9rem 1rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div style="font-size:0.875rem;font-weight:600;color:#92400e">
+              ⏳ 待提交 Google 收录：${res.count} 篇
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-primary" style="padding:4px 12px;font-size:12px" onclick="copyGscUrls()">📋 复制全部 URL</button>
+              <button class="btn" style="padding:4px 12px;font-size:12px" onclick="markGscSubmitted()">标记全部已提交</button>
+            </div>
+          </div>
+          <div style="font-size:0.75rem;color:#a16207;margin-top:6px;line-height:1.6">
+            IndexNow 只推 Bing / Yandex，Google 需手动提交。复制后到 GSC → 顶部 URL 检查栏 → 粘贴 → 「请求编入索引」。
+          </div>
+          <textarea readonly onclick="this.select()" style="width:100%;margin-top:8px;height:74px;font-family:ui-monospace,Menlo,monospace;font-size:11px;padding:8px;border:1px solid #fcd34d;border-radius:6px;background:#fff;resize:vertical">${API.escapeHtml(gscPlain)}</textarea>
+        </div>`;
+    } catch (err) {
+      box.innerHTML = '';
+    }
+  }
+
+  window.copyGscUrls = async () => {
+    if (!gscPlain) return API.toast('没有可复制的 URL', 'warning');
+    try {
+      await navigator.clipboard.writeText(gscPlain);
+      API.toast('已复制 ' + gscPlain.split('\n').length + ' 条 URL', 'success');
+    } catch {
+      API.toast('复制失败，请手动选中文本框内容', 'error');
+    }
+  };
+
+  window.markGscSubmitted = async () => {
+    if (!confirm('确认这些 URL 都已在 GSC 提交过？清单将被清空。')) return;
+    try {
+      await API.delete('/api/gsc/pending');
+      API.toast('清单已清空', 'success');
+      renderGscPending();
+    } catch (err) {
+      API.toast('操作失败: ' + err.message, 'error');
+    }
+  };
+
   updateGenStats();
+  renderGscPending();
 
   await loadPosts();
 });
