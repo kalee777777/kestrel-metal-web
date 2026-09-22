@@ -160,6 +160,53 @@ async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
 }
 
 /**
+ * 校验生成的 banner 图片字节是否可用。
+ *
+ * 历史事故（2026-09）：wanx 生成的 5 张 hero 图下半部分为纯黑
+ * （生成中断但文件完整），发布链路无任何校验直接上传，导致
+ * 卡片与 banner 半黑。Workers 无法解码像素做半黑检测（像素级
+ * 检测由回收入库时的本地脚本负责），这里至少校验：
+ * 1. 文件大小合理（>30KB）
+ * 2. 合法的 RIFF/WEBP 容器头
+ * 3. 声明尺寸达到请求的 1280x720 量级（宽≥1000 且 高≥500）
+ * 任一不满足即抛错，上层 catch 返回 null，文章回退到静态 hero 图。
+ */
+function validateBannerImage(bytes: ArrayBuffer): void {
+  const b = new Uint8Array(bytes);
+  if (b.length < 30_000) {
+    throw new Error(`banner too small (${b.length} bytes), likely truncated`);
+  }
+  if (b.length < 30 || b[0] !== 0x52 || b[1] !== 0x49 || b[2] !== 0x46 || b[3] !== 0x46
+    || b[8] !== 0x57 || b[9] !== 0x45 || b[10] !== 0x42 || b[11] !== 0x50) {
+    throw new Error('banner is not a valid RIFF/WEBP file');
+  }
+
+  let width = 0;
+  let height = 0;
+  const fourcc = String.fromCharCode(b[12], b[13], b[14], b[15]);
+  if (fourcc === 'VP8X') {
+    // extended format: 24-bit little-endian canvas size minus one
+    width = 1 + (b[24] | (b[25] << 8) | (b[26] << 16));
+    height = 1 + (b[27] | (b[28] << 8) | (b[29] << 16));
+  } else if (fourcc === 'VP8L') {
+    // lossless: 14-bit little-endian bitstream after signature byte
+    width = 1 + ((b[21] | (b[22] << 8)) & 0x3fff);
+    height = 1 + ((((b[22] >> 6) | (b[23] << 2) | (b[24] << 10)) & 0x3fff));
+  } else if (fourcc === 'VP8 ') {
+    // lossy: sync code 0x9D 0x01 0x2A then 14-bit width/height
+    if (b[23] === 0x9d && b[24] === 0x01 && b[25] === 0x2a) {
+      width = (b[26] | (b[27] << 8)) & 0x3fff;
+      height = (b[28] | (b[29] << 8)) & 0x3fff;
+    }
+  }
+
+  if (width < 1000 || height < 500) {
+    throw new Error(`banner dimensions too small (${width}x${height}), expected 1280x720`);
+  }
+  console.log(`[banner-gen] Validated banner: ${width}x${height}, ${b.length} bytes`);
+}
+
+/**
  * 为新增动态页面生成 Banner 图片
  * 仅用于 AI 生成的文章页面，不影响已有静态页面
  *
@@ -194,6 +241,9 @@ export async function generateBannerImage(
     const imgResp = await fetch(imageUrl);
     if (!imgResp.ok) throw new Error('Failed to download generated banner image');
     const imageBytes = await imgResp.arrayBuffer();
+
+    // 发布前校验：坏图（截断/尺寸不足）直接判定失败，回退静态 hero 图
+    validateBannerImage(imageBytes);
 
     // 文件名带上内容哈希。
     //
