@@ -223,7 +223,7 @@
                 "@type": "ContactPoint",
                 "telephone": "+86-17832383339",
                 "contactType": "sales",
-                "email": "sales@kestrelmetal.com",
+                "email": "kalee@kestrelmetal.com",
                 "availableLanguage": ["English", "Chinese"]
             },
             "knowsAbout": [
@@ -315,7 +315,7 @@
             "image": DOMAIN + "/images/factory.jpg",
             "url": DOMAIN,
             "telephone": "+86-17832383339",
-            "email": "sales@kestrelmetal.com",
+            "email": "kalee@kestrelmetal.com",
             "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Anping",
