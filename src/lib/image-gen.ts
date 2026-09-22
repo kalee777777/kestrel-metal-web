@@ -173,7 +173,7 @@ function buildPrompt(request: ImageRequest): string {
     gabion:
       'gabion box wire mesh cage filled with natural stone, landscape retaining wall, erosion control in outdoor setting',
     razor:
-      'razor wire concertina coil on top of security fence, industrial perimeter protection, dramatic lighting',
+      'razor wire concertina coil on top of security fence, industrial perimeter protection, bright daylight',
     welded:
       'welded wire mesh panel fence, double wire construction, modern industrial fencing, clean professional look',
     'high-security':
@@ -185,9 +185,9 @@ function buildPrompt(request: ImageRequest): string {
     'metal fencing products, industrial security solutions, wire mesh manufacturing';
 
   const styleModifiers: Record<string, string> = {
-    industrial: 'factory background, warehouse setting, large-scale installation, dramatic shadows',
+    industrial: 'factory background, warehouse setting, large-scale installation, bright even lighting',
     product: 'product showcase, clean white background, detailed close-up, studio lighting',
-    scene: 'real-world installation, outdoor setting, natural environment, golden hour lighting',
+    scene: 'real-world installation, outdoor setting, natural environment, bright daylight',
     detail: 'extreme close-up, texture detail, material quality focus, macro photography',
   };
 

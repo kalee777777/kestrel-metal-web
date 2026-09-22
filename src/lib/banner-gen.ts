@@ -18,6 +18,17 @@ const POLL_INTERVAL_MS = 5000;
 const MAX_POLL_ATTEMPTS = 30;
 
 /**
+ * 统一画面基调：明亮、通透、清晰。
+ *
+ * 曾经这里散落着 "dark moody tones" / "dark tones" / "dramatic lighting"，
+ * 实测产出的图片平均亮度只有 42/255，多张图的暗部占比超过 90%
+ * （cattle fence 那张几乎整幅纯黑）。hero 区本身还叠着 72%-90% 的深色遮罩，
+ * 暗图再压一层，页面上就是一团灰。B2B 产品图本就该明亮易辨，故统一改掉。
+ */
+const BRIGHT_BASE =
+  'bright natural daylight, well-lit, clean composition, professional commercial photography, wide angle, 8k resolution, photorealistic';
+
+/**
  * 关键词 → Banner 提示词映射
  * 根据关键词生成对应的工业风格 Banner 描述
  */
@@ -26,47 +37,50 @@ function buildBannerPrompt(keyword: string): string {
 
   // 产品类关键词
   if (kw.includes('gabion')) {
-    return 'gabion wire mesh cages filled with natural stones, retaining wall construction site, industrial landscape, golden hour lighting, professional commercial photography, wide angle, cinematic, dark moody tones, 8k resolution';
+    return `gabion wire mesh cages filled with natural stones, retaining wall construction site, sunny blue sky, ${BRIGHT_BASE}`;
   }
   if (kw.includes('chain link') || kw.includes('chain-link')) {
-    return 'galvanized chain link fence installation, metallic steel mesh, industrial security perimeter, construction site background, dramatic lighting, professional commercial photography, wide angle, cinematic, 8k resolution';
+    return `galvanized chain link fence installation, metallic steel mesh, industrial security perimeter, ${BRIGHT_BASE}`;
   }
   if (kw.includes('razor wire') || kw.includes('razor-wire')) {
-    return 'razor wire concertina coil on security fence, industrial perimeter protection, dramatic sunset lighting, professional commercial photography, wide angle, cinematic, dark industrial tones, 8k resolution';
+    return `razor wire concertina coil on security fence, industrial perimeter protection, ${BRIGHT_BASE}`;
   }
   if (kw.includes('barbed wire') || kw.includes('barbed-wire')) {
-    return 'barbed wire fence line, rural agricultural boundary, golden hour backlight, professional commercial photography, wide angle, cinematic, warm industrial tones, 8k resolution';
+    return `barbed wire fence line, rural agricultural boundary, bright green field, morning sunlight, ${BRIGHT_BASE}`;
   }
   if (kw.includes('welded wire') || kw.includes('welded-wire')) {
-    return 'welded wire mesh panels, modern industrial fencing, clean geometric patterns, factory setting, professional commercial photography, wide angle, cinematic, 8k resolution';
+    return `welded wire mesh panels, modern industrial fencing, clean geometric patterns, bright warehouse, ${BRIGHT_BASE}`;
   }
   if (kw.includes('hexagonal') || kw.includes('hexagonal wire')) {
-    return 'hexagonal wire mesh chicken netting, agricultural fencing, green countryside background, professional commercial photography, wide angle, cinematic, 8k resolution';
+    return `hexagonal wire mesh chicken netting, agricultural fencing, bright green countryside, sunny daylight, ${BRIGHT_BASE}`;
   }
   if (kw.includes('security fence') || kw.includes('high security')) {
-    return 'high security fence system with anti-climb mesh, industrial facility perimeter, dramatic lighting, professional commercial photography, wide angle, cinematic, dark tones, 8k resolution';
+    return `high security fence system with anti-climb mesh, industrial facility perimeter, ${BRIGHT_BASE}`;
   }
   if (kw.includes('fence post') || kw.includes('post')) {
-    return 'metal fence posts installation, steel Y-post and T-post, construction site, professional commercial photography, wide angle, cinematic, industrial tones, 8k resolution';
+    return `metal fence posts installation, steel Y-post and T-post, construction site, ${BRIGHT_BASE}`;
   }
   if (kw.includes('wire mesh')) {
-    return 'wire mesh manufacturing, steel wire grid panels, industrial factory setting, professional commercial photography, wide angle, cinematic, metallic tones, 8k resolution';
+    return `wire mesh manufacturing, steel wire grid panels, bright modern factory interior, ${BRIGHT_BASE}`;
   }
   if (kw.includes('galvanized')) {
-    return 'galvanized steel wire products, shiny metallic surface, industrial manufacturing, professional commercial photography, wide angle, cinematic, silver tones, 8k resolution';
+    return `galvanized steel wire products, shiny metallic surface, well-lit industrial setting, ${BRIGHT_BASE}`;
   }
   if (kw.includes('358') || kw.includes('anti-climb')) {
-    return '358 high security anti-climb fence, prison grade security fencing, industrial facility, professional commercial photography, wide angle, cinematic, dark tones, 8k resolution';
+    return `358 high security anti-climb fence, prison grade security fencing, industrial facility, ${BRIGHT_BASE}`;
+  }
+  if (kw.includes('stainless') || kw.includes('nickel') || kw.includes('copper') || kw.includes('filter')) {
+    return `stainless steel wire mesh and filter screens, fine metallic weave close-up, clean bright workshop, ${BRIGHT_BASE}`;
   }
   if (kw.includes('manufacturer') || kw.includes('supplier') || kw.includes('factory')) {
-    return 'metal fencing manufacturing facility, large-scale industrial production, wire mesh factory interior, professional commercial photography, wide angle, cinematic, industrial tones, 8k resolution';
+    return `metal fencing manufacturing facility, large-scale industrial production, bright well-lit factory interior, ${BRIGHT_BASE}`;
   }
   if (kw.includes('guide') || kw.includes('buying') || kw.includes('b2b')) {
-    return 'industrial metal fencing products showcase, professional B2B catalog style, clean composition, dramatic lighting, professional commercial photography, wide angle, cinematic, 8k resolution';
+    return `industrial metal fencing products showcase, professional B2B catalog style, clean bright studio background, well-lit, ${BRIGHT_BASE}`;
   }
 
   // 通用工业风格 Banner
-  return 'industrial metal fencing and wire mesh products, professional B2B photography, wide angle composition, dramatic lighting, dark moody industrial tones, cinematic quality, 8k resolution, photorealistic';
+  return `industrial metal fencing and wire mesh products, professional B2B photography, clean bright composition, ${BRIGHT_BASE}`;
 }
 
 async function submitBannerTask(apiKey: string, prompt: string): Promise<string> {
