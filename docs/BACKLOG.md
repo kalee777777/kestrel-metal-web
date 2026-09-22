@@ -31,8 +31,8 @@
 | ENT-06 | LinkedIn 页面补全 | ✅ 2026-09-20:概述(长简介)、专业领域、地点(Anping Industrial Zone)、行业 已更新完成。**剩余**:有效邮箱域名添加(kestrelmetal.com,后台提醒项)+ 按内容计划发前 3 篇帖子([LINKEDIN_CONTENT_PLAN.md](LINKEDIN_CONTENT_PLAN.md)) | 人工 | 🔄 |
 | SITE-01 | 站内 schema 联系信息对齐 | 电话格式 `+86-17832383339` → `+86 17832383339`、schema 邮箱 `sales@` → `kalee@`(主)、员工 60-100 → 51-100;改动点:`perf-scripts/static-jsonld.js` + `js/seo-enhance.js`,随下次 schema 重建/部署一并执行(数字主体不变,不紧急) | AI | ☐ |
 | SITE-02 | 发布渠道分歧调查 | ✅ 2026-09-20 已澄清:9 篇文章是 **SEO 自动化工作流**生成后直接上传生产测试的(用户确认),明天(09-21)正式发布。回收进仓库的操作保留(commit 121877d)。**衍生注意项见 SITE-04** | 人工说明 | ✅ 09-20 |
-| SITE-04 | 明日发布后核对(09-21) | 工作流正式发布这 9 篇后:① 确认发布流程**不会用工作流旧版覆盖仓库里已修复的元数据**(canonical/og/JSON-LD,commit 121877d);② 若发布动作会自动更新 blog 索引,核对 SITE-03 是否随之解决;③ 提醒:线上已可访问且 sitemap 已收录,Google 可能已在抓取测试版内容——若元数据与仓库版不一致,以仓库版为准重传。验收:线上 9 页与仓库版 diff 为零或更优 | 人工发布 + AI 核对 | ☐ |
-| SITE-03 | 9 篇回收文章补内部链接 | 这些文章目前是孤儿页(blog.html / blog-news.html 均未引用,内部链接为 0);若明日发布动作会自动挂上博客索引则核对即可,否则手动补:博客索引卡片 + 相关文章互链 + 从对应产品页挂入口。验收:每篇 ≥2 个内链 | AI + 人工审核 | ☐ |
+| SITE-04 | 工作流发布后核对 | ✅ 2026-09-21 完成——① 9 篇中 8 篇线上与仓库零差异(仅 Cloudflare 注入);1 篇(galvanized-chain-link-fence-the-b2b-buyer-s-guide)线上 og/twitter 被工作流旧版覆盖(canonical/JSON-LD 幸存),仓库版正确,随下次部署自动修复;② 工作流发布**不更新博客索引** → SITE-03 已手动补齐;③ 发布日又直传 5 篇新文章(358/牛栏/3D 安装/剃刀/焊接网 top10),已同样回收 + 补 og + sitemap 212 对齐(commit c6844da) | AI | ✅ 09-21 |
+| SITE-03 | 回收文章补内部链接 | ✅ 2026-09-21 完成(扩展到全部 14 篇)——blog-news.html 三分类插入 14 张卡片(计数徽章同步:Product Posts 12→14 / Tips 9→11 / Product Info 12→22);每篇正文加 Related Guides 块(2-3 个主题互链);3 个核心产品页挂入口(gabion / chain-link / razor-btc)。**每篇内链 0 → ≥3**,验收达标(commit 1c15b9b) | AI | ✅ 09-21 |
 | GEO-03 | GA4 ai_referral 数据首查 | 确认事件在积累、自定义维度可查,定型月度查看路径 | 人工 | ☐ |
 
 ## P1 · 30 天
