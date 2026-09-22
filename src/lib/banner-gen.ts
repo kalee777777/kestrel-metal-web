@@ -151,6 +151,14 @@ async function pollBannerResult(apiKey: string, taskId: string): Promise<string>
   throw new Error(`Banner task ${taskId} timed out after ${MAX_POLL_ATTEMPTS} polls`);
 }
 
+/** 计算字节内容的 SHA-256，返回小写十六进制串 */
+async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', buffer);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 /**
  * 为新增动态页面生成 Banner 图片
  * 仅用于 AI 生成的文章页面，不影响已有静态页面
@@ -173,7 +181,6 @@ export async function generateBannerImage(
   }
 
   const prompt = buildBannerPrompt(keyword);
-  const imageKey = `banner/${slug}-hero.webp`;
 
   console.log(`[banner-gen] Generating banner for: ${slug} (keyword: ${keyword})`);
 
@@ -188,11 +195,20 @@ export async function generateBannerImage(
     if (!imgResp.ok) throw new Error('Failed to download generated banner image');
     const imageBytes = await imgResp.arrayBuffer();
 
-    // 上传到 R2
+    // 文件名带上内容哈希。
+    //
+    // 图片响应由 Worker 从 R2 返回，并带 immutable 长缓存；若沿用固定的
+    // `{slug}-hero.webp`，重新生成后 CDN 仍会一直吐旧图（实测 ge-cache-status: HIT，
+    // 加查询参数也没用，Cloudflare 的缓存键不含 query）。文件名随内容变化后，
+    // 新图天然是一条新 URL，缓存问题消失。
+    const hash = (await sha256Hex(imageBytes)).slice(0, 10);
+    const imageKey = `banner/${slug}-hero-${hash}.webp`;
+
+    // 上传到 R2（旧文件保留，供仍引用旧 URL 的历史页面使用）
     await env.IMAGES.put(imageKey, imageBytes, {
       httpMetadata: {
         contentType: 'image/webp',
-        cacheControl: 'public, max-age=31536000',
+        cacheControl: 'public, max-age=31536000, immutable',
       },
     });
 
