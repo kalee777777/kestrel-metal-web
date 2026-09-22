@@ -500,6 +500,71 @@ route('DELETE', '/api/competitors/:domain', async ({ env, params, request }) => 
   return jsonResponse({ message: 'Deleted' });
 });
 
+// 为早期文章回填产品组归属（需 ADMIN_TOKEN）
+//
+// groupId 字段是关键词聚类改造时才引入的，之前发布的文章都没有。
+// 去重本身不依赖它（覆盖检测走 keyword+variants 再匹配组），
+// 但 Admin 分组视图会把这些文章显示成「未标记」，这里按关键词推回去。
+route('POST', '/api/blog/backfill-groups', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const { matchGroupId } = await import('./lib/keyword-cluster');
+
+  interface PublishedRow {
+    slug: string;
+    keyword?: string;
+    groupId?: string | null;
+    variants?: string[];
+    [key: string]: unknown;
+  }
+
+  const all = (await getJSON<PublishedRow[]>(env.CONTENT_QUEUE, 'published:all')) ?? [];
+  const result = {
+    total: all.length,
+    alreadyTagged: 0,
+    updated: 0,
+    unresolved: 0,
+    details: [] as Array<{ slug: string; groupId: string | null }>,
+  };
+
+  for (const row of all) {
+    if (row.groupId) {
+      result.alreadyTagged++;
+      continue;
+    }
+
+    const slug = String(row.slug ?? '');
+    // 先用关键词判定，退化到把 slug 的连字符拆成词再试
+    const groupId =
+      matchGroupId(row.keyword ?? '') ||
+      matchGroupId(slug) ||
+      matchGroupId(slug.replace(/[-_]/g, ' '));
+
+    if (!groupId) {
+      result.unresolved++;
+      result.details.push({ slug, groupId: null });
+      continue;
+    }
+
+    row.groupId = groupId;
+
+    const record = await getJSON<PublishedRow>(env.CONTENT_QUEUE, `published:${slug}`);
+    if (record) {
+      record.groupId = groupId;
+      await setJSON(env.CONTENT_QUEUE, `published:${slug}`, record);
+    }
+
+    result.updated++;
+    result.details.push({ slug, groupId });
+  }
+
+  await setJSON(env.CONTENT_QUEUE, 'published:all', all);
+  return jsonResponse({ message: 'Backfill completed', ...result });
+});
+
 // 触发竞品分析（需 ADMIN_TOKEN）
 route('POST', '/api/competitors/analyze', async ({ env, request }) => {
   if (!isAdminAuthorized(request, env)) {
