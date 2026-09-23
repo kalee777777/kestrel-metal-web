@@ -159,6 +159,22 @@ async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
     .join('');
 }
 
+/** 根据文件头判断图片格式（Qwen 并不稳定返回同一种容器） */
+function detectImageFormat(b: Uint8Array): 'webp' | 'png' | 'jpeg' | null {
+  if (b.length < 12) return null;
+  if (b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46
+    && b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50) {
+    return 'webp';
+  }
+  if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) return 'png';
+  if (b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return 'jpeg';
+  return null;
+}
+
+export function imageFormatToContentType(fmt: 'webp' | 'png' | 'jpeg'): string {
+  return fmt === 'png' ? 'image/png' : fmt === 'jpeg' ? 'image/jpeg' : 'image/webp';
+}
+
 /**
  * 校验生成的 banner 图片字节是否可用。
  *
@@ -167,43 +183,68 @@ async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
  * 卡片与 banner 半黑。Workers 无法解码像素做半黑检测（像素级
  * 检测由回收入库时的本地脚本负责），这里至少校验：
  * 1. 文件大小合理（>30KB）
- * 2. 合法的 RIFF/WEBP 容器头
+ * 2. 是可识别的图片容器（WebP / PNG / JPEG 均可）
  * 3. 声明尺寸达到请求的 1280x720 量级（宽≥1000 且 高≥500）
  * 任一不满足即抛错，上层 catch 返回 null，文章回退到静态 hero 图。
+ *
+ * 注意：早期这里只认 WebP，而 wanx 实际会返回 PNG，于是整条链路
+ * 静默失败、文章退回静态兜底图。现在按实际格式判断并校验尺寸。
  */
-function validateBannerImage(bytes: ArrayBuffer): void {
+function validateBannerImage(bytes: ArrayBuffer): { format: 'webp' | 'png' | 'jpeg' } {
   const b = new Uint8Array(bytes);
   if (b.length < 30_000) {
     throw new Error(`banner too small (${b.length} bytes), likely truncated`);
   }
-  if (b.length < 30 || b[0] !== 0x52 || b[1] !== 0x49 || b[2] !== 0x46 || b[3] !== 0x46
-    || b[8] !== 0x57 || b[9] !== 0x45 || b[10] !== 0x42 || b[11] !== 0x50) {
-    throw new Error('banner is not a valid RIFF/WEBP file');
+
+  const format = detectImageFormat(b);
+  if (!format) {
+    throw new Error(`banner is not a recognised image (magic: ${b[0]?.toString(16)} ${b[1]?.toString(16)} ${b[2]?.toString(16)} ${b[3]?.toString(16)})`);
   }
 
   let width = 0;
   let height = 0;
-  const fourcc = String.fromCharCode(b[12], b[13], b[14], b[15]);
-  if (fourcc === 'VP8X') {
-    // extended format: 24-bit little-endian canvas size minus one
-    width = 1 + (b[24] | (b[25] << 8) | (b[26] << 16));
-    height = 1 + (b[27] | (b[28] << 8) | (b[29] << 16));
-  } else if (fourcc === 'VP8L') {
-    // lossless: 14-bit little-endian bitstream after signature byte
-    width = 1 + ((b[21] | (b[22] << 8)) & 0x3fff);
-    height = 1 + ((((b[22] >> 6) | (b[23] << 2) | (b[24] << 10)) & 0x3fff));
-  } else if (fourcc === 'VP8 ') {
-    // lossy: sync code 0x9D 0x01 0x2A then 14-bit width/height
-    if (b[23] === 0x9d && b[24] === 0x01 && b[25] === 0x2a) {
-      width = (b[26] | (b[27] << 8)) & 0x3fff;
-      height = (b[28] | (b[29] << 8)) & 0x3fff;
+
+  if (format === 'png') {
+    // IHDR: 宽高各 4 字节大端，位于第 16 字节起
+    width = (b[16] << 24) | (b[17] << 16) | (b[18] << 8) | b[19];
+    height = (b[20] << 24) | (b[21] << 16) | (b[22] << 8) | b[23];
+  } else if (format === 'jpeg') {
+    // 逐个扫描 SOFn 标记（0xFFC0 ~ 0xFFCF，排除 C4/C8/CC）
+    let offset = 2;
+    while (offset + 9 < b.length) {
+      if (b[offset] !== 0xff) { offset++; continue; }
+      const marker = b[offset + 1];
+      if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+        height = (b[offset + 5] << 8) | b[offset + 6];
+        width = (b[offset + 7] << 8) | b[offset + 8];
+        break;
+      }
+      offset += 2 + ((b[offset + 2] << 8) | b[offset + 3]);
+    }
+  } else {
+    const fourcc = String.fromCharCode(b[12], b[13], b[14], b[15]);
+    if (fourcc === 'VP8X') {
+      // extended format: 24-bit little-endian canvas size minus one
+      width = 1 + (b[24] | (b[25] << 8) | (b[26] << 16));
+      height = 1 + (b[27] | (b[28] << 8) | (b[29] << 16));
+    } else if (fourcc === 'VP8L') {
+      // lossless: 14-bit little-endian bitstream after signature byte
+      width = 1 + ((b[21] | (b[22] << 8)) & 0x3fff);
+      height = 1 + ((((b[22] >> 6) | (b[23] << 2) | (b[24] << 10)) & 0x3fff));
+    } else if (fourcc === 'VP8 ') {
+      // lossy: sync code 0x9D 0x01 0x2A then 14-bit width/height
+      if (b[23] === 0x9d && b[24] === 0x01 && b[25] === 0x2a) {
+        width = (b[26] | (b[27] << 8)) & 0x3fff;
+        height = (b[28] | (b[29] << 8)) & 0x3fff;
+      }
     }
   }
 
   if (width < 1000 || height < 500) {
     throw new Error(`banner dimensions too small (${width}x${height}), expected 1280x720`);
   }
-  console.log(`[banner-gen] Validated banner: ${width}x${height}, ${b.length} bytes`);
+  console.log(`[banner-gen] Validated banner: ${format} ${width}x${height}, ${b.length} bytes`);
+  return { format };
 }
 
 /**
@@ -242,22 +283,24 @@ export async function generateBannerImage(
     if (!imgResp.ok) throw new Error('Failed to download generated banner image');
     const imageBytes = await imgResp.arrayBuffer();
 
-    // 发布前校验：坏图（截断/尺寸不足）直接判定失败，回退静态 hero 图
-    validateBannerImage(imageBytes);
+    // 发布前校验：坏图（截断/尺寸不足）直接判定失败，回退静态 hero 图。
+    // 同时拿到真实格式 —— wanx 并不总是返回 WebP，Content-Type 必须跟着实际走，
+    // 否则浏览器拿到 image/webp 声明却收到 PNG 字节。
+    const { format } = validateBannerImage(imageBytes);
 
     // 文件名带上内容哈希。
     //
     // 图片响应由 Worker 从 R2 返回，并带 immutable 长缓存；若沿用固定的
-    // `{slug}-hero.webp`，重新生成后 CDN 仍会一直吐旧图（实测 ge-cache-status: HIT，
+    // `{slug}-hero.webp`，重新生成后 CDN 仍会一直吐旧图（实测 cf-cache-status: HIT，
     // 加查询参数也没用，Cloudflare 的缓存键不含 query）。文件名随内容变化后，
     // 新图天然是一条新 URL，缓存问题消失。
     const hash = (await sha256Hex(imageBytes)).slice(0, 10);
-    const imageKey = `banner/${slug}-hero-${hash}.webp`;
+    const imageKey = `banner/${slug}-hero-${hash}.${format}`;
 
     // 上传到 R2（旧文件保留，供仍引用旧 URL 的历史页面使用）
     await env.IMAGES.put(imageKey, imageBytes, {
       httpMetadata: {
-        contentType: 'image/webp',
+        contentType: imageFormatToContentType(format),
         cacheControl: 'public, max-age=31536000, immutable',
       },
     });
