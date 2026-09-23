@@ -565,6 +565,70 @@ route('POST', '/api/blog/backfill-groups', async ({ env, request }) => {
   return jsonResponse({ message: 'Backfill completed', ...result });
 });
 
+// Banner 生成连通性诊断（需 ADMIN_TOKEN）
+//
+// generateBannerImage 内部把异常 catch 掉只返回 null，调用方只看到
+// "no URL"，无从判断是额度耗尽、模型下线、内容审核还是网络问题。
+// 这里直接打一次 DashScope 提交接口，把原始状态码与响应体透出来。
+route('GET', '/api/banner/diagnose', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+
+  const apiKey = env.QWEN_API_KEY;
+  if (!apiKey) {
+    return jsonResponse({ ok: false, stage: 'config', error: 'QWEN_API_KEY 未配置' });
+  }
+  if (!env.IMAGES) {
+    return jsonResponse({ ok: false, stage: 'config', error: 'IMAGES (R2) 未绑定' });
+  }
+
+  const started = Date.now();
+  try {
+    const resp = await fetch(
+      'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+          'X-DashScope-Async': 'enable',
+        },
+        body: JSON.stringify({
+          model: 'wanx-v1',
+          input: { prompt: 'bright industrial steel wire mesh fence, natural daylight' },
+          parameters: { style: '<photography>', size: '1280*720', n: 1 },
+        }),
+      },
+    );
+
+    const bodyText = await resp.text();
+    let parsed: unknown = null;
+    try {
+      parsed = JSON.parse(bodyText);
+    } catch {
+      // 非 JSON 响应，保留原文
+    }
+
+    return jsonResponse({
+      ok: resp.ok,
+      stage: 'submit',
+      status: resp.status,
+      elapsedMs: Date.now() - started,
+      qwenModelVar: env.QWEN_MODEL || null,
+      body: bodyText.slice(0, 800),
+      parsed,
+    });
+  } catch (err) {
+    return jsonResponse({
+      ok: false,
+      stage: 'network',
+      elapsedMs: Date.now() - started,
+      error: err instanceof Error ? err.message : String(err),
+    });
+  }
+});
+
 // 待提交 Google 的 URL 清单
 //
 // IndexNow 只覆盖 Bing / Yandex，Google 不参与该协议，也没有面向普通文章的
