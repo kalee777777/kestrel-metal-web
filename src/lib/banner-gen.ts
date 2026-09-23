@@ -151,6 +151,27 @@ async function pollBannerResult(apiKey: string, taskId: string): Promise<string>
   throw new Error(`Banner task ${taskId} timed out after ${MAX_POLL_ATTEMPTS} polls`);
 }
 
+/**
+ * 把生成好的 Banner URL 写进文章 HTML。
+ *
+ * 两处都要换：
+ * 1. hero 的背景图
+ * 2. JSON-LD 的 Article.image —— 模板里它填的是静态兜底图，
+ *    只换背景会导致结构化数据仍指向兜底图，Google 图片搜索读到的是错图。
+ *    模板中仅此一处 "image" 字段（没有 logo 之类），直接替换是安全的。
+ */
+export function applyBannerToHtml(html: string, bannerUrl: string): string {
+  let out = html.replace(
+    /background-image:url\('[^']*'\);/,
+    `background-image:url('${bannerUrl}');`,
+  );
+  out = out.replace(
+    /"image":\s*"https:\/\/[^"]*"/,
+    `"image": "https://www.kestrelmetal.com${bannerUrl}"`,
+  );
+  return out;
+}
+
 /** 计算字节内容的 SHA-256，返回小写十六进制串 */
 async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', buffer);

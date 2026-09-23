@@ -884,7 +884,7 @@ route('POST', '/api/banner/regenerate', async ({ env, request }) => {
   if (!published || !published.html) return jsonResponse({ error: 'Article not found' }, 404);
 
   try {
-    const { generateBannerImage } = await import('./lib/banner-gen');
+    const { generateBannerImage, applyBannerToHtml } = await import('./lib/banner-gen');
     const bannerUrl = await generateBannerImage(
       { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
       published.keyword || '',
@@ -893,10 +893,8 @@ route('POST', '/api/banner/regenerate', async ({ env, request }) => {
     if (bannerUrl) {
       const hasSlot = /background-image:url\('[^']*'\);/.test(published.html);
       if (hasSlot) {
-        const updatedHtml = published.html.replace(
-          /background-image:url\('[^']*'\);/,
-          `background-image:url('${bannerUrl}');`,
-        );
+        // 同时更新 hero 背景与 JSON-LD 的 Article.image
+        const updatedHtml = applyBannerToHtml(published.html, bannerUrl);
         await env.CONTENT_QUEUE.put(`published:${body.slug}`, JSON.stringify({ ...published, html: updatedHtml }));
         return jsonResponse({ ok: true, slug: body.slug, bannerUrl, inserted: true });
       }

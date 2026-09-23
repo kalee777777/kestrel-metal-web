@@ -104,17 +104,14 @@ export default async function score(env: Env): Promise<void> {
         // 为新增动态页面生成 Banner 图片（不影响已有静态页面）
         let finalHtml = currentHtml;
         try {
-          const { generateBannerImage } = await import('../lib/banner-gen');
+          const { generateBannerImage, applyBannerToHtml } = await import('../lib/banner-gen');
           const bannerUrl = await generateBannerImage(
             { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
             draft.keyword,
             draft.slug,
           );
           if (bannerUrl) {
-            finalHtml = finalHtml.replace(
-              /background-image:url\('[^']*'\);/,
-              `background-image:url('${bannerUrl}');`,
-            );
+            finalHtml = applyBannerToHtml(finalHtml, bannerUrl);
             console.log(`[score] Banner generated for ${draft.slug}: ${bannerUrl}`);
           }
         } catch (err) {
