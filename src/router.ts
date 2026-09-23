@@ -603,21 +603,50 @@ route('GET', '/api/banner/diagnose', async ({ env, request }) => {
     );
 
     const bodyText = await resp.text();
-    let parsed: unknown = null;
+
+    // 提交成功并不代表能出图：真正的失败常发生在轮询阶段（任务被服务端判 FAILED）。
+    // 所以这里把任务跑到底，连同最终 task_status 与 message 一起返回。
+    let taskId: string | null = null;
     try {
-      parsed = JSON.parse(bodyText);
+      taskId = (JSON.parse(bodyText) as { output?: { task_id?: string } }).output?.task_id ?? null;
     } catch {
-      // 非 JSON 响应，保留原文
+      // 非 JSON，忽略
+    }
+
+    const polls: Array<{ attempt: number; status: string; message?: string }> = [];
+    let imageUrl: string | null = null;
+
+    if (taskId && resp.ok) {
+      for (let i = 0; i < 10; i++) {
+        await new Promise((r) => setTimeout(r, 5000));
+        const pr = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        const pj = (await pr.json()) as {
+          output?: { task_status?: string; message?: string; results?: Array<{ url: string }> };
+        };
+        const status = pj.output?.task_status ?? 'UNKNOWN';
+        polls.push({ attempt: i + 1, status, message: pj.output?.message });
+        if (status === 'SUCCEEDED') {
+          imageUrl = pj.output?.results?.[0]?.url ?? null;
+          break;
+        }
+        if (status === 'FAILED') break;
+      }
     }
 
     return jsonResponse({
       ok: resp.ok,
-      stage: 'submit',
+      stage: 'submit+poll',
       status: resp.status,
       elapsedMs: Date.now() - started,
+      taskId,
+      polls,
+      finalStatus: polls.length ? polls[polls.length - 1].status : null,
+      finalMessage: polls.length ? polls[polls.length - 1].message ?? null : null,
+      imageUrl: imageUrl ? '(ok)' : null,
       qwenModelVar: env.QWEN_MODEL || null,
-      body: bodyText.slice(0, 800),
-      parsed,
+      body: bodyText.slice(0, 400),
     });
   } catch (err) {
     return jsonResponse({
