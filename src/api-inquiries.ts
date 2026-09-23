@@ -20,6 +20,7 @@ import {
   getInquiryById,
   getInquiryStats,
   createInquiry,
+  updateInquiry,
   deleteInquiry,
   addReply
 } from './lib/inquiries';
@@ -233,6 +234,44 @@ route('GET', '/api/inquiries/:id', async (ctx: RouteContext) => {
     return jsonResponse({ error: 'Internal server error', message: String(error) }, 500);
   }
 });
+
+/** Admin 更新询盘状态（支持 PUT / PATCH） */
+const updateInquiryStatusHandler = async (ctx: RouteContext) => {
+  const { env, params, request } = ctx;
+  if (!verifyAdminToken(ctx, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+
+  const id = parseInt(params.id);
+  if (isNaN(id)) {
+    return jsonResponse({ error: 'Bad request', message: 'Invalid inquiry ID' }, 400);
+  }
+
+  try {
+    const body = await request.json() as { status?: string };
+    const allowed = ['pending', 'replied', 'closed'];
+    if (!body?.status || !allowed.includes(body.status)) {
+      return jsonResponse({ error: 'Bad request', message: 'status must be one of: pending, replied, closed' }, 400);
+    }
+
+    const updates: { status: 'pending' | 'replied' | 'closed'; replied_at?: string } = {
+      status: body.status as 'pending' | 'replied' | 'closed'
+    };
+    if (body.status === 'replied') {
+      updates.replied_at = new Date().toISOString();
+    }
+
+    const inquiry = await updateInquiry(env.INQUIRIES, id, updates);
+    if (!inquiry) {
+      return jsonResponse({ error: 'Not found', message: 'Inquiry not found' }, 404);
+    }
+    return jsonResponse(inquiry);
+  } catch (error) {
+    return jsonResponse({ error: 'Internal server error', message: String(error) }, 500);
+  }
+};
+route('PUT', '/api/inquiries/:id', updateInquiryStatusHandler);
+route('PATCH', '/api/inquiries/:id', updateInquiryStatusHandler);
 
 /** Admin 删除询盘 */
 route('DELETE', '/api/inquiries/:id', async (ctx: RouteContext) => {

@@ -97,6 +97,7 @@ Router.register('/inquiries', async function (container) {
       document.getElementById('viewCreated').textContent = new Date(inq.created_at).toLocaleString();
       document.getElementById('viewReplied').textContent = inq.replied_at ? new Date(inq.replied_at).toLocaleString() : '-';
 
+      document.getElementById('statusUpdateSelect').value = inq.status;
       document.getElementById('replyForm').reset();
       document.getElementById('replyForm').dataset.id = id;
 
@@ -213,6 +214,15 @@ Router.register('/inquiries', async function (container) {
               <textarea name="content" class="form-control" style="min-height:100px;margin-top:0.5rem" placeholder="输入回复内容..."></textarea>
             </form>
           </div>
+          <div style="margin-top:1.5rem;display:flex;align-items:center;gap:0.75rem;padding-top:1rem;border-top:1px solid var(--gray-200)">
+            <strong>更新状态:</strong>
+            <select id="statusUpdateSelect" class="form-control" style="max-width:160px">
+              <option value="pending">待回复</option>
+              <option value="replied">已回复</option>
+              <option value="closed">已关闭</option>
+            </select>
+            <button class="btn" onclick="updateInquiryStatus()">保存状态</button>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn" onclick="closeInquiryModal()">关闭</button>
@@ -239,6 +249,20 @@ Router.register('/inquiries', async function (container) {
       await loadInquiries(currentPage);
     } catch (err) {
       API.toast('发送失败: ' + err.message, 'error');
+    }
+  };
+
+  window.updateInquiryStatus = async () => {
+    const id = document.getElementById('replyForm').dataset.id;
+    const status = document.getElementById('statusUpdateSelect').value;
+    if (!id) { API.toast('未选择询盘', 'error'); return; }
+    try {
+      await API.put(`/api/inquiries/${id}`, { status });
+      API.toast('状态已更新', 'success');
+      await viewInquiry(parseInt(id));
+      await loadInquiries(currentPage);
+    } catch (err) {
+      API.toast('更新状态失败: ' + err.message, 'error');
     }
   };
 
