@@ -570,7 +570,7 @@ route('POST', '/api/blog/backfill-groups', async ({ env, request }) => {
 // generateBannerImage 内部把异常 catch 掉只返回 null，调用方只看到
 // "no URL"，无从判断是额度耗尽、模型下线、内容审核还是网络问题。
 // 这里直接打一次 DashScope 提交接口，把原始状态码与响应体透出来。
-route('GET', '/api/banner/diagnose', async ({ env, request }) => {
+route('GET', '/api/banner/diagnose', async ({ env, request, url }) => {
   if (!isAdminAuthorized(request, env)) {
     return jsonResponse({ error: 'Unauthorized' }, 401);
   }
@@ -584,6 +584,16 @@ route('GET', '/api/banner/diagnose', async ({ env, request }) => {
   }
 
   const started = Date.now();
+
+  // 传入 ?keyword=xxx 时用与真实流程完全一致的 prompt 复现问题，
+  // 否则用一个简单的测试 prompt 判断服务是否可用。
+  const keyword = url.searchParams.get('keyword');
+  let prompt = 'bright industrial steel wire mesh fence, natural daylight';
+  if (keyword) {
+    const { buildBannerPrompt } = await import('./lib/banner-gen');
+    prompt = buildBannerPrompt(keyword);
+  }
+
   try {
     const resp = await fetch(
       'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis',
@@ -596,7 +606,7 @@ route('GET', '/api/banner/diagnose', async ({ env, request }) => {
         },
         body: JSON.stringify({
           model: 'wanx-v1',
-          input: { prompt: 'bright industrial steel wire mesh fence, natural daylight' },
+          input: { prompt },
           parameters: { style: '<photography>', size: '1280*720', n: 1 },
         }),
       },
@@ -646,6 +656,7 @@ route('GET', '/api/banner/diagnose', async ({ env, request }) => {
       finalMessage: polls.length ? polls[polls.length - 1].message ?? null : null,
       imageUrl: imageUrl ? '(ok)' : null,
       qwenModelVar: env.QWEN_MODEL || null,
+      promptUsed: prompt,
       body: bodyText.slice(0, 400),
     });
   } catch (err) {

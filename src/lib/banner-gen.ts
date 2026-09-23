@@ -32,7 +32,7 @@ const BRIGHT_BASE =
  * 关键词 → Banner 提示词映射
  * 根据关键词生成对应的工业风格 Banner 描述
  */
-function buildBannerPrompt(keyword: string): string {
+export function buildBannerPrompt(keyword: string): string {
   const kw = keyword.toLowerCase();
 
   // 产品类关键词
