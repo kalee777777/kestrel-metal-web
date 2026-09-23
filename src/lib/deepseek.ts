@@ -452,17 +452,30 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
   const today = new Date().toISOString().split('T')[0];
   const aiHeroImage = `images/blog/${slug}-hero.webp`;
 
-  // Fallback hero images from existing static assets (used when AI generation fails)
+  // 兜底配图：AI Banner 生成失败时使用（例如 DashScope 欠费或限流）。
+  // 顺序即优先级，具体产品词必须排在通用词之前 ——
+  // 曾出现 "filter epoxy coated mesh" 一路落到默认的 gabion 图，图文完全不符。
   const keywordToHero: Record<string, string> = {
+    'epoxy': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'filter': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'stainless': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'nickel': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'copper': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'brass': 'images/blog/epoxy-coated-wire-mesh.webp',
     'gabion': 'images/blog/blog-gabion-market-hero.webp',
     'chain-link': 'images/blog/blog-chain-link-yard-hero.webp',
+    'chain link': 'images/blog/blog-chain-link-yard-hero.webp',
     'razor-wire': 'images/blog/blog-razor-coils-hero.avif',
     'barbed-wire': 'images/blog/blog-barbed-cost-hero.webp',
     'welded-wire': 'images/blog/welded-mesh-711.webp',
+    'welded mesh': 'images/blog/welded-mesh-711.webp',
     'hexagonal': 'images/blog/blog-hex-mesh-hero.webp',
     'security-fence': 'images/blog/dual-fence-hero.webp',
-    'fence': 'images/blog/blog-gabion-market-hero.webp',
+    'anti-climb': 'images/blog/dual-fence-hero.webp',
+    '358': 'images/blog/dual-fence-hero.webp',
     'wire-mesh': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'wire mesh': 'images/blog/epoxy-coated-wire-mesh.webp',
+    'fence': 'images/blog/blog-gabion-market-hero.webp',
   };
 
   let heroFallback = 'images/blog/blog-gabion-market-hero.webp';
