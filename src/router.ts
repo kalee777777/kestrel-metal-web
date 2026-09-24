@@ -1036,8 +1036,8 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
 
   if (cronName === 'geo-audit') {
     const { default: geoAudit } = await import('./cron/geo-audit');
-    const summary = await geoAudit(env);
-    return jsonResponse({ message: 'GEO audit completed', summary });
+    const result = await geoAudit(env, { force: true });
+    return jsonResponse({ message: 'GEO audit chunk completed', ...result });
   }
 
   return jsonResponse({

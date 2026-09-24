@@ -312,12 +312,11 @@ export default {
           });
           break;
 
-        // 每日 09:00 UTC+8，仅每月 1 号真正执行 — GEO 全站审计 + 低分页补丁（GEO-08/04）
+        // 每日 09:00 UTC+8 — GEO 全站审计(分片续跑:1 号开周期,之后每天续跑至完成;GEO-08/04)
         case '0 1 * * *':
           await runCronTask('geo-audit', env, async () => {
-            if (beijingDate() !== 1) return `跳过：今天不是 1 号（北京日期 ${beijingDate()}）`;
             const { default: geoAudit } = await import('./cron/geo-audit');
-            await geoAudit(env);
+            return (await geoAudit(env)).summary;
           });
           break;
 

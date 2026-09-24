@@ -832,20 +832,29 @@ Router.register('/geo', async function (container) {
   };
 
   window.runGeoAuditCron = async () => {
-    if (!confirm('立即全站审计(评分 + 生成低分页补丁),约需数分钟,期间无需等待。继续?')) return;
+    if (!confirm('立即全站审计(评分 + 生成低分页补丁)。服务端按分片执行,这里会自动连续跑完所有分片(约 1-3 分钟)。继续?')) return;
+    let adminToken = localStorage.getItem('km_admin_token');
+    let round = 0;
     try {
-      let adminToken = localStorage.getItem('km_admin_token');
-      const resp = await fetch('/api/trigger/geo-audit', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${adminToken}` }
-      });
-      const data = await resp.json().catch(() => ({}));
-      if (!resp.ok) throw new Error(data.error || ('HTTP ' + resp.status));
-      API.toast('审计完成: ' + (data.summary || ''), 'success');
+      let result = null;
+      // 服务端每次调用只处理一个分片(Workers 子请求上限),客户端循环跑到完成
+      while (round < 25) {
+        round++;
+        const resp = await fetch('/api/trigger/geo-audit', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok) throw new Error(data.error || ('HTTP ' + resp.status));
+        result = data;
+        if (data.done) break;
+        await new Promise(r => setTimeout(r, 1500));
+      }
+      API.toast('审计完成: ' + (result ? (result.summary || '') : ''), 'success');
       await loadPatches();
       await loadScores();
     } catch (err) {
-      API.toast('审计失败或超时(耗时较长时以 cron 结果为准,稍后刷新查看): ' + err.message, 'error');
+      API.toast('审计中断(已完成分片保留,可重试续跑): ' + err.message, 'error');
     }
   };
 
