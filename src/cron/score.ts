@@ -1,18 +1,23 @@
 /**
- * Phase 07: SEO 评分 + 自动部署 Cron 任务
+ * Phase 07: SEO/GEO 评分 + 自动发布 Cron 任务
  *
- * 每周一 05:00 UTC+8 自动执行：
+ * 每日 05:00 UTC+8 自动执行：
  * 1. 从草稿队列中获取待评分文章
- * 2. SEO 评分（30+ 项检查）
- * 3. 低于 80 分自动修复（最多 3 轮）
- * 4. 评分达标后提交到 GitHub
- * 5. Cloudflare Pages 自动部署
+ * 2. SEO 评分（13 项检查）+ GEO 评分（schema/可引用性/事实密度）
+ * 3. 不达标自动修复（最多 3 轮，失分维度作为反馈传给重新生成）
+ * 4. 达标（SEO ≥60 且 GEO ≥70）写入 KV published，Worker 动态渲染
+ * 5. IndexNow 推送 + llms.txt 自动追加条目（GEO 闭环）
  */
 
 import type { Env } from '../index';
 import { scoreSEO } from '../lib/seo-score';
+import { computeGeoScore, geoRepairHints } from '../lib/geo-score';
+import type { GeoScoreResult } from '../lib/geo-score';
 import { generateFullArticle } from '../lib/deepseek';
 import { listKeys, getJSON, setJSON } from '../lib/kv';
+
+/** GEO 发布门禁：低于此分不发布（模型见 lib/geo-score.ts） */
+const GEO_MINIMUM_SCORE = 70;
 
 interface DraftData {
   slug: string;
@@ -24,6 +29,7 @@ interface DraftData {
   variants?: string[];
   status: string;
   score?: number;
+  geoScore?: number;
   scoreRound?: number;
   images?: string[];
 }
@@ -54,23 +60,33 @@ export default async function score(env: Env): Promise<void> {
 
       let currentHtml = draft.html;
       let currentScore = 0;
+      let currentGeo: GeoScoreResult = { score: 0, schema_completeness: 0, citation_friendliness: 0, fact_density: 0 };
       let round = 0;
 
       while (round < 3) {
         round++;
         const result = scoreSEO(currentHtml, draft.keyword);
+        currentGeo = computeGeoScore(currentHtml);
         currentScore = result.totalScore;
 
-        console.log(`[score] Round ${round}: Score ${currentScore}/100`);
+        console.log(
+          `[score] Round ${round}: SEO ${currentScore}/100, GEO ${currentGeo.score}/100 ` +
+            `(schema ${currentGeo.schema_completeness} / citation ${currentGeo.citation_friendliness} / facts ${currentGeo.fact_density})`,
+        );
 
-        if (result.passed) {
+        if (result.passed && currentGeo.score >= GEO_MINIMUM_SCORE) {
           break;
         }
 
-        console.log(`[score] Score below 60, attempting fix round ${round}...`);
+        console.log(`[score] Below threshold (SEO 60 / GEO ${GEO_MINIMUM_SCORE}), attempting fix round ${round}...`);
 
         if (env.DEEPSEEK_API_KEY) {
           try {
+            // 失分维度 → 具体修复指令，让重新生成有的放矢而不是盲抽
+            const hints = geoRepairHints(currentGeo, currentHtml);
+            if (!result.passed) {
+              hints.unshift(`Previous draft failed SEO checks (score ${currentScore}/100); tighten title/meta/keyword density/word count (2000+)`);
+            }
             const fixedArticle = await generateFullArticle(
               {
                 DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
@@ -79,10 +95,12 @@ export default async function score(env: Env): Promise<void> {
               {
                 keyword: draft.keyword,
                 title: draft.title,
+                variants: draft.variants ?? [],
+                repairHints: hints,
               },
             );
             currentHtml = fixedArticle.html;
-            console.log(`[score] Regenerated article for round ${round}`);
+            console.log(`[score] Regenerated article for round ${round} (${hints.length} repair hints)`);
           } catch (err) {
             console.error(`[score] Regeneration failed:`, err);
             break;
@@ -96,11 +114,12 @@ export default async function score(env: Env): Promise<void> {
         ...draft,
         html: currentHtml,
         score: currentScore,
+        geoScore: currentGeo.score,
         scoreRound: round,
         status: 'scoring',
       });
 
-      if (currentScore >= 60) {
+      if (currentScore >= 60 && currentGeo.score >= GEO_MINIMUM_SCORE) {
         // 为新增动态页面生成 Banner 图片（不影响已有静态页面）
         let finalHtml = currentHtml;
         try {
@@ -126,6 +145,7 @@ export default async function score(env: Env): Promise<void> {
           groupId: draft.groupId ?? null,
           variants: draft.variants ?? [],
           score: currentScore,
+          geoScore: currentGeo.score,
           status: 'published',
           publishedAt: new Date().toISOString(),
           detail_url: `https://www.kestrelmetal.com/${draft.slug}.html`,
@@ -159,12 +179,26 @@ export default async function score(env: Env): Promise<void> {
         }
         await setJSON(env.CONTENT_QUEUE, 'published:all', allPublished);
 
-        console.log(`[score] Published: ${draft.slug} (Score: ${currentScore})`);
+        console.log(`[score] Published: ${draft.slug} (SEO: ${currentScore}, GEO: ${currentGeo.score})`);
         deployed++;
         publishedPaths.push(`/${draft.slug}.html`);
         publishedSlugs.push(draft.slug);
+
+        // GEO 闭环：发布后把文章追加进动态 llms.txt（失败不影响发布）
+        try {
+          const { appendLlmsEntry } = await import('../lib/llms');
+          await appendLlmsEntry(env, {
+            slug: draft.slug,
+            title: draft.title,
+            url: `https://www.kestrelmetal.com/${draft.slug}.html`,
+            summary: draft.metaDescription,
+            keyword: draft.keyword,
+          });
+        } catch (err) {
+          console.error(`[score] llms.txt append failed for ${draft.slug}:`, err);
+        }
       } else {
-        console.log(`[score] Skipped: ${draft.slug} (Score: ${currentScore} < 60)`);
+        console.log(`[score] Skipped: ${draft.slug} (SEO: ${currentScore}/60, GEO: ${currentGeo.score}/${GEO_MINIMUM_SCORE})`);
         await setJSON(env.CONTENT_QUEUE, key.name, {
           ...draft,
           html: currentHtml,

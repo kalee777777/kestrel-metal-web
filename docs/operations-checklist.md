@@ -29,7 +29,7 @@
 
 ---
 
-## 三、每月例行（约 30 分钟）
+## 三、每月例行(约 30 分钟)
 
 | # | 检查项 | 操作方法 | 说明 |
 |---|--------|----------|------|
@@ -42,8 +42,30 @@
 | 7 | **页面加载速度** | Chrome → F12 → Lighthouse → Generate report | LCP < 2.5s, CLS < 0.1 |
 | 8 | **移动端适配** | Chrome DevTools → 手机视图 → 浏览主要页面 | 确认无布局错位 |
 | 9 | **3D 模型加载** | 访问 5 个含 3D 模型的产品页 | 确认所有 3D 模型正常加载 |
+| 10 | **GEO 月度审计结果** | Admin → GEO 优化 → GEO 评分(geo-audit 1 号 09:00 自动跑) | 看全站平均分与低分页变化;补丁在「GEO 补强」Tab 审核 |
+| 11 | **GEO 补丁 PR 合并** | Admin → GEO 补强 → 批准 → 开 PR → GitHub 合并 | 合并即自动部署;部署后下轮审计复测分数 |
+| 12 | **GA4 AI Referral 报告** | GA4 探索「AI Referral 月度报告」 | AI 引用带来的会话/来源/着陆页,日期改上月 |
 
 ---
+
+## 二·B、GEO 自动化流水线(cron 驱动,人工只做审核)
+
+> 2026-09-25 上线。生成侧 GEO 强化 + llms.txt/FAQ 闭环 + 月度审计三段式,
+> 复用 DeepSeek key 与 Worker/KV 架构,静态页补强经 GitHub PR 人工合并。
+
+| 时机 | 自动动作 | 人工动作 |
+|------|---------|---------|
+| 每日 04:00/05:00(北京) | 文章生成 + 双门禁发布(SEO ≥60 **且 GEO ≥70**):首段定义句、FAQPage schema 服务端注入、事实密度;发布自动追加 llms.txt 条目 | 无 |
+| 每周日 07:00(北京) | geo-faq:从竞品缺口/GSC 机会词生成 3 条含数字事实的 FAQ → KV 待审 | Admin → FAQ 管理:待审行「✓ 启用」(即时上线 faq.html) |
+| 每月 1 号 09:00(北京) | geo-audit:全站逐页 GEO 评分 → KV geo:scores;低分页生成补丁(定义句+事实点)→ KV geo:patches | Admin → GEO 补强:批准/编辑补丁 → 「开 PR」→ GitHub 合并(合并即部署) |
+| 每月 1 号 08:00(北京) | 月报附 GEO 段(平均分/分布/llms 新增/FAQ 待审数) | 无 |
+
+**前置配置**(一次性):`wrangler secret put GH_TOKEN`(fine-grained,仅 `kalee777777/kestrel-metal-web` 仓库 Contents + Pull requests 读写);Admin → FAQ 管理 → 本地存量一键上传。
+**手动补跑**:`POST /api/trigger/geo-faq`、`POST /api/trigger/geo-audit`(ADMIN_TOKEN);审计耗时数分钟属正常。
+**回退**:清空 KV `geo:llms:entries` 恢复纯静态 llms.txt;FAQ 注入随 `is_active=false` 即停;补丁不批准则永不进仓库。
+
+---
+
 
 ## 四、每季度例行
 

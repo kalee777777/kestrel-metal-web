@@ -132,6 +132,19 @@ export default {
       });
     }
 
+    // 动态 llms.txt：静态基底 + KV 自动发布条目合并（GEO 闭环，免 git 部署）
+    if (url.pathname === '/llms.txt') {
+      const { renderLlmsTxt } = await import('./lib/llms');
+      const text = await renderLlmsTxt(env);
+      return new Response(text, {
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600, must-revalidate',
+        },
+        status: 200,
+      });
+    }
+
     // IndexNow key 验证文件：/{key}.txt 返回 key 本身
     if (url.pathname.endsWith('.txt')) {
       const { getIndexNowKey } = await import('./lib/indexnow');
@@ -221,7 +234,16 @@ export default {
     }
 
     const html = await response.text();
-    const enhanced = await injectSeoTags(html, url.pathname, env);
+    let enhanced = await injectSeoTags(html, url.pathname, env);
+    // faq.html：KV FAQ 运行时注入（GEO 闭环，Admin 启用即上线）
+    if (url.pathname === '/faq.html' || url.pathname === '/faq') {
+      try {
+        const { injectFaqIntoHtml } = await import('./lib/faq');
+        enhanced = await injectFaqIntoHtml(enhanced, env);
+      } catch (err) {
+        console.error('[faq] Runtime injection failed:', err);
+      }
+    }
     headers.set('Cache-Control', 'public, max-age=300, must-revalidate');
     return new Response(enhanced, {
       headers,
@@ -278,6 +300,24 @@ export default {
             if (!isBeijingWeekday(0)) return `跳过：今天不是周日（北京周 ${beijingDay()}）`;
             const { default: track } = await import('./cron/track');
             await track(env);
+          });
+          break;
+
+        // 每日 07:00 UTC+8，仅周日真正执行 — GEO FAQ 自动扩容（GEO-07）
+        case '0 23 * * *':
+          await runCronTask('geo-faq', env, async () => {
+            if (!isBeijingWeekday(0)) return `跳过：今天不是周日（北京周 ${beijingDay()}）`;
+            const { default: geoFaq } = await import('./cron/geo-faq');
+            await geoFaq(env);
+          });
+          break;
+
+        // 每日 09:00 UTC+8，仅每月 1 号真正执行 — GEO 全站审计 + 低分页补丁（GEO-08/04）
+        case '0 1 * * *':
+          await runCronTask('geo-audit', env, async () => {
+            if (beijingDate() !== 1) return `跳过：今天不是 1 号（北京日期 ${beijingDate()}）`;
+            const { default: geoAudit } = await import('./cron/geo-audit');
+            await geoAudit(env);
           });
           break;
 

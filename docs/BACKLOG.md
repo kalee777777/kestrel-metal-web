@@ -34,14 +34,15 @@
 | SITE-04 | 工作流发布后核对 | ✅ 2026-09-21 完成——① 9 篇中 8 篇线上与仓库零差异(仅 Cloudflare 注入);1 篇(galvanized-chain-link-fence-the-b2b-buyer-s-guide)线上 og/twitter 被工作流旧版覆盖(canonical/JSON-LD 幸存),仓库版正确,随下次部署自动修复;② 工作流发布**不更新博客索引** → SITE-03 已手动补齐;③ 发布日又直传 5 篇新文章(358/牛栏/3D 安装/剃刀/焊接网 top10),已同样回收 + 补 og + sitemap 212 对齐(commit c6844da) | AI | ✅ 09-21 |
 | SITE-03 | 回收文章补内部链接 | ✅ 2026-09-21 完成(扩展到全部 14 篇)——blog-news.html 三分类插入 14 张卡片(计数徽章同步:Product Posts 12→14 / Tips 9→11 / Product Info 12→22);每篇正文加 Related Guides 块(2-3 个主题互链);3 个核心产品页挂入口(gabion / chain-link / razor-btc)。**每篇内链 0 → ≥3**,验收达标(commit 1c15b9b) | AI | ✅ 09-21 |
 | GEO-03 | GA4 ai_referral 数据首查 | ✅ 2026-09-23 完全关闭——事件确认在积累(8/30-9/23 共 7 次/3 用户);月度路径定型 = GA4 探索「AI Referral 月度报告」(行=Source+Page,值=事件数,过滤=Source 匹配正则 `\.`);**首查发现**:ChatGPT 占 6/7(其中 /fence-3d.html 独占 4 次 = AI 最认可页面,GEO-04 补强样板),Gemini 1 次(/blog-history-of-gabion.html),Perplexity 0(最大增长空间) | 人工 + AI | ✅ 09-23 |
+| GEO-10 | GEO 自动化流水线部署 + 一次性配置 | 2026-09-25 代码完成(三段式,见 GEO_PROGRESS 第六轮)。**剩余**:① git push 部署 ② `wrangler secret put GH_TOKEN`(fine-grained,仅 kestrel-metal-web 仓库 Contents+PR 写) ③ Admin→FAQ 管理一键上传本地存量 ④ `POST /api/trigger/geo-audit` 首跑 + 检查 `GET /api/geo/scores` ⑤ 下周日验证 geo-faq 产出待审条目 | AI + 人工 | 🔄 |
 
 ## P1 · 30 天
 
 | ID | 事项 | 说明 / 验收标准 | 负责 | 状态 |
 |----|------|----------------|------|------|
-| GEO-04 | 低分页 Top20 补强 | 管理台评分排序取最低 20 页,补段首定义句 + "数字+单位"事实点。验收:复测评分上升 | AI + 人工审核 | ☐ |
+| GEO-04 | 低分页 Top20 补强 | 🔄 2026-09-25 自动化——geo-audit 每月 1 号自动生成补丁(定义句+事实点),Admin「GEO 补强」批准 → GH PR 合并部署。**剩余**:部署后首跑 + 首批补丁审核(人工把关 AI 生成的事实点真实性) | AI 生成 + 人工审核 | 🔄 |
 | ENT-01 | Europages 建档 | 免费供应商账户、域名邮箱注册、信息包全量填写、≥5 张产品图。验收:档案 URL 存档进 ENT-05 | 人工 | ☐ |
-| GEO-05 | llms.txt 月度更新机制 | 新博客/新证据点每月同步进 llms.txt,挂入月度循环(见 GEO-08) | AI | ☐ |
+| GEO-05 | llms.txt 月度更新机制 | ✅ 2026-09-25 自动化——新文章发布自动追加 KV 条目,`GET /llms.txt` 动态合并(静态基底不动,清空 KV 即回退);手工内容更新仍走 git | AI | ✅ 09-25 |
 
 ## P2 · 90 天
 
@@ -52,8 +53,8 @@
 | ENT-04 | Wikidata 条目 | 前置:ENT-01/02 上线后用其作第三方引用,降低删除风险;属性 P571/P856/P159/P1056 + 引用。验收:存活 2 周无删除模板 | AI 起草 + 人工提交 | ☐ |
 | ENT-05 | sameAs 回加(持续) | 每个档案上线后:URL 加进 static-jsonld 生成器 → 跑回加脚本 → llms.txt 补行 → 推 Gitee 部署 → 管理台 JSON-LD 校验 0 失败 | AI | ☐ |
 | GEO-06 | 对比类内容按关键词簇产出 | 接入现有 SEO 关键词簇流水线(feat(seo) cluster 提交),一个簇一篇对比文带数据表 | AI + 人工审核 | ☐ |
-| GEO-07 | FAQ 扩容 23 → 40+ | 用管理台 FAQ 模块录入(与 GEO 问答单一数据源),页面真实渲染 + FAQPage schema | AI + 人工审核 | ☐ |
-| GEO-08 | 月度循环固化 | 审计脚本 → 评分 → 基线测试 → 补内容 → 更新 llms.txt;写入 operations-checklist.md,每月一轮 | AI | ☐ |
+| GEO-07 | FAQ 扩容 23 → 40+ | 🔄 2026-09-25 自动化——geo-faq 每周日 07:00 生成 3 条含数字事实 FAQ(KV 待审),Admin「✓ 启用」即上线 faq.html + FAQPage schema。**剩余**:部署 + 存量迁移后,按 3 条/周节奏积累 | AI 生成 + 人工审核 | 🔄 |
+| GEO-08 | 月度循环固化 | ✅ 2026-09-25 自动化——geo-audit(1 号 09:00)全站评分+补丁、月报附 GEO 段、人工动作(补丁审核/PR 合并/GA4 报告)已写入 operations-checklist.md §三 + §二·B | AI | ✅ 09-25 |
 
 ## P3 · 远期(触发式,到条件再做)
 

@@ -2,7 +2,7 @@
 
 > **文档性质**: 滚动更新（活文档），每次 GEO 相关工作完成后更新本文件
 > **创建日期**: 2026-08-30
-> **最后更新**: 2026-09-19
+> **最后更新**: 2026-09-25
 > **定位**: GEO 工作进度总览与维护入口。单轮工作的详细实施与验证记录见《GEO 优化报告》，本文件回答"现在到哪了、接下来做什么"
 
 ---
@@ -14,11 +14,12 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 | # | 模块 | 状态 | 完成度 | 说明 |
 |---|------|------|--------|------|
 | 1 | AI 抓取入口（开门） | ✅ 完成 | 100% | robots.txt 放行 8 个 AI 爬虫 + Cloudflare 边缘层配置 |
-| 2 | 内容可引用性（自我介绍） | ✅ 完成 | 100% | llms.txt + 5 篇 GEO 磁铁博客 + 5 个产品页定义句 |
-| 3 | 结构化数据（让 AI 敢引用） | ✅ 完成 | 100% | 静态 JSON-LD 全站覆盖 + 运行时补充 + 类型识别修复 |
-| 4 | 数据追踪闭环（知道谁来） | ✅ 完成 | 100% | GA4/Umami AI Referral 事件 + GSC 关联 |
+| 2 | 内容可引用性（自我介绍） | ✅ 完成 | 100% | llms.txt（已动态化）+ 5 篇 GEO 磁铁博客 + 5 个产品页定义句 |
+| 3 | 结构化数据（让 AI 敢引用） | ✅ 完成 | 100% | 静态 JSON-LD 全站覆盖 + 运行时补充 + 新文章服务端 FAQPage schema |
+| 4 | 数据追踪闭环（知道谁来） | ✅ 完成 | 100% | GA4/Umami AI Referral 事件 + GSC 关联；首查基线 7 次/3 用户（ChatGPT 6 / Gemini 1） |
 | 5 | 站外实体（证明我是我） | 🔄 进行中 | 55% | LinkedIn 已上线并回加 sameAs；Europages/Thomasnet/GBP 待建 |
-| 6 | 效果验证（GEO 基线测试） | ⏳ 未开始 | 0% | 基线 Prompt 待人工测试，需 AI 引擎收录积累 |
+| 6 | 效果验证（GEO 基线测试） | 🔄 工具就绪 | 20% | 基线验证 Tab + 10 条 Prompt 已拟，人工测试待做 |
+| 7 | **GEO 自动化流水线** | ✅ 代码完成 | 90% | 2026-09-25 三段式上线（见第六轮），待部署 + GH_TOKEN/FAQ 迁移两个一次性配置 |
 
 ---
 
@@ -86,6 +87,35 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
   - **FAQ 管理页**补共享数据源提示（与 GEO 问答互指）
   - **延后项**：GA4 ai_referral 数据面板需 OAuth / 后端凭据，纯静态 Admin 无法落地，待接真后端时一并实现
 - 待办:统一记入 [BACKLOG.md](BACKLOG.md)(项目待办总表,唯一事实源)
+
+### 第六轮:2026-09-25 — GEO 自动化流水线三段式(✅ 代码完成,待部署)
+
+> 定位:把"内容制作 → 生成 → 发布 → 维护"整条 GEO 工作流挂上现有 SEO 流水线的自动化轨道,
+> 复用 DeepSeek key 与 Worker/KV 架构,不新增外部 API(仅 GH_TOKEN 一个 secret)。
+
+**阶段 A · 生成即 GEO(改造现有文章流水线)**
+- `lib/deepseek.ts`:outline 增加 `definitionSentence` 字段;正文要求首段定义句、每个 H2 ≥1 个"数字+单位"事实、多变体词出对比表;`ArticleRequest.repairHints` 失分反馈透传
+- 模板:FAQ 区块 class 换 `faq-item`(对齐静态生成器/seo-enhance 约定)+ **服务端 FAQPage JSON-LD**(`"text"` 字段约定,不依赖 JS)
+- 新 `lib/geo-score.ts`:Admin computeScore 忠实移植(JSON-LD 40/可引用 30/事实密度 30)+ `geoRepairHints` 失分翻译
+- `cron/score.ts`:发布门禁 = SEO ≥60 **且 GEO ≥70**;修复循环把 GEO 失分维度写进重生成 prompt(顺带修复了重生成丢 variants 的问题);published 记录带 `geoScore`
+
+**阶段 B · llms.txt + FAQ 自动闭环(KV 动态渲染,免 git 部署)**
+- 新 `lib/llms.ts` + `index.ts` 拦截 `GET /llms.txt`:静态基底 + KV `geo:llms:entries` 合并「Latest Guides」段(插在 FAQ 段前);发布文章自动追加条目(上限 50,按 slug 去重)
+- 新 `lib/faq.ts`:FAQ 服务端单一数据源(KV `geo:faqs`,字段兼容 localStorage 存量);`/api/faq/all|POST|PUT|DELETE|import` 五路由(读公开/写 ADMIN_TOKEN)
+- Admin `api.js`:faq 路由真实 API 优先、localStorage 兜底;FAQ 管理页加数据源横幅 +「一键上传本地存量」迁移按钮 + auto 来源「待审核」徽章
+- `index.ts` 对 /faq.html 调 `injectFaqIntoHtml`:KV active 英文条目去重注入 `.faq-item` 分组 + 合并 FAQPage mainEntity
+- 新 `cron/geo-faq.ts`(周日 07:00 北京):竞品缺口/GSC 机会词选 3 个未覆盖主题 → DeepSeek 生成含数字事实 FAQ → 待审核入库
+
+**阶段 C · 月度审计 + 低分页 PR 补强**
+- 新 `cron/geo-audit.ts`(每月 1 号 09:00 北京):sitemap 全页并发评分 → KV `geo:scores`;跳过动态文章(生成侧已 GEO);低分 Top20(排除已应用/忽略)分批生成补丁 → KV `geo:patches`(pending)
+- 新 `lib/github.ts`:GH_TOKEN + Contents/PR API,批准补丁 → 新分支逐页插「Key Facts」块(定义句+事实点,幂等) → 开 PR,人工合并即 Cloudflare 自动部署
+- 路由:`GET /api/geo/scores`(公开)、`GET/PUT /api/geo/patches`(ADMIN_TOKEN)、`POST /api/geo/patches/pr`、trigger 扩展 `geo-faq`/`geo-audit`
+- Admin GEO 页新增「GEO 补强」Tab(补丁表/批准/编辑/开 PR/手动审计);评分 Tab 优先读服务端 KV
+- 月报(`cron/monthly-report.ts`)附 GEO 段:平均分/高中低分布/Bottom5/llms 新增/FAQ 待审/补丁统计
+
+**验证**:tsc 通过;wrangler dry-run 构建通过;纯函数冒烟(mergeLlmsTxt 插入位置/链接/空透传、computeGeoScore 富页 70 vs 裸页 0、hints 输出)通过
+
+**待办(一次性)**:① `wrangler secret put GH_TOKEN` ② Admin → FAQ 管理一键上传本地存量 ③ 部署后 `POST /api/trigger/geo-audit` 首跑基线
 
 ---
 
@@ -221,3 +251,5 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 | 2026-08-30 | 创建本进度文档；收录三轮工作（08-21 基础建设 / 08-27~30 审计修复与数据闭环 / 08-30 实体一致性），梳理待办与维护指南 |
 | 2026-08-30 | 第四轮：LinkedIn 上线（kestrelmetal 别名）+ sameAs 三层回加（196 文件 198 块）+ llms.txt 补 LinkedIn 行 |
 | 2026-09-19 | 第五轮：Admin GEO 板块数据链路打通——GEO 问答并入 faqs 单一数据源（含幂等迁移）、cms-sync 过滤 zh 条目、i18n 语言包导出（en/zh.json）、Schema 模板导出 + JSON 保存校验；P1 修正同日完成——GEO 评分真实计算（198 页全站实测）、robots 分组解析、escapeHtml/safeUrl 全量转义、诊断历史可视化、四表空状态；P2 补齐同日完成——基线验证 Tab（Prompt 管理 + AI 引用记录，落地模块 6）、全站 JSON-LD 校验、llms.txt/sitemap 查看器、i18n 搜索筛选分页/导入/动态语言 |
+| 2026-09-23 | GA4 ai_referral 首查：28 天 7 次事件/3 用户（ChatGPT 6 次、/fence-3d.html 独占 4 次；Gemini 1；Perplexity 0）；「AI Referral 月度报告」探索定型，GEO-03 关闭 |
+| 2026-09-25 | 第六轮：GEO 自动化流水线三段式——A) 生成即 GEO（prompt 定义句/faq-item/服务端 FAQPage schema/GEO≥70 门禁+失分反馈重生成）；B) llms.txt 动态化 + FAQ 服务端化（KV 单一数据源、faq.html 运行时注入、周日 geo-faq cron 扩容待审）；C) 月度 geo-audit 全站评分 + 低分页补丁 → GitHub PR 人工合并；月报附 GEO 段；tsc/dry-run/冒烟全通过，待部署 |

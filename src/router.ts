@@ -405,6 +405,74 @@ route('GET', '/api/seo/indexnow', async ({ env }) => {
   return jsonResponse({ last_submit: lastSubmit ?? null });
 });
 
+// ─── FAQ / GEO 问答（单一数据源，KV geo:faqs） ───
+
+// 全量列表（FAQ 为公开内容，允许匿名读取；faq.html 运行时注入同样走这里）
+route('GET', '/api/faq/all', async ({ env }) => {
+  const { listFaqs } = await import('./lib/faq');
+  const faqs = await listFaqs(env);
+  return jsonResponse(faqs);
+});
+
+// 新增（需 ADMIN_TOKEN）
+route('POST', '/api/faq', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<Partial<import('./lib/faq').FaqItem>>().catch(() => null);
+  if (!body || !body.question || !body.answer) {
+    return jsonResponse({ error: 'question and answer are required' }, 400);
+  }
+  const { createFaq } = await import('./lib/faq');
+  const item = await createFaq(env, body);
+  return jsonResponse(item, 201);
+});
+
+// 更新（需 ADMIN_TOKEN；geo-faq cron 生成的待审条目在这里被激活）
+route('PUT', '/api/faq/:id', async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<Partial<import('./lib/faq').FaqItem>>().catch(() => null);
+  if (!body) {
+    return jsonResponse({ error: 'Invalid JSON body' }, 400);
+  }
+  const { updateFaq } = await import('./lib/faq');
+  const item = await updateFaq(env, params.id, body);
+  if (!item) {
+    return jsonResponse({ error: 'Not found' }, 404);
+  }
+  return jsonResponse(item);
+});
+
+// 删除（需 ADMIN_TOKEN）
+route('DELETE', '/api/faq/:id', async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { deleteFaq } = await import('./lib/faq');
+  const ok = await deleteFaq(env, params.id);
+  if (!ok) {
+    return jsonResponse({ error: 'Not found' }, 404);
+  }
+  return jsonResponse({ message: 'Deleted' });
+});
+
+// Admin localStorage 集合一次性迁移（按 question 去重，需 ADMIN_TOKEN）
+route('POST', '/api/faq/import', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<Partial<import('./lib/faq').FaqItem>[]>().catch(() => null);
+  if (!Array.isArray(body)) {
+    return jsonResponse({ error: 'Array body is required' }, 400);
+  }
+  const { importFaqs } = await import('./lib/faq');
+  const result = await importFaqs(env, body);
+  return jsonResponse(result);
+});
+
+
 // GSC 重新授权：生成 Google 授权链接（需 ADMIN_TOKEN）
 route('GET', '/api/gsc/auth', async ({ env, request, url }) => {
   if (request.headers.get('Authorization') !== `Bearer ${env.ADMIN_TOKEN}`) {
@@ -960,10 +1028,114 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
     return jsonResponse({ message: 'Monthly report generated' });
   }
 
+  if (cronName === 'geo-faq') {
+    const { default: geoFaq } = await import('./cron/geo-faq');
+    await geoFaq(env);
+    return jsonResponse({ message: 'GEO FAQ generation completed (pending review in admin)' });
+  }
+
+  if (cronName === 'geo-audit') {
+    const { default: geoAudit } = await import('./cron/geo-audit');
+    const summary = await geoAudit(env);
+    return jsonResponse({ message: 'GEO audit completed', summary });
+  }
+
   return jsonResponse({
     message: `Cron ${cronName} triggered`,
     note: 'This cron handler is not yet implemented',
   });
+});
+
+// ─── GEO 评分 / 补丁（geo-audit cron 的数据出口 + 补丁审核入口） ───
+
+// 全站 GEO 评分列表（公开只读；Admin 评分表优先读这里）
+route('GET', '/api/geo/scores', async ({ env }) => {
+  const { getJSON } = await import('./lib/kv');
+  interface ScoreRow {
+    page_url: string;
+    title?: string;
+    score: number;
+    schema_completeness: number;
+    citation_friendliness: number;
+    fact_density: number;
+    scored_at: string;
+  }
+  const rows = (await getJSON<ScoreRow[]>(env.SEO_DATA, 'geo:scores')) ?? [];
+  const sorted = rows.slice().sort((a, b) => a.score - b.score);
+  const lastScoredAt = rows.reduce((max, r) => (r.scored_at > max ? r.scored_at : max), '');
+  return jsonResponse({
+    scored_at: lastScoredAt || null,
+    count: rows.length,
+    average: rows.length ? Math.round(rows.reduce((s, r) => s + r.score, 0) / rows.length) : null,
+    scores: sorted,
+  });
+});
+
+// 补丁列表（需 ADMIN_TOKEN）
+route('GET', '/api/geo/patches', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { getJSON } = await import('./lib/kv');
+  const patches = (await getJSON<import('./cron/geo-audit').GeoPatch[]>(env.SEO_DATA, 'geo:patches')) ?? [];
+  return jsonResponse(patches);
+});
+
+// 补丁编辑 / 审核状态变更（需 ADMIN_TOKEN）
+route('PUT', '/api/geo/patches/:slug', async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<Partial<import('./cron/geo-audit').GeoPatch>>().catch(() => null);
+  if (!body) {
+    return jsonResponse({ error: 'Invalid JSON body' }, 400);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const patches = (await getJSON<import('./cron/geo-audit').GeoPatch[]>(env.SEO_DATA, 'geo:patches')) ?? [];
+  const idx = patches.findIndex((p) => p.slug === params.slug);
+  if (idx < 0) {
+    return jsonResponse({ error: 'Not found' }, 404);
+  }
+  const allowed: Array<keyof import('./cron/geo-audit').GeoPatch> = [
+    'definition_sentence',
+    'fact_points',
+    'status',
+    'title',
+  ];
+  for (const key of allowed) {
+    if (body[key] !== undefined) {
+      (patches[idx] as unknown as Record<string, unknown>)[key] = body[key];
+    }
+  }
+  await setJSON(env.SEO_DATA, 'geo:patches', patches);
+  return jsonResponse(patches[idx]);
+});
+
+// 把已批准补丁应用到仓库并开 PR（需 ADMIN_TOKEN + GH_TOKEN）
+route('POST', '/api/geo/patches/pr', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const patches = (await getJSON<import('./cron/geo-audit').GeoPatch[]>(env.SEO_DATA, 'geo:patches')) ?? [];
+  const approved = patches.filter((p) => p.status === 'approved');
+  if (approved.length === 0) {
+    return jsonResponse({ error: 'No approved patches. Approve patches first (PUT /api/geo/patches/:slug {status:"approved"})' }, 400);
+  }
+
+  const { openPatchPullRequest } = await import('./lib/github');
+  const result = await openPatchPullRequest(env, approved);
+
+  // 已应用补丁标记 applied + 存 PR 链接
+  const appliedSet = new Set(result.appliedSlugs);
+  for (const p of patches) {
+    if (appliedSet.has(p.slug)) {
+      p.status = 'applied';
+      p.pr_url = result.prUrl;
+    }
+  }
+  await setJSON(env.SEO_DATA, 'geo:patches', patches);
+  return jsonResponse({ message: 'Pull request opened. Merge it on GitHub to deploy.', ...result });
 });
 
 // ─── 工具函数 ───

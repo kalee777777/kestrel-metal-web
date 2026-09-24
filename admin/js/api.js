@@ -560,6 +560,28 @@ const API = (function () {
     return { data, page, totalPages, total };
   }
 
+  // 真实 Worker FAQ API（/api/faq/*，KV geo:faqs —— GEO 流水线单一数据源）。
+  // 成功返回解析后的 JSON；路由未部署 / Worker 不可用时返回 null，调用方回退 localStorage。
+  async function tryWorkerFaqApi(path, method, body) {
+    let adminToken = localStorage.getItem('km_admin_token');
+    if (!adminToken || adminToken.startsWith('mock_token_')) adminToken = DEFAULT_ADMIN_TOKEN;
+    try {
+      const resp = await fetch(path, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        ...(body ? { body: JSON.stringify(body) } : {})
+      });
+      if (resp.ok) return await resp.json();
+      console.warn('[faq] Worker API ' + resp.status + ', falling back to localStorage');
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
   // Router
   async function handleRequest(url, options = {}) {
     const method = options.method || 'GET';
@@ -697,9 +719,11 @@ const API = (function () {
       return getPaginated('case_studies', page, pageSize, search, status ? { status } : {});
     }
 
-    // FAQ
+    // FAQ — 优先真实 Worker API（KV geo:faqs），不可用时回退 localStorage
     if (segments[0] === 'api' && segments[1] === 'faq') {
       const id = segments[2];
+      const realApi = await tryWorkerFaqApi('/' + segments.join('/'), method, body);
+      if (realApi !== null) return realApi;
       if (segments[2] === 'all') return getCollection('faqs');
       if (id && method === 'PUT') return update('faqs', id, body);
       if (id && method === 'DELETE') return remove('faqs', id);
@@ -871,10 +895,15 @@ const API = (function () {
       return getCollection('seo');
     }
 
-    // GEO (questions 为 faqs 的别名 —— GEO 问答与 FAQ 单一数据源)
+    // GEO (questions 为 faqs 的别名 —— GEO 问答与 FAQ 单一数据源；同样优先真实 Worker API)
     if (segments[0] === 'api' && segments[1] === 'geo') {
       if (segments[2] === 'questions') {
         const id = segments[3];
+        const mapPath = method === 'GET' && !id ? '/api/faq/all'
+          : method === 'POST' ? '/api/faq'
+          : '/api/faq/' + id;
+        const realApi = await tryWorkerFaqApi(mapPath, method, body);
+        if (realApi !== null) return realApi;
         if (id && method === 'PUT') return update('faqs', id, body);
         if (id && method === 'DELETE') return remove('faqs', id);
         if (id) return getById('faqs', id);
@@ -890,9 +919,20 @@ const API = (function () {
         return getCollection('geo_templates');
       }
       if (segments[2] === 'scores') {
+        // 优先读服务端 KV(geo-audit cron 全站评分);未部署/失败回退 localStorage
+        if (method === 'GET') {
+          try {
+            const resp = await fetch('/api/geo/scores');
+            if (resp.ok) {
+              const data = await resp.json();
+              return data.scores || [];
+            }
+          } catch {}
+          return getCollection('geo_scores');
+        }
         const url = segments[3];
         if (method === 'POST') {
-          // 真实评分落库:按 page_url upsert(评分计算在 geo.js 客户端完成,page_url 走 body)
+          // 浏览器端单页评分仍走本地缓存(全站评分已由服务端 cron 承接)
           const pageUrl = String(body.page_url || '').trim();
           if (!pageUrl.startsWith('/') || pageUrl.startsWith('//')) throw new Error('page_url 必须是站内相对路径');
           ['score', 'schema_completeness', 'citation_friendliness', 'fact_density'].forEach(k => {
@@ -910,6 +950,21 @@ const API = (function () {
           return { message: '删除成功' };
         }
         return getCollection('geo_scores');
+      }
+      // GEO 补强补丁 —— 直通真实 Worker API(geo-audit cron 产出,需 ADMIN_TOKEN)
+      if (segments[2] === 'patches') {
+        let adminToken = localStorage.getItem('km_admin_token');
+        if (!adminToken || adminToken.startsWith('mock_token_')) adminToken = DEFAULT_ADMIN_TOKEN;
+        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` };
+        const apiPath = '/' + segments.join('/');
+        const resp = await fetch(apiPath, {
+          method,
+          headers,
+          ...(body ? { body: JSON.stringify(body) } : {})
+        });
+        const data = await resp.json().catch(() => null);
+        if (!resp.ok) throw new Error((data && data.error) || ('HTTP ' + resp.status));
+        return data;
       }
     }
 

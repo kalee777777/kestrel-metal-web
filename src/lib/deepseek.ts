@@ -20,12 +20,16 @@ export interface ArticleRequest {
   title?: string;
   productLine?: string;
   targetAudience?: string;
+  /** 自动修复循环传入的失分反馈（SEO/GEO 评分维度），引导重新生成时补齐 */
+  repairHints?: string[];
 }
 
 export interface ArticleOutline {
   title: string;
   metaDescription: string;
   h1: string;
+  /** 自闭环定义句（"X is a …"），首段第一个句子，供 AI 引擎脱离上下文引用 */
+  definitionSentence?: string;
   sections: Array<{
     h2: string;
     h3s: string[];
@@ -53,7 +57,7 @@ export interface GeneratedArticle {
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
-async function callDeepSeek(
+export async function callDeepSeek(
   env: DeepSeekEnv,
   systemPrompt: string,
   userPrompt: string,
@@ -360,6 +364,11 @@ export async function generateOutline(
     ? `\nSecondary keywords (same product family, must be woven into this single article):\n${variantList.map((v) => `- ${v}`).join('\n')}\n\nWhen structuring sections, allocate at least one H2 or H3 to each secondary keyword so the article ranks for the whole keyword group instead of a single phrase.`
     : '';
 
+  const repairHints = (request.repairHints ?? []).filter(Boolean);
+  const repairBlock = repairHints.length > 0
+    ? `\n10. This is a REGENERATION. The previous draft scored poorly; fix these specific weaknesses:\n${repairHints.map((h) => `   - ${h}`).join('\n')}`
+    : '';
+
   const userPrompt = `Create a detailed SEO blog article outline for the target keyword: "${request.keyword}"${variantBlock}
 
 Requirements:
@@ -371,12 +380,15 @@ Requirements:
 6. Content should be professional, informative, and suitable for B2B buyers
 7. Include practical tips, specifications, and industry insights
 8. Write in English, professional tone
-
+9. GEO requirements (content must be quotable by AI search engines):
+   - definitionSentence: a self-contained definition ("${request.keyword.replace(/"/g, '')} is a …") that makes sense when quoted out of context; include the product category and primary use case
+   - Every FAQ answer must stand alone and contain at least one concrete number with a unit (e.g. "15-25 days", "zinc 40-270 g/m²", "mesh 50-75mm")${repairBlock}
 Respond in this exact JSON format:
 {
   "title": "Article title with keyword",
   "metaDescription": "150-160 char meta description",
   "h1": "Main heading",
+  "definitionSentence": "Self-contained definition sentence",
   "sections": [
     {
       "h2": "Section heading",
@@ -387,7 +399,7 @@ Respond in this exact JSON format:
   "faq": [
     {
       "question": "FAQ question?",
-      "answer": "Concise answer"
+      "answer": "Concise answer with a concrete number+unit fact"
     }
   ],
   "internalLinks": ["suggested anchor text for internal links"],
@@ -410,6 +422,7 @@ export async function generateArticle(
   outline: ArticleOutline,
   keyword: string,
   variants: string[] = [],
+  repairHints: string[] = [],
 ): Promise<GeneratedArticle> {
   const systemPrompt = `You are an expert B2B SEO content writer for Kestrel Metal (kestrelmetal.com), a leading manufacturer of metal fencing, gabion boxes, razor wire, and industrial security products. Write comprehensive, SEO-optimized content in English. Always respond with valid HTML content only (no markdown, no code blocks).`;
 
@@ -441,7 +454,11 @@ Requirements:
 8. Include bullet points and numbered lists where appropriate
 9. Reference Kestrel Metal products naturally
 10. End with a compelling conclusion and CTA
-
+11. GEO requirements (AI search engines must be able to quote this article):
+    - The VERY FIRST sentence of the article body must be this self-contained definition, verbatim: ${outline.definitionSentence ? `"${outline.definitionSentence}"` : `a self-contained definition of "${keyword}" ("${keyword} is a …") that makes sense when quoted alone`}
+    - Every H2 section must contain at least one fact written as a concrete number with a unit (mm, m, g/m², MPA, tons/month, days, %, gauge, etc.)
+    - Render comparisons as HTML <table> when two or more options are contrasted${variants.length > 0 ? ' (including a main keyword vs secondary keyword comparison table)' : ''}
+${repairHints.length > 0 ? `12. This is a REGENERATION. The previous draft was rejected by automated scoring; fix these specific weaknesses:\n${repairHints.map((h) => `    - ${h}`).join('\n')}\n` : ''}
 Output ONLY the HTML content for the article body (no <html>, <head>, <body> tags). Use proper semantic HTML: <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, <em>, <table>, <tr>, <td>.`;
 
   const htmlContent = await callDeepSeek(env, systemPrompt, userPrompt);
@@ -488,11 +505,28 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
 
   const heroImage = aiHeroImage;
   const heroImageFallback = heroFallback;
+  // faq-item：与站内静态页/seo-enhance.js/静态生成器三方约定一致（extractFaqItems 抓
+  // class="faq-item"，注入的 FAQPage schema 用 "text" 字段）——保留 faq-detail 以复用 article.css 样式
   const faqHtml = outline.faq.map(f => `
-      <details class="faq-detail">
+      <details class="faq-item faq-detail">
         <summary>${f.question}</summary>
         <p>${f.answer}</p>
       </details>`).join('\n');
+
+  // 服务端 FAQPage JSON-LD（GEO：AI 爬虫不执行 JS，schema 必须在原始 HTML 里）
+  const faqSchema = outline.faq.length > 0
+    ? `\n  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": ${JSON.stringify(outline.faq.map(f => ({
+      '@type': 'Question',
+      text: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })), null, 2).replace(/</g, '\\u003c')}
+  }
+  </script>`
+    : '';
 
   const articleHtml = `<!DOCTYPE html>
 <html lang="en">
@@ -545,7 +579,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
     "wordCount": ${wordCount},
     "image": "https://www.kestrelmetal.com/${heroImageFallback}"
   }
-  </script>
+  </script>${faqSchema}
 </head>
 <body>
   <div id="navbar-placeholder"></div>
@@ -638,7 +672,7 @@ export async function generateFullArticle(
   const outline = await generateOutline(env, request);
 
   console.log(`[deepseek] Generating article: ${outline.title}`);
-  const article = await generateArticle(env, outline, request.keyword, request.variants ?? []);
+  const article = await generateArticle(env, outline, request.keyword, request.variants ?? [], request.repairHints ?? []);
   article.variants = request.variants ?? [];
 
   console.log(`[deepseek] Article generated: ${article.wordCount} words`);

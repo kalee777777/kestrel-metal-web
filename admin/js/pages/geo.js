@@ -2,6 +2,55 @@ Router.register('/geo', async function (container) {
   let questions = [];
   let templates = [];
   let scores = [];
+  let patches = [];
+  let patchesLoaded = false;
+
+  async function loadPatches() {
+    try {
+      patches = await API.get('/api/geo/patches');
+      patchesLoaded = true;
+      renderPatches();
+    } catch (err) {
+      // 服务端未部署该路由时静默(表格保持空态提示),不弹错误
+      patchesLoaded = true;
+      renderPatches();
+    }
+  }
+
+  function renderPatches() {
+    const tbody = document.getElementById('patchTable');
+    if (!tbody) return;
+    const esc = API.escapeHtml;
+    if (!patches.length) {
+      tbody.innerHTML = emptyRow(6, '暂无补丁。每月 1 号 geo-audit cron 自动生成低分页补丁,或点上方按钮手动触发');
+      return;
+    }
+    const statusBadge = (p) => {
+      if (p.status === 'applied') return `<span class="badge badge-success">已应用</span>${p.pr_url ? `<div style="font-size:0.75rem;margin-top:0.2rem"><a href="${esc(p.pr_url)}" target="_blank" rel="noopener">PR ↗</a></div>` : ''}`;
+      if (p.status === 'approved') return '<span class="badge badge-info">已批准</span>';
+      if (p.status === 'dismissed') return '<span class="badge badge-gray">已忽略</span>';
+      return '<span class="badge badge-warning">待审核</span>';
+    };
+    tbody.innerHTML = patches.map((p, idx) => `
+      <tr>
+        <td>
+          <strong>${esc(p.title || p.slug)}</strong>
+          <div style="font-size:0.75rem;color:var(--text-secondary)"><a href="${esc(p.page_url)}" target="_blank" rel="noopener">${esc(p.slug)}.html ↗</a></div>
+        </td>
+        <td><span class="badge ${p.current_score >= 60 ? 'badge-warning' : 'badge-danger'}">${p.current_score}</span></td>
+        <td style="max-width:320px">${esc((p.definition_sentence || '').slice(0, 120))}${(p.definition_sentence || '').length > 120 ? '...' : ''}</td>
+        <td>${(p.fact_points || []).length}</td>
+        <td>${statusBadge(p)}</td>
+        <td>
+          <div class="btn-group">
+            ${p.status === 'pending' ? `<button class="btn btn-sm btn-success" onclick="approvePatch(${idx})">✓ 批准</button>` : ''}
+            ${p.status === 'pending' ? `<button class="btn btn-sm" onclick="dismissPatch(${idx})">忽略</button>` : ''}
+            <button class="btn btn-sm" onclick="editPatch(${idx})">编辑</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
 
   async function loadQuestions() {
     try {
@@ -100,7 +149,7 @@ Router.register('/geo', async function (container) {
         : esc(s.page_url);
       return `
       <tr>
-        <td>${link}<div style="font-size:0.75rem;color:var(--text-secondary)">评分于 ${s.scored_at ? esc(new Date(s.scored_at).toLocaleString('zh-CN')) : '历史数据'}</div></td>
+        <td>${s.title ? `<strong>${esc(s.title)}</strong><div style="font-size:0.75rem;color:var(--text-secondary)">` : ''}${link}${s.title ? '</div>' : ''}<div style="font-size:0.75rem;color:var(--text-secondary)">评分于 ${s.scored_at ? esc(new Date(s.scored_at).toLocaleString('zh-CN')) : '历史数据'}</div></td>
         <td><span class="badge ${s.score >= 80 ? 'badge-success' : s.score >= 60 ? 'badge-warning' : 'badge-danger'}">${s.score}</span></td>
         <td>${s.schema_completeness}%</td>
         <td>${s.citation_friendliness}%</td>
@@ -723,11 +772,89 @@ Router.register('/geo', async function (container) {
     API.toast(invalid ? `已导出 ${out.length} 条模板,其中 ${invalid} 条 JSON 非法(已标记 parse_error)` : `已导出 ${out.length} 条模板`, invalid ? 'error' : 'success');
   };
 
+  window.loadPatchesBtn = async () => {
+    patchesLoaded = false;
+    await loadPatches();
+    API.toast('补丁列表已刷新', 'success');
+  };
+
+  window.approvePatch = async (idx) => {
+    const p = patches[idx];
+    if (!p) return;
+    try {
+      await API.put(`/api/geo/patches/${encodeURIComponent(p.slug)}`, { status: 'approved' });
+      API.toast('已批准,可点「合并已批准补丁并开 PR」', 'success');
+      await loadPatches();
+    } catch (err) {
+      API.toast('批准失败: ' + err.message, 'error');
+    }
+  };
+
+  window.dismissPatch = async (idx) => {
+    const p = patches[idx];
+    if (!p || !confirm('忽略这个页面的补丁?(下轮审计可能重新生成)')) return;
+    try {
+      await API.put(`/api/geo/patches/${encodeURIComponent(p.slug)}`, { status: 'dismissed' });
+      await loadPatches();
+    } catch (err) {
+      API.toast('操作失败: ' + err.message, 'error');
+    }
+  };
+
+  window.editPatch = (idx) => {
+    const p = patches[idx];
+    if (!p) return;
+    const form = document.getElementById('patchForm');
+    form.slug.value = p.slug;
+    form.definition_sentence.value = p.definition_sentence || '';
+    form.fact_points.value = JSON.stringify(p.fact_points || [], null, 2);
+    form.dataset.idx = idx;
+    document.getElementById('patchModal').classList.add('show');
+  };
+
+  window.closePatchModal = () => document.getElementById('patchModal').classList.remove('show');
+
+  window.openPatchPr = async () => {
+    const approved = patches.filter(p => p.status === 'approved');
+    if (!approved.length) {
+      API.toast('没有已批准的补丁——先在列表里点「✓ 批准」', 'error');
+      return;
+    }
+    if (!confirm(`将为 ${approved.length} 个页面开 PR(合并后自动部署)。继续?`)) return;
+    try {
+      const result = await API.post('/api/geo/patches/pr');
+      API.toast(`PR 已创建,去 GitHub 合并即可部署`, 'success');
+      if (result.prUrl) window.open(result.prUrl, '_blank');
+      await loadPatches();
+    } catch (err) {
+      API.toast('开 PR 失败: ' + err.message, 'error');
+    }
+  };
+
+  window.runGeoAuditCron = async () => {
+    if (!confirm('立即全站审计(评分 + 生成低分页补丁),约需数分钟,期间无需等待。继续?')) return;
+    try {
+      let adminToken = localStorage.getItem('km_admin_token');
+      const resp = await fetch('/api/trigger/geo-audit', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) throw new Error(data.error || ('HTTP ' + resp.status));
+      API.toast('审计完成: ' + (data.summary || ''), 'success');
+      await loadPatches();
+      await loadScores();
+    } catch (err) {
+      API.toast('审计失败或超时(耗时较长时以 cron 结果为准,稍后刷新查看): ' + err.message, 'error');
+    }
+  };
+
   let activeTab = 'questions';
   window.showGeoTab = (tab) => {
     activeTab = tab;
     document.querySelectorAll('.geo-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
     document.querySelectorAll('.geo-tab-content').forEach(c => c.classList.toggle('hidden', c.id !== tab + 'Tab'));
+    if (tab === 'patches' && !patchesLoaded) loadPatches();
   };
 
   container.innerHTML = `
@@ -738,6 +865,7 @@ Router.register('/geo', async function (container) {
       <button class="geo-tab-btn active" data-tab="questions" onclick="showGeoTab('questions')">GEO 问答</button>
       <button class="geo-tab-btn" data-tab="templates" onclick="showGeoTab('templates')">Schema 模板</button>
       <button class="geo-tab-btn" data-tab="scores" onclick="showGeoTab('scores')">GEO 评分</button>
+      <button class="geo-tab-btn" data-tab="patches" onclick="showGeoTab('patches')">GEO 补强</button>
       <button class="geo-tab-btn" data-tab="monitor" onclick="showGeoTab('monitor')">GEO 诊断</button>
       <button class="geo-tab-btn" data-tab="baseline" onclick="showGeoTab('baseline')">基线验证</button>
     </div>
@@ -767,13 +895,40 @@ Router.register('/geo', async function (container) {
 
     <div id="scoresTab" class="geo-tab-content hidden">
       <div style="display:flex;gap:0.5rem;margin-bottom:0.8rem;align-items:center">
-        <button class="btn btn-primary" id="scoreAllBtn" onclick="scoreAllPages()">🔍 从 sitemap 拉取并全站评分</button>
+        <button class="btn btn-primary" id="scoreAllBtn" onclick="scoreAllPages()">🔍 从 sitemap 拉取并全站评分(浏览器端)</button>
       </div>
       <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.8rem">
-        ℹ️ 评分基于页面真实内容计算:JSON-LD 类型覆盖(权重 40%)、可引用结构(定义句/标题/FAQ/列表,30%)、事实密度(带单位数字/千字符,30%);低分页面置顶。
+        ℹ️ 列表优先读取服务端评分(<strong>geo-audit 每月 1 号自动全站评分</strong>,与发布门禁同一模型);服务端无数据时显示浏览器端评分。评分模型:JSON-LD 类型覆盖(40%)、可引用结构(定义句/标题/FAQ/列表,30%)、事实密度(带单位数字/千字符,30%);低分页面置顶。
       </p>
       <div class="table-wrap">
         <table><thead><tr><th>页面</th><th>GEO 评分</th><th>Schema 完整性</th><th>引用友好度</th><th>事实密度</th><th>操作</th></tr></thead><tbody id="scoreTable"></tbody></table>
+      </div>
+    </div>
+
+    <div id="patchesTab" class="geo-tab-content hidden">
+      <div style="display:flex;gap:0.5rem;margin-bottom:0.8rem;align-items:center;flex-wrap:wrap">
+        <button class="btn" onclick="loadPatchesBtn()">🔄 刷新补丁列表</button>
+        <button class="btn" onclick="runGeoAuditCron()">🔍 立即全站审计 + 生成补丁</button>
+        <button class="btn btn-primary" onclick="openPatchPr()">🚀 合并已批准补丁并开 PR</button>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.8rem">
+        ℹ️ geo-audit 每月 1 号自动全站评分并为低分页生成补丁(自闭环定义句 + 数字事实点)。批准后点「开 PR」——GitHub 合并即自动部署。<strong>审计耗时数分钟</strong>,日常以 cron 为准,按钮用于补跑。
+      </p>
+      <div class="table-wrap">
+        <table><thead><tr><th>页面</th><th>当前分</th><th>定义句</th><th>事实点</th><th>状态</th><th>操作</th></tr></thead><tbody id="patchTable"></tbody></table>
+      </div>
+      <div id="patchModal" class="modal-overlay">
+        <div class="modal" style="max-width:700px">
+          <div class="modal-header"><div class="modal-title">编辑补丁</div><button class="modal-close" onclick="closePatchModal()">×</button></div>
+          <div class="modal-body">
+          <form id="patchForm">
+            <input type="hidden" name="slug">
+            <div class="form-group"><label>定义句(自闭环,可被 AI 脱离上下文引用)</label><textarea name="definition_sentence" class="form-control" style="min-height:80px" required></textarea></div>
+              <div class="form-group"><label>事实点 JSON 数组([{"value":"40-270 g/m²","context":"zinc coating options"}])</label><textarea name="fact_points" class="form-control" style="min-height:140px;font-family:monospace;font-size:0.85rem"></textarea></div>
+            </form>
+          </div>
+          <div class="modal-footer"><button class="btn" onclick="closePatchModal()">取消</button><button class="btn btn-primary" onclick="document.getElementById('patchForm').submit()">保存</button></div>
+        </div>
       </div>
     </div>
 
@@ -948,6 +1103,31 @@ Router.register('/geo', async function (container) {
     closeCitationModal();
     renderBaseline();
     API.toast('记录已保存', 'success');
+  });
+
+  document.getElementById('patchForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const slug = form.slug.value;
+    let factPoints;
+    try {
+      factPoints = JSON.parse(form.fact_points.value || '[]');
+      if (!Array.isArray(factPoints)) throw new Error();
+    } catch {
+      API.toast('事实点必须是合法的 JSON 数组', 'error');
+      return;
+    }
+    try {
+      await API.put(`/api/geo/patches/${encodeURIComponent(slug)}`, {
+        definition_sentence: form.definition_sentence.value.trim(),
+        fact_points: factPoints,
+      });
+      API.toast('补丁已保存', 'success');
+      closePatchModal();
+      await loadPatches();
+    } catch (err) {
+      API.toast('保存失败: ' + err.message, 'error');
+    }
   });
 
   await loadQuestions();
