@@ -88,31 +88,43 @@ function handleContactSubmit(e) {
     console.error('[Inquiry] Failed to save:', err);
   }
 
-  // 同步到后端存储
-  syncToBackend(inquiryData);
-
-  setTimeout(function () {
-    btn.textContent = '✓ Message Sent!';
-    btn.style.background = '#28a745';
-    if (window.Analytics) {
-      Analytics.trackInquiryForm(inquiryData.product_name);
-    }
-    setTimeout(function () {
-      btn.textContent = originalText;
-      btn.style.background = '';
-      btn.disabled = false;
-      e.target.reset();
-    }, 2000);
-  }, 1200);
+  // 同步到后端存储：等待后端确认后再提示成功，避免"假成功"漏单
+  syncToBackend(inquiryData)
+    .then(function () {
+      btn.textContent = '✓ Message Sent!';
+      btn.style.background = '#28a745';
+      if (window.Analytics) {
+        Analytics.trackInquiryForm(inquiryData.product_name);
+      }
+      setTimeout(function () {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+        e.target.reset();
+      }, 2000);
+    })
+    .catch(function (err) {
+      console.error('[Inquiry] Failed to sync to backend:', err);
+      btn.textContent = 'Submission failed';
+      btn.style.background = '#dc3545';
+      alert('Sorry, your message could not be sent. Please try again, or email us directly at kalee@kestrelmetal.com');
+      setTimeout(function () {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 3000);
+    });
   return false;
 }
 
 function syncToBackend(inquiryData) {
-  // 从本地存储获取API密钥
-  var apiKey = localStorage.getItem('km_inquiry_api_key');
+  // 从本地存储获取API密钥；localStorage 被禁/未注入时回退到公开密钥（与 js/includes.js 一致）
+  var apiKey;
+  try {
+    apiKey = localStorage.getItem('km_inquiry_api_key');
+  } catch (e) { apiKey = null; }
   if (!apiKey) {
-    console.warn('[Inquiry] No API key found, skipping backend sync');
-    return;
+    apiKey = 'c73a2621683b6456423317f522f77f98bb57273ccbbda6853cee7fa27c5a6370';
   }
 
   // 构建API请求
@@ -129,7 +141,7 @@ function syncToBackend(inquiryData) {
     source_page: inquiryData.source_page
   };
 
-  fetch(apiUrl, {
+  return fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -145,8 +157,5 @@ function syncToBackend(inquiryData) {
   })
   .then(function(data) {
     console.log('[Inquiry] Synced to backend successfully:', data);
-  })
-  .catch(function(err) {
-    console.error('[Inquiry] Failed to sync to backend:', err);
   });
 }

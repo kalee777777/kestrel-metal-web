@@ -609,28 +609,41 @@
       console.error('[Audit] Failed to save:', err);
     }
 
-    // 同步到后端 KV 存储
-    syncToBackend(auditData);
-
-    setTimeout(function () {
-      btn.textContent = 'Request Received!';
-      btn.style.background = '#28a745';
-      alert('Thank you, ' + auditData.name + '! Your factory audit request has been submitted. We will confirm your appointment within 2 business days.');
-      setTimeout(function () {
-        btn.textContent = originalText;
-        btn.style.background = '';
-        btn.disabled = false;
-        form.reset();
-      }, 2000);
-    }, 1200);
+    // 同步到后端 KV 存储：等待后端确认后再提示成功，避免"假成功"漏单
+    syncToBackend(auditData)
+      .then(function () {
+        btn.textContent = 'Request Received!';
+        btn.style.background = '#28a745';
+        alert('Thank you, ' + auditData.name + '! Your factory audit request has been submitted. We will confirm your appointment within 2 business days.');
+        setTimeout(function () {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+          form.reset();
+        }, 2000);
+      })
+      .catch(function (err) {
+        console.error('[Audit] Failed to sync to backend:', err);
+        btn.textContent = 'Submission failed';
+        btn.style.background = '#dc3545';
+        alert('Sorry, your request could not be sent. Please try again, or email us directly at kalee@kestrelmetal.com');
+        setTimeout(function () {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      });
     return false;
   }
 
   function syncToBackend(auditData) {
-    var apiKey = localStorage.getItem('km_inquiry_api_key');
+    // localStorage 被禁/未注入时回退到公开密钥（与 js/includes.js 一致）
+    var apiKey;
+    try {
+      apiKey = localStorage.getItem('km_inquiry_api_key');
+    } catch (e) { apiKey = null; }
     if (!apiKey) {
-      console.warn('[Audit] No API key found, skipping backend sync');
-      return;
+      apiKey = 'c73a2621683b6456423317f522f77f98bb57273ccbbda6853cee7fa27c5a6370';
     }
 
     var apiUrl = '/api/inquiries';
@@ -646,7 +659,7 @@
       source_page: auditData.source_page
     };
 
-    fetch(apiUrl, {
+    return fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -660,9 +673,6 @@
     })
     .then(function(data) {
       console.log('[Audit] Synced to backend:', data);
-    })
-    .catch(function(err) {
-      console.error('[Audit] Failed to sync to backend:', err);
     });
   }
   </script>
