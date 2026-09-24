@@ -113,9 +113,9 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 - Admin GEO 页新增「GEO 补强」Tab(补丁表/批准/编辑/开 PR/手动审计);评分 Tab 优先读服务端 KV
 - 月报(`cron/monthly-report.ts`)附 GEO 段:平均分/高中低分布/Bottom5/llms 新增/FAQ 待审/补丁统计
 
-**验证**:tsc 通过;wrangler dry-run 构建通过;纯函数冒烟(mergeLlmsTxt 插入位置/链接/空透传、computeGeoScore 富页 70 vs 裸页 0、hints 输出)通过
+**验证**:tsc 通过;wrangler dry-run 构建通过;纯函数冒烟(mergeLlmsTxt 插入位置/链接/空透传、computeGeoScore 富页 70 vs 裸页 0、hints 输出)通过;**线上端到端验证(2026-09-25)**——faq/geo-scores/geo-patches/llms.txt 路由全通、全站审计 215/215 页(平均 64;高 32/中 112/低 71)、20 个低分页补丁待审、geo-faq 首跑 3 条待审 FAQ(质量达标)。**经验**:Worker 自域公网 fetch 全部失败(改 ASSETS/KV 直读);每次调用子请求上限 50(审计改分片续跑,每次 40 页,进度存 KV `geo:audit:progress`)
 
-**待办(一次性)**:① `wrangler secret put GH_TOKEN` ② Admin → FAQ 管理一键上传本地存量 ③ 部署后 `POST /api/trigger/geo-audit` 首跑基线
+**待办(一次性)**:① `wrangler secret put GH_TOKEN` ② Admin → FAQ 管理一键上传本地存量 ③ 审核 20 个补丁 + 3 条待审 FAQ
 
 ---
 

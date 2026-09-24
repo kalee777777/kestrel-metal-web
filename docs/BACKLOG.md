@@ -34,7 +34,7 @@
 | SITE-04 | 工作流发布后核对 | ✅ 2026-09-21 完成——① 9 篇中 8 篇线上与仓库零差异(仅 Cloudflare 注入);1 篇(galvanized-chain-link-fence-the-b2b-buyer-s-guide)线上 og/twitter 被工作流旧版覆盖(canonical/JSON-LD 幸存),仓库版正确,随下次部署自动修复;② 工作流发布**不更新博客索引** → SITE-03 已手动补齐;③ 发布日又直传 5 篇新文章(358/牛栏/3D 安装/剃刀/焊接网 top10),已同样回收 + 补 og + sitemap 212 对齐(commit c6844da) | AI | ✅ 09-21 |
 | SITE-03 | 回收文章补内部链接 | ✅ 2026-09-21 完成(扩展到全部 14 篇)——blog-news.html 三分类插入 14 张卡片(计数徽章同步:Product Posts 12→14 / Tips 9→11 / Product Info 12→22);每篇正文加 Related Guides 块(2-3 个主题互链);3 个核心产品页挂入口(gabion / chain-link / razor-btc)。**每篇内链 0 → ≥3**,验收达标(commit 1c15b9b) | AI | ✅ 09-21 |
 | GEO-03 | GA4 ai_referral 数据首查 | ✅ 2026-09-23 完全关闭——事件确认在积累(8/30-9/23 共 7 次/3 用户);月度路径定型 = GA4 探索「AI Referral 月度报告」(行=Source+Page,值=事件数,过滤=Source 匹配正则 `\.`);**首查发现**:ChatGPT 占 6/7(其中 /fence-3d.html 独占 4 次 = AI 最认可页面,GEO-04 补强样板),Gemini 1 次(/blog-history-of-gabion.html),Perplexity 0(最大增长空间) | 人工 + AI | ✅ 09-23 |
-| GEO-10 | GEO 自动化流水线部署 + 一次性配置 | 2026-09-25 代码完成(三段式,见 GEO_PROGRESS 第六轮)。**剩余**:① git push 部署 ② `wrangler secret put GH_TOKEN`(fine-grained,仅 kestrel-metal-web 仓库 Contents+PR 写) ③ Admin→FAQ 管理一键上传本地存量 ④ `POST /api/trigger/geo-audit` 首跑 + 检查 `GET /api/geo/scores` ⑤ 下周日验证 geo-faq 产出待审条目 | AI + 人工 | 🔄 |
+| GEO-10 | GEO 自动化流水线部署 + 一次性配置 | 🔄 2026-09-25 上线并端到端验证——全站审计 215/215 页(平均 64,高 32/中 112/低 71,高分数与 admin 浏览器评分一致)、20 个低分页补丁待审、geo-faq 首跑 3 条待审 FAQ(定义句+数字事实,质量达标)、faq/geo-scores/patches/llms.txt 路由全通。**剩余**:① `wrangler secret put GH_TOKEN`(fine-grained,仅 kestrel-metal-web 仓库 Contents+PR 写)→ 才能开补丁 PR ② Admin→FAQ 管理一键上传本地存量 ③ 审核 20 个补丁 + 3 条 FAQ | AI + 人工 | 🔄 |
 
 ## P1 · 30 天
 
