@@ -152,19 +152,17 @@ export async function updateInquiry(
   return inquiry;
 }
 
-/** 删除询盘 */
+/** 删除询盘（幂等：即使详情已不存在，也会清理索引列表中的残留） */
 export async function deleteInquiry(
   kv: KVNamespace,
   id: number
 ): Promise<boolean> {
   const itemKey = `inquiries:item:${id}`;
-  const data = await kv.get(itemKey, 'json');
-  if (!data) return false;
 
-  // 删除询盘详情
+  // 删除询盘详情（不存在时 kv.delete 为空操作）
   await kv.delete(itemKey);
 
-  // 更新索引列表
+  // 无条件清理索引列表（防止并发删除时的读改写竞态留下幻影条目）
   const listKey = 'inquiries:list';
   const listData = await kv.get(listKey, 'json');
   if (listData) {
