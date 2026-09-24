@@ -48,11 +48,30 @@ async function collectUrls(env: Env): Promise<string[]> {
   return [...sitemap.xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)].map((m) => m[1]);
 }
 
-async function fetchAndScore(url: string): Promise<ScoreRow | null> {
-  try {
-    const resp = await fetch(url);
-    if (!resp.ok) return null;
+/**
+ * 取页面 HTML:优先 ASSETS(静态页,与访客所见一致),回退 KV published:{slug}(动态文章)。
+ * 不 fetch 自身公网域名——Worker 回环抓取在本环境不可靠(实测 214 页全部失败)。
+ */
+async function fetchPageHtml(env: Env, url: string): Promise<string | null> {
+  const path = new URL(url).pathname;
+  const assetPath = path === '/' ? '/index.html' : path;
+  const resp = await env.ASSETS.fetch(`https://www.kestrelmetal.com${assetPath}`);
+  if (resp.ok) {
     const html = await resp.text();
+    if (html) return html;
+  }
+  const slug = path.replace(/^\//, '').replace(/\.html$/, '');
+  if (slug && !slug.includes('/') && !slug.includes('.')) {
+    const published = (await env.CONTENT_QUEUE.get(`published:${slug}`, 'json')) as { html?: string } | null;
+    if (published?.html) return published.html;
+  }
+  return null;
+}
+
+async function fetchAndScore(env: Env, url: string): Promise<ScoreRow | null> {
+  try {
+    const html = await fetchPageHtml(env, url);
+    if (!html) return null;
     const geo = computeGeoScore(html);
     const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
     return {
@@ -67,11 +86,11 @@ async function fetchAndScore(url: string): Promise<ScoreRow | null> {
 }
 
 /** 并发评分全站；返回成功行（失败页跳过，下轮再评） */
-async function scoreAllPages(urls: string[]): Promise<ScoreRow[]> {
+async function scoreAllPages(env: Env, urls: string[]): Promise<ScoreRow[]> {
   const rows: ScoreRow[] = [];
   for (let i = 0; i < urls.length; i += SCORE_CONCURRENCY) {
     const batch = urls.slice(i, i + SCORE_CONCURRENCY);
-    const results = await Promise.all(batch.map(fetchAndScore));
+    const results = await Promise.all(batch.map((u) => fetchAndScore(env, u)));
     for (const r of results) if (r) rows.push(r);
   }
   return rows;
@@ -136,7 +155,7 @@ export default async function geoAudit(env: Env): Promise<string> {
   const urls = await collectUrls(env);
   console.log(`[geo-audit] Scoring ${urls.length} pages`);
 
-  const rows = await scoreAllPages(urls);
+  const rows = await scoreAllPages(env, urls);
   if (rows.length === 0) {
     return 'No pages scored (sitemap empty or fetch failures)';
   }
