@@ -49,8 +49,19 @@ jobs:
         if: env.APPROVED_COUNT != '0'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_EVENT: ${{ github.event_name }}
         run: |
           set -euo pipefail
+          exec 2> >(tee /tmp/err.log >&2)
+          report_failure() {
+            ERR=$(node -e 'const fs=require("fs");let s="";try{s=fs.readFileSync("/tmp/err.log","utf8")}catch{};console.log(JSON.stringify(s.split("\n").slice(-40).join("\n").slice(-6000)))' 2>/dev/null || echo '""')
+            curl -sf --max-time 20 -X POST https://www.kestrelmetal.com/api/geo/patches/workflow-report \
+              -H 'Content-Type: application/json' \
+              -d "{\"status\":\"failure\",\"run_id\":$RUN_ID,\"event\":\"$RUN_EVENT\",\"error\":$ERR}" || true
+          }
+          trap report_failure ERR
+
           APPLIED=$(node -e "const d=JSON.parse(require('fs').readFileSync('/tmp/applied.json','utf8'));console.log(d.applied.length)")
           if [ "$APPLIED" = "0" ]; then
             echo "No files changed (all patches already applied) — nothing to do"
@@ -66,10 +77,9 @@ jobs:
           BODY=$(node -e "
             const d=JSON.parse(require('fs').readFileSync('/tmp/applied.json','utf8'));
             const lines=d.applied.map(p=>'- **'+p.title+'** (\`'+p.slug+'.html\`)\n  - '+p.definition_sentence);
-            console.log(['Automated GEO reinforcement (geo-audit → admin-approved).','',...lines,'','Each page gets a \"Key Facts\" block (self-contained definition + numeric facts) before \`</main\`.','Merge to deploy via Cloudflare git integration.','_If you close this PR without merging, reset those patches to approved in the admin panel._'].join('\n'));
+            console.log(['Automated GEO reinforcement (geo-audit → admin-approved).','',...lines,'','Each page gets a \"Key Facts\" block (self-contained definition + numeric facts) before \`</main>\`.','Merge to deploy via Cloudflare git integration.','_If you close this PR without merging, reset those patches to approved in the admin panel._'].join('\n'));
           ")
           PR_URL=$(gh pr create --title "geo: reinforce $APPLIED low-scoring pages" --body "$BODY" --base main --head "$BRANCH")
-          echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
           echo "Pull request: $PR_URL"
 
           # 回写状态:approved → applied(幂等;仅影响下轮审计选题)
@@ -77,3 +87,7 @@ jobs:
           curl -sf --max-time 30 -X POST https://www.kestrelmetal.com/api/geo/patches/mark-applied \
             -H 'Content-Type: application/json' \
             -d "{\"slugs\":$SLUGS,\"pr_url\":\"$PR_URL\"}" || echo "WARN: mark-applied failed (patches remain approved; next run re-creates PR only for unapplied files)"
+
+          curl -sf --max-time 20 -X POST https://www.kestrelmetal.com/api/geo/patches/workflow-report \
+            -H 'Content-Type: application/json' \
+            -d "{\"status\":\"success\",\"run_id\":$RUN_ID,\"event\":\"$RUN_EVENT\",\"applied\":$APPLIED,\"pr_url\":\"$PR_URL\"}" || true

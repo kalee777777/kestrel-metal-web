@@ -1109,6 +1109,50 @@ route('POST', '/api/geo/patches/mark-applied', async ({ env, request }) => {
   return jsonResponse({ marked, pr_url: body.pr_url ?? null });
 });
 
+// ─── geo-patches 工作流运行报告(Actions 远端可观测性:公开读写,内容为运行状态) ───
+
+interface WorkflowReport {
+  status: 'success' | 'failure';
+  run_id?: number;
+  event?: string;
+  applied?: number;
+  pr_url?: string;
+  error?: string;
+  reported_at: string;
+}
+
+// 最近一次报告(公开读 —— Admin/诊断用)
+route('GET', '/api/geo/patches/workflow-report', async ({ env }) => {
+  const { getJSON } = await import('./lib/kv');
+  const last = await getJSON<WorkflowReport>(env.SEO_DATA, 'geo:workflow:last_report');
+  return jsonResponse(last ?? { status: 'never_run', reported_at: null });
+});
+
+// 工作流上报(成功带 pr_url;失败带错误尾部,截断防滥用)
+route('POST', '/api/geo/patches/workflow-report', async ({ env, request }) => {
+  const body = await request
+    .json<{ status?: string; run_id?: number; event?: string; applied?: number; pr_url?: string; error?: string }>()
+    .catch(() => null);
+  if (!body || (body.status !== 'success' && body.status !== 'failure')) {
+    return jsonResponse({ error: 'status must be success|failure' }, 400);
+  }
+  const report: WorkflowReport = {
+    status: body.status,
+    run_id: body.run_id,
+    event: body.event,
+    applied: typeof body.applied === 'number' ? body.applied : undefined,
+    pr_url: body.pr_url,
+    error: typeof body.error === 'string' ? body.error.slice(-6000) : undefined,
+    reported_at: new Date().toISOString(),
+  };
+  const { getJSON, setJSON } = await import('./lib/kv');
+  await setJSON(env.SEO_DATA, 'geo:workflow:last_report', report);
+  const history = (await getJSON<WorkflowReport[]>(env.SEO_DATA, 'geo:workflow:history')) ?? [];
+  history.push(report);
+  await setJSON(env.SEO_DATA, 'geo:workflow:history', history.slice(-20));
+  return jsonResponse({ ok: true });
+});
+
 // 补丁编辑 / 审核状态变更（需 ADMIN_TOKEN）
 route('PUT', '/api/geo/patches/:slug', async ({ env, params, request }) => {
   if (!isAdminAuthorized(request, env)) {
