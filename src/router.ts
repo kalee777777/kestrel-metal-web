@@ -1112,11 +1112,14 @@ route('POST', '/api/geo/patches/mark-applied', async ({ env, request }) => {
 // ─── geo-patches 工作流运行报告(Actions 远端可观测性:公开读写,内容为运行状态) ───
 
 interface WorkflowReport {
-  status: 'success' | 'failure';
+  status: 'success' | 'failure' | 'pending_pr';
   run_id?: number;
   event?: string;
   applied?: number;
   pr_url?: string;
+  /** gh pr create 被仓库设置拦截时回传:分支已推送,一键创建 PR 的链接 */
+  branch?: string;
+  compare_url?: string;
   error?: string;
   reported_at: string;
 }
@@ -1131,17 +1134,20 @@ route('GET', '/api/geo/patches/workflow-report', async ({ env }) => {
 // 工作流上报(成功带 pr_url;失败带错误尾部,截断防滥用)
 route('POST', '/api/geo/patches/workflow-report', async ({ env, request }) => {
   const body = await request
-    .json<{ status?: string; run_id?: number; event?: string; applied?: number; pr_url?: string; error?: string }>()
+    .json<{ status?: string; run_id?: number; event?: string; applied?: number; pr_url?: string; branch?: string; compare_url?: string; error?: string }>()
     .catch(() => null);
-  if (!body || (body.status !== 'success' && body.status !== 'failure')) {
-    return jsonResponse({ error: 'status must be success|failure' }, 400);
+  const allowed = ['success', 'failure', 'pending_pr'];
+  if (!body || !allowed.includes(String(body.status))) {
+    return jsonResponse({ error: 'status must be success|failure|pending_pr' }, 400);
   }
   const report: WorkflowReport = {
-    status: body.status,
+    status: body.status as WorkflowReport['status'],
     run_id: body.run_id,
     event: body.event,
     applied: typeof body.applied === 'number' ? body.applied : undefined,
     pr_url: body.pr_url,
+    branch: body.branch,
+    compare_url: body.compare_url,
     error: typeof body.error === 'string' ? body.error.slice(-6000) : undefined,
     reported_at: new Date().toISOString(),
   };

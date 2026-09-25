@@ -79,7 +79,16 @@ jobs:
             const lines=d.applied.map(p=>'- **'+p.title+'** (\`'+p.slug+'.html\`)\n  - '+p.definition_sentence);
             console.log(['Automated GEO reinforcement (geo-audit → admin-approved).','',...lines,'','Each page gets a \"Key Facts\" block (self-contained definition + numeric facts) before \`</main>\`.','Merge to deploy via Cloudflare git integration.','_If you close this PR without merging, reset those patches to approved in the admin panel._'].join('\n'));
           ")
-          PR_URL=$(gh pr create --title "geo: reinforce $APPLIED low-scoring pages" --body "$BODY" --base main --head "$BRANCH")
+          PR_URL=$(gh pr create --title "geo: reinforce $APPLIED low-scoring pages" --body "$BODY" --base main --head "$BRANCH") \
+            || {
+              # 仓库未开启「Allow GitHub Actions to create and approve pull requests」时
+              # GITHUB_TOKEN 不能开 PR —— 回传 compare 链接,管理台/邮件里一键创建
+              echo "WARN: gh pr create not permitted; reporting compare URL"
+              curl -sf --max-time 20 -X POST https://www.kestrelmetal.com/api/geo/patches/workflow-report \
+                -H 'Content-Type: application/json' \
+                -d "{\"status\":\"pending_pr\",\"run_id\":$RUN_ID,\"event\":\"$RUN_EVENT\",\"applied\":$APPLIED,\"branch\":\"$BRANCH\",\"compare_url\":\"https://github.com/kalee777777/kestrel-metal-web/compare/main...$BRANCH\"}" || true
+              exit 0
+            }
           echo "Pull request: $PR_URL"
 
           # 回写状态:approved → applied(幂等;仅影响下轮审计选题)
