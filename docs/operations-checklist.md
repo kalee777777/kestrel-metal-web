@@ -55,10 +55,15 @@
 
 | 时机 | 自动动作 | 人工动作 |
 |------|---------|---------|
-| 每日 04:00/05:00(北京) | 文章生成 + 双门禁发布(SEO ≥60 **且 GEO ≥70**):首段定义句、FAQPage schema 服务端注入、事实密度;发布自动追加 llms.txt 条目 | 无 |
-| 每周日 07:00(北京) | geo-faq:从竞品缺口/GSC 机会词生成 3 条含数字事实的 FAQ → KV 待审 | Admin → FAQ 管理:待审行「✓ 启用」(即时上线 faq.html) |
-| 每月 1 号 09:00(北京) | geo-audit:全站逐页 GEO 评分 → KV geo:scores;低分页生成补丁(定义句+事实点)→ KV geo:patches | Admin → GEO 补强:批准/编辑补丁 → 「开 PR」→ GitHub 合并(合并即部署) |
+| 每日 04:00/05:00(北京) | 文章生成 + 双门禁发布(SEO ≥60 **且 GEO ≥70**):首段定义句、FAQPage schema 服务端注入、事实密度;发布自动追加 llms.txt 条目 | 无(首篇验证:Copper Wire Mesh,SEO 81/GEO 82) |
+| 每周日 06:00(北京,track slot 内) | geo-faq:从竞品缺口/GSC 机会词生成 3 条含数字事实的 FAQ → KV 待审(20h 去重防重复) | Admin → FAQ 管理:待审行「✓ 启用」(即时上线 faq.html) |
+| 每日 08:00(北京,monthly-report slot 内) | geo-audit 分片:1 号开新周期,之后每天续跑 40 页至完成 → 生成低分页补丁 | Admin → GEO 补强:批准/编辑补丁 → 「开 PR」→ GitHub 合并(合并即部署) |
 | 每月 1 号 08:00(北京) | 月报附 GEO 段(平均分/分布/llms 新增/FAQ 待审数) | 无 |
+
+> ⚠️ cron 挂载方式(2026-09-25):新增 trigger 表达式在 Git 集成部署下不被 Cloudflare 调度
+> (与既往"周级 trigger 不可靠"同因),故 geo-audit/geo-faq 挂在老的每日 slot 里靠代码门控;
+> `0 23`/`0 1` 两个独立 case 保留作备用。若在 Dashboard 手动补登记过 trigger,两者会双保险,
+> geo-faq 的 20h 新鲜度检查可防重复生成。
 
 **前置配置**(一次性):`wrangler secret put GH_TOKEN`(fine-grained,仅 `kalee777777/kestrel-metal-web` 仓库 Contents + Pull requests 读写);Admin → FAQ 管理 → 本地存量一键上传。
 **手动补跑**:`POST /api/trigger/geo-faq`、`POST /api/trigger/geo-audit`(ADMIN_TOKEN);审计耗时数分钟属正常。
