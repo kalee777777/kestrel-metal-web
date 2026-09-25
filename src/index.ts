@@ -292,6 +292,13 @@ export default {
             const { default: monthlyReport } = await import('./cron/monthly-report');
             await monthlyReport(env);
           });
+          // GEO 全站审计分片(自门控:1 号开周期,其余日子续跑至完成)。
+          // 挂在本 slot 而非独立 cron:新增 trigger 表达式在 Git 集成部署下
+          // 实测不被调度(2026-09-25 验证),老 slot 每日必触发。
+          await runCronTask('geo-audit', env, async () => {
+            const { default: geoAudit } = await import('./cron/geo-audit');
+            return (await geoAudit(env)).summary;
+          });
           break;
 
         // 每日 06:00 UTC+8，仅周日真正执行 — 效果追踪
@@ -301,9 +308,20 @@ export default {
             const { default: track } = await import('./cron/track');
             await track(env);
           });
+          // GEO FAQ 自动扩容(仅周日;带 20h 新鲜度去重,防多 slot 重复生成)
+          await runCronTask('geo-faq', env, async () => {
+            if (!isBeijingWeekday(0)) return `跳过：今天不是周日（北京周 ${beijingDay()}）`;
+            const { getJSON } = await import('./lib/kv');
+            const last = await getJSON<{ timestamp: string }>(env.SEO_DATA, 'cron:last_run:geo-faq');
+            if (last && Date.now() - new Date(last.timestamp).getTime() < 20 * 3600_000) {
+              return `跳过：20 小时内已生成过(上次 ${last.timestamp})`;
+            }
+            const { default: geoFaq } = await import('./cron/geo-faq');
+            await geoFaq(env);
+          });
           break;
 
-        // 每日 07:00 UTC+8，仅周日真正执行 — GEO FAQ 自动扩容（GEO-07）
+        // 备用直达 slot(若未来 trigger 被正确调度则由此触发;当前 Git 集成部署不调度新表达式)
         case '0 23 * * *':
           await runCronTask('geo-faq', env, async () => {
             if (!isBeijingWeekday(0)) return `跳过：今天不是周日（北京周 ${beijingDay()}）`;
@@ -312,7 +330,6 @@ export default {
           });
           break;
 
-        // 每日 09:00 UTC+8 — GEO 全站审计(分片续跑:1 号开周期,之后每天续跑至完成;GEO-08/04)
         case '0 1 * * *':
           await runCronTask('geo-audit', env, async () => {
             const { default: geoAudit } = await import('./cron/geo-audit');
