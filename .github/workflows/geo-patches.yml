@@ -1,0 +1,79 @@
+# GEO 补丁 PR 自动化
+#
+# 数据流:Worker geo-audit 生成低分页补丁 → Admin 批准(status=approved)
+#        → 本工作流拉取已批准补丁 → 插入 Key Facts 块 → 建分支开 PR
+#        → 人工合并 → Cloudflare git 集成自动部署。
+# 使用 Actions 自带的单次 GITHUB_TOKEN,无需任何长期 PAT。
+#
+# 触发:每 6 小时定时 / 触碰 .geo-patch-trigger 文件的推送 / Actions 页手动运行
+name: geo-patches-pr
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - '.geo-patch-trigger'
+      - '.github/workflows/geo-patches.yml'
+      - 'scripts/apply-geo-patches.mjs'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: geo-patches
+  cancel-in-progress: false
+
+jobs:
+  create-pr:
+    if: github.repository == 'kalee777777/kestrel-metal-web'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch approved patches
+        run: |
+          set -euo pipefail
+          curl -sf --max-time 30 https://www.kestrelmetal.com/api/geo/patches/approved -o /tmp/patches.json
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/patches.json','utf8')).length)")
+          echo "APPROVED_COUNT=$COUNT" >> "$GITHUB_ENV"
+          echo "Approved patches: $COUNT"
+
+      - name: Apply patches to HTML
+        if: env.APPROVED_COUNT != '0'
+        run: node scripts/apply-geo-patches.mjs /tmp/patches.json | tee /tmp/applied.json
+
+      - name: Create branch and pull request
+        if: env.APPROVED_COUNT != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          APPLIED=$(node -e "const d=JSON.parse(require('fs').readFileSync('/tmp/applied.json','utf8'));console.log(d.applied.length)")
+          if [ "$APPLIED" = "0" ]; then
+            echo "No files changed (all patches already applied) — nothing to do"
+            exit 0
+          fi
+          git config user.name "geo-bot"
+          git config user.email "noreply@users.noreply.github.com"
+          BRANCH="geo/patches-$(date -u +%Y%m%d-%H%M)"
+          git checkout -b "$BRANCH"
+          git add '*.html'
+          git commit -m "geo: reinforce $APPLIED low-scoring pages (definition + key facts)"
+          git push origin "$BRANCH"
+          BODY=$(node -e "
+            const d=JSON.parse(require('fs').readFileSync('/tmp/applied.json','utf8'));
+            const lines=d.applied.map(p=>'- **'+p.title+'** (\`'+p.slug+'.html\`)\n  - '+p.definition_sentence);
+            console.log(['Automated GEO reinforcement (geo-audit → admin-approved).','',...lines,'','Each page gets a \"Key Facts\" block (self-contained definition + numeric facts) before \`</main\`.','Merge to deploy via Cloudflare git integration.','_If you close this PR without merging, reset those patches to approved in the admin panel._'].join('\n'));
+          ")
+          PR_URL=$(gh pr create --title "geo: reinforce $APPLIED low-scoring pages" --body "$BODY" --base main --head "$BRANCH")
+          echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
+          echo "Pull request: $PR_URL"
+
+          # 回写状态:approved → applied(幂等;仅影响下轮审计选题)
+          SLUGS=$(node -e "const d=JSON.parse(require('fs').readFileSync('/tmp/applied.json','utf8'));console.log(JSON.stringify(d.applied.map(p=>p.slug)))")
+          curl -sf --max-time 30 -X POST https://www.kestrelmetal.com/api/geo/patches/mark-applied \
+            -H 'Content-Type: application/json' \
+            -d "{\"slugs\":$SLUGS,\"pr_url\":\"$PR_URL\"}" || echo "WARN: mark-applied failed (patches remain approved; next run re-creates PR only for unapplied files)"

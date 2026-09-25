@@ -820,15 +820,9 @@ Router.register('/geo', async function (container) {
       API.toast('没有已批准的补丁——先在列表里点「✓ 批准」', 'error');
       return;
     }
-    if (!confirm(`将为 ${approved.length} 个页面开 PR(合并后自动部署)。继续?`)) return;
-    try {
-      const result = await API.post('/api/geo/patches/pr');
-      API.toast(`PR 已创建,去 GitHub 合并即可部署`, 'success');
-      if (result.prUrl) window.open(result.prUrl, '_blank');
-      await loadPatches();
-    } catch (err) {
-      API.toast('开 PR 失败: ' + err.message, 'error');
-    }
+    // PR 由 GitHub Actions 工作流创建(每 6 小时定时;也可立即手动运行)
+    if (!confirm(`已批准 ${approved.length} 个补丁。GitHub Actions 将自动建分支开 PR(每 6 小时检查一次)。\n\n点「确定」打开工作流页面,再点「Run workflow」可立即生成 PR。继续?`)) return;
+    window.open('https://github.com/kalee777777/kestrel-metal-web/actions/workflows/geo-patches.yml', '_blank');
   };
 
   window.runGeoAuditCron = async () => {
@@ -918,7 +912,7 @@ Router.register('/geo', async function (container) {
       <div style="display:flex;gap:0.5rem;margin-bottom:0.8rem;align-items:center;flex-wrap:wrap">
         <button class="btn" onclick="loadPatchesBtn()">🔄 刷新补丁列表</button>
         <button class="btn" onclick="runGeoAuditCron()">🔍 立即全站审计 + 生成补丁</button>
-        <button class="btn btn-primary" onclick="openPatchPr()">🚀 合并已批准补丁并开 PR</button>
+        <button class="btn btn-primary" onclick="openPatchPr()">🚀 去 GitHub 生成 PR(Actions)</button>
       </div>
       <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.8rem">
         ℹ️ geo-audit 每月 1 号自动全站评分并为低分页生成补丁(自闭环定义句 + 数字事实点)。批准后点「开 PR」——GitHub 合并即自动部署。<strong>审计耗时数分钟</strong>,日常以 cron 为准,按钮用于补跑。

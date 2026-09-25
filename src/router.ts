@@ -1071,7 +1071,7 @@ route('GET', '/api/geo/scores', async ({ env }) => {
   });
 });
 
-// 补丁列表（需 ADMIN_TOKEN）
+// 补丁列表(需 ADMIN_TOKEN)
 route('GET', '/api/geo/patches', async ({ env, request }) => {
   if (!isAdminAuthorized(request, env)) {
     return jsonResponse({ error: 'Unauthorized' }, 401);
@@ -1079,6 +1079,34 @@ route('GET', '/api/geo/patches', async ({ env, request }) => {
   const { getJSON } = await import('./lib/kv');
   const patches = (await getJSON<import('./cron/geo-audit').GeoPatch[]>(env.SEO_DATA, 'geo:patches')) ?? [];
   return jsonResponse(patches);
+});
+
+// 已批准补丁(公开只读 —— 供 GitHub Actions 拉取;内容本就是将要上线的页面文案)
+route('GET', '/api/geo/patches/approved', async ({ env }) => {
+  const { getJSON } = await import('./lib/kv');
+  const patches = (await getJSON<import('./cron/geo-audit').GeoPatch[]>(env.SEO_DATA, 'geo:patches')) ?? [];
+  return jsonResponse(patches.filter((p) => p.status === 'approved'));
+});
+
+// 标记已应用(Actions 开出 PR 后回写;仅允许 approved → applied,幂等无害)
+route('POST', '/api/geo/patches/mark-applied', async ({ env, request }) => {
+  const body = await request.json<{ slugs?: string[]; pr_url?: string }>().catch(() => null);
+  if (!body || !Array.isArray(body.slugs) || body.slugs.length === 0) {
+    return jsonResponse({ error: 'slugs[] is required' }, 400);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const patches = (await getJSON<import('./cron/geo-audit').GeoPatch[]>(env.SEO_DATA, 'geo:patches')) ?? [];
+  const wanted = new Set(body.slugs.map(String));
+  let marked = 0;
+  for (const p of patches) {
+    if (wanted.has(p.slug) && p.status === 'approved') {
+      p.status = 'applied';
+      p.pr_url = body.pr_url;
+      marked++;
+    }
+  }
+  if (marked > 0) await setJSON(env.SEO_DATA, 'geo:patches', patches);
+  return jsonResponse({ marked, pr_url: body.pr_url ?? null });
 });
 
 // 补丁编辑 / 审核状态变更（需 ADMIN_TOKEN）
