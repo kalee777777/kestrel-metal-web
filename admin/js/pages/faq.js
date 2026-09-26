@@ -1,5 +1,6 @@
 Router.register('/faq', async function (container) {
   let faqs = [];
+  let statusFilter = 'all'; // all | pending | active | inactive
 
   async function loadFAQs() {
     try {
@@ -10,9 +11,43 @@ Router.register('/faq', async function (container) {
     }
   }
 
+  function renderFilters() {
+    const bar = document.getElementById('faqFilterBar');
+    if (!bar) return;
+    const pending = faqs.filter(f => !f.is_active && f.source === 'auto').length;
+    const active = faqs.filter(f => !!f.is_active).length;
+    const inactive = faqs.filter(f => !f.is_active && f.source !== 'auto').length;
+    const defs = [
+      { key: 'all', label: '全部', n: faqs.length, cls: '' },
+      { key: 'pending', label: '⏳ 待审核', n: pending, cls: 'pending' },
+      { key: 'active', label: '✅ 已启用', n: active, cls: '' },
+      { key: 'inactive', label: '⛔ 已禁用', n: inactive, cls: '' },
+    ];
+    bar.innerHTML = defs.map(d => `
+      <button class="faq-filter-btn ${d.cls} ${statusFilter === d.key ? 'active' : ''}" onclick="setFaqFilter('${d.key}')">
+        ${d.label} <span class="faq-filter-n">${d.n}</span>
+      </button>`).join('');
+  }
+
+  window.setFaqFilter = (key) => {
+    statusFilter = key;
+    renderTable();
+  };
+
   function renderTable() {
+    renderFilters();
     const tbody = document.getElementById('faqTableBody');
-    tbody.innerHTML = faqs.map(f => `
+    const list = faqs.filter(f => {
+      if (statusFilter === 'pending') return !f.is_active && f.source === 'auto';
+      if (statusFilter === 'active') return !!f.is_active;
+      if (statusFilter === 'inactive') return !f.is_active && f.source !== 'auto';
+      return true;
+    });
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-secondary)">${statusFilter === 'pending' ? '🎉 没有待审核的 FAQ——周日 geo-faq 生成后这里每周会出现 3 条新条目' : '当前筛选下没有条目'}</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list.map(f => `
       <tr>
         <td>${f.id}</td>
         <td>${f.category || '-'}</td>
@@ -24,7 +59,7 @@ Router.register('/faq', async function (container) {
         <td>${f.sort_order}</td>
         <td>
           <div class="btn-group">
-            ${!f.is_active && f.source === 'auto' ? `<button class="btn btn-sm btn-success" onclick="approveFAQ(${f.id})">✓ 启用</button>` : ''}
+            ${!f.is_active && f.source === 'auto' ? `<button class="btn btn-sm btn-success" onclick="approveFAQ(${f.id})">✓ 启用并上线</button>` : ''}
             <button class="btn btn-sm" onclick="editFAQ(${f.id})">编辑</button>
             <button class="btn btn-sm btn-danger" onclick="deleteFAQ(${f.id})">删除</button>
           </div>
@@ -36,7 +71,7 @@ Router.register('/faq', async function (container) {
   window.approveFAQ = async (id) => {
     try {
       await API.put(`/api/faq/${id}`, { is_active: true });
-      API.toast('已启用,faq.html 与 GEO 渲染即时生效', 'success');
+      API.toast('已启用——faq.html 条目与 FAQPage schema 将在 ≤5 分钟内自动上线(免部署)', 'success');
       await loadFAQs();
     } catch (err) {
       API.toast('启用失败: ' + err.message, 'error');
@@ -81,13 +116,23 @@ Router.register('/faq', async function (container) {
   };
 
   container.innerHTML = `
+    <style>
+      .faq-filter-btn { border:1px solid var(--gray-200,#e2e8f0); background:#fff; border-radius:20px; padding:.35rem .9rem; font-size:.85rem; cursor:pointer; margin-right:.5rem; }
+      .faq-filter-btn.active { background:var(--ink,#0f172a); color:#fff; border-color:var(--ink,#0f172a); }
+      .faq-filter-btn.pending { border-color:#f59e0b; }
+      .faq-filter-btn.pending.active { background:#d97706; border-color:#d97706; }
+      .faq-filter-btn.pending:not(.active) .faq-filter-n { color:#d97706; }
+      .faq-filter-btn.active .faq-filter-n { opacity:.85; }
+      .faq-filter-n { font-weight:700; margin-left:.15rem; }
+    </style>
     <div class="page-header">
       <h1>FAQ 管理</h1>
       <button class="btn btn-primary" onclick="openAddFAQ()">+ 新增 FAQ</button>
     </div>
+    <div id="faqFilterBar" style="display:flex;flex-wrap:wrap;margin-bottom:1rem"></div>
     <div id="faqSourceBanner" style="display:none;margin-bottom:1rem;padding:0.75rem 1rem;border-radius:8px;font-size:0.85rem"></div>
     <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem">
-      ℹ️ 本列表与「GEO 优化 → GEO 问答」共享同一数据源(GEO 流水线服务端 KV),两边编辑实时同步;站点 faq.html 自动渲染 <strong>启用 + 非中文</strong> 的条目。geo-faq 每周自动生成的条目以「待审核」状态出现在列表里,勾选启用后上线。
+      ℹ️ 数据源:服务端 KV(geo:faqs)。「⏳ 待审核」= geo-faq 每周日自动生成(重点核对答案里的数字真实性);点 <strong>✓ 启用并上线</strong> 后 faq.html 条目与 FAQPage schema 在 ≤5 分钟内自动生效(免部署)。停用/删除同样即时撤下。
     </p>
     <div class="table-wrap">
       <table>
