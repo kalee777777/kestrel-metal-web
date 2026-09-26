@@ -25,7 +25,7 @@
 
 | ID | 事项 | 说明 / 验收标准 | 负责 | 状态 |
 |----|------|----------------|------|------|
-| GEO-01 | 首轮基线测试 | 10 条 Prompt(推荐/对比/合规各 3-4)× ChatGPT(联网)/Perplexity/Gemini;结果录入管理台「基线验证」。验收:产出第一份引用率基线 | 人工测试 + AI 记录 | ☐ |
+| GEO-01 | 首轮基线测试 | 🔄 2026-09-25 **Perplexity 全部 10 条完成(AI 自动化):引用率 0/10**——诊断与行动建议见 [GEO_BASELINE_2026-09.md](GEO_BASELINE_2026-09.md);**新发现:P0 = made-in-china/Alibaba 目录页建档**(Perplexity 引用池第一来源,已加 ENT-07)。**剩余**:ChatGPT/Gemini 人工补测(需登录) + 结果录入管理台 | AI + 人工 | 🔄 |
 | GEO-02 | 生产/本地 sitemap 差异修复 | ✅ 2026-09-20 完成——9 个线上独有页面为 SEO 文章流水线直传生产、未进仓库(见 SITE-02),已全部回收入库 + sitemap 207 对齐 + 修复 1 篇错误 canonical + 9 篇补齐 og/JSON-LD(commit 121877d)。**遗留内部链接问题转 SITE-03** | AI | ✅ 09-20 |
 | ENT-00 | 创建统一信息包 entity-fact-sheet.md | ✅ 2026-09-20 完整定稿([entity-fact-sheet.md](entity-fact-sheet.md)):DEC-1/2/3 全部关闭,字段 + 三版描述 + 平台登记表齐备 | AI | ✅ 09-20 |
 | ENT-06 | LinkedIn 页面补全 | ✅ 2026-09-20:概述(长简介)、专业领域、地点(Anping Industrial Zone)、行业 已更新完成。**剩余**:有效邮箱域名添加(kestrelmetal.com,后台提醒项)+ 按内容计划发前 3 篇帖子([LINKEDIN_CONTENT_PLAN.md](LINKEDIN_CONTENT_PLAN.md)) | 人工 | 🔄 |
@@ -42,6 +42,7 @@
 |----|------|----------------|------|------|
 | GEO-04 | 低分页 Top20 补强 | 🔄 2026-09-25 自动化——geo-audit 每月 1 号自动生成补丁(定义句+事实点),Admin「GEO 补强」批准 → GH PR 合并部署。**剩余**:部署后首跑 + 首批补丁审核(人工把关 AI 生成的事实点真实性) | AI 生成 + 人工审核 | 🔄 |
 | ENT-01 | Europages 建档 | 免费供应商账户、域名邮箱注册、信息包全量填写、≥5 张产品图。验收:档案 URL 存档进 ENT-05 | 人工 | ☐ |
+| ENT-07 | **made-in-china / Alibaba 国际站供应商页建档** | 2026-09-25 基线测试发现:B2B 目录页是 Perplexity 引用池第一来源(10 条中出现 ~15 次),优先级高于 Europages;建页后 URL 存档进 ENT-05 并回加 sameAs | 人工 | ☐ |
 | GEO-05 | llms.txt 月度更新机制 | ✅ 2026-09-25 自动化——新文章发布自动追加 KV 条目,`GET /llms.txt` 动态合并(静态基底不动,清空 KV 即回退);手工内容更新仍走 git | AI | ✅ 09-25 |
 
 ## P2 · 90 天
