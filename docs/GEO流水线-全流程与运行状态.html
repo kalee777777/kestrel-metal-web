@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO 自动化流水线 — 全流程图与实时运行状态</title>
+<style>
+  :root { --ink:#0f172a; --sub:#64748b; --line:#e2e8f0; --brand:#FF6B35; --blue:#2563eb; --green:#16a34a; --amber:#d97706; --red:#dc2626; --bg:#f8fafc; --card:#fff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; padding:2.5rem 1rem; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  header { border-left:6px solid var(--brand); padding-left:1.2rem; margin-bottom:1.6rem; }
+  header h1 { font-size:1.65rem; }
+  header .meta { color:var(--sub); font-size:.86rem; margin-top:.3rem; }
+  h2 { font-size:1.2rem; margin:2.4rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid var(--line); }
+  h2 .no { display:inline-block; background:var(--ink); color:#fff; border-radius:6px; font-size:.78rem; padding:.1rem .5rem; margin-right:.5rem; vertical-align:2px; }
+
+  /* 健康总览 */
+  .health { background:linear-gradient(135deg,#052e16,#14532d); border-radius:14px; color:#fff; padding:1.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:1.4rem; align-items:center; }
+  .health .big { font-size:1.5rem; font-weight:800; }
+  .health .dot { width:12px; height:12px; border-radius:50%; background:#4ade80; box-shadow:0 0 0 4px rgba(74,222,128,.25); display:inline-block; margin-right:.4rem; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+  .hstat { text-align:center; } .hstat .k { font-size:.74rem; opacity:.75; } .hstat .v { font-size:1.35rem; font-weight:700; }
+
+  /* 泳道 */
+  .lane { background:var(--card); border:1px solid var(--line); border-radius:14px; margin:1.2rem 0; overflow:hidden; }
+  .lane-head { display:flex; align-items:center; gap:.7rem; padding:.8rem 1.2rem; border-bottom:1px solid var(--line); background:#f8fafc; flex-wrap:wrap; }
+  .lane-badge { font-size:.8rem; font-weight:700; color:#fff; border-radius:8px; padding:.2rem .7rem; }
+  .lane-title { font-weight:700; font-size:.95rem; }
+  .lane-note { color:var(--sub); font-size:.78rem; margin-left:auto; }
+  .lane-body { padding:1rem 1.2rem; display:flex; flex-wrap:wrap; gap:.9rem; align-items:stretch; }
+  .node { border:1.5px solid var(--line); border-radius:12px; padding:.75rem .95rem; flex:1; min-width:195px; position:relative; background:#fff; }
+  .node.auto { border-color:#bbf7d0; background:#f0fdf4; }
+  .node.manual { border-color:#fde68a; background:#fffbeb; }
+  .node .tag { position:absolute; top:-9px; right:10px; font-size:.66rem; font-weight:700; border-radius:10px; padding:.05rem .5rem; }
+  .auto .tag { background:var(--green); color:#fff; } .manual .tag { background:var(--amber); color:#fff; }
+  .node b.n { display:block; font-size:.9rem; margin-bottom:.25rem; }
+  .node .s { font-size:.74rem; color:var(--sub); }
+  .node .live { margin-top:.4rem; font-size:.74rem; color:var(--green); font-weight:600; }
+  .arrow { align-self:center; color:#94a3b8; font-weight:800; font-size:1.1rem; }
+
+  /* 表格 */
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06); font-size:.85rem; }
+  th { background:var(--ink); color:#fff; padding:.55rem .7rem; text-align:left; font-weight:600; }
+  td { padding:.5rem .7rem; border-bottom:1px solid var(--line); }
+  tr:last-child td { border-bottom:none; }
+  .ok { color:var(--green); font-weight:700; }
+  .warn { color:var(--amber); font-weight:700; }
+  code { background:#f1f5f9; border-radius:4px; padding:.05rem .35rem; font-size:.82em; }
+  .pill { display:inline-block; border-radius:20px; padding:.03rem .55rem; font-size:.74rem; font-weight:600; }
+  .p-g { background:#dcfce7; color:var(--green); } .p-a { background:#fef3c7; color:var(--amber); }
+  .note { background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:1rem 1.2rem; font-size:.88rem; margin:1rem 0; }
+  .timeline { background:#fff; border:1px solid var(--line); border-radius:12px; padding:1rem 1.3rem; }
+  .tl-row { display:grid; grid-template-columns:130px 24px 1fr; gap:.6rem; padding:.35rem 0; font-size:.86rem; align-items:baseline; }
+  .tl-t { color:var(--sub); font-variant-numeric:tabular-nums; text-align:right; }
+  .tl-dot { width:10px; height:10px; border-radius:50%; background:var(--green); align-self:center; }
+  footer { margin-top:2.8rem; color:var(--sub); font-size:.78rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>GEO 自动化流水线 — 全流程图与实时运行状态</h1>
+  <div class="meta">数据采集:2026-09-26 13:50(北京)· 全部数字来自生产环境 API 实测 · 图例:<span class="pill p-g">🤖 自动</span> 无需人工 <span class="pill p-a">👆 人工</span> 需要你操作</div>
+</header>
+
+<!-- ============ 健康总览 ============ -->
+<div class="health">
+  <div style="flex:1;min-width:220px"><span class="dot"></span><span class="big">流水线运行正常</span><div style="font-size:.8rem;opacity:.8;margin-top:.2rem">7/7 个定时任务按计划触发并留痕 · 两个挂载 slot 的修复已生效</div></div>
+  <div class="hstat"><div class="k">连续自动发文</div><div class="v">2 天</div></div>
+  <div class="hstat"><div class="k">KV 文章(双门禁)</div><div class="v">21 篇</div></div>
+  <div class="hstat"><div class="k">全站 GEO 评分</div><div class="v">64 分</div></div>
+  <div class="hstat"><div class="k">llms.txt 自动条目</div><div class="v">2 条</div></div>
+  <div class="hstat"><div class="k">待人工事项</div><div class="v">3 项</div></div>
+</div>
+
+<!-- ============ 流程图 ============ -->
+<h2><span class="no">1</span>每日自动循环(北京 03:00 → 05:00,全自动)</h2>
+<div class="lane">
+  <div class="lane-head"><span class="lane-badge" style="background:var(--blue)">每 日</span><span class="lane-title">内容生产主线</span><span class="lane-note">cron 实测:昨天 04:03 / 05:01 均成功</span></div>
+  <div class="lane-body">
+    <div class="node auto"><span class="tag">自动</span><b class="n">① GSC 数据同步</b><span class="s">03:00 · 拉排名/机会词入 KV</span><div class="live">✓ 昨 19:00Z 成功(3s)</div></div><span class="arrow">→</span>
+    <div class="node auto"><span class="tag">自动</span><b class="n">② 选题+生成</b><span class="s">04:00 · 竞品缺口/GSC 聚类 → DeepSeek 写文</span><div class="live">✓ 昨 20:03Z 成功(145s)</div></div><span class="arrow">→</span>
+    <div class="node auto"><span class="tag">自动</span><b class="n">③ 双门禁发布</b><span class="s">05:00 · SEO≥60 <b>且 GEO≥70</b> 才过;失败带失分反馈重生成(≤3轮)</span><div class="live">✓ 昨 21:01Z 成功</div></div><span class="arrow">→</span>
+    <div class="node auto"><span class="tag">自动</span><b class="n">④ GEO 闭环分发</b><span class="s">发布即:llms.txt 追加条目 + sitemap 合并 + IndexNow 推送</span><div class="live">✓ llms.txt 现有 2 条自动条目</div></div>
+  </div>
+</div>
+<div class="timeline">
+  <b style="font-size:.9rem">昨夜实跑时间线(全自动,零人工)</b>
+  <div class="tl-row"><span class="tl-t">04:03 北京</span><span class="tl-dot"></span><span>生成《Cost of Metal Fence Posts》— DeepSeek 大纲+正文,含定义句/FAQ/事实点</span></div>
+  <div class="tl-row"><span class="tl-t">05:01 北京</span><span class="tl-dot"></span><span>双门禁通过 <b>SEO 82 / GEO 75</b> → 写入 KV → Banner → 发布上线</span></div>
+  <div class="tl-row"><span class="tl-t">05:01 +秒级</span><span class="tl-dot"></span><span>llms.txt 自动追加第 2 条 Latest Guides · sitemap 215→217 · IndexNow 已推送</span></div>
+  <div class="tl-row"><span class="tl-t">08:00 北京</span><span class="tl-dot"></span><span>geo-audit 分片槽位触发 → 正确跳过(非 1 号,无未完成周期)— 修复后首次留痕 ✓</span></div>
+</div>
+
+<h2><span class="no">2</span>每周日循环(北京 06:00/07:00,生成自动 / 审核人工)</h2>
+<div class="lane">
+  <div class="lane-head"><span class="lane-badge" style="background:#7c3aed">每周日</span><span class="lane-title">FAQ 扩容(GEO-07)</span><span class="lane-note">cron 实测:今晨槽位触发,正确跳过(今天周六)</span></div>
+  <div class="lane-body">
+    <div class="node auto"><span class="tag">自动</span><b class="n">⑤ geo-faq 生成</b><span class="s">周日 06:00 · 从竞品缺口/GSC 机会词选 3 个未覆盖问题 → DeepSeek 生成含数字事实 Q/A</span><div class="live">✓ 槽位今晨已触发并正确跳过;明晨将首次正式生成</div></div><span class="arrow">→</span>
+    <div class="node manual"><span class="tag">人工</span><b class="n">⑥ 审核 FAQ</b><span class="s">Admin → FAQ 管理 → 「待审核」行点 <b>✓ 启用</b>(重点核数字真实性)</span><div class="live" style="color:var(--amber)">3 条已启用;明晨起每周 +3 条待审</div></div><span class="arrow">→</span>
+    <div class="node auto"><span class="tag">自动</span><b class="n">⑦ 即时上线</b><span class="s">启用后 ≤5 分钟:faq.html 注入条目 + FAQPage schema 同步(免部署)</span><div class="live">✓ 现网 25 条 / schema 25 条</div></div>
+  </div>
+</div>
+
+<h2><span class="no">3</span>每月循环(1 号起分片跑,生成自动 / 批准与合并人工)</h2>
+<div class="lane">
+  <div class="lane-head"><span class="lane-badge" style="background:var(--brand)">每 月</span><span class="lane-title">全站审计 + 低分页补强(GEO-08/04)</span><span class="lane-note">下轮:10 月 1 号 08:00 开周期,每天续跑 40 页</span></div>
+  <div class="lane-body">
+    <div class="node auto"><span class="tag">自动</span><b class="n">⑧ geo-audit 评分</b><span class="s">1 号开周期,每日 08:00 续跑 40 页(子请求上限分片)→ KV geo:scores</span><div class="live">✓ 当前 215 页 / 均分 64(9-24 周期)</div></div><span class="arrow">→</span>
+    <div class="node auto"><span class="tag">自动</span><b class="n">⑨ 补丁生成</b><span class="s">跑完自动取低分 Top20 → DeepSeek 生成定义句+事实点补丁</span><div class="live">✓ 上轮 20 个已全部应用</div></div><span class="arrow">→</span>
+    <div class="node manual"><span class="tag">人工</span><b class="n">⑩ 批准补丁</b><span class="s">Admin → GEO 补强 → 逐条 ✓(我会做实体一致性扫描,盯日期/邮箱/电话/认证)</span><div class="live" style="color:var(--amber)">当前 0 待审</div></div><span class="arrow">→</span>
+    <div class="node auto"><span class="tag">自动</span><b class="n">⑪ Actions 开 PR</b><span class="s">每 6 小时检查已批准 → 建分支/改文件/开 PR(零 token)</span><div class="live">✓ 上轮 success → PR #2</div></div><span class="arrow">→</span>
+    <div class="node manual"><span class="tag">人工</span><b class="n">⑫ 合并部署</b><span class="s">GitHub 点 Merge → Cloudflare 自动部署 → 上线</span><div class="live" style="color:var(--amber)">当前 0 个待合并</div></div>
+  </div>
+</div>
+<div class="lane">
+  <div class="lane-head"><span class="lane-badge" style="background:#475569">每 月</span><span class="lane-title">月报 + 效果验证</span></div>
+  <div class="lane-body">
+    <div class="node auto"><span class="tag">自动</span><b class="n">⑬ 月报 GEO 段</b><span class="s">1 号 08:00 · 平均分/分布/Bottom5/llms 新增/FAQ 待审数 → KV report:YYYY-MM</span><div class="live">✓ 代码就绪,10-01 首跑</div></div><span class="arrow">→</span>
+    <div class="node manual"><span class="tag">人工</span><b class="n">⑭ 月度查看</b><span class="s">GA4「AI Referral 月度报告」+ Admin 评分趋势(基线 7 次/28 天)</span><div class="live" style="color:var(--amber)">每月 1 号 10 分钟</div></div><span class="arrow">→</span>
+    <div class="node manual"><span class="tag">人工</span><b class="n">⑮ 基线复测</b><span class="s">每两周同 10 条 Prompt 复测引用率(当前基线 0/10)</span><div class="live" style="color:var(--amber)">下次建议 10-09</div></div>
+  </div>
+</div>
+
+<!-- ============ 定时任务健康表 ============ -->
+<h2><span class="no">4</span>定时任务运行记录(生产 API 实测)</h2>
+<table>
+<tr><th>任务</th><th>时间(北京)</th><th>上次触发</th><th>结果</th><th>说明</th></tr>
+<tr><td><code>gsc-sync</code></td><td>每日 03:00</td><td>今晨 ✓</td><td class="ok">成功</td><td>排名数据同步</td></tr>
+<tr><td><code>generate</code></td><td>每日 04:00</td><td>昨 04:03 ✓</td><td class="ok">成功(145s)</td><td>产出今晨发布的文章</td></tr>
+<tr><td><code>score</code></td><td>每日 05:00</td><td>昨 05:01 ✓</td><td class="ok">成功</td><td>双门禁发布 + llms.txt 追加</td></tr>
+<tr><td><code>track</code></td><td>每日 06:00(周日执行)</td><td>今晨 ✓</td><td class="warn">正确跳过</td><td>今天周六,明晨执行</td></tr>
+<tr><td><code>geo-faq</code></td><td>每日 06:00 槽位(周日执行)</td><td>今晨 ✓</td><td class="warn">正确跳过</td><td><b>挂载修复后首次留痕</b>,明晨首次正式生成 3 条 FAQ</td></tr>
+<tr><td><code>monthly-report</code></td><td>每日 08:00(1 号执行)</td><td>今晨 ✓</td><td class="warn">正确跳过</td><td>10-01 首次附 GEO 段</td></tr>
+<tr><td><code>geo-audit</code></td><td>每日 08:00 槽位(1 号开周期)</td><td>今晨 ✓</td><td class="warn">正确跳过</td><td><b>挂载修复后首次留痕</b>;10-01 开新周期,10-06 前后跑完 217 页</td></tr>
+<tr><td><code>geo-patches-pr</code><br><span style="color:var(--sub);font-size:.75rem">GitHub Actions</span></td><td>每 6 小时</td><td>PR #2 ✓</td><td class="ok">success</td><td>无已批准补丁时空转,零成本</td></tr>
+</table>
+<div class="note"><b>"正确跳过"也是健康信号:</b>这些任务设计为"每日触发 + 代码内判断是否执行",每天留痕证明调度链路活着,到点才真正干活。geo-audit / geo-faq 今晨的记录是 cron 挂载修复后的<b>首次证据</b>——修复生效。</div>
+
+<!-- ============ 人工事项 ============ -->
+<h2><span class="no">5</span>当前需要你的全部事项(仅 3 项)</h2>
+<table>
+<tr><th style="width:60px">优先级</th><th>事项</th><th>频率</th><th>耗时</th><th>状态</th></tr>
+<tr><td><b style="color:var(--red)">P0</b></td><td>目录页建档(ENT-07,详见面板报告)</td><td>一次性</td><td>2-3 小时</td><td class="warn">你计划慢慢补</td></tr>
+<tr><td><b style="color:var(--amber)">P1</b></td><td>周日审核 geo-faq 新 FAQ(数字真实性)</td><td>每周 10 分钟</td><td>10 分钟</td><td>明晨首批</td></tr>
+<tr><td><b style="color:var(--amber)">P1</b></td><td>每月批准补丁 → 合并 PR(我可代批+代合并)</td><td>每月 20 分钟</td><td>20 分钟</td><td>10 月首轮回</td></tr>
+<tr><td><b style="color:var(--blue)">P2</b></td><td>两周基线复测 + ChatGPT/Gemini 补测</td><td>每两周 30 分钟</td><td>30 分钟</td><td>建议 10-09</td></tr>
+</table>
+<p style="color:var(--sub);font-size:.8rem">除上表外,其余一切——生成、评分、发布、分发、审计、补丁、PR、月报——均为自动。</p>
+
+<!-- ============ 闭环说明 ============ -->
+<h2><span class="no">6</span>三条回退保险(出问题怎么办)</h2>
+<table>
+<tr><th>场景</th><th>回退方式</th><th>影响</th></tr>
+<tr><td>llms.txt 出现错误条目</td><td>删 KV <code>geo:llms:entries</code> 对应项 → 1 小时缓存后恢复纯静态</td><td>零部署</td></tr>
+<tr><td>FAQ 想撤下</td><td>Admin 停用(is_active=false)→ 5 分钟内 faq.html/schema 同步消失</td><td>零部署</td></tr>
+<tr><td>补丁不想要</td><td>PR 不合并即不上线;已合并的可 revert 提交</td><td>可控</td></tr>
+<tr><td>某篇文章质量差</td><td>Admin → 内容管理删除(删 KV 键 + sitemap 自动收缩)</td><td>零部署</td></tr>
+</table>
+
+<footer>GEO 流水线可视化 · 2026-09-26 13:50 实时数据 · 詳细文档:docs/GEO_PROGRESS.md 第六轮 · docs/operations-checklist.md §二·B</footer>
+</div>
+</body>
+</html>

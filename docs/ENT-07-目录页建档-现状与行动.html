@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENT-07 · 目录页建档 — 现状诊断与行动方案</title>
+<style>
+  :root { --ink:#0f172a; --sub:#64748b; --line:#e2e8f0; --brand:#FF6B35; --blue:#2563eb; --green:#16a34a; --amber:#d97706; --red:#dc2626; --bg:#f8fafc; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; color:var(--ink); background:var(--bg); line-height:1.65; padding:2.5rem 1rem; }
+  .wrap { max-width:1060px; margin:0 auto; }
+  header { border-left:6px solid var(--brand); padding-left:1.2rem; margin-bottom:2rem; }
+  header h1 { font-size:1.7rem; }
+  header .meta { color:var(--sub); font-size:.88rem; margin-top:.3rem; }
+  h2 { font-size:1.25rem; margin:2.6rem 0 1rem; padding-bottom:.5rem; border-bottom:2px solid var(--line); }
+  h2 .no { display:inline-block; background:var(--ink); color:#fff; border-radius:6px; font-size:.8rem; padding:.1rem .5rem; margin-right:.5rem; vertical-align:2px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.1rem 1.2rem; }
+  .card .k { color:var(--sub); font-size:.82rem; }
+  .card .v { font-size:1.9rem; font-weight:700; margin-top:.2rem; }
+  .card .d { font-size:.8rem; color:var(--sub); margin-top:.3rem; }
+  .v.bad { color:var(--red); } .v.mid { color:var(--amber); } .v.good { color:var(--green); }
+  .bar-row { display:grid; grid-template-columns:210px 1fr 64px; gap:.8rem; align-items:center; margin:.55rem 0; font-size:.88rem; }
+  .bar-track { background:#eef2f7; border-radius:6px; height:26px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:6px; display:flex; align-items:center; padding-left:.6rem; color:#fff; font-size:.78rem; font-weight:600; min-width:2rem; transition:width .6s; }
+  .num { text-align:right; font-weight:700; }
+  .note { background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:1rem 1.2rem; font-size:.9rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06); font-size:.86rem; }
+  th { background:var(--ink); color:#fff; padding:.6rem .7rem; text-align:left; font-weight:600; }
+  td { padding:.55rem .7rem; border-bottom:1px solid var(--line); }
+  tr:last-child td { border-bottom:none; }
+  .pill { display:inline-block; border-radius:20px; padding:.05rem .55rem; font-size:.75rem; font-weight:600; }
+  .p-mic { background:#dbeafe; color:var(--blue); } .p-ali { background:#fef3c7; color:var(--amber); }
+  .p-comp { background:#fee2e2; color:var(--red); } .p-other { background:#f1f5f9; color:var(--sub); }
+  .p-ke { background:#dcfce7; color:var(--green); }
+  .flow { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:1rem 0; }
+  .step { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:.6rem .9rem; font-size:.85rem; flex:1; min-width:150px; }
+  .step b { display:block; color:var(--brand); font-size:.78rem; margin-bottom:.15rem; }
+  .arrow { color:var(--sub); font-weight:700; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media (max-width:760px){ .grid2{grid-template-columns:1fr} }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.1rem 1.2rem; }
+  .panel h3 { font-size:.98rem; margin-bottom:.6rem; }
+  .tag { display:inline-block; background:#f1f5f9; border-radius:6px; padding:.15rem .5rem; font-size:.78rem; margin:.15rem .2rem .15rem 0; }
+  .ok { color:var(--green); font-weight:700; } .no2 { color:var(--red); font-weight:700; }
+  footer { margin-top:3rem; color:var(--sub); font-size:.8rem; text-align:center; }
+  code { background:#f1f5f9; border-radius:4px; padding:.05rem .35rem; font-size:.82em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>ENT-07 · made-in-china / Alibaba 目录页建档 — 现状诊断与行动方案</h1>
+  <div class="meta">生成:2026-09-26 · 数据源:GEO 基线测试(Perplexity 10 条 Prompt,78 个被抓取引用来源)· 关联:GEO_BASELINE_2026-09.md / BACKLOG ENT-07</div>
+</header>
+
+<!-- ================= 1. 结论 ================= -->
+<h2><span class="no">1</span>一页结论</h2>
+<div class="cards">
+  <div class="card"><div class="k">Perplexity 基线引用率</div><div class="v bad">0 / 10</div><div class="d">10 条采购 Prompt 无一引用 kestrelmetal.com</div></div>
+  <div class="card"><div class="k">引用来源里目录页占比</div><div class="v mid">28%</div><div class="d">78 个来源中 22 个是 made-in-china / Alibaba(10 条中 7 条出现)</div></div>
+  <div class="card"><div class="k">我们在两大目录站的档案</div><div class="v bad">0 张</div><div class="d">双站搜索 "Kestrel Metal" 均无结果(2026-09-26 验证)</div></div>
+  <div class="card"><div class="k">被引用的安平同行档案</div><div class="v mid">≥ 14 家</div><div class="d">Woda / Bendin / Hanglei / Biaoguan / Skyhall / Honglian 等</div></div>
+</div>
+<div class="note">
+<b>一句话诊断:</b>Perplexity 在 B2B 采购问题上的引用池 = <b>B2B 目录页(28%)+ 竞品独立站/博客(62%)+ 工具站与社媒(10%)</b>。竞品靠目录页获得了"被 AI 信任的结构化供给",我们在这条最大的进水口上 <b>完全是空白</b>——这不是内容质量问题(我们 215 页 + 自动流水线),是<b>实体入口缺失</b>。
+</div>
+
+<!-- ================= 2. 引用池解剖 ================= -->
+<h2><span class="no">2</span>基线引用池解剖(78 个被抓取来源)</h2>
+<div class="bar-row"><span>made-in-china(子域名 showroom + /factory 目录)</span><div class="bar-track"><div class="bar-fill" style="width:74%;background:var(--blue)">18 个</div></div><span class="num">23%</span></div>
+<div class="bar-row"><span>竞品独立站 / 产品页 / SEO 博客</span><div class="bar-track"><div class="bar-fill" style="width:96%;background:var(--red)">~48 个</div></div><span class="num">62%</span></div>
+<div class="bar-row"><span>Alibaba(supplier 目录 + seller 博客)</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:var(--amber)">3 个</div></div><span class="num">4%</span></div>
+<div class="bar-row"><span>GlobalSources 证书 PDF</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--amber)">1 个</div></div><span class="num">1%</span></div>
+<div class="bar-row"><span>物流/关税工具站(freightamigo 等)</span><div class="bar-track"><div class="bar-fill" style="width:24%;background:#94a3b8">8 个</div></div><span class="num">10%</span></div>
+<div class="bar-row"><span>LinkedIn 帖子(安平同行)</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--green)">1 个</div></div><span class="num">1%</span></div>
+<div class="bar-row"><span><b>kestrelmetal.com</b></span><div class="bar-track"><div class="bar-fill" style="width:1.5%;background:var(--green)">0</div></div><span class="num">0%</span></div>
+
+<h2><span class="no">3</span>逐条矩阵:每条 Prompt 引用了什么</h2>
+<table>
+<tr><th style="width:44px">#</th><th>Prompt(类别)</th><th style="width:120px">目录页</th><th style="width:110px">竞品站</th><th style="width:110px">其他</th><th>本站</th></tr>
+<tr><td>1</td><td>NATO-22 + 500MW 太阳能(推荐)</td><td><span class="pill p-mic">MIC ×3</span></td><td><span class="pill p-comp">×7</span></td><td>—</td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>2</td><td>3D 焊接网·澳太阳能(推荐)</td><td><span class="pill p-mic">MIC ×9</span></td><td><span class="pill p-comp">×1</span></td><td>—</td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>3</td><td>ISO 9001 gabion·安平(推荐)</td><td><span class="pill p-mic">MIC ×1+</span></td><td><span class="pill p-comp">×3+</span></td><td>—</td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>4</td><td>358 高安全围栏(推荐)</td><td><span class="pill p-mic">MIC ×2</span> <span class="pill p-ali">Ali ×1</span></td><td><span class="pill p-comp">×5</span></td><td>—</td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>5</td><td>3D vs 链网·澳(对比)</td><td>—</td><td><span class="pill p-comp">×5</span></td><td><span class="pill p-other">澳本地 ×3</span></td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>6</td><td>镀锌 vs PVC 海水(对比)</td><td>—</td><td><span class="pill p-comp">×6</span></td><td><span class="pill p-other">军方 PDF ×1</span></td><td><span class="pill p-ke">0</span> <b style="color:var(--red);font-size:.75rem">AI 称"找不到对比数据"</b></td></tr>
+<tr><td>7</td><td>焊接 vs 编织石笼(对比)</td><td><span class="pill p-mic">MIC ×2</span></td><td><span class="pill p-comp">×5</span></td><td><span class="pill p-other">行业站 ×1</span></td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>8</td><td>HS 编码出口(合规)</td><td>—</td><td>—</td><td><span class="pill p-other">工具站 ×8</span></td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>9</td><td>NATO-22 合规(合规)</td><td><span class="pill p-mic">MIC ×1</span></td><td><span class="pill p-comp">×7</span></td><td>—</td><td><span class="pill p-ke">0</span></td></tr>
+<tr><td>10</td><td>CE / EN 10223(合规)</td><td><span class="pill p-ali">Ali ×2</span></td><td><span class="pill p-comp">×4</span></td><td><span class="pill p-other">GS PDF + LinkedIn</span></td><td><span class="pill p-ke">0</span></td></tr>
+</table>
+<p style="color:var(--sub);font-size:.8rem;margin-top:.5rem">MIC = made-in-china(P1/P2 全量 10 源已核;P3-P10 每条抓取前 8 源)· 第 6 条最有诊断价值:AI 明确说"找不到有对比数据的中国工厂",而站内 blog-galvanized-vs-pvc.html 就是这篇——内容在,入口不在。</p>
+
+<!-- ================= 4. 竞品 vs 我们 ================= -->
+<h2><span class="no">4</span>入口现状:同行有,我们没有</h2>
+<div class="grid2">
+  <div class="panel">
+    <h3>🔥 被引用同行的目录页形态(made-in-china)</h3>
+    <div class="tag">wodafence2025.en.made-in-china.com(Anping Woda 企业子站)</div>
+    <div class="tag">bdfence.en.made-in-china.com(Bendin 产品列表)</div>
+    <div class="tag">skyhallfence.en.made-in-china.com</div>
+    <div class="tag">honglianfence.en.made-in-china.com</div>
+    <div class="tag">hangleimetal.en.made-in-china.com(产品分组页)</div>
+    <div class="tag">made-in-china.com/showroom/bg-gabions(Biaoguan 展厅)</div>
+    <p style="font-size:.82rem;color:var(--sub);margin-top:.6rem">三种被引形态:<b>① 企业子域名展厅 ② /factory/ 聚合目录里的供应商 ③ /products-search/ 关键词页</b>。AI 把它们当作"结构化、经过平台核验"的供给清单。</p>
+  </div>
+  <div class="panel">
+    <h3>❄️ 我们的两个空白(2026-09-26 搜索验证)</h3>
+    <p style="font-size:.9rem">made-in-china.com 搜 "Kestrel Metal":<span class="no2">0 结果</span><br>
+    alibaba.com 搜 "Kestrel Metal" + wire mesh:<span class="no2">0 结果</span></p>
+    <p style="font-size:.82rem;color:var(--sub);margin-top:.6rem">意味着:AI 引擎在"中国丝网供应商"检索里,<b>没有任何一条平台核验路径能到达我们</b>。官网 215 页内容再好,也缺少这层被目录站背书的入口。</p>
+  </div>
+</div>
+
+<!-- ================= 5. 为什么目录页权重高 ================= -->
+<h2><span class="no">5</span>为什么 AI 引擎偏爱目录页</h2>
+<table>
+<tr><th style="width:33%">目录页特性</th><th>对 AI 检索的意义</th></tr>
+<tr><td><b>结构化 SKU</b></td><td>规格/MOQ/认证字段齐整,天然适合被拆解引用(正是 GEO 追求的"机器可引用"形态)</td></tr>
+<tr><td><b>平台核验信号</b></td><td>第三方营业执照/认证审核,AI 把它当可信源降低幻觉风险</td></tr>
+<tr><td><b>域名权重</b></td><td>made-in-china / Alibaba 是超高权重老域,子页天然排在检索前列</td></tr>
+<tr><td><b>采购语义集中</b></td><td>"China + 产品 + manufacturer/supplier"查询的语义主场,和 AI 采购问题完全同域</td></tr>
+</table>
+
+<!-- ================= 6. 行动方案 ================= -->
+<h2><span class="no">6</span>行动方案(ENT-07)</h2>
+<div class="flow">
+  <div class="step"><b>STEP 1 · 注册建站</b>made-in-china 基础会员(免费)开供应商子站;Alibaba 国际站需金品诚企/基础会员决策(见下)</div><span class="arrow">→</span>
+  <div class="step"><b>STEP 2 · 信息包灌入</b>entity-fact-sheet.md 全字段(名称/地址/电话 kalee@/认证/产能)+ 11 条产品线目录</div><span class="arrow">→</span>
+  <div class="step"><b>STEP 3 · 素材复用</b>tradewheel-upload/ 已有 86 张产品图 + rich HTML 生成器 + 上传脚本,直接改造复用</div><span class="arrow">→</span>
+  <div class="step"><b>STEP 4 · 上线核验</b>档案 URL 无痕窗口可访问 + 搜索引擎收录(site: 查询)</div><span class="arrow">→</span>
+  <div class="step"><b>STEP 5 · sameAs 回加</b>URL 写入 static-jsonld 生成器 → 重跑 → llms.txt 补行 → git 部署(ENT-05 闭环)</div>
+</div>
+<div class="grid2">
+  <div class="panel">
+    <h3>💰 成本与周期</h3>
+    <table>
+      <tr><th>平台</th><th>费用</th><th>审核周期</th></tr>
+      <tr><td>made-in-china 基础会员</td><td class="ok">免费</td><td>1-3 天</td></tr>
+      <tr><td>Alibaba 国际站基础会员</td><td class="mid">~¥2-3 万/年</td><td>1-2 周</td></tr>
+    </table>
+    <p style="font-size:.82rem;color:var(--sub);margin-top:.5rem">建议:made-in-china 立即做(零成本);Alibaba 因年费较高,先看 MIC 上线 + 两周复测的引用变化再决策。Tradewheel 上传(已在做)继续,三者不冲突。</p>
+  </div>
+  <div class="panel">
+    <h3>🎯 衡量标准(验收)</h3>
+    <p style="font-size:.88rem">
+    ① 档案页被 Google 收录(<code>site:made-in-china.com kestrel</code> 有结果)<br>
+    ② sameAs 回加后全站 JSON-LD 校验 0 失败<br>
+    ③ 两周复测:同 10 条 Prompt,目录页维度出现 <b>kestrel 条目 ≥1 次</b><br>
+    ④ GA4 ai_referral 事件量对比基线(7 次/28 天)</p>
+  </div>
+</div>
+
+<!-- ================= 7. 全局位置 ================= -->
+<h2><span class="no">7</span>这件事在 GEO 全局里的位置</h2>
+<table>
+<tr><th>GEO 五层</th><th>状态</th><th>本行动影响的层</th></tr>
+<tr><td>0 抓取准入 / 1 身份与事实 / 2-3 结构化数据</td><td class="ok">✅ 已完成</td><td>—</td></tr>
+<tr><td>4 数据追踪闭环</td><td class="ok">✅ 已完成(基线 7 次/28 天)</td><td>—</td></tr>
+<tr><td><b>5 站外实体(证明我是我)</b></td><td class="mid">🔄 55% → 本行动后 ↑</td><td><b>主战场:从"0 目录入口"到"两大平台在册"</b></td></tr>
+<tr><td>6 效果验证</td><td class="mid">🔄 基线已建(0/10),待 ChatGPT/Gemini 补测</td><td>复测引用率的直接变量</td></tr>
+</table>
+<div class="note"><b>预期路径:</b>目录页上线(1 周)→ 收录(1-2 周)→ AI 检索池开始出现我们(2-4 周)→ 两周复测验证。目录页解决"进候选池",流水线内容解决"被选中后够不够硬"——两条腿现在都有了,只差时间积累。</div>
+
+<footer>ENT-07 可视化报告 · 数据截至 2026-09-26 · 详细测试数据见 docs/GEO_BASELINE_2026-09.md · 待办跟踪见 docs/BACKLOG.md</footer>
+</div>
+</body>
+</html>
