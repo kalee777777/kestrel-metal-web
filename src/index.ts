@@ -272,6 +272,8 @@ export default {
         // 每日 04:00 UTC+8 — AI 内容生成（每天 1 个产品组 = 1 篇文章）
         case '0 20 * * *':
           await runCronTask('generate', env, async () => {
+            const paused = await checkContentPipelinePaused(env);
+            if (paused) return paused;
             const { default: generate } = await import('./cron/generate');
             await generate(env);
           });
@@ -280,6 +282,8 @@ export default {
         // 每日 05:00 UTC+8 — SEO 评分 + 发布（有草稿才处理，空转开销极低）
         case '0 21 * * *':
           await runCronTask('score', env, async () => {
+            const paused = await checkContentPipelinePaused(env);
+            if (paused) return paused;
             const { default: score } = await import('./cron/score');
             await score(env);
           });
@@ -346,8 +350,7 @@ export default {
   },
 };
 
-// ─── 北京时间（UTC+8）工具 ───
-//
+// ─── 北京时间（UTC+8）工具 ───//
 // 星期/日期判断放在代码里而不是 cron 表达式里：实测带星期字段的 trigger
 // 在这套 Git 集成部署下不可靠（周级任务曾连续 7 天未被唤起），
 // 而每日 trigger 一直正常。改为每日触发 + 代码判断后，既可靠又可留痕。
@@ -367,6 +370,19 @@ function beijingDate(): number {
 
 function isBeijingWeekday(day: number): boolean {
   return beijingDay() === day;
+}
+
+/**
+ * 内容管线暂停开关（generate + score）。
+ * 背景：2026-09-24 Google spam update 推送期间，暂停新增 AI 内容以降低
+ * 「规模化内容」评估压力。KV 存在 automation:pause-content-pipeline 即暂停。
+ * 设置/解除：POST /api/settings/content-pipeline {paused: true|false}（ADMIN_TOKEN），
+ * 或直接在 Dashboard 删除/写入该 KV 键。其余 cron（gsc-sync 等）不受影响。
+ */
+async function checkContentPipelinePaused(env: Env): Promise<string | null> {
+  const reason = await env.SEO_DATA.get('automation:pause-content-pipeline');
+  if (!reason) return null;
+  return `跳过：内容管线已人工暂停（${reason}）。恢复：POST /api/settings/content-pipeline {"paused":false} 或删除 KV 键 automation:pause-content-pipeline`;
 }
 
 /**

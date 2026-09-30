@@ -1046,6 +1046,50 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   });
 });
 
+// ─── 内容管线暂停开关（generate + score cron 的人工闸门） ───
+//
+// 背景：2026-09-24 Google spam update 推送期间暂停新增 AI 内容，
+// 降低「规模化内容」的评估压力。只影响内容生产（generate/score），
+// gsc-sync / track / geo-audit / monthly-report 等数据任务照常运行。
+//
+// GET  → 查看当前状态
+// POST {paused: true, reason: "..."} → 暂停（写 KV automation:pause-content-pipeline）
+// POST {paused: false}               → 恢复（删该 KV 键）
+route('GET', '/api/settings/content-pipeline', async ({ env }) => {
+  const { getJSON } = await import('./lib/kv');
+  const state = await getJSON<{ pausedAt?: string; reason?: string }>(
+    env.SEO_DATA,
+    'automation:pause-content-pipeline',
+  );
+  return jsonResponse({ paused: !!state, ...state });
+});
+
+route('POST', '/api/settings/content-pipeline', async ({ env, request }) => {
+  const auth = request.headers.get('Authorization');
+  if (auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { setJSON } = await import('./lib/kv');
+  let body: { paused?: boolean; reason?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid JSON body' }, 400);
+  }
+  if (typeof body.paused !== 'boolean') {
+    return jsonResponse({ error: 'Field "paused" (boolean) is required' }, 400);
+  }
+  if (body.paused) {
+    await setJSON(env.SEO_DATA, 'automation:pause-content-pipeline', {
+      pausedAt: new Date().toISOString(),
+      reason: body.reason || 'paused via admin API',
+    });
+  } else {
+    await env.SEO_DATA.delete('automation:pause-content-pipeline');
+  }
+  return jsonResponse({ paused: body.paused });
+});
+
 // ─── GEO 评分 / 补丁（geo-audit cron 的数据出口 + 补丁审核入口） ───
 
 // 全站 GEO 评分列表（公开只读；Admin 评分表优先读这里）
