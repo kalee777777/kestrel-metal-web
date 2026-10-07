@@ -42,7 +42,7 @@
 |----|------|----------------|------|------|
 | GEO-04 | 低分页 Top20 补强 | 🔄 2026-09-25 自动化——geo-audit 每月 1 号自动生成补丁(定义句+事实点),Admin「GEO 补强」批准 → GH PR 合并部署。**剩余**:部署后首跑 + 首批补丁审核(人工把关 AI 生成的事实点真实性) | AI 生成 + 人工审核 | 🔄 |
 | ENT-01 | Europages 建档 | 免费供应商账户、域名邮箱注册、信息包全量填写、≥5 张产品图。验收:档案 URL 存档进 ENT-05 | 人工 | ☐ |
-| ENT-07 | **made-in-china / Alibaba 国际站供应商页建档** | 2026-09-25 基线测试发现:B2B 目录页是 Perplexity 引用池第一来源(10 条中出现 ~15 次),优先级高于 Europages;建页后 URL 存档进 ENT-05 并回加 sameAs | 人工 | ☐ |
+| ENT-07 | **made-in-china / Alibaba 国际站供应商页建档** | ✅ made-in-china 部分 2026-10-07 建档完成(公司信息 + 84 产品,免费会员纯文本描述;过程记录见 [GEO_PROGRESS.md](GEO_PROGRESS.md) 第八轮)。**剩余验收闭环**:① 档案 URL 回填 [entity-fact-sheet.md](entity-fact-sheet.md) §六 → ② ENT-05 sameAs 回加 + llms.txt 补行 → ③ 10-09 基线复测(对照 0/10);Alibaba 国际站部分视复测结果再排期 | 人工 | 🔄 |
 | GEO-05 | llms.txt 月度更新机制 | ✅ 2026-09-25 自动化——新文章发布自动追加 KV 条目,`GET /llms.txt` 动态合并(静态基底不动,清空 KV 即回退);手工内容更新仍走 git | AI | ✅ 09-25 |
 
 ## P2 · 90 天

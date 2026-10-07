@@ -94,6 +94,7 @@
 | 平台 | 档案 URL | 状态 | 日期 |
 |------|---------|------|------|
 | LinkedIn | https://www.linkedin.com/company/kestrelmetal | ✅ 已上线(slug 定稿 2026-09-20;页面待补全,见 ENT-06) | 2026-08-30 |
+| Made-in-China | ⏳ 待回填(免费会员档) | 🔄 2026-10-07 建档完成:公司信息按本表逐字录入 + 84 产品上传(纯文本描述 + 13 项产品属性)。URL 拿到后:更新本表 → sameAs 回加(ENT-05)→ llms.txt Company Identity 段补行 | 2026-10-07 |
 | Europages | — | ☐ 未建 | |
 | Thomasnet | — | ☐ 未建 | |
 | Google Business Profile | — | ☐ 未建 | |

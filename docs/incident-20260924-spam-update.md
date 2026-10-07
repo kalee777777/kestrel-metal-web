@@ -140,7 +140,7 @@ curl -X POST https://www.kestrelmetal.com/api/settings/content-pipeline \
 ### 5.1 现在 → 10-08（更新推送期）
 
 - ❌ 不做：新结构调整、批量提交收录、删改 URL、恢复发文
-- ✅ 可做：ENT-07 made-in-china 免费建档（站外权威，与本次更新正交）
+- ✅ 可做：ENT-07 made-in-china 免费建档（站外权威，与本次更新正交）——**已完成 2026-10-07**，剩 URL 回填 + sameAs 回加 + 10-09 基线复测
 - 监控（自动，无需人工）：每日 03:00 GSC 同步照常
 
 ### 5.2 10-08 后取新基线，判定标准
