@@ -23,19 +23,17 @@ export default async function gscSync(env: Env): Promise<void> {
 
   const date = today();
 
-  let rows = await queryAllKeywords(
-    env,
-    getDateDaysAgo(3),
-    getDateDaysAgo(2),
-  );
+  // 只抓取单个已最终化的日期（GSC 约 2-3 天最终化）。
+  // 之前若该窗口为空会回退到「近 28 天累计聚合」并写入单个日期键，
+  // 导致 dashboard 把约 28 天的累计关键词/展示误标成当天（假回弹）。
+  // 现在彻底移除累计回退，只保留单日且稍提前一个窗口兜底，保证取数口径真实。
+  const dataDate = getDateDaysAgo(3);
+  let rows = await queryAllKeywords(env, dataDate, dataDate);
 
   if (rows.length === 0) {
-    console.log('[gsc-sync] No data for 3-2 days ago, trying wider range...');
-    rows = await queryAllKeywords(
-      env,
-      getDateDaysAgo(28),
-      getDateDaysAgo(1),
-    );
+    const fallbackDate = getDateDaysAgo(4);
+    console.log(`[gsc-sync] No data for finalized day ${dataDate}, trying ${fallbackDate}...`);
+    rows = await queryAllKeywords(env, fallbackDate, fallbackDate);
   }
 
   if (rows.length === 0) {
