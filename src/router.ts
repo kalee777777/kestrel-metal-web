@@ -326,6 +326,47 @@ route('GET', '/api/gsc/status', async ({ env }) => {
   }
 });
 
+// GSC 历史窗口只读重抓：按 [query,date] 重新拉取已最终化区间的逐日真实数据（不写 KV）
+// 仅用于诊断「展示量偏低是取数口径伪影还是真实回落」，需 ADMIN_TOKEN
+route('GET', '/api/gsc/recheck', async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const today = new Date().toISOString().split('T')[0];
+  const defaultStart = new Date(Date.now() - 27 * 86400_000).toISOString().split('T')[0];
+  const start = url.searchParams.get('start') ?? defaultStart;
+  const end = url.searchParams.get('end') ?? today;
+
+  try {
+    const { querySearchAnalytics } = await import('./lib/gsc');
+    const rows = await querySearchAnalytics(env, start, end, ['query', 'date'], 25000);
+
+    const byDate = new Map<string, { impressions: number; clicks: number; queries: Set<string> }>();
+    for (const row of rows) {
+      const date = row.keys[1] ?? row.keys[0];
+      if (!date) continue;
+      const agg = byDate.get(date) ?? { impressions: 0, clicks: 0, queries: new Set<string>() };
+      agg.impressions += row.impressions;
+      agg.clicks += row.clicks;
+      agg.queries.add(row.keys[0] ?? '');
+      byDate.set(date, agg);
+    }
+
+    const result = Array.from(byDate.entries())
+      .map(([date, agg]) => ({
+        date,
+        impressions: agg.impressions,
+        clicks: agg.clicks,
+        keywordCount: agg.queries.size,
+      }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    return jsonResponse({ start, end, byDate: result });
+  } catch (err) {
+    return jsonResponse({ error: err instanceof Error ? err.message : String(err) }, 500);
+  }
+});
+
 // ─── SEO 元数据管理（Admin 后台） ───
 
 function isAdminAuthorized(request: Request, env: Env): boolean {
