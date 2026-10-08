@@ -569,7 +569,7 @@ function normalizePath(loc) {
 }
 async function buildSitemap(env) {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>';
-  const staticResp = await env.ASSETS.fetch("https://kestrelmetal.com/sitemap.xml");
+  const staticResp = await env.ASSETS.fetch("https://www.kestrelmetal.com/sitemap.xml");
   if (staticResp.ok) {
     xml = await staticResp.text();
   }
@@ -610,6 +610,211 @@ var init_sitemap = __esm({
     DOMAIN = "https://www.kestrelmetal.com";
     __name(normalizePath, "normalizePath");
     __name(buildSitemap, "buildSitemap");
+  }
+});
+
+// src/lib/faq.ts
+var faq_exports = {};
+__export(faq_exports, {
+  activeEnglishFaqs: () => activeEnglishFaqs,
+  createFaq: () => createFaq,
+  deleteFaq: () => deleteFaq,
+  getFaq: () => getFaq,
+  hasSimilarQuestion: () => hasSimilarQuestion,
+  importFaqs: () => importFaqs,
+  injectFaqIntoHtml: () => injectFaqIntoHtml,
+  listFaqs: () => listFaqs,
+  saveFaqs: () => saveFaqs,
+  updateFaq: () => updateFaq
+});
+async function listFaqs(env) {
+  const items = await getJSON(env.SEO_DATA, KV_KEY) ?? [];
+  return items.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+}
+async function saveFaqs(env, items) {
+  await setJSON(env.SEO_DATA, KV_KEY, items);
+}
+async function getFaq(env, id) {
+  const items = await listFaqs(env);
+  return items.find((f) => String(f.id) === id);
+}
+function nextId(items) {
+  return items.reduce((max, f) => Math.max(max, Number(f.id) || 0), 0) + 1;
+}
+async function createFaq(env, data) {
+  if (!data.question || !data.answer) throw new Error("question and answer are required");
+  const items = await listFaqs(env);
+  const item = {
+    id: nextId(items),
+    question: String(data.question),
+    answer: String(data.answer),
+    category: data.category || "General",
+    language: data.language || "en",
+    sort_order: data.sort_order ?? nextId(items),
+    is_active: data.is_active ?? true,
+    source: data.source || "admin",
+    created_at: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  items.push(item);
+  await saveFaqs(env, items);
+  return item;
+}
+async function updateFaq(env, id, data) {
+  const items = await listFaqs(env);
+  const idx = items.findIndex((f) => String(f.id) === id);
+  if (idx < 0) return void 0;
+  const { id: _ignored, ...rest } = data;
+  items[idx] = { ...items[idx], ...rest };
+  await saveFaqs(env, items);
+  return items[idx];
+}
+async function deleteFaq(env, id) {
+  const items = await listFaqs(env);
+  const next = items.filter((f) => String(f.id) !== id);
+  if (next.length === items.length) return false;
+  await saveFaqs(env, next);
+  return true;
+}
+async function importFaqs(env, incoming) {
+  const items = await listFaqs(env);
+  let imported = 0;
+  let skipped = 0;
+  for (const row of incoming) {
+    if (!row?.question || !row?.answer) {
+      skipped++;
+      continue;
+    }
+    if (items.some((f) => f.question === row.question)) {
+      skipped++;
+      continue;
+    }
+    items.push({
+      id: nextId(items),
+      question: String(row.question),
+      answer: String(row.answer),
+      category: row.category || "General",
+      language: row.language || "en",
+      sort_order: row.sort_order ?? nextId(items),
+      is_active: row.is_active ?? true,
+      source: row.source || "admin",
+      created_at: row.created_at || (/* @__PURE__ */ new Date()).toISOString()
+    });
+    imported++;
+  }
+  await saveFaqs(env, items);
+  return { imported, skipped };
+}
+function activeEnglishFaqs(items) {
+  return items.filter((f) => f.is_active !== false && (f.language ?? "en") === "en");
+}
+function hasSimilarQuestion(items, question) {
+  const norm = /* @__PURE__ */ __name((q) => q.trim().toLowerCase().replace(/[?.!]+$/, ""), "norm");
+  const target = norm(question);
+  return items.some((f) => norm(f.question) === target);
+}
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function normQuestion(q) {
+  return q.trim().toLowerCase().replace(/[?.!]+$/, "").replace(/\s+/g, " ");
+}
+async function injectFaqIntoHtml(html, env) {
+  const faqs = activeEnglishFaqs(await listFaqs(env));
+  if (faqs.length === 0) return html;
+  const existingQuestions = new Set(
+    [...html.matchAll(/<span class="faq-question-text">\s*([\s\S]*?)\s*<\/span>/gi)].map(
+      (m) => normQuestion(m[1].replace(/<[^>]+>/g, ""))
+    )
+  );
+  const fresh = faqs.filter((f) => !existingQuestions.has(normQuestion(f.question)));
+  if (fresh.length === 0) return html;
+  const itemsHtml = fresh.map((f) => FAQ_ITEM_TMPL(f.question, f.answer)).join("\n");
+  const groupHtml = `
+          <!-- KV geo:faqs runtime-injected -->
+          <div class="faq-group" data-group="general" data-reveal>
+            <div class="faq-group-header">
+              <span class="faq-group-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Buying &amp; Technical FAQ
+              </span>
+              <div class="faq-group-line"></div>
+            </div>
+${itemsHtml}
+          </div>
+`;
+  const containerOpen = '<div id="faqContainer">';
+  const idx = html.indexOf(containerOpen);
+  if (idx < 0) return html;
+  let out = html.slice(0, idx + containerOpen.length) + groupHtml + html.slice(idx + containerOpen.length);
+  const schemaEntries = fresh.map((f) => ({
+    "@type": "Question",
+    text: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer }
+  }));
+  const faqPageRe = /(<script type="application\/ld\+json">[\s\S]*?"@type"\s*:\s*"FAQPage"[\s\S]*?"mainEntity"\s*:\s*\[)([\s\S]*?)(\][\s\S]*?<\/script>)/;
+  if (faqPageRe.test(out)) {
+    out = out.replace(faqPageRe, (match, pre, entityBody, post) => {
+      try {
+        const arr = JSON.parse(`[${entityBody.trim().replace(/,$/, "")}]`);
+        for (const entry of schemaEntries) {
+          const already = arr.some(
+            (q) => q && normQuestion(String(q.text ?? q.name ?? "")) === normQuestion(entry.text)
+          );
+          if (!already) arr.push(entry);
+        }
+        return `${pre}
+    ${arr.map((q) => JSON.stringify(q)).join(",\n    ")}
+  ${post}`;
+      } catch {
+        return match;
+      }
+    });
+  } else if (/<\/head>/i.test(out)) {
+    const block = `
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": ${JSON.stringify(schemaEntries, null, 2).replace(/</g, "\\u003c")}
+  }
+  <\/script>
+`;
+    out = out.replace(/<\/head>/i, `${block}</head>`);
+  }
+  console.log(`[faq] Injected ${fresh.length} KV FAQs into faq.html`);
+  return out;
+}
+var KV_KEY, FAQ_ITEM_TMPL;
+var init_faq = __esm({
+  "src/lib/faq.ts"() {
+    "use strict";
+    init_kv();
+    KV_KEY = "geo:faqs";
+    __name(listFaqs, "listFaqs");
+    __name(saveFaqs, "saveFaqs");
+    __name(getFaq, "getFaq");
+    __name(nextId, "nextId");
+    __name(createFaq, "createFaq");
+    __name(updateFaq, "updateFaq");
+    __name(deleteFaq, "deleteFaq");
+    __name(importFaqs, "importFaqs");
+    __name(activeEnglishFaqs, "activeEnglishFaqs");
+    __name(hasSimilarQuestion, "hasSimilarQuestion");
+    __name(escapeHtml, "escapeHtml");
+    __name(normQuestion, "normQuestion");
+    FAQ_ITEM_TMPL = /* @__PURE__ */ __name((question, answer) => `
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-question-text">${escapeHtml(question)}</span>
+                <span class="faq-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </span>
+              </div>
+              <div class="faq-answer-wrapper">
+                <div class="faq-answer">${escapeHtml(answer)}</div>
+              </div>
+            </div>`, "FAQ_ITEM_TMPL");
+    __name(injectFaqIntoHtml, "injectFaqIntoHtml");
   }
 });
 
@@ -968,8 +1173,13 @@ async function fetchCompetitorSitemap(domain) {
     const locs2 = xml.match(/<loc>([^<]+)<\/loc>/g) || [];
     const childUrls = locs2.map((m) => m.replace(/<\/?loc>/g, "").trim()).filter((u) => u.startsWith("http"));
     console.log(`[competitor] Found ${childUrls.length} child sitemaps`);
+    const ranked = childUrls.map((url) => {
+      const lower = url.toLowerCase();
+      const hits = PRODUCT_SITEMAP_HINTS.reduce((sum, h) => lower.includes(h) ? sum + 1 : sum, 0);
+      return { url, hits };
+    }).sort((a, b) => b.hits - a.hits).map((x) => x.url);
     const allUrls = [];
-    for (const childUrl of childUrls.slice(0, 3)) {
+    for (const childUrl of ranked.slice(0, MAX_CHILD_SITEMAPS)) {
       const childXml = await fetchWithTimeout(childUrl);
       if (childXml) {
         const childLocs = childXml.match(/<loc>([^<]+)<\/loc>/g) || [];
@@ -1096,12 +1306,16 @@ async function analyzeCompetitor(env, domain) {
   const { keywords, extractedCount, filteredCount, sampleKeywords } = await extractKeywordsFromUrls(urls);
   console.log(`[competitor] Keyword extraction for ${domain}: ${keywords.length} keywords (${extractedCount} raw, ${filteredCount} filtered)`);
   await setJSON(env.SEO_DATA, `competitor:${domain}:keywords`, keywords);
+  const nowIso = (/* @__PURE__ */ new Date()).toISOString();
   const list = await getCompetitors(env);
-  const entry = list.find((c) => c.domain === domain);
-  if (entry) {
-    entry.lastAnalyzed = (/* @__PURE__ */ new Date()).toISOString();
-    await setJSON(env.SEO_DATA, "competitors:list", list);
+  const index = list.findIndex((c) => c.domain === domain);
+  if (index >= 0) {
+    list[index].lastAnalyzed = nowIso;
+  } else {
+    console.log(`[competitor] ${domain} missing from list (KV eventual consistency), upserting`);
+    list.push({ domain, name: domain, addedAt: nowIso, lastAnalyzed: nowIso });
   }
+  await setJSON(env.SEO_DATA, "competitors:list", list);
   return {
     keywordCount: keywords.length,
     debug: { urlCount: urls.length, extracted: extractedCount, filtered: filteredCount, samples: sampleKeywords }
@@ -1156,12 +1370,14 @@ async function computeGap(env) {
   gaps.sort((a, b) => b.competitorCount - a.competitorCount);
   return gaps;
 }
-var STOP_WORDS, INDUSTRY_SEEDS;
+var PRODUCT_SITEMAP_HINTS, MAX_CHILD_SITEMAPS, STOP_WORDS, INDUSTRY_SEEDS;
 var init_competitor = __esm({
   "src/lib/competitor.ts"() {
     "use strict";
     init_kv();
     init_lang_filter();
+    PRODUCT_SITEMAP_HINTS = ["product", "wire", "mesh", "category", "catalog", "collection", "shop"];
+    MAX_CHILD_SITEMAPS = 6;
     STOP_WORDS = /* @__PURE__ */ new Set([
       "the",
       "a",
@@ -1430,6 +1646,7 @@ __export(keyword_cluster_exports, {
 function isProductKeyword(keyword) {
   const kw = normalizeKeyword(keyword);
   if (!kw) return false;
+  if (NOISE_EXACT.has(kw)) return false;
   return !NOISE_PATTERNS.some((p) => kw.includes(p));
 }
 function normalizeKeyword(keyword) {
@@ -1669,7 +1886,7 @@ function pickArticleKeywords(group) {
   const variants = pool.slice(1, MAX_VARIANTS_PER_ARTICLE).map((k) => k.keyword);
   return { primary, variants };
 }
-var PRODUCT_GROUPS, UNGROUPED_ID, NOISE_PATTERNS, MAX_VARIANTS_PER_ARTICLE, OVERRIDES_KEY, CLUSTER_CACHE_KEY;
+var PRODUCT_GROUPS, UNGROUPED_ID, NOISE_PATTERNS, NOISE_EXACT, MAX_VARIANTS_PER_ARTICLE, OVERRIDES_KEY, CLUSTER_CACHE_KEY;
 var init_keyword_cluster = __esm({
   "src/lib/keyword-cluster.ts"() {
     "use strict";
@@ -1782,6 +1999,63 @@ var init_keyword_cluster = __esm({
         productLine: "fence-accessories",
         patterns: ["fence post", "t post", "y post", "gate", "tension wire", "fence clamp", "tie wire"]
       },
+      // 丝材先判：避免 "stainless steel wire"（丝）被不锈钢网组抢走
+      {
+        id: "wire-products",
+        name: "Wire Products / \u4E1D\u6750",
+        productLine: "wire",
+        patterns: [
+          "wire rod",
+          "steel wire",
+          "galvanized wire",
+          "binding wire",
+          "annealed wire",
+          "stainless wire",
+          "stainless steel wire",
+          "oval wire",
+          "flat wire"
+        ]
+      },
+      // ── 工业过滤网 / 特种合金网系列 ──
+      // 必须排在通用 wire-mesh 之前：
+      // "stainless steel mesh" 同时命中 "steel mesh"，顺序反了会被通用组吞掉。
+      {
+        id: "stainless-mesh",
+        name: "Stainless Steel Mesh / \u4E0D\u9508\u94A2\u7F51",
+        productLine: "stainless-mesh",
+        patterns: ["stainless steel", "stainless", "steel screen"]
+      },
+      {
+        id: "nickel-mesh",
+        name: "Nickel Mesh / \u954D\u7F51",
+        productLine: "nickel-mesh",
+        patterns: ["nickel"]
+      },
+      {
+        id: "copper-brass-mesh",
+        name: "Copper & Brass Mesh / \u94DC\u7F51\u9EC4\u94DC\u7F51",
+        productLine: "copper-brass-mesh",
+        patterns: ["copper", "brass", "bronze"]
+      },
+      {
+        id: "filter-mesh",
+        name: "Filter & Screen Mesh / \u8FC7\u6EE4\u7F51\u7B5B\u7F51",
+        productLine: "filter-mesh",
+        patterns: [
+          "filter mesh",
+          "filter screen",
+          "filtration",
+          "filter disc",
+          "filter",
+          "sieve",
+          "screening",
+          "screen mesh",
+          "epoxy coated",
+          "epoxy",
+          "fine mesh",
+          "dutch twill"
+        ]
+      },
       {
         id: "wire-mesh",
         name: "Wire Mesh / \u91D1\u5C5E\u7F51\uFF08\u901A\u7528\uFF09",
@@ -1797,21 +2071,6 @@ var init_keyword_cluster = __esm({
           "wire fence",
           "steel fence",
           "mesh fencing"
-        ]
-      },
-      {
-        id: "wire-products",
-        name: "Wire Products / \u4E1D\u6750",
-        productLine: "wire",
-        patterns: [
-          "wire rod",
-          "steel wire",
-          "galvanized wire",
-          "binding wire",
-          "annealed wire",
-          "stainless wire",
-          "oval wire",
-          "flat wire"
         ]
       }
     ];
@@ -1837,8 +2096,28 @@ var init_keyword_cluster = __esm({
       "weed mat",
       "careers",
       "job vacancy",
-      "download catalog"
+      "download catalog",
+      // 竞品站内页：质量巡检、深加工介绍等，不是可选题的产品词
+      "quality inspection",
+      "further processing",
+      "yingkaimo"
     ];
+    NOISE_EXACT = /* @__PURE__ */ new Set([
+      "products",
+      "product",
+      "home",
+      "about",
+      "contact",
+      "service",
+      "services",
+      "news",
+      "blog",
+      "faq",
+      "gallery",
+      "video",
+      "download",
+      "index"
+    ]);
     __name(isProductKeyword, "isProductKeyword");
     MAX_VARIANTS_PER_ARTICLE = 8;
     __name(normalizeKeyword, "normalizeKeyword");
@@ -1864,50 +2143,56 @@ var init_keyword_cluster = __esm({
 // src/lib/banner-gen.ts
 var banner_gen_exports = {};
 __export(banner_gen_exports, {
-  generateBannerImage: () => generateBannerImage
+  applyBannerToHtml: () => applyBannerToHtml,
+  buildBannerPrompt: () => buildBannerPrompt,
+  generateBannerImage: () => generateBannerImage,
+  imageFormatToContentType: () => imageFormatToContentType
 });
 function buildBannerPrompt(keyword) {
   const kw = keyword.toLowerCase();
   if (kw.includes("gabion")) {
-    return "gabion wire mesh cages filled with natural stones, retaining wall construction site, industrial landscape, golden hour lighting, professional commercial photography, wide angle, cinematic, dark moody tones, 8k resolution";
+    return `gabion wire mesh cages filled with natural stones, retaining wall construction site, sunny blue sky, ${BRIGHT_BASE}`;
   }
   if (kw.includes("chain link") || kw.includes("chain-link")) {
-    return "galvanized chain link fence installation, metallic steel mesh, industrial security perimeter, construction site background, dramatic lighting, professional commercial photography, wide angle, cinematic, 8k resolution";
+    return `galvanized chain link fence installation, metallic steel mesh, industrial security perimeter, ${BRIGHT_BASE}`;
   }
   if (kw.includes("razor wire") || kw.includes("razor-wire")) {
-    return "razor wire concertina coil on security fence, industrial perimeter protection, dramatic sunset lighting, professional commercial photography, wide angle, cinematic, dark industrial tones, 8k resolution";
+    return `razor wire concertina coil on security fence, industrial perimeter protection, ${BRIGHT_BASE}`;
   }
   if (kw.includes("barbed wire") || kw.includes("barbed-wire")) {
-    return "barbed wire fence line, rural agricultural boundary, golden hour backlight, professional commercial photography, wide angle, cinematic, warm industrial tones, 8k resolution";
+    return `barbed wire fence line, rural agricultural boundary, bright green field, morning sunlight, ${BRIGHT_BASE}`;
   }
   if (kw.includes("welded wire") || kw.includes("welded-wire")) {
-    return "welded wire mesh panels, modern industrial fencing, clean geometric patterns, factory setting, professional commercial photography, wide angle, cinematic, 8k resolution";
+    return `welded wire mesh panels, modern industrial fencing, clean geometric patterns, bright warehouse, ${BRIGHT_BASE}`;
   }
   if (kw.includes("hexagonal") || kw.includes("hexagonal wire")) {
-    return "hexagonal wire mesh chicken netting, agricultural fencing, green countryside background, professional commercial photography, wide angle, cinematic, 8k resolution";
+    return `hexagonal wire mesh chicken netting, agricultural fencing, bright green countryside, sunny daylight, ${BRIGHT_BASE}`;
   }
   if (kw.includes("security fence") || kw.includes("high security")) {
-    return "high security fence system with anti-climb mesh, industrial facility perimeter, dramatic lighting, professional commercial photography, wide angle, cinematic, dark tones, 8k resolution";
+    return `high security fence system with anti-climb mesh, industrial facility perimeter, ${BRIGHT_BASE}`;
   }
   if (kw.includes("fence post") || kw.includes("post")) {
-    return "metal fence posts installation, steel Y-post and T-post, construction site, professional commercial photography, wide angle, cinematic, industrial tones, 8k resolution";
+    return `metal fence posts installation, steel Y-post and T-post, construction site, ${BRIGHT_BASE}`;
   }
   if (kw.includes("wire mesh")) {
-    return "wire mesh manufacturing, steel wire grid panels, industrial factory setting, professional commercial photography, wide angle, cinematic, metallic tones, 8k resolution";
+    return `wire mesh manufacturing, steel wire grid panels, bright modern factory interior, ${BRIGHT_BASE}`;
   }
   if (kw.includes("galvanized")) {
-    return "galvanized steel wire products, shiny metallic surface, industrial manufacturing, professional commercial photography, wide angle, cinematic, silver tones, 8k resolution";
+    return `galvanized steel wire products, shiny metallic surface, well-lit industrial setting, ${BRIGHT_BASE}`;
   }
   if (kw.includes("358") || kw.includes("anti-climb")) {
-    return "358 high security anti-climb fence, prison grade security fencing, industrial facility, professional commercial photography, wide angle, cinematic, dark tones, 8k resolution";
+    return `358 high security anti-climb fence, prison grade security fencing, industrial facility, ${BRIGHT_BASE}`;
+  }
+  if (kw.includes("stainless") || kw.includes("nickel") || kw.includes("copper") || kw.includes("filter")) {
+    return `stainless steel wire mesh and filter screens, fine metallic weave close-up, clean bright workshop, ${BRIGHT_BASE}`;
   }
   if (kw.includes("manufacturer") || kw.includes("supplier") || kw.includes("factory")) {
-    return "metal fencing manufacturing facility, large-scale industrial production, wire mesh factory interior, professional commercial photography, wide angle, cinematic, industrial tones, 8k resolution";
+    return `metal fencing manufacturing facility, large-scale industrial production, bright well-lit factory interior, ${BRIGHT_BASE}`;
   }
   if (kw.includes("guide") || kw.includes("buying") || kw.includes("b2b")) {
-    return "industrial metal fencing products showcase, professional B2B catalog style, clean composition, dramatic lighting, professional commercial photography, wide angle, cinematic, 8k resolution";
+    return `industrial metal fencing products showcase, professional B2B catalog style, clean bright studio background, well-lit, ${BRIGHT_BASE}`;
   }
-  return "industrial metal fencing and wire mesh products, professional B2B photography, wide angle composition, dramatic lighting, dark moody industrial tones, cinematic quality, 8k resolution, photorealistic";
+  return `industrial metal fencing and wire mesh products, professional B2B photography, clean bright composition, ${BRIGHT_BASE}`;
 }
 async function submitBannerTask(apiKey, prompt) {
   const resp = await fetch(DASHSCOPE_API_URL, {
@@ -1960,6 +2245,83 @@ async function pollBannerResult(apiKey, taskId) {
   }
   throw new Error(`Banner task ${taskId} timed out after ${MAX_POLL_ATTEMPTS} polls`);
 }
+function applyBannerToHtml(html, bannerUrl) {
+  let out = html.replace(
+    /background-image:url\('[^']*'\);/,
+    `background-image:url('${bannerUrl}');`
+  );
+  out = out.replace(
+    /"image":\s*"https:\/\/[^"]*"/,
+    `"image": "https://www.kestrelmetal.com${bannerUrl}"`
+  );
+  return out;
+}
+async function sha256Hex(buffer) {
+  const digest = await crypto.subtle.digest("SHA-256", buffer);
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+function detectImageFormat(b) {
+  if (b.length < 12) return null;
+  if (b[0] === 82 && b[1] === 73 && b[2] === 70 && b[3] === 70 && b[8] === 87 && b[9] === 69 && b[10] === 66 && b[11] === 80) {
+    return "webp";
+  }
+  if (b[0] === 137 && b[1] === 80 && b[2] === 78 && b[3] === 71) return "png";
+  if (b[0] === 255 && b[1] === 216 && b[2] === 255) return "jpeg";
+  return null;
+}
+function imageFormatToContentType(fmt) {
+  return fmt === "png" ? "image/png" : fmt === "jpeg" ? "image/jpeg" : "image/webp";
+}
+function validateBannerImage(bytes) {
+  const b = new Uint8Array(bytes);
+  if (b.length < 3e4) {
+    throw new Error(`banner too small (${b.length} bytes), likely truncated`);
+  }
+  const format = detectImageFormat(b);
+  if (!format) {
+    throw new Error(`banner is not a recognised image (magic: ${b[0]?.toString(16)} ${b[1]?.toString(16)} ${b[2]?.toString(16)} ${b[3]?.toString(16)})`);
+  }
+  let width = 0;
+  let height = 0;
+  if (format === "png") {
+    width = b[16] << 24 | b[17] << 16 | b[18] << 8 | b[19];
+    height = b[20] << 24 | b[21] << 16 | b[22] << 8 | b[23];
+  } else if (format === "jpeg") {
+    let offset = 2;
+    while (offset + 9 < b.length) {
+      if (b[offset] !== 255) {
+        offset++;
+        continue;
+      }
+      const marker = b[offset + 1];
+      if (marker >= 192 && marker <= 207 && marker !== 196 && marker !== 200 && marker !== 204) {
+        height = b[offset + 5] << 8 | b[offset + 6];
+        width = b[offset + 7] << 8 | b[offset + 8];
+        break;
+      }
+      offset += 2 + (b[offset + 2] << 8 | b[offset + 3]);
+    }
+  } else {
+    const fourcc = String.fromCharCode(b[12], b[13], b[14], b[15]);
+    if (fourcc === "VP8X") {
+      width = 1 + (b[24] | b[25] << 8 | b[26] << 16);
+      height = 1 + (b[27] | b[28] << 8 | b[29] << 16);
+    } else if (fourcc === "VP8L") {
+      width = 1 + ((b[21] | b[22] << 8) & 16383);
+      height = 1 + ((b[22] >> 6 | b[23] << 2 | b[24] << 10) & 16383);
+    } else if (fourcc === "VP8 ") {
+      if (b[23] === 157 && b[24] === 1 && b[25] === 42) {
+        width = (b[26] | b[27] << 8) & 16383;
+        height = (b[28] | b[29] << 8) & 16383;
+      }
+    }
+  }
+  if (width < 1e3 || height < 500) {
+    throw new Error(`banner dimensions too small (${width}x${height}), expected 1280x720`);
+  }
+  console.log(`[banner-gen] Validated banner: ${format} ${width}x${height}, ${b.length} bytes`);
+  return { format };
+}
 async function generateBannerImage(env, keyword, slug) {
   if (!env.QWEN_API_KEY) {
     console.log("[banner-gen] No QWEN_API_KEY configured, skipping banner generation");
@@ -1970,7 +2332,6 @@ async function generateBannerImage(env, keyword, slug) {
     return null;
   }
   const prompt = buildBannerPrompt(keyword);
-  const imageKey = `banner/${slug}-hero.webp`;
   console.log(`[banner-gen] Generating banner for: ${slug} (keyword: ${keyword})`);
   try {
     const taskId = await submitBannerTask(env.QWEN_API_KEY, prompt);
@@ -1979,10 +2340,13 @@ async function generateBannerImage(env, keyword, slug) {
     const imgResp = await fetch(imageUrl2);
     if (!imgResp.ok) throw new Error("Failed to download generated banner image");
     const imageBytes = await imgResp.arrayBuffer();
+    const { format } = validateBannerImage(imageBytes);
+    const hash = (await sha256Hex(imageBytes)).slice(0, 10);
+    const imageKey = `banner/${slug}-hero-${hash}.${format}`;
     await env.IMAGES.put(imageKey, imageBytes, {
       httpMetadata: {
-        contentType: "image/webp",
-        cacheControl: "public, max-age=31536000"
+        contentType: imageFormatToContentType(format),
+        cacheControl: "public, max-age=31536000, immutable"
       }
     });
     const bannerUrl = `/images/${imageKey}`;
@@ -1993,7 +2357,7 @@ async function generateBannerImage(env, keyword, slug) {
     return null;
   }
 }
-var DASHSCOPE_API_URL, DASHSCOPE_TASK_URL, POLL_INTERVAL_MS, MAX_POLL_ATTEMPTS;
+var DASHSCOPE_API_URL, DASHSCOPE_TASK_URL, POLL_INTERVAL_MS, MAX_POLL_ATTEMPTS, BRIGHT_BASE;
 var init_banner_gen = __esm({
   "src/lib/banner-gen.ts"() {
     "use strict";
@@ -2001,9 +2365,15 @@ var init_banner_gen = __esm({
     DASHSCOPE_TASK_URL = "https://dashscope.aliyuncs.com/api/v1/tasks";
     POLL_INTERVAL_MS = 5e3;
     MAX_POLL_ATTEMPTS = 30;
+    BRIGHT_BASE = "bright natural daylight, well-lit, clean composition, professional commercial photography, wide angle, 8k resolution, photorealistic";
     __name(buildBannerPrompt, "buildBannerPrompt");
     __name(submitBannerTask, "submitBannerTask");
     __name(pollBannerResult, "pollBannerResult");
+    __name(applyBannerToHtml, "applyBannerToHtml");
+    __name(sha256Hex, "sha256Hex");
+    __name(detectImageFormat, "detectImageFormat");
+    __name(imageFormatToContentType, "imageFormatToContentType");
+    __name(validateBannerImage, "validateBannerImage");
     __name(generateBannerImage, "generateBannerImage");
   }
 });
@@ -2110,6 +2480,79 @@ async function callDeepSeek(env, systemPrompt, userPrompt) {
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
+function sanitizeArticleHtml(html) {
+  let out = html;
+  out = out.replace(/<script[\s\S]*?<\/script\s*>/gi, "");
+  out = out.replace(/<script\b[^>]*>/gi, "");
+  out = out.replace(/<a\b[^>]*(display\s*:\s*none|visibility\s*:\s*hidden)[^>]*>([\s\S]*?)<\/a>/gi, "");
+  out = out.replace(/<a\b[^>]*(display\s*:\s*none|visibility\s*:\s*hidden)[^>]*\/?>/gi, "");
+  out = out.replace(/<\/?(?:html|head|body|article|main|aside)\b[^>]*>/gi, "");
+  const tags = ["details", "table", "thead", "tbody", "tr", "td", "th", "ul", "ol", "li", "div", "p", "blockquote", "figure", "strong", "em", "h2", "h3", "h4"];
+  const warnings = [];
+  for (const tag of tags) {
+    const opens = (out.match(new RegExp(`<${tag}(?:\\s|>)`, "gi")) || []).length;
+    const closes = (out.match(new RegExp(`</${tag}\\s*>`, "gi")) || []).length;
+    if (opens > closes) {
+      const missing = opens - closes;
+      warnings.push(`<${tag}> x${missing} unclosed`);
+      out += `</${tag}>`.repeat(missing);
+    }
+  }
+  if (warnings.length > 0) {
+    console.warn(`[deepseek] sanitize: auto-closed ${warnings.join(", ")}`);
+  }
+  return out.trim();
+}
+function escAttr(value) {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function getSidebarData(keyword) {
+  const kw = keyword.toLowerCase();
+  for (const entry of KEYWORD_SIDEBARS) {
+    if (entry.match.some((m) => kw.includes(m))) return entry.data;
+  }
+  return DEFAULT_SIDEBAR;
+}
+function buildSidebarHtml(keyword) {
+  const data = getSidebarData(keyword);
+  const tagHtml = data.categories.map((c) => `<a href="blog-news.html" class="blog-sidebar-tag">${c}</a>`).join("\n                  ");
+  const postHtml = data.posts.map((p) => `<li><a href="${p.href}">${p.title}</a></li>`).join("\n                ");
+  const productHtml = data.products.map(
+    (p) => `<a href="${p.href}" class="blog-sidebar-product-card">
+                  <div class="blog-sidebar-product-card-img">
+                    <img src="${p.img}" alt="${escAttr(p.name)}" loading="lazy" decoding="async">
+                  </div>
+                  <div class="blog-sidebar-product-card-info">
+                    <h4>${p.name}</h4>
+                    <p>${p.desc}</p>
+                  </div>
+                </a>`
+  ).join("\n                ");
+  return `<aside class="article-sidebar">
+            <div class="article-sidebar-card">
+              <div class="blog-sidebar-section">
+                <div class="blog-sidebar-label">Category</div>
+                <div class="blog-sidebar-tags">
+                  ${tagHtml}
+                </div>
+              </div>
+
+              <div class="blog-sidebar-section">
+                <div class="blog-sidebar-label">Related Posts</div>
+                <ul class="blog-sidebar-links">
+                  ${postHtml}
+                </ul>
+              </div>
+
+              <div class="blog-sidebar-section">
+                <div class="blog-sidebar-label">Related Products</div>
+                <div class="blog-sidebar-products">
+                  ${productHtml}
+                </div>
+              </div>
+            </div>
+          </aside>`;
+}
 async function generateOutline(env, request) {
   const systemPrompt = `You are an expert B2B SEO content writer specializing in metal fencing, gabion boxes, razor wire, and industrial security products. You write for an international audience (English). Always respond in valid JSON format.`;
   const variantList = (request.variants ?? []).filter(Boolean);
@@ -2118,6 +2561,10 @@ Secondary keywords (same product family, must be woven into this single article)
 ${variantList.map((v) => `- ${v}`).join("\n")}
 
 When structuring sections, allocate at least one H2 or H3 to each secondary keyword so the article ranks for the whole keyword group instead of a single phrase.` : "";
+  const repairHints = (request.repairHints ?? []).filter(Boolean);
+  const repairBlock = repairHints.length > 0 ? `
+10. This is a REGENERATION. The previous draft scored poorly; fix these specific weaknesses:
+${repairHints.map((h) => `   - ${h}`).join("\n")}` : "";
   const userPrompt = `Create a detailed SEO blog article outline for the target keyword: "${request.keyword}"${variantBlock}
 
 Requirements:
@@ -2129,12 +2576,15 @@ Requirements:
 6. Content should be professional, informative, and suitable for B2B buyers
 7. Include practical tips, specifications, and industry insights
 8. Write in English, professional tone
-
+9. GEO requirements (content must be quotable by AI search engines):
+   - definitionSentence: a self-contained definition ("${request.keyword.replace(/"/g, "")} is a \u2026") that makes sense when quoted out of context; include the product category and primary use case
+   - Every FAQ answer must stand alone and contain at least one concrete number with a unit (e.g. "15-25 days", "zinc 40-270 g/m\xB2", "mesh 50-75mm")${repairBlock}
 Respond in this exact JSON format:
 {
   "title": "Article title with keyword",
   "metaDescription": "150-160 char meta description",
   "h1": "Main heading",
+  "definitionSentence": "Self-contained definition sentence",
   "sections": [
     {
       "h2": "Section heading",
@@ -2145,7 +2595,7 @@ Respond in this exact JSON format:
   "faq": [
     {
       "question": "FAQ question?",
-      "answer": "Concise answer"
+      "answer": "Concise answer with a concrete number+unit fact"
     }
   ],
   "internalLinks": ["suggested anchor text for internal links"],
@@ -2160,7 +2610,7 @@ Respond in this exact JSON format:
     throw new Error("Failed to parse outline JSON from DeepSeek response");
   }
 }
-async function generateArticle(env, outline, keyword, variants = []) {
+async function generateArticle(env, outline, keyword, variants = [], repairHints = []) {
   const systemPrompt = `You are an expert B2B SEO content writer for Kestrel Metal (kestrelmetal.com), a leading manufacturer of metal fencing, gabion boxes, razor wire, and industrial security products. Write comprehensive, SEO-optimized content in English. Always respond with valid HTML content only (no markdown, no code blocks).`;
   const userPrompt = `Write a complete SEO-optimized blog article based on this outline:
 
@@ -2194,23 +2644,41 @@ Requirements:
 8. Include bullet points and numbered lists where appropriate
 9. Reference Kestrel Metal products naturally
 10. End with a compelling conclusion and CTA
-
+11. GEO requirements (AI search engines must be able to quote this article):
+    - The VERY FIRST sentence of the article body must be this self-contained definition, verbatim: ${outline.definitionSentence ? `"${outline.definitionSentence}"` : `a self-contained definition of "${keyword}" ("${keyword} is a \u2026") that makes sense when quoted alone`}
+    - Every H2 section must contain at least one fact written as a concrete number with a unit (mm, m, g/m\xB2, MPA, tons/month, days, %, gauge, etc.)
+    - Render comparisons as HTML <table> when two or more options are contrasted${variants.length > 0 ? " (including a main keyword vs secondary keyword comparison table)" : ""}
+${repairHints.length > 0 ? `12. This is a REGENERATION. The previous draft was rejected by automated scoring; fix these specific weaknesses:
+${repairHints.map((h) => `    - ${h}`).join("\n")}
+` : ""}
 Output ONLY the HTML content for the article body (no <html>, <head>, <body> tags). Use proper semantic HTML: <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, <em>, <table>, <tr>, <td>.`;
   const htmlContent = await callDeepSeek(env, systemPrompt, userPrompt);
-  const wordCount = htmlContent.split(/\s+/).length;
+  const sanitizedHtml = sanitizeArticleHtml(htmlContent);
+  const wordCount = sanitizedHtml.split(/\s+/).length;
   const slug = slugify(outline.title);
   const today2 = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
   const aiHeroImage = `images/blog/${slug}-hero.webp`;
   const keywordToHero = {
+    "epoxy": "images/blog/epoxy-coated-wire-mesh.webp",
+    "filter": "images/blog/epoxy-coated-wire-mesh.webp",
+    "stainless": "images/blog/epoxy-coated-wire-mesh.webp",
+    "nickel": "images/blog/epoxy-coated-wire-mesh.webp",
+    "copper": "images/blog/epoxy-coated-wire-mesh.webp",
+    "brass": "images/blog/epoxy-coated-wire-mesh.webp",
     "gabion": "images/blog/blog-gabion-market-hero.webp",
     "chain-link": "images/blog/blog-chain-link-yard-hero.webp",
+    "chain link": "images/blog/blog-chain-link-yard-hero.webp",
     "razor-wire": "images/blog/blog-razor-coils-hero.avif",
     "barbed-wire": "images/blog/blog-barbed-cost-hero.webp",
     "welded-wire": "images/blog/welded-mesh-711.webp",
+    "welded mesh": "images/blog/welded-mesh-711.webp",
     "hexagonal": "images/blog/blog-hex-mesh-hero.webp",
     "security-fence": "images/blog/dual-fence-hero.webp",
-    "fence": "images/blog/blog-gabion-market-hero.webp",
-    "wire-mesh": "images/blog/epoxy-coated-wire-mesh.webp"
+    "anti-climb": "images/blog/dual-fence-hero.webp",
+    "358": "images/blog/dual-fence-hero.webp",
+    "wire-mesh": "images/blog/epoxy-coated-wire-mesh.webp",
+    "wire mesh": "images/blog/epoxy-coated-wire-mesh.webp",
+    "fence": "images/blog/blog-gabion-market-hero.webp"
   };
   let heroFallback = "images/blog/blog-gabion-market-hero.webp";
   for (const [kw, img] of Object.entries(keywordToHero)) {
@@ -2222,10 +2690,22 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
   const heroImage = aiHeroImage;
   const heroImageFallback = heroFallback;
   const faqHtml = outline.faq.map((f) => `
-      <details class="faq-detail">
+      <details class="faq-item faq-detail">
         <summary>${f.question}</summary>
         <p>${f.answer}</p>
       </details>`).join("\n");
+  const faqSchema = outline.faq.length > 0 ? `
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": ${JSON.stringify(outline.faq.map((f) => ({
+    "@type": "Question",
+    text: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer }
+  })), null, 2).replace(/</g, "\\u003c")}
+  }
+  <\/script>` : "";
   const articleHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2277,7 +2757,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
     "wordCount": ${wordCount},
     "image": "https://www.kestrelmetal.com/${heroImageFallback}"
   }
-  <\/script>
+  <\/script>${faqSchema}
 </head>
 <body>
   <div id="navbar-placeholder"></div>
@@ -2312,7 +2792,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
               Back to Blog &amp; News
             </a>
             <article class="article-content">
-              ${htmlContent}
+              ${sanitizedHtml}
             </article>
             <section class="article-faq">
               <h2>Frequently Asked Questions</h2>
@@ -2321,7 +2801,25 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
             <div class="article-inquiry-cta">
               <p>Looking for reliable ${keyword} solutions? At Kestrel Metal, we manufacture premium metal products with worldwide shipping and 24-hour quote response. <a class="inquiry-cta-link" href="contact.html">Request a Quote</a> today for customized specifications and competitive pricing.</p>
             </div>
+            <div class="share-section" data-page-url="https://www.kestrelmetal.com/${slug}.html" data-page-title="${escAttr(outline.title)} | KESTREL METAL">
+              <span class="share-label">Share</span>
+              <a href="#" class="share-btn" data-share="linkedin" title="Share on LinkedIn" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+              <a href="#" class="share-btn" data-share="twitter" title="Share on Twitter" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+              <a href="#" class="share-btn" data-share="email" title="Share via Email"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+            </div>
+            <div class="article-post-nav">
+              <a href="blog-news.html" class="prev">
+                <div class="nav-label">&larr; Previous</div>
+                <div class="nav-title">Back to Blog &amp; News</div>
+              </a>
+              <a href="blog-news.html" class="next">
+                <div class="nav-label">Next &rarr;</div>
+                <div class="nav-title">More Blog &amp; News</div>
+              </a>
+            </div>
           </div>
+
+          ${buildSidebarHtml(keyword)}
         </div>
       </div>
     </section>
@@ -2346,18 +2844,149 @@ async function generateFullArticle(env, request) {
   console.log(`[deepseek] Generating outline for keyword: ${request.keyword}`);
   const outline = await generateOutline(env, request);
   console.log(`[deepseek] Generating article: ${outline.title}`);
-  const article = await generateArticle(env, outline, request.keyword, request.variants ?? []);
+  const article = await generateArticle(env, outline, request.keyword, request.variants ?? [], request.repairHints ?? []);
   article.variants = request.variants ?? [];
   console.log(`[deepseek] Article generated: ${article.wordCount} words`);
   return article;
 }
-var DEEPSEEK_API_URL;
+var DEEPSEEK_API_URL, KEYWORD_SIDEBARS, DEFAULT_SIDEBAR;
 var init_deepseek = __esm({
   "src/lib/deepseek.ts"() {
     "use strict";
     DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
     __name(callDeepSeek, "callDeepSeek");
     __name(slugify, "slugify");
+    __name(sanitizeArticleHtml, "sanitizeArticleHtml");
+    __name(escAttr, "escAttr");
+    KEYWORD_SIDEBARS = [
+      {
+        match: ["razor"],
+        data: {
+          categories: ["Security", "Razor Wire"],
+          posts: [
+            { href: "blog-razor-coils-7-things.html", title: "7 Things You Probably Didn't Know About Razor Coils" },
+            { href: "blog-nato22-razor-wire.html", title: "NATO-22 Certified Razor Wire: Meeting Global Military Security Standards" },
+            { href: "blog-border-razor-wire-deployment.html", title: "Razor Wire Is Most Visible Result of $210M Troop Deployment to US-Mexico Border" }
+          ],
+          products: [
+            { href: "razor-wire-btc.html", img: "images/blog/btc-razor-wire.webp", name: "BTC Barbed Tape Concertina", desc: "Military-grade NATO-22 standard" },
+            { href: "razor-wire-cross.html", img: "images/wire-razor-hero.webp", name: "Cross Concertina Razor Wire", desc: "Interlocking crossed coils" },
+            { href: "razor-wire-welded-mesh.html", img: "images/fence-security-hero.webp", name: "Welded Razor Mesh", desc: "Rigid mesh panels" }
+          ]
+        }
+      },
+      {
+        match: ["gabion"],
+        data: {
+          categories: ["Gabion", "Sourcing Guide"],
+          posts: [
+            { href: "blog-gabion-box-selection-guide.html", title: "How to Select the Right Gabion Box" },
+            { href: "blog-how-to-install-welded-gabion-boxes.html", title: "How to Install Welded Gabion Boxes: A Complete Step-by-Step Guide" },
+            { href: "blog-welded-vs-twisted-gabion.html", title: "Welded vs Twisted Gabion: Which to Choose" }
+          ],
+          products: [
+            { href: "gabion-boxes.html", img: "images/gabion-box-1.webp", name: "Gabion Boxes", desc: "Welded mesh stone cages" },
+            { href: "gabion-mattresses.html", img: "images/gabion-mattress.webp", name: "Gabion Mattresses", desc: "Erosion control revetments" },
+            { href: "double-twisted-gabion.html", img: "images/gabion-landscaping.webp", name: "Double Twisted Gabion", desc: "Hexagonal woven baskets" }
+          ]
+        }
+      },
+      {
+        match: ["chain link", "chain-link"],
+        data: {
+          categories: ["Fencing", "Chain Link"],
+          posts: [
+            { href: "blog-chain-link-selection.html", title: "How to Select the Right Chain Link Fence" },
+            { href: "blog-chain-link-evolution.html", title: "The Evolution of Chain Link Fence: 2024 and Beyond" },
+            { href: "blog-galvanized-vs-pvc.html", title: "Galvanized vs PVC Coated Chain Link" }
+          ],
+          products: [
+            { href: "galvanized-chain-link.html", img: "images/chain-link-overview.webp", name: "Galvanized Chain Link", desc: "Hot-dip zinc coating" },
+            { href: "chain-link-security-fence.html", img: "images/chain-link-pvc.webp", name: "Chain Link Security Fence", desc: "PVC coated options" },
+            { href: "chain-link.html", img: "images/chain-link-privacy.webp", name: "Chain Link Fencing", desc: "All gauge options" }
+          ]
+        }
+      },
+      {
+        match: ["barbed"],
+        data: {
+          categories: ["Fencing", "Barbed Wire"],
+          posts: [
+            { href: "blog-barb-wire-gates-tips.html", title: "Tips for Opening and Closing Barb Wire Gates" },
+            { href: "blog-nato22-razor-wire.html", title: "NATO-22 Certified Razor Wire" },
+            { href: "blog-border-razor-wire-deployment.html", title: "Razor Wire at the US-Mexico Border" }
+          ],
+          products: [
+            { href: "barbed-wire-concertina.html", img: "images/wire-barbed-hero.webp", name: "Barbed Wire Concertina", desc: "Coiled barrier wire" },
+            { href: "barbed-wire-galvanized.html", img: "images/wire-razor-hero.webp", name: "Galvanized Barbed Wire", desc: "Standard IOWA type" },
+            { href: "hot-dip-galvanized.html", img: "images/fence-security-hero.webp", name: "Hot Dip Galvanized Wire", desc: "Zinc coated fencing wire" }
+          ]
+        }
+      },
+      {
+        match: ["cattle", "livestock", "farm", "field fence", "deer", "horse"],
+        data: {
+          categories: ["Agriculture", "Field Fence"],
+          posts: [
+            { href: "blog-field-fence-installation.html", title: "Field Fence Installation Guide" },
+            { href: "blog-fence-liability-escaped-animals.html", title: "Fence Liability: Escaped Animals" },
+            { href: "blog-installation-mistakes.html", title: "10 Common Mistakes When Installing Wire Mesh Fencing" }
+          ],
+          products: [
+            { href: "fence-farm.html", img: "images/app-horse-paddocks.webp", name: "Farm Fence", desc: "Livestock fencing rolls" },
+            { href: "hinge-joint-knot.html", img: "images/app-garden-fence.webp", name: "Hinge Joint Knot Fence", desc: "Flexible livestock mesh" },
+            { href: "fixed-knot-fence.html", img: "images/app-tree-guard.webp", name: "Fixed Knot Fence", desc: "High-tension game fence" }
+          ]
+        }
+      },
+      {
+        match: ["3d panel", "3d-panel", "358", "anti-climb", "high security", "security fence", "prison"],
+        data: {
+          categories: ["Security", "High Security Fence"],
+          posts: [
+            { href: "blog-dual-fence-security.html", title: "Dual Fence Security System: Why Two Perimeter Barriers Multiply Security" },
+            { href: "blog-razor-coils-7-things.html", title: "7 Things You Probably Didn't Know About Razor Coils" },
+            { href: "blog-installation-mistakes.html", title: "10 Common Mistakes When Installing Wire Mesh Fencing" }
+          ],
+          products: [
+            { href: "fence-3d.html", img: "images/fence-security-hero.webp", name: "3D Panel Fence", desc: "V-profile welded panels" },
+            { href: "358-security-fence.html", img: "images/blog/dual-fence-hero.webp", name: "358 Security Fence", desc: "Anti-climb small mesh" },
+            { href: "fence-security.html", img: "images/welded-mesh-711.webp", name: "Security Fencing", desc: "Perimeter solutions" }
+          ]
+        }
+      },
+      {
+        match: ["hexagonal", "chicken"],
+        data: {
+          categories: ["Agriculture", "Hexagonal Mesh"],
+          posts: [
+            { href: "blog-squirrel-proof-wire-mesh.html", title: "Squirrel Proof Wire Mesh" },
+            { href: "blog-materials-welded-wire-mesh.html", title: "Materials Used in Welded Wire Mesh" },
+            { href: "blog-specification-sheet.html", title: "Wire Mesh Specification Sheet: How to Read Technical Data" }
+          ],
+          products: [
+            { href: "hexagonal-wire.html", img: "images/hexagonal-wire.webp", name: "Hexagonal Wire Mesh", desc: "Chicken netting rolls" },
+            { href: "hexagonal-wire-galvanized.html", img: "images/hexagonal-wire.webp", name: "Galvanized Hexagonal Wire", desc: "Zinc coated netting" },
+            { href: "hexagonal-wire-pvc.html", img: "images/app-rabbit-cage.webp", name: "PVC Coated Hexagonal", desc: "Green coated mesh" }
+          ]
+        }
+      }
+    ];
+    DEFAULT_SIDEBAR = {
+      categories: ["Buying Guide", "Wire Mesh"],
+      posts: [
+        { href: "blog-specification-sheet.html", title: "Wire Mesh Specification Sheet: How to Read and Interpret Technical Data" },
+        { href: "blog-materials-welded-wire-mesh.html", title: "Materials Used in Welded Wire Mesh" },
+        { href: "blog-installation-mistakes.html", title: "10 Common Mistakes When Installing Wire Mesh Fencing" }
+      ],
+      products: [
+        { href: "fence-products.html", img: "images/welded-mesh-711.webp", name: "Welded Wire Mesh", desc: "Panels and rolls" },
+        { href: "galvanized-chain-link.html", img: "images/chain-link-overview.webp", name: "Galvanized Chain Link", desc: "Hot-dip zinc coating" },
+        { href: "gabion-boxes.html", img: "images/gabion-box-1.webp", name: "Gabion Boxes", desc: "Welded mesh stone cages" }
+      ]
+    };
+    __name(getSidebarData, "getSidebarData");
+    __name(buildSidebarHtml, "buildSidebarHtml");
     __name(generateOutline, "generateOutline");
     __name(generateArticle, "generateArticle");
     __name(generateFullArticle, "generateFullArticle");
@@ -2457,15 +3086,15 @@ function buildPrompt(request) {
   const productPrompts = {
     "chain-link": "galvanized chain link fence installation, metallic silver steel mesh, industrial security fencing on a construction site",
     gabion: "gabion box wire mesh cage filled with natural stone, landscape retaining wall, erosion control in outdoor setting",
-    razor: "razor wire concertina coil on top of security fence, industrial perimeter protection, dramatic lighting",
+    razor: "razor wire concertina coil on top of security fence, industrial perimeter protection, bright daylight",
     welded: "welded wire mesh panel fence, double wire construction, modern industrial fencing, clean professional look",
     "high-security": "high-security fence with barbed wire topping, anti-climb mesh, perimeter protection system at industrial facility"
   };
   const productDesc = productPrompts[request.productLine ?? ""] ?? "metal fencing products, industrial security solutions, wire mesh manufacturing";
   const styleModifiers = {
-    industrial: "factory background, warehouse setting, large-scale installation, dramatic shadows",
+    industrial: "factory background, warehouse setting, large-scale installation, bright even lighting",
     product: "product showcase, clean white background, detailed close-up, studio lighting",
-    scene: "real-world installation, outdoor setting, natural environment, golden hour lighting",
+    scene: "real-world installation, outdoor setting, natural environment, bright daylight",
     detail: "extreme close-up, texture detail, material quality focus, macro photography"
   };
   const styleDesc = styleModifiers[request.style ?? "industrial"] ?? styleModifiers.industrial;
@@ -2556,7 +3185,7 @@ async function generate(env) {
   console.log(
     `[generate] Clustered ${clusterResult.totalKeywords} keywords into ${clusterResult.groups.length} groups (${clusterResult.coveredGroupCount} already covered)`
   );
-  let selectedGroups = selectGroups(clusterResult, MAX_GROUPS_PER_WEEK);
+  let selectedGroups = selectGroups(clusterResult, MAX_GROUPS_PER_RUN);
   if (selectedGroups.length === 0) {
     console.log("[generate] No cluster candidates, falling back to default keyword groups");
     selectedGroups = buildFallbackGroups();
@@ -2697,7 +3326,7 @@ async function generateImagesForDrafts(env) {
   }
   console.log(`[generate] Image generation completed. Processed ${processed} drafts.`);
 }
-var MAX_GROUPS_PER_WEEK;
+var MAX_GROUPS_PER_RUN;
 var init_generate = __esm({
   "src/cron/generate.ts"() {
     "use strict";
@@ -2705,7 +3334,7 @@ var init_generate = __esm({
     init_image_gen();
     init_kv();
     init_keyword_cluster();
-    MAX_GROUPS_PER_WEEK = 2;
+    MAX_GROUPS_PER_RUN = 1;
     __name(generate, "generate");
     __name(buildFallbackGroups, "buildFallbackGroups");
     __name(generateImagesForDrafts, "generateImagesForDrafts");
@@ -3041,6 +3670,171 @@ var init_seo_score = __esm({
   }
 });
 
+// src/lib/geo-score.ts
+function computeGeoScore(html) {
+  const noScript = html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ");
+  const text = noScript.replace(/<[^>]+>/g, " ").replace(/&[a-z#0-9]+;/gi, " ");
+  const blocks = [...html.matchAll(/<script[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map(
+    (m) => m[1]
+  );
+  const types = /* @__PURE__ */ new Set();
+  let parseFail = 0;
+  for (const src of blocks) {
+    try {
+      const data = JSON.parse(src);
+      for (const d of Array.isArray(data) ? data : [data]) {
+        if (d && d["@type"]) types.add(String(d["@type"]));
+      }
+    } catch {
+      parseFail++;
+    }
+  }
+  const relevant = RELEVANT_SCHEMA_TYPES.filter((t) => types.has(t)).length;
+  let schema = blocks.length > 0 ? Math.min(100, 40 + relevant * 15) : 0;
+  if (parseFail > 0) schema = Math.min(schema, 60);
+  let citation = 0;
+  if (/<meta[^>]+name=["']description["'][^>]+content=["'][^"']{20,}/i.test(html)) citation += 15;
+  if (/\b(?:is|are)\s+(?:a|an|the)\s+[a-z]/i.test(text)) citation += 30;
+  if ((html.match(/<h[23][\s>]/gi) || []).length >= 2) citation += 20;
+  if (/class=["'][^"']*faq/i.test(html) || /<details[\s>]/i.test(html)) citation += 15;
+  if (/<link[^>]+rel=["']canonical["']/i.test(html)) citation += 10;
+  if (/<(?:ul|ol)[\s>]/i.test(html)) citation += 10;
+  const facts = (text.match(FACT_WITH_UNIT_RE) || []).length;
+  const kb = Math.max(1, text.length / 1024);
+  const density = Math.min(100, Math.round(facts / kb * 25));
+  const score2 = Math.round(schema * 0.4 + citation * 0.3 + density * 0.3);
+  return {
+    score: score2,
+    schema_completeness: Math.round(schema),
+    citation_friendliness: Math.round(citation),
+    fact_density: density
+  };
+}
+function geoRepairHints(result, html) {
+  const hints = [];
+  if (result.citation_friendliness < 70) {
+    if (!/\b(?:is|are)\s+(?:a|an|the)\s+[a-z]/i.test(html.replace(/<[^>]+>/g, " "))) {
+      hints.push(
+        'The article body lacks a self-contained definition sentence: the very first sentence must read "<keyword> is a <category> used for <primary use case>" so AI engines can quote it out of context'
+      );
+    }
+    if ((html.match(/<h[23][\s>]/gi) || []).length < 2) {
+      hints.push("Add at least 2 H2/H3 headings to structure the content for scannability");
+    }
+    if (!/<(?:ul|ol)[\s>]/i.test(html)) {
+      hints.push("Convert at least one prose block into a <ul> or <ol> list (specifications, steps, or criteria)");
+    }
+  }
+  if (result.fact_density < 40) {
+    hints.push(
+      "Fact density is too low: add concrete numbers with units in every major section (dimensions in mm/m, coating in g/m\xB2, capacity in tons/month, lead time in days, percentages)"
+    );
+  }
+  if (result.schema_completeness < 70) {
+    if (!/"@type"\s*:\s*"FAQPage"/i.test(html)) {
+      hints.push("The FAQ section is missing or empty: include 3-5 FAQ entries with numeric answers");
+    }
+  }
+  return hints;
+}
+var RELEVANT_SCHEMA_TYPES, FACT_WITH_UNIT_RE;
+var init_geo_score = __esm({
+  "src/lib/geo-score.ts"() {
+    "use strict";
+    RELEVANT_SCHEMA_TYPES = [
+      "Organization",
+      "WebSite",
+      "Product",
+      "Article",
+      "TechArticle",
+      "FAQPage",
+      "BreadcrumbList",
+      "Service",
+      "LocalBusiness"
+    ];
+    FACT_WITH_UNIT_RE = /\d+(?:\.\d+)?\s?(?:%|mm|cm|km|kg|mpa|psi|mesh|gauge|awg|µm|micron|kw|mw|kn|g\/m²?|m[23²]|inch(?:es)?|ft|years?)\b/gi;
+    __name(computeGeoScore, "computeGeoScore");
+    __name(geoRepairHints, "geoRepairHints");
+  }
+});
+
+// src/lib/llms.ts
+var llms_exports = {};
+__export(llms_exports, {
+  appendLlmsEntry: () => appendLlmsEntry,
+  listLlmsEntries: () => listLlmsEntries,
+  mergeLlmsTxt: () => mergeLlmsTxt,
+  removeLlmsEntry: () => removeLlmsEntry,
+  renderLlmsTxt: () => renderLlmsTxt
+});
+async function listLlmsEntries(env) {
+  return await getJSON(env.SEO_DATA, KV_KEY2) ?? [];
+}
+async function appendLlmsEntry(env, entry) {
+  const entries = await listLlmsEntries(env);
+  const next = [
+    { ...entry, addedAt: (/* @__PURE__ */ new Date()).toISOString() },
+    ...entries.filter((e) => e.slug !== entry.slug)
+  ].slice(0, MAX_ENTRIES);
+  await setJSON(env.SEO_DATA, KV_KEY2, next);
+  console.log(`[llms] Entry upserted: ${entry.slug} (${next.length} total)`);
+}
+async function removeLlmsEntry(env, slug) {
+  const entries = (await listLlmsEntries(env)).filter((e) => e.slug !== slug);
+  await setJSON(env.SEO_DATA, KV_KEY2, entries);
+}
+function escapeLine(text) {
+  return text.replace(/\s+/g, " ").trim();
+}
+function mergeLlmsTxt(baseText, entries) {
+  if (entries.length === 0) return baseText;
+  const lines = entries.map((e) => {
+    const summary = escapeLine(e.summary);
+    return `- [${escapeLine(e.title)}](${e.url})${summary ? ` \u2014 ${summary}` : ""}`;
+  });
+  const section = `## Latest Guides (Auto-Updated)
+
+${lines.join("\n")}`;
+  const trimmed = baseText.replace(/\s+$/, "");
+  const faqIndex = trimmed.indexOf("\n## FAQ");
+  if (faqIndex >= 0) {
+    return `${trimmed.slice(0, faqIndex).replace(/\s+$/, "")}
+
+${section}
+${trimmed.slice(faqIndex)}
+`;
+  }
+  return `${trimmed}
+
+${section}
+`;
+}
+async function renderLlmsTxt(env) {
+  const assetResp = await env.ASSETS.fetch("https://www.kestrelmetal.com/llms.txt");
+  const base = assetResp.ok ? await assetResp.text() : "";
+  if (!base) {
+    console.error("[llms] Static base llms.txt missing from ASSETS");
+    return "# KESTREL METAL\n";
+  }
+  const entries = await listLlmsEntries(env);
+  return mergeLlmsTxt(base, entries);
+}
+var KV_KEY2, MAX_ENTRIES;
+var init_llms = __esm({
+  "src/lib/llms.ts"() {
+    "use strict";
+    init_kv();
+    KV_KEY2 = "geo:llms:entries";
+    MAX_ENTRIES = 50;
+    __name(listLlmsEntries, "listLlmsEntries");
+    __name(appendLlmsEntry, "appendLlmsEntry");
+    __name(removeLlmsEntry, "removeLlmsEntry");
+    __name(escapeLine, "escapeLine");
+    __name(mergeLlmsTxt, "mergeLlmsTxt");
+    __name(renderLlmsTxt, "renderLlmsTxt");
+  }
+});
+
 // src/lib/indexnow.ts
 var indexnow_exports = {};
 __export(indexnow_exports, {
@@ -3131,6 +3925,7 @@ async function score(env) {
   }
   let deployed = 0;
   const publishedPaths = [];
+  const publishedSlugs = [];
   for (const key of keys) {
     const draft = await getJSON(env.CONTENT_QUEUE, key.name);
     if (!draft || draft.status !== "queued" && draft.status !== "image_gen" && draft.status !== "skipped") {
@@ -3140,18 +3935,26 @@ async function score(env) {
       console.log(`[score] Scoring: ${draft.slug}`);
       let currentHtml = draft.html;
       let currentScore = 0;
+      let currentGeo = { score: 0, schema_completeness: 0, citation_friendliness: 0, fact_density: 0 };
       let round = 0;
       while (round < 3) {
         round++;
         const result = scoreSEO(currentHtml, draft.keyword);
+        currentGeo = computeGeoScore(currentHtml);
         currentScore = result.totalScore;
-        console.log(`[score] Round ${round}: Score ${currentScore}/100`);
-        if (result.passed) {
+        console.log(
+          `[score] Round ${round}: SEO ${currentScore}/100, GEO ${currentGeo.score}/100 (schema ${currentGeo.schema_completeness} / citation ${currentGeo.citation_friendliness} / facts ${currentGeo.fact_density})`
+        );
+        if (result.passed && currentGeo.score >= GEO_MINIMUM_SCORE) {
           break;
         }
-        console.log(`[score] Score below 60, attempting fix round ${round}...`);
+        console.log(`[score] Below threshold (SEO 60 / GEO ${GEO_MINIMUM_SCORE}), attempting fix round ${round}...`);
         if (env.DEEPSEEK_API_KEY) {
           try {
+            const hints = geoRepairHints(currentGeo, currentHtml);
+            if (!result.passed) {
+              hints.unshift(`Previous draft failed SEO checks (score ${currentScore}/100); tighten title/meta/keyword density/word count (2000+)`);
+            }
             const fixedArticle = await generateFullArticle(
               {
                 DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
@@ -3159,11 +3962,13 @@ async function score(env) {
               },
               {
                 keyword: draft.keyword,
-                title: draft.title
+                title: draft.title,
+                variants: draft.variants ?? [],
+                repairHints: hints
               }
             );
             currentHtml = fixedArticle.html;
-            console.log(`[score] Regenerated article for round ${round}`);
+            console.log(`[score] Regenerated article for round ${round} (${hints.length} repair hints)`);
           } catch (err) {
             console.error(`[score] Regeneration failed:`, err);
             break;
@@ -3176,23 +3981,21 @@ async function score(env) {
         ...draft,
         html: currentHtml,
         score: currentScore,
+        geoScore: currentGeo.score,
         scoreRound: round,
         status: "scoring"
       });
-      if (currentScore >= 60) {
+      if (currentScore >= 60 && currentGeo.score >= GEO_MINIMUM_SCORE) {
         let finalHtml = currentHtml;
         try {
-          const { generateBannerImage: generateBannerImage2 } = await Promise.resolve().then(() => (init_banner_gen(), banner_gen_exports));
+          const { generateBannerImage: generateBannerImage2, applyBannerToHtml: applyBannerToHtml2 } = await Promise.resolve().then(() => (init_banner_gen(), banner_gen_exports));
           const bannerUrl = await generateBannerImage2(
             { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
             draft.keyword,
             draft.slug
           );
           if (bannerUrl) {
-            finalHtml = finalHtml.replace(
-              /background-image:url\('[^']*'\);/,
-              `background-image:url('${bannerUrl}');`
-            );
+            finalHtml = applyBannerToHtml2(finalHtml, bannerUrl);
             console.log(`[score] Banner generated for ${draft.slug}: ${bannerUrl}`);
           }
         } catch (err) {
@@ -3206,6 +4009,7 @@ async function score(env) {
           groupId: draft.groupId ?? null,
           variants: draft.variants ?? [],
           score: currentScore,
+          geoScore: currentGeo.score,
           status: "published",
           publishedAt: (/* @__PURE__ */ new Date()).toISOString(),
           detail_url: `https://www.kestrelmetal.com/${draft.slug}.html`,
@@ -3221,11 +4025,24 @@ async function score(env) {
           allPublished.push(entryWithoutHtml);
         }
         await setJSON(env.CONTENT_QUEUE, "published:all", allPublished);
-        console.log(`[score] Published: ${draft.slug} (Score: ${currentScore})`);
+        console.log(`[score] Published: ${draft.slug} (SEO: ${currentScore}, GEO: ${currentGeo.score})`);
         deployed++;
         publishedPaths.push(`/${draft.slug}.html`);
+        publishedSlugs.push(draft.slug);
+        try {
+          const { appendLlmsEntry: appendLlmsEntry2 } = await Promise.resolve().then(() => (init_llms(), llms_exports));
+          await appendLlmsEntry2(env, {
+            slug: draft.slug,
+            title: draft.title,
+            url: `https://www.kestrelmetal.com/${draft.slug}.html`,
+            summary: draft.metaDescription,
+            keyword: draft.keyword
+          });
+        } catch (err) {
+          console.error(`[score] llms.txt append failed for ${draft.slug}:`, err);
+        }
       } else {
-        console.log(`[score] Skipped: ${draft.slug} (Score: ${currentScore} < 60)`);
+        console.log(`[score] Skipped: ${draft.slug} (SEO: ${currentScore}/60, GEO: ${currentGeo.score}/${GEO_MINIMUM_SCORE})`);
         await setJSON(env.CONTENT_QUEUE, key.name, {
           ...draft,
           html: currentHtml,
@@ -3252,15 +4069,40 @@ async function score(env) {
     } catch (err) {
       console.error("[score] IndexNow submission failed:", err);
     }
+    try {
+      await recordPendingGscUrls(env, publishedPaths, publishedSlugs);
+    } catch (err) {
+      console.error("[score] Failed to record pending GSC urls:", err);
+    }
   }
 }
+async function recordPendingGscUrls(env, paths, slugs) {
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const existing = await getJSON2(env.SEO_DATA, "gsc:pending") ?? { urls: [] };
+  const bySlug = new Map(existing.urls.map((row) => [row.slug, row]));
+  const now2 = (/* @__PURE__ */ new Date()).toISOString();
+  paths.forEach((path, index) => {
+    const slug = slugs[index] ?? path.replace(/^\//, "").replace(/\.html$/, "");
+    if (!slug) return;
+    if (!bySlug.has(slug)) {
+      bySlug.set(slug, { url: `https://www.kestrelmetal.com${path.startsWith("/") ? "" : "/"}${path}`, slug, publishedAt: now2 });
+    }
+  });
+  const urls = Array.from(bySlug.values()).slice(-200);
+  await setJSON2(env.SEO_DATA, "gsc:pending", { urls, updatedAt: now2 });
+  console.log(`[score] GSC pending list now holds ${urls.length} URLs`);
+}
+var GEO_MINIMUM_SCORE;
 var init_score = __esm({
   "src/cron/score.ts"() {
     "use strict";
     init_seo_score();
+    init_geo_score();
     init_deepseek();
     init_kv();
+    GEO_MINIMUM_SCORE = 70;
     __name(score, "score");
+    __name(recordPendingGscUrls, "recordPendingGscUrls");
   }
 });
 
@@ -3310,7 +4152,7 @@ async function trackArticlePerformance(env) {
       const trackingData = {
         slug: article.slug,
         keyword: article.keyword,
-        url: `https://kestrelmetal.com/blog/${article.slug}.html`,
+        url: `https://www.kestrelmetal.com/${article.slug}.html`,
         impressions: totalImpressions,
         clicks: totalClicks,
         avgPosition: positionCount > 0 ? totalPosition / positionCount : 0,
@@ -3406,11 +4248,47 @@ var monthly_report_exports = {};
 __export(monthly_report_exports, {
   default: () => monthlyReport
 });
+async function buildGeoSection(env, monthPrefix) {
+  const scores = await getJSON(env.SEO_DATA, "geo:scores") ?? [];
+  const llms = await getJSON(env.SEO_DATA, "geo:llms:entries") ?? [];
+  const faqs = await getJSON(env.SEO_DATA, "geo:faqs") ?? [];
+  const patches = await getJSON(env.SEO_DATA, "geo:patches") ?? [];
+  const average = scores.length ? Math.round(scores.reduce((s, r) => s + r.score, 0) / scores.length) : null;
+  return {
+    average_score: average,
+    scored_pages: scores.length,
+    distribution: {
+      high: scores.filter((r) => r.score >= 80).length,
+      mid: scores.filter((r) => r.score >= 60 && r.score < 80).length,
+      low: scores.filter((r) => r.score < 60).length
+    },
+    bottom_pages: scores.slice().sort((a, b) => a.score - b.score).slice(0, 5).map((r) => ({ page: r.page_url.replace(/^https?:\/\/[^/]+\//, "/"), score: r.score })),
+    llms_entries_total: llms.length,
+    llms_entries_added_this_month: llms.filter((e) => e.addedAt?.startsWith(monthPrefix)).length,
+    faq_total: faqs.filter((f) => f.is_active !== false && (f.language ?? "en") === "en").length,
+    faq_auto_total: faqs.filter((f) => f.source === "auto").length,
+    faq_pending_review: faqs.filter((f) => f.source === "auto" && f.is_active === false).length,
+    patches_pending: patches.filter((p) => p.status === "pending" || p.status === "approved").length,
+    patches_applied: patches.filter((p) => p.status === "applied").length
+  };
+}
 async function monthlyReport(env) {
   console.log("[monthly-report] Generating monthly report...");
   try {
     const report = await generateMonthlyReport(env);
     console.log(`[monthly-report] Completed: ${report.totalArticles} articles, ${report.totalImpressions} impressions`);
+    try {
+      const month = report.month;
+      const stored = await getJSON(env.SEO_DATA, `report:${month}`);
+      if (stored) {
+        const geo = await buildGeoSection(env, month);
+        stored.geo = geo;
+        await setJSON(env.SEO_DATA, `report:${month}`, stored);
+        console.log(`[monthly-report] GEO section attached (avg ${geo.average_score}, ${geo.scored_pages} pages)`);
+      }
+    } catch (err) {
+      console.error("[monthly-report] GEO section failed:", err);
+    }
   } catch (err) {
     console.error("[monthly-report] Failed:", err);
   }
@@ -3419,7 +4297,450 @@ var init_monthly_report = __esm({
   "src/cron/monthly-report.ts"() {
     "use strict";
     init_tracking();
+    init_kv();
+    __name(buildGeoSection, "buildGeoSection");
     __name(monthlyReport, "monthlyReport");
+  }
+});
+
+// src/cron/geo-faq.ts
+var geo_faq_exports = {};
+__export(geo_faq_exports, {
+  default: () => geoFaq
+});
+async function collectTopicKeywords(env) {
+  const gap = (await getJSON(env.SEO_DATA, "competitors:gap"))?.gaps ?? [];
+  const opp = (await getJSON(env.SEO_DATA, "opportunities:weekly"))?.opportunities ?? [];
+  const seen = /* @__PURE__ */ new Set();
+  const out = [];
+  for (const row of [...gap, ...opp]) {
+    const kw = String(row.keyword ?? "").trim().toLowerCase();
+    if (!kw || seen.has(kw)) continue;
+    if (/(^|\s)(best|top|cheapest)\b/i.test(kw) && kw.length < 12) continue;
+    seen.add(kw);
+    out.push(kw);
+  }
+  return out;
+}
+async function generateFaq(env, keyword) {
+  const systemPrompt = "You are a B2B export sales engineer at Kestrel Metal (kestrelmetal.com), a wire mesh fence manufacturer in Anping, China (ISO 9001, 12+ years, 3000+ tons/month capacity, FOB Tianjin/Shanghai, lead time 15-25 days). Respond ONLY with valid JSON.";
+  const userPrompt = `A procurement buyer would ask an AI search engine: "${keyword}"
+
+Write ONE FAQ entry answering this as Kestrel Metal would. Requirements:
+- question: natural buyer phrasing (may differ slightly from the keyword)
+- answer: 2-3 sentences, self-contained and quotable by AI engines, MUST include at least one concrete number with a unit drawn from real B2B facts (dimensions mm/m, coating g/m\xB2, capacity tons/month, lead time days, MOQ, standards ASTM/EN/ISO)
+- category: one of Orders, Products, Quality, Compliance, Shipping, Product Knowledge, Installation Guide
+- Do not invent certifications the company does not hold (we hold ISO 9001:2015, CE, UKCA, REACH)
+
+JSON format: {"question": "...", "answer": "...", "category": "..."}`;
+  const resp = await callDeepSeek(
+    { DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY, DEEPSEEK_MODEL: env.DEEPSEEK_MODEL || "deepseek-chat" },
+    systemPrompt,
+    userPrompt
+  );
+  const match = resp.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("No JSON in DeepSeek response");
+  const parsed = JSON.parse(match[0]);
+  if (!parsed.question || !parsed.answer) throw new Error("Incomplete FAQ JSON");
+  return parsed;
+}
+async function geoFaq(env) {
+  if (!env.DEEPSEEK_API_KEY) {
+    console.log("[geo-faq] DEEPSEEK_API_KEY not set, skipping");
+    return;
+  }
+  const existing = await listFaqs(env);
+  const keywords = await collectTopicKeywords(env);
+  const unanswered = keywords.filter((kw) => {
+    const kwWords = kw.split(/\s+/).filter((w) => w.length > 3);
+    if (kwWords.length === 0) return false;
+    return !existing.some((f) => {
+      const q = f.question.toLowerCase();
+      return kwWords.every((w) => q.includes(w));
+    });
+  });
+  console.log(`[geo-faq] ${keywords.length} topics, ${unanswered.length} uncovered, generating ${FAQS_PER_RUN}`);
+  let created = 0;
+  for (const keyword of unanswered.slice(0, FAQS_PER_RUN)) {
+    try {
+      const faq = await generateFaq(env, keyword);
+      if (hasSimilarQuestion(existing, faq.question)) {
+        console.log(`[geo-faq] Similar question exists, skipped: ${faq.question}`);
+        continue;
+      }
+      await createFaq(env, {
+        question: faq.question,
+        answer: faq.answer,
+        category: faq.category || "Product Knowledge",
+        language: "en",
+        sort_order: 100,
+        is_active: false,
+        // 待审核，Admin 启用后才进 faq.html
+        source: "auto"
+      });
+      existing.push({ question: faq.question });
+      created++;
+      console.log(`[geo-faq] Created pending FAQ: ${faq.question}`);
+    } catch (err) {
+      console.error(`[geo-faq] Failed for "${keyword}":`, err);
+    }
+  }
+  console.log(`[geo-faq] Done. ${created} pending FAQs awaiting review.`);
+}
+var FAQS_PER_RUN;
+var init_geo_faq = __esm({
+  "src/cron/geo-faq.ts"() {
+    "use strict";
+    init_deepseek();
+    init_faq();
+    init_kv();
+    FAQS_PER_RUN = 3;
+    __name(collectTopicKeywords, "collectTopicKeywords");
+    __name(generateFaq, "generateFaq");
+    __name(geoFaq, "geoFaq");
+  }
+});
+
+// src/cron/geo-audit.ts
+var geo_audit_exports = {};
+__export(geo_audit_exports, {
+  default: () => geoAudit
+});
+async function collectUrls(env) {
+  const { buildSitemap: buildSitemap2 } = await Promise.resolve().then(() => (init_sitemap(), sitemap_exports));
+  const sitemap = await buildSitemap2(env);
+  return [...sitemap.xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)].map((m) => m[1]);
+}
+async function fetchPageHtml(env, url) {
+  const path = new URL(url).pathname;
+  const assetPath = path === "/" ? "/index.html" : path;
+  let html = null;
+  try {
+    const resp = await env.ASSETS.fetch(`https://www.kestrelmetal.com${assetPath}`);
+    if (resp.ok) html = await resp.text();
+  } catch {
+  }
+  if (!html) {
+    const slug = path.replace(/^\//, "").replace(/\.html$/, "");
+    if (slug && !slug.includes("/") && !slug.includes(".")) {
+      try {
+        const published = await env.CONTENT_QUEUE.get(`published:${slug}`, "json");
+        if (published?.html) html = published.html;
+      } catch {
+      }
+    }
+  }
+  return html || null;
+}
+async function fetchAndScore(env, url) {
+  try {
+    const html = await fetchPageHtml(env, url);
+    if (!html) return null;
+    const geo = computeGeoScore(html);
+    const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+    return {
+      page_url: url,
+      title: titleMatch ? titleMatch[1].replace(/\s*\|.*$/, "").trim() : url,
+      ...geo,
+      scored_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  } catch {
+    return null;
+  }
+}
+async function scoreAllPages(env, urls) {
+  const rows = [];
+  for (let i = 0; i < urls.length; i += SCORE_CONCURRENCY) {
+    const batch = urls.slice(i, i + SCORE_CONCURRENCY);
+    const results = await Promise.all(batch.map((u) => fetchAndScore(env, u)));
+    for (const r of results) if (r) rows.push(r);
+  }
+  return rows;
+}
+async function generatePatchBatch(env, rows) {
+  const systemPrompt = "You are a GEO (Generative Engine Optimization) specialist for Kestrel Metal (kestrelmetal.com), a wire mesh fence manufacturer in Anping, China. Respond ONLY with valid JSON.";
+  const pageList = rows.map(
+    (r) => `- slug: ${r.page_url.replace(/^https?:\/\/[^/]+\//, "").replace(/\.html$/, "")}
+  title: ${r.title}
+  current GEO score: ${r.score} (citation ${r.citation_friendliness}, facts ${r.fact_density})`
+  );
+  const userPrompt = `For each page below, write a reinforcement patch that makes it more quotable by AI search engines.
+
+Rules:
+- definition_sentence: ONE self-contained sentence ("<Product> is a <category> used for <primary use>, <key differentiator>"). It must make sense quoted out of context and must match what the page actually sells.
+- fact_points: 3-5 SHORT factual data points, each written as a number with a unit plus 5-10 words of context (e.g. {value: "40-270 g/m\xB2", context: "zinc coating weight options"}). Use realistic B2B specs for this product type (dimensions, coating, capacity, lead time, standards). Never invent certifications the company does not hold (we hold ISO 9001:2015, CE, UKCA, REACH).
+- slug: echo the input slug exactly.
+
+Pages:
+${pageList.join("\n")}
+
+JSON format: {"patches": [{"slug": "...", "definition_sentence": "...", "fact_points": [{"value": "...", "context": "..."}]}]}`;
+  const resp = await callDeepSeek(
+    { DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY, DEEPSEEK_MODEL: env.DEEPSEEK_MODEL || "deepseek-chat" },
+    systemPrompt,
+    userPrompt
+  );
+  const match = resp.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("No JSON in patch response");
+  const parsed = JSON.parse(match[0]);
+  if (!Array.isArray(parsed.patches)) throw new Error("Malformed patches JSON");
+  const bySlug = new Map(rows.map((r) => [r.page_url.replace(/^https?:\/\/[^/]+\//, "").replace(/\.html$/, ""), r]));
+  return parsed.patches.filter((p) => p.slug && p.definition_sentence && Array.isArray(p.fact_points) && p.fact_points.length > 0).map((p) => {
+    const row = bySlug.get(p.slug);
+    return {
+      slug: p.slug,
+      page_url: row?.page_url ?? `https://www.kestrelmetal.com/${p.slug}.html`,
+      title: row?.title ?? p.slug,
+      definition_sentence: p.definition_sentence,
+      fact_points: p.fact_points.slice(0, 5),
+      current_score: row?.score ?? 0,
+      status: "pending",
+      created_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  });
+}
+function beijingMonth() {
+  const d = new Date(Date.now() + 8 * 36e5);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+function beijingDayOfMonth() {
+  return new Date(Date.now() + 8 * 36e5).getUTCDate();
+}
+async function geoAudit(env, opts = {}) {
+  let progress = await getJSON(env.SEO_DATA, PROGRESS_KEY);
+  if (!progress) {
+    if (!opts.force && beijingDayOfMonth() !== 1) {
+      return { summary: `\u8DF3\u8FC7:\u4ECA\u5929\u4E0D\u662F 1 \u53F7(\u5317\u4EAC ${beijingMonth()}-${beijingDayOfMonth()}),\u4E5F\u65E0\u672A\u5B8C\u6210\u5468\u671F`, done: true, scored: 0, total: 0 };
+    }
+    const urls = await collectUrls(env);
+    if (urls.length === 0) {
+      return { summary: "sitemap \u4E3A\u7A7A\u6216\u6293\u53D6\u5931\u8D25,\u672A\u5F00\u59CB", done: true, scored: 0, total: 0 };
+    }
+    progress = { cycle: beijingMonth(), remaining: urls, total: urls.length, scored: 0, startedAt: (/* @__PURE__ */ new Date()).toISOString() };
+    console.log(`[geo-audit] New cycle ${progress.cycle}: ${urls.length} pages, chunked by ${CHUNK_SIZE}`);
+  }
+  const chunk = progress.remaining.splice(0, CHUNK_SIZE);
+  const rows = await scoreAllPages(env, chunk);
+  progress.scored += rows.length;
+  if (rows.length > 0) {
+    const existingRows = await getJSON(env.SEO_DATA, "geo:scores") ?? [];
+    const byUrl = new Map(existingRows.map((r) => [r.page_url, r]));
+    for (const r of rows) byUrl.set(r.page_url, r);
+    await setJSON(env.SEO_DATA, "geo:scores", Array.from(byUrl.values()));
+  }
+  const allRows = await getJSON(env.SEO_DATA, "geo:scores") ?? [];
+  const avg = allRows.length ? Math.round(allRows.reduce((s, r) => s + r.score, 0) / allRows.length) : 0;
+  console.log(`[geo-audit] Chunk done: +${rows.length} scored, cycle ${progress.scored}/${progress.total}, site avg ${avg}`);
+  if (progress.remaining.length > 0) {
+    await setJSON(env.SEO_DATA, PROGRESS_KEY, progress);
+    return {
+      summary: `\u5206\u7247\u5B8C\u6210:\u672C\u8F6E +${rows.length},\u5468\u671F\u7D2F\u8BA1 ${progress.scored}/${progress.total},\u6B21\u65E5 cron \u81EA\u52A8\u7EED\u8DD1(\u6216\u518D\u6B21\u624B\u52A8\u89E6\u53D1)`,
+      done: false,
+      scored: progress.scored,
+      total: progress.total
+    };
+  }
+  let patchSummary = "\u672A\u751F\u6210\u8865\u4E01";
+  const dynamicSlugs = new Set(
+    (await getJSON(env.CONTENT_QUEUE, "published:all") ?? []).map((p) => p.slug)
+  );
+  const lowest = allRows.filter((r) => {
+    const slug = r.page_url.replace(/^https?:\/\/[^/]+\//, "").replace(/\.html$/, "");
+    return slug !== "" && !dynamicSlugs.has(slug);
+  }).sort((a, b) => a.score - b.score).slice(0, PATCH_TARGET_COUNT);
+  const existingPatches = await getJSON(env.SEO_DATA, "geo:patches") ?? [];
+  const dismissedOrApplied = new Set(
+    existingPatches.filter((p) => p.status === "applied" || p.status === "dismissed").map((p) => p.slug)
+  );
+  const pendingTargets = lowest.filter((r) => {
+    const slug = r.page_url.replace(/^https?:\/\/[^/]+\//, "").replace(/\.html$/, "");
+    return !dismissedOrApplied.has(slug);
+  });
+  if (env.DEEPSEEK_API_KEY && pendingTargets.length > 0) {
+    const keptApproved = existingPatches.filter((p) => p.status === "approved");
+    const fresh = [];
+    for (let i = 0; i < pendingTargets.length; i += PATCH_BATCH) {
+      const batch = pendingTargets.slice(i, i + PATCH_BATCH);
+      try {
+        fresh.push(...await generatePatchBatch(env, batch));
+        console.log(`[geo-audit] Patch batch ${Math.floor(i / PATCH_BATCH) + 1}: +${batch.length} targets`);
+      } catch (err) {
+        console.error("[geo-audit] Patch batch failed:", err);
+      }
+    }
+    await setJSON(env.SEO_DATA, "geo:patches", [...keptApproved, ...fresh]);
+    patchSummary = `${fresh.length} \u4E2A\u4F4E\u5206\u9875\u8865\u4E01\u5F85\u5BA1\u6838`;
+    console.log(`[geo-audit] ${fresh.length} patches pending review`);
+  }
+  await setJSON(env.SEO_DATA, PROGRESS_KEY + ":last_cycle", { ...progress, finishedAt: (/* @__PURE__ */ new Date()).toISOString() });
+  await env.SEO_DATA.delete(PROGRESS_KEY);
+  return {
+    summary: `\u5468\u671F\u5B8C\u6210:${allRows.length} \u9875,\u5168\u7AD9\u5E73\u5747 ${avg};${patchSummary}`,
+    done: true,
+    scored: progress.scored,
+    total: progress.total
+  };
+}
+var SCORE_CONCURRENCY, PATCH_TARGET_COUNT, PATCH_BATCH, CHUNK_SIZE, PROGRESS_KEY;
+var init_geo_audit = __esm({
+  "src/cron/geo-audit.ts"() {
+    "use strict";
+    init_geo_score();
+    init_deepseek();
+    init_kv();
+    SCORE_CONCURRENCY = 8;
+    PATCH_TARGET_COUNT = 20;
+    PATCH_BATCH = 10;
+    __name(collectUrls, "collectUrls");
+    __name(fetchPageHtml, "fetchPageHtml");
+    __name(fetchAndScore, "fetchAndScore");
+    __name(scoreAllPages, "scoreAllPages");
+    __name(generatePatchBatch, "generatePatchBatch");
+    CHUNK_SIZE = 40;
+    PROGRESS_KEY = "geo:audit:progress";
+    __name(beijingMonth, "beijingMonth");
+    __name(beijingDayOfMonth, "beijingDayOfMonth");
+    __name(geoAudit, "geoAudit");
+  }
+});
+
+// src/lib/github.ts
+var github_exports = {};
+__export(github_exports, {
+  openPatchPullRequest: () => openPatchPullRequest,
+  patchToHtml: () => patchToHtml
+});
+function authHeaders(env) {
+  return {
+    Authorization: `Bearer ${env.GH_TOKEN}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+}
+async function gh(env, path, init) {
+  const resp = await fetch(`${API}${path}`, {
+    ...init,
+    headers: { ...authHeaders(env), ...init?.headers }
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`GitHub API ${resp.status} on ${path}: ${text.slice(0, 300)}`);
+  }
+  return await resp.json();
+}
+async function getFile(env, path, ref) {
+  const data = await gh(env, `/repos/${REPO}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(ref)}`);
+  const b64 = data.content.replace(/\n/g, "");
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return { sha: data.sha, text: new TextDecoder().decode(bytes) };
+}
+function toBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function escapeHtml2(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function patchToHtml(patch) {
+  const facts = patch.fact_points.map((f) => `        <li><strong>${escapeHtml2(f.value)}</strong> \u2014 ${escapeHtml2(f.context)}</li>`).join("\n");
+  return `
+  <!-- GEO reinforcement patch (auto-generated, reviewed in admin) -->
+  <section class="geo-facts" style="max-width:1200px;margin:2rem auto;padding:1.5rem;border:1px solid #e5e7eb;border-radius:12px;">
+    <h2 style="margin:0 0 0.75rem;font-size:1.25rem;">Key Facts</h2>
+    <p style="margin:0 0 0.75rem;">${escapeHtml2(patch.definition_sentence)}</p>
+    <ul style="margin:0;padding-left:1.25rem;display:grid;gap:0.4rem;">
+${facts}
+    </ul>
+  </section>
+`;
+}
+function applyPatchToHtml(html, patch) {
+  const block = patchToHtml(patch);
+  if (html.includes("GEO reinforcement patch")) return html;
+  if (/<\/main>/i.test(html)) return html.replace(/<\/main>/i, `${block}  </main>`);
+  return html.replace(/<\/body>/i, `${block}</body>`);
+}
+async function openPatchPullRequest(env, patches) {
+  if (!env.GH_TOKEN) throw new Error("GH_TOKEN not configured (wrangler secret put GH_TOKEN)");
+  if (patches.length === 0) throw new Error("No approved patches to apply");
+  const dateTag = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "");
+  const branch = `geo/patches-${dateTag}`;
+  const mainRef = await gh(env, `/repos/${REPO}/git/ref/heads%2Fmain`);
+  const baseSha = mainRef.object.sha;
+  try {
+    await gh(env, `/repos/${REPO}/git/refs`, {
+      method: "POST",
+      body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: baseSha })
+    });
+  } catch (err) {
+    if (!String(err).includes("422")) throw err;
+  }
+  const applied = [];
+  for (const patch of patches) {
+    const path = `${patch.slug}.html`;
+    let file;
+    try {
+      file = await getFile(env, path, branch);
+    } catch {
+      console.warn(`[github] ${path} not found in repo, skipping`);
+      continue;
+    }
+    const next = applyPatchToHtml(file.text, patch);
+    if (next === file.text) {
+      console.warn(`[github] ${path} already patched or no insertion point, skipping`);
+      continue;
+    }
+    await gh(env, `/repos/${REPO}/contents/${encodeURIComponent(path)}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: `geo: reinforce ${path} (definition + key facts)`,
+        content: toBase64(next),
+        sha: file.sha,
+        branch
+      })
+    });
+    applied.push(patch.slug);
+  }
+  if (applied.length === 0) throw new Error("No files were modified (missing or already patched)");
+  const bodyLines = patches.filter((p) => applied.includes(p.slug)).map((p) => `- **${p.title}** (\`${p.slug}.html\`, GEO ${p.current_score}/100)
+  - ${p.definition_sentence}`);
+  const pr = await gh(env, `/repos/${REPO}/pulls`, {
+    method: "POST",
+    body: JSON.stringify({
+      title: `geo: reinforce ${applied.length} low-scoring pages (${dateTag})`,
+      head: branch,
+      base: "main",
+      body: [
+        "Automated GEO reinforcement patch (generated by geo-audit cron, approved in admin).",
+        "",
+        ...bodyLines,
+        "",
+        'Each page gets a "Key Facts" block (self-contained definition + numeric facts) inserted before `</main>`.',
+        "Merge to deploy via Cloudflare git integration."
+      ].join("\n")
+    })
+  });
+  console.log(`[github] PR opened: ${pr.html_url} (${applied.length} files)`);
+  return { prUrl: pr.html_url, branch, appliedSlugs: applied };
+}
+var REPO, API;
+var init_github = __esm({
+  "src/lib/github.ts"() {
+    "use strict";
+    REPO = "kalee777777/kestrel-metal-web";
+    API = "https://api.github.com";
+    __name(authHeaders, "authHeaders");
+    __name(gh, "gh");
+    __name(getFile, "getFile");
+    __name(toBase64, "toBase64");
+    __name(escapeHtml2, "escapeHtml");
+    __name(patchToHtml, "patchToHtml");
+    __name(applyPatchToHtml, "applyPatchToHtml");
+    __name(openPatchPullRequest, "openPatchPullRequest");
   }
 });
 
@@ -3702,6 +5023,61 @@ route("GET", "/api/seo/indexnow", async ({ env }) => {
   const lastSubmit = await getJSON2(env.SEO_DATA, "indexnow:last_submit");
   return jsonResponse({ last_submit: lastSubmit ?? null });
 });
+route("GET", "/api/faq/all", async ({ env }) => {
+  const { listFaqs: listFaqs2 } = await Promise.resolve().then(() => (init_faq(), faq_exports));
+  const faqs = await listFaqs2(env);
+  return jsonResponse(faqs);
+});
+route("POST", "/api/faq", async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const body = await request.json().catch(() => null);
+  if (!body || !body.question || !body.answer) {
+    return jsonResponse({ error: "question and answer are required" }, 400);
+  }
+  const { createFaq: createFaq2 } = await Promise.resolve().then(() => (init_faq(), faq_exports));
+  const item = await createFaq2(env, body);
+  return jsonResponse(item, 201);
+});
+route("PUT", "/api/faq/:id", async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const body = await request.json().catch(() => null);
+  if (!body) {
+    return jsonResponse({ error: "Invalid JSON body" }, 400);
+  }
+  const { updateFaq: updateFaq2 } = await Promise.resolve().then(() => (init_faq(), faq_exports));
+  const item = await updateFaq2(env, params.id, body);
+  if (!item) {
+    return jsonResponse({ error: "Not found" }, 404);
+  }
+  return jsonResponse(item);
+});
+route("DELETE", "/api/faq/:id", async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { deleteFaq: deleteFaq2 } = await Promise.resolve().then(() => (init_faq(), faq_exports));
+  const ok = await deleteFaq2(env, params.id);
+  if (!ok) {
+    return jsonResponse({ error: "Not found" }, 404);
+  }
+  return jsonResponse({ message: "Deleted" });
+});
+route("POST", "/api/faq/import", async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const body = await request.json().catch(() => null);
+  if (!Array.isArray(body)) {
+    return jsonResponse({ error: "Array body is required" }, 400);
+  }
+  const { importFaqs: importFaqs2 } = await Promise.resolve().then(() => (init_faq(), faq_exports));
+  const result = await importFaqs2(env, body);
+  return jsonResponse(result);
+});
 route("GET", "/api/gsc/auth", async ({ env, request, url }) => {
   if (request.headers.get("Authorization") !== `Bearer ${env.ADMIN_TOKEN}`) {
     return jsonResponse({ error: "Unauthorized" }, 401);
@@ -3776,6 +5152,185 @@ route("DELETE", "/api/competitors/:domain", async ({ env, params, request }) => 
   }
   return jsonResponse({ message: "Deleted" });
 });
+route("POST", "/api/blog/backfill-groups", async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const { matchGroupId: matchGroupId2 } = await Promise.resolve().then(() => (init_keyword_cluster(), keyword_cluster_exports));
+  const all = await getJSON2(env.CONTENT_QUEUE, "published:all") ?? [];
+  const result = {
+    total: all.length,
+    alreadyTagged: 0,
+    updated: 0,
+    unresolved: 0,
+    details: []
+  };
+  for (const row of all) {
+    if (row.groupId) {
+      result.alreadyTagged++;
+      continue;
+    }
+    const slug = String(row.slug ?? "");
+    const groupId = matchGroupId2(row.keyword ?? "") || matchGroupId2(slug) || matchGroupId2(slug.replace(/[-_]/g, " "));
+    if (!groupId) {
+      result.unresolved++;
+      result.details.push({ slug, groupId: null });
+      continue;
+    }
+    row.groupId = groupId;
+    const record = await getJSON2(env.CONTENT_QUEUE, `published:${slug}`);
+    if (record) {
+      record.groupId = groupId;
+      await setJSON2(env.CONTENT_QUEUE, `published:${slug}`, record);
+    }
+    result.updated++;
+    result.details.push({ slug, groupId });
+  }
+  await setJSON2(env.CONTENT_QUEUE, "published:all", all);
+  return jsonResponse({ message: "Backfill completed", ...result });
+});
+route("GET", "/api/banner/diagnose", async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const apiKey = env.QWEN_API_KEY;
+  if (!apiKey) {
+    return jsonResponse({ ok: false, stage: "config", error: "QWEN_API_KEY \u672A\u914D\u7F6E" });
+  }
+  if (!env.IMAGES) {
+    return jsonResponse({ ok: false, stage: "config", error: "IMAGES (R2) \u672A\u7ED1\u5B9A" });
+  }
+  const started = Date.now();
+  const keyword = url.searchParams.get("keyword");
+  let prompt = "bright industrial steel wire mesh fence, natural daylight";
+  if (keyword) {
+    const { buildBannerPrompt: buildBannerPrompt2 } = await Promise.resolve().then(() => (init_banner_gen(), banner_gen_exports));
+    prompt = buildBannerPrompt2(keyword);
+  }
+  try {
+    const resp = await fetch(
+      "https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          "X-DashScope-Async": "enable"
+        },
+        body: JSON.stringify({
+          model: "wanx-v1",
+          input: { prompt },
+          parameters: { style: "<photography>", size: "1280*720", n: 1 }
+        })
+      }
+    );
+    const bodyText = await resp.text();
+    let taskId = null;
+    try {
+      taskId = JSON.parse(bodyText).output?.task_id ?? null;
+    } catch {
+    }
+    const polls = [];
+    let imageUrl2 = null;
+    if (taskId && resp.ok) {
+      for (let i = 0; i < 10; i++) {
+        await new Promise((r) => setTimeout(r, 5e3));
+        const pr = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
+          headers: { Authorization: `Bearer ${apiKey}` }
+        });
+        const pj = await pr.json();
+        const status = pj.output?.task_status ?? "UNKNOWN";
+        polls.push({ attempt: i + 1, status, message: pj.output?.message });
+        if (status === "SUCCEEDED") {
+          imageUrl2 = pj.output?.results?.[0]?.url ?? null;
+          break;
+        }
+        if (status === "FAILED") break;
+      }
+    }
+    return jsonResponse({
+      ok: resp.ok,
+      stage: "submit+poll",
+      status: resp.status,
+      elapsedMs: Date.now() - started,
+      taskId,
+      polls,
+      finalStatus: polls.length ? polls[polls.length - 1].status : null,
+      finalMessage: polls.length ? polls[polls.length - 1].message ?? null : null,
+      imageUrl: imageUrl2 ? "(ok)" : null,
+      qwenModelVar: env.QWEN_MODEL || null,
+      promptUsed: prompt,
+      body: bodyText.slice(0, 400)
+    });
+  } catch (err) {
+    return jsonResponse({
+      ok: false,
+      stage: "network",
+      elapsedMs: Date.now() - started,
+      error: err instanceof Error ? err.message : String(err)
+    });
+  }
+});
+route("GET", "/api/gsc/pending", async ({ env }) => {
+  const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const data = await getJSON2(
+    env.SEO_DATA,
+    "gsc:pending"
+  );
+  const urls = data?.urls ?? [];
+  return jsonResponse({
+    count: urls.length,
+    updatedAt: data?.updatedAt ?? null,
+    urls,
+    plain: urls.map((u) => u.url).join("\n")
+  });
+});
+route("POST", "/api/gsc/pending/seed", async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const days = Number(url.searchParams.get("days") ?? 0);
+  const cutoff = days > 0 ? Date.now() - days * 864e5 : 0;
+  const published = await getJSON2(env.CONTENT_QUEUE, "published:all") ?? [];
+  const existing = await getJSON2(env.SEO_DATA, "gsc:pending") ?? { urls: [] };
+  const bySlug = new Map(existing.urls.map((row) => [row.slug, row]));
+  let added = 0;
+  for (const row of published) {
+    if (!row.slug) continue;
+    if (bySlug.has(row.slug)) continue;
+    const publishedAt = row.publishedAt ?? (/* @__PURE__ */ new Date()).toISOString();
+    if (cutoff && new Date(publishedAt).getTime() < cutoff) continue;
+    bySlug.set(row.slug, {
+      url: `https://www.kestrelmetal.com/${row.slug}.html`,
+      slug: row.slug,
+      publishedAt
+    });
+    added++;
+  }
+  const urls = Array.from(bySlug.values()).sort((a, b) => a.publishedAt < b.publishedAt ? 1 : -1);
+  await setJSON2(env.SEO_DATA, "gsc:pending", { urls, updatedAt: (/* @__PURE__ */ new Date()).toISOString() });
+  return jsonResponse({ message: "Seeded", added, count: urls.length });
+});
+route("DELETE", "/api/gsc/pending", async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const slug = url.searchParams.get("slug");
+  if (!slug) {
+    await setJSON2(env.SEO_DATA, "gsc:pending", { urls: [], updatedAt: (/* @__PURE__ */ new Date()).toISOString() });
+    return jsonResponse({ message: "Cleared", count: 0 });
+  }
+  const data = await getJSON2(
+    env.SEO_DATA,
+    "gsc:pending"
+  );
+  const urls = (data?.urls ?? []).filter((row) => row.slug !== slug);
+  await setJSON2(env.SEO_DATA, "gsc:pending", { urls, updatedAt: (/* @__PURE__ */ new Date()).toISOString() });
+  return jsonResponse({ message: "Removed", slug, count: urls.length });
+});
 route("POST", "/api/competitors/analyze", async ({ env, request }) => {
   if (!isAdminAuthorized(request, env)) {
     return jsonResponse({ error: "Unauthorized" }, 401);
@@ -3805,7 +5360,7 @@ route("GET", "/api/keyword-groups", async ({ env, url }) => {
   const { runClustering: runClustering2, loadCachedCluster: loadCachedCluster2, selectGroups: selectGroups2 } = await Promise.resolve().then(() => (init_keyword_cluster(), keyword_cluster_exports));
   const forceRefresh = url.searchParams.get("refresh") === "1";
   const result = forceRefresh ? await runClustering2(env) : await loadCachedCluster2(env) ?? await runClustering2(env);
-  const upcoming = selectGroups2(result, 2).map((g) => ({
+  const upcoming = selectGroups2(result, 1).map((g) => ({
     id: g.id,
     name: g.name,
     primaryKeyword: g.primaryKeyword,
@@ -3889,19 +5444,26 @@ route("POST", "/api/banner/regenerate", async ({ env, request }) => {
   const published = await env.CONTENT_QUEUE.get(`published:${body.slug}`, "json");
   if (!published || !published.html) return jsonResponse({ error: "Article not found" }, 404);
   try {
-    const { generateBannerImage: generateBannerImage2 } = await Promise.resolve().then(() => (init_banner_gen(), banner_gen_exports));
+    const { generateBannerImage: generateBannerImage2, applyBannerToHtml: applyBannerToHtml2 } = await Promise.resolve().then(() => (init_banner_gen(), banner_gen_exports));
     const bannerUrl = await generateBannerImage2(
       { QWEN_API_KEY: env.QWEN_API_KEY, QWEN_MODEL: env.QWEN_MODEL, IMAGES: env.IMAGES },
       published.keyword || "",
       body.slug
     );
     if (bannerUrl) {
-      const updatedHtml = published.html.replace(
-        /background-image:url\('[^']*'\);/,
-        `background-image:url('${bannerUrl}');`
-      );
-      await env.CONTENT_QUEUE.put(`published:${body.slug}`, JSON.stringify({ ...published, html: updatedHtml }));
-      return jsonResponse({ ok: true, slug: body.slug, bannerUrl });
+      const hasSlot = /background-image:url\('[^']*'\);/.test(published.html);
+      if (hasSlot) {
+        const updatedHtml = applyBannerToHtml2(published.html, bannerUrl);
+        await env.CONTENT_QUEUE.put(`published:${body.slug}`, JSON.stringify({ ...published, html: updatedHtml }));
+        return jsonResponse({ ok: true, slug: body.slug, bannerUrl, inserted: true });
+      }
+      return jsonResponse({
+        ok: true,
+        slug: body.slug,
+        bannerUrl,
+        inserted: false,
+        reason: "no background-image slot in stored html; hero section missing"
+      });
     }
     return jsonResponse({ ok: false, error: "Banner generation returned no URL" });
   } catch (err) {
@@ -3944,10 +5506,176 @@ route("POST", "/api/trigger/:cron", async ({ env, params, request }) => {
     await monthlyReport2(env);
     return jsonResponse({ message: "Monthly report generated" });
   }
+  if (cronName === "geo-faq") {
+    const { default: geoFaq2 } = await Promise.resolve().then(() => (init_geo_faq(), geo_faq_exports));
+    await geoFaq2(env);
+    return jsonResponse({ message: "GEO FAQ generation completed (pending review in admin)" });
+  }
+  if (cronName === "geo-audit") {
+    const { default: geoAudit2 } = await Promise.resolve().then(() => (init_geo_audit(), geo_audit_exports));
+    const result = await geoAudit2(env, { force: true });
+    return jsonResponse({ message: "GEO audit chunk completed", ...result });
+  }
   return jsonResponse({
     message: `Cron ${cronName} triggered`,
     note: "This cron handler is not yet implemented"
   });
+});
+route("GET", "/api/settings/content-pipeline", async ({ env }) => {
+  const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const state = await getJSON2(
+    env.SEO_DATA,
+    "automation:pause-content-pipeline"
+  );
+  return jsonResponse({ paused: !!state, ...state });
+});
+route("POST", "/api/settings/content-pipeline", async ({ env, request }) => {
+  const auth = request.headers.get("Authorization");
+  if (auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: "Invalid JSON body" }, 400);
+  }
+  if (typeof body.paused !== "boolean") {
+    return jsonResponse({ error: 'Field "paused" (boolean) is required' }, 400);
+  }
+  if (body.paused) {
+    await setJSON2(env.SEO_DATA, "automation:pause-content-pipeline", {
+      pausedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      reason: body.reason || "paused via admin API"
+    });
+  } else {
+    await env.SEO_DATA.delete("automation:pause-content-pipeline");
+  }
+  return jsonResponse({ paused: body.paused });
+});
+route("GET", "/api/geo/scores", async ({ env }) => {
+  const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const rows = await getJSON2(env.SEO_DATA, "geo:scores") ?? [];
+  const sorted = rows.slice().sort((a, b) => a.score - b.score);
+  const lastScoredAt = rows.reduce((max, r) => r.scored_at > max ? r.scored_at : max, "");
+  return jsonResponse({
+    scored_at: lastScoredAt || null,
+    count: rows.length,
+    average: rows.length ? Math.round(rows.reduce((s, r) => s + r.score, 0) / rows.length) : null,
+    scores: sorted
+  });
+});
+route("GET", "/api/geo/patches", async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const patches = await getJSON2(env.SEO_DATA, "geo:patches") ?? [];
+  return jsonResponse(patches);
+});
+route("GET", "/api/geo/patches/approved", async ({ env }) => {
+  const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const patches = await getJSON2(env.SEO_DATA, "geo:patches") ?? [];
+  return jsonResponse(patches.filter((p) => p.status === "approved"));
+});
+route("POST", "/api/geo/patches/mark-applied", async ({ env, request }) => {
+  const body = await request.json().catch(() => null);
+  if (!body || !Array.isArray(body.slugs) || body.slugs.length === 0) {
+    return jsonResponse({ error: "slugs[] is required" }, 400);
+  }
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const patches = await getJSON2(env.SEO_DATA, "geo:patches") ?? [];
+  const wanted = new Set(body.slugs.map(String));
+  let marked = 0;
+  for (const p of patches) {
+    if (wanted.has(p.slug) && p.status === "approved") {
+      p.status = "applied";
+      p.pr_url = body.pr_url;
+      marked++;
+    }
+  }
+  if (marked > 0) await setJSON2(env.SEO_DATA, "geo:patches", patches);
+  return jsonResponse({ marked, pr_url: body.pr_url ?? null });
+});
+route("GET", "/api/geo/patches/workflow-report", async ({ env }) => {
+  const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const last = await getJSON2(env.SEO_DATA, "geo:workflow:last_report");
+  return jsonResponse(last ?? { status: "never_run", reported_at: null });
+});
+route("POST", "/api/geo/patches/workflow-report", async ({ env, request }) => {
+  const body = await request.json().catch(() => null);
+  const allowed = ["success", "failure", "pending_pr"];
+  if (!body || !allowed.includes(String(body.status))) {
+    return jsonResponse({ error: "status must be success|failure|pending_pr" }, 400);
+  }
+  const report = {
+    status: body.status,
+    run_id: body.run_id,
+    event: body.event,
+    applied: typeof body.applied === "number" ? body.applied : void 0,
+    pr_url: body.pr_url,
+    branch: body.branch,
+    compare_url: body.compare_url,
+    error: typeof body.error === "string" ? body.error.slice(-6e3) : void 0,
+    reported_at: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  await setJSON2(env.SEO_DATA, "geo:workflow:last_report", report);
+  const history = await getJSON2(env.SEO_DATA, "geo:workflow:history") ?? [];
+  history.push(report);
+  await setJSON2(env.SEO_DATA, "geo:workflow:history", history.slice(-20));
+  return jsonResponse({ ok: true });
+});
+route("PUT", "/api/geo/patches/:slug", async ({ env, params, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const body = await request.json().catch(() => null);
+  if (!body) {
+    return jsonResponse({ error: "Invalid JSON body" }, 400);
+  }
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const patches = await getJSON2(env.SEO_DATA, "geo:patches") ?? [];
+  const idx = patches.findIndex((p) => p.slug === params.slug);
+  if (idx < 0) {
+    return jsonResponse({ error: "Not found" }, 404);
+  }
+  const allowed = [
+    "definition_sentence",
+    "fact_points",
+    "status",
+    "title"
+  ];
+  for (const key of allowed) {
+    if (body[key] !== void 0) {
+      patches[idx][key] = body[key];
+    }
+  }
+  await setJSON2(env.SEO_DATA, "geo:patches", patches);
+  return jsonResponse(patches[idx]);
+});
+route("POST", "/api/geo/patches/pr", async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const { getJSON: getJSON2, setJSON: setJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+  const patches = await getJSON2(env.SEO_DATA, "geo:patches") ?? [];
+  const approved = patches.filter((p) => p.status === "approved");
+  if (approved.length === 0) {
+    return jsonResponse({ error: 'No approved patches. Approve patches first (PUT /api/geo/patches/:slug {status:"approved"})' }, 400);
+  }
+  const { openPatchPullRequest: openPatchPullRequest2 } = await Promise.resolve().then(() => (init_github(), github_exports));
+  const result = await openPatchPullRequest2(env, approved);
+  const appliedSet = new Set(result.appliedSlugs);
+  for (const p of patches) {
+    if (appliedSet.has(p.slug)) {
+      p.status = "applied";
+      p.pr_url = result.prUrl;
+    }
+  }
+  await setJSON2(env.SEO_DATA, "geo:patches", patches);
+  return jsonResponse({ message: "Pull request opened. Merge it on GitHub to deploy.", ...result });
 });
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -4475,26 +6203,107 @@ __name(register, "register");
 register();
 
 // src/lib/inquiries.ts
+var ITEM_PREFIX = "inquiries:item:";
+var DETAIL_FETCH_BUDGET = 40;
+var META_FIELD_MAX = 120;
+function itemKey(id) {
+  return `${ITEM_PREFIX}${id}`;
+}
+__name(itemKey, "itemKey");
+function metaField(value) {
+  const s = (value ?? "").toString();
+  return s.length > META_FIELD_MAX ? s.slice(0, META_FIELD_MAX) : s;
+}
+__name(metaField, "metaField");
+function buildIndexMeta(inq) {
+  return {
+    id: inq.id,
+    status: inq.status,
+    created_at: inq.created_at,
+    name: metaField(inq.name),
+    email: metaField(inq.email),
+    phone: metaField(inq.phone),
+    company: metaField(inq.company),
+    country: metaField(inq.country),
+    product_name: metaField(inq.product_name),
+    quantity: metaField(inq.quantity),
+    source_page: metaField(inq.source_page)
+  };
+}
+__name(buildIndexMeta, "buildIndexMeta");
+function rowFromMeta(meta) {
+  return { ...meta, message: "", replies: [] };
+}
+__name(rowFromMeta, "rowFromMeta");
+async function listIndexKeys(kv) {
+  const out = [];
+  let cursor;
+  do {
+    const page = await kv.list({ prefix: ITEM_PREFIX, cursor });
+    for (const k of page.keys) {
+      const id = parseInt(k.name.slice(ITEM_PREFIX.length), 10);
+      if (!isNaN(id)) out.push({ id, meta: k.metadata ?? null });
+    }
+    cursor = page.list_complete ? void 0 : page.cursor;
+  } while (cursor !== void 0);
+  return out;
+}
+__name(listIndexKeys, "listIndexKeys");
+async function hydrateRows(kv, rows) {
+  if (!rows.length) return rows;
+  const details = await Promise.all(rows.map((r) => kv.get(itemKey(r.id), "json")));
+  return rows.map((r, i) => details[i] ?? r);
+}
+__name(hydrateRows, "hydrateRows");
+async function buildIndex(kv) {
+  const keys = await listIndexKeys(kv);
+  const legacy = keys.filter((k) => k.meta === null);
+  const healed = /* @__PURE__ */ new Map();
+  if (legacy.length > 0) {
+    const toHeal = legacy.slice(0, DETAIL_FETCH_BUDGET);
+    const details = await Promise.all(toHeal.map((k) => kv.get(itemKey(k.id), "json")));
+    await Promise.all(toHeal.map((k, i) => {
+      const d = details[i];
+      if (!d) return null;
+      healed.set(k.id, d);
+      return kv.put(itemKey(k.id), JSON.stringify(d), { metadata: buildIndexMeta(d) });
+    }));
+  }
+  return keys.map((k) => {
+    if (k.meta) return rowFromMeta(k.meta);
+    if (healed.has(k.id)) return healed.get(k.id);
+    return { id: k.id, status: "pending", created_at: "", name: "", email: "", message: "", replies: [] };
+  });
+}
+__name(buildIndex, "buildIndex");
 async function getInquiries(kv, page = 1, pageSize = 20, search, status) {
-  const listKey = "inquiries:list";
-  const listData = await kv.get(listKey, "json");
-  let inquiries = listData ? listData : [];
+  let rows = await buildIndex(kv);
+  let rowsHydrated = false;
   if (search) {
-    const searchLower = search.toLowerCase();
-    inquiries = inquiries.filter(
-      (inq) => inq.name?.toLowerCase().includes(searchLower) || inq.email?.toLowerCase().includes(searchLower) || inq.company?.toLowerCase().includes(searchLower) || inq.product_name?.toLowerCase().includes(searchLower) || inq.message?.toLowerCase().includes(searchLower)
+    if (rows.length <= DETAIL_FETCH_BUDGET) {
+      rows = await hydrateRows(kv, rows);
+      rowsHydrated = true;
+    } else {
+      console.warn(`[inquiries] ${rows.length} rows exceed detail budget ${DETAIL_FETCH_BUDGET}, search degrades to metadata fields`);
+    }
+    const q = search.toLowerCase();
+    rows = rows.filter(
+      (inq) => inq.name?.toLowerCase().includes(q) || inq.email?.toLowerCase().includes(q) || inq.company?.toLowerCase().includes(q) || inq.product_name?.toLowerCase().includes(q) || inq.message?.toLowerCase().includes(q)
     );
   }
   if (status) {
-    inquiries = inquiries.filter((inq) => inq.status === status);
+    rows = rows.filter((inq) => inq.status === status);
   }
-  inquiries.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  const total = inquiries.length;
-  const totalPages = Math.ceil(total / pageSize);
+  rows.sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime() || b.id - a.id
+  );
+  const total = rows.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const startIndex = (page - 1) * pageSize;
-  const paginatedInquiries = inquiries.slice(startIndex, startIndex + pageSize);
+  const paginated = rows.slice(startIndex, startIndex + pageSize);
+  const data = rowsHydrated || pageSize > DETAIL_FETCH_BUDGET ? paginated : await hydrateRows(kv, paginated);
   return {
-    data: paginatedInquiries,
+    data,
     page,
     pageSize,
     total,
@@ -4503,13 +6312,12 @@ async function getInquiries(kv, page = 1, pageSize = 20, search, status) {
 }
 __name(getInquiries, "getInquiries");
 async function getInquiryById(kv, id) {
-  const itemKey = `inquiries:item:${id}`;
-  const data = await kv.get(itemKey, "json");
+  const data = await kv.get(itemKey(id), "json");
   return data ? data : null;
 }
 __name(getInquiryById, "getInquiryById");
 async function createInquiry(kv, inquiryData) {
-  const id = Date.now() + Math.floor(Math.random() * 1e3);
+  const id = Date.now() + Math.floor(Math.random() * 1e6);
   const inquiry = {
     ...inquiryData,
     id,
@@ -4517,35 +6325,25 @@ async function createInquiry(kv, inquiryData) {
     created_at: (/* @__PURE__ */ new Date()).toISOString(),
     replies: []
   };
-  const itemKey = `inquiries:item:${id}`;
-  await kv.put(itemKey, JSON.stringify(inquiry));
-  const listKey = "inquiries:list";
-  const listData = await kv.get(listKey, "json");
-  const inquiries = listData ? listData : [];
-  inquiries.push(inquiry);
-  await kv.put(listKey, JSON.stringify(inquiries));
-  await updateInquiryStats(kv);
+  await kv.put(itemKey(id), JSON.stringify(inquiry), { metadata: buildIndexMeta(inquiry) });
   return inquiry;
 }
 __name(createInquiry, "createInquiry");
+async function updateInquiry(kv, id, updates) {
+  const data = await kv.get(itemKey(id), "json");
+  if (!data) return null;
+  const inquiry = { ...data, ...updates };
+  await kv.put(itemKey(id), JSON.stringify(inquiry), { metadata: buildIndexMeta(inquiry) });
+  return inquiry;
+}
+__name(updateInquiry, "updateInquiry");
 async function deleteInquiry(kv, id) {
-  const itemKey = `inquiries:item:${id}`;
-  const data = await kv.get(itemKey, "json");
-  if (!data) return false;
-  await kv.delete(itemKey);
-  const listKey = "inquiries:list";
-  const listData = await kv.get(listKey, "json");
-  if (listData) {
-    const inquiries = listData.filter((inq) => inq.id !== id);
-    await kv.put(listKey, JSON.stringify(inquiries));
-  }
-  await updateInquiryStats(kv);
+  await kv.delete(itemKey(id));
   return true;
 }
 __name(deleteInquiry, "deleteInquiry");
 async function addReply(kv, id, reply) {
-  const itemKey = `inquiries:item:${id}`;
-  const data = await kv.get(itemKey, "json");
+  const data = await kv.get(itemKey(id), "json");
   if (!data) return null;
   const inquiry = data;
   if (!inquiry.replies) inquiry.replies = [];
@@ -4556,40 +6354,22 @@ async function addReply(kv, id, reply) {
   });
   inquiry.status = "replied";
   inquiry.replied_at = (/* @__PURE__ */ new Date()).toISOString();
-  await kv.put(itemKey, JSON.stringify(inquiry));
-  const listKey = "inquiries:list";
-  const listData = await kv.get(listKey, "json");
-  if (listData) {
-    const inquiries = listData.map(
-      (inq) => inq.id === id ? inquiry : inq
-    );
-    await kv.put(listKey, JSON.stringify(inquiries));
-  }
-  await updateInquiryStats(kv);
+  await kv.put(itemKey(id), JSON.stringify(inquiry), { metadata: buildIndexMeta(inquiry) });
   return inquiry;
 }
 __name(addReply, "addReply");
 async function getInquiryStats(kv) {
-  return await updateInquiryStats(kv);
+  const rows = await buildIndex(kv);
+  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  return {
+    total: rows.length,
+    pending: rows.filter((i) => i.status === "pending").length,
+    replied: rows.filter((i) => i.status === "replied").length,
+    closed: rows.filter((i) => i.status === "closed").length,
+    today: rows.filter((i) => i.created_at?.split("T")[0] === todayStr).length
+  };
 }
 __name(getInquiryStats, "getInquiryStats");
-async function updateInquiryStats(kv) {
-  const listKey = "inquiries:list";
-  const listData = await kv.get(listKey, "json");
-  const inquiries = listData ? listData : [];
-  const todayStr = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-  const stats = {
-    total: inquiries.length,
-    pending: inquiries.filter((i) => i.status === "pending").length,
-    replied: inquiries.filter((i) => i.status === "replied").length,
-    closed: inquiries.filter((i) => i.status === "closed").length,
-    today: inquiries.filter((i) => i.created_at?.split("T")[0] === todayStr).length
-  };
-  const statsKey = "inquiries:stats";
-  await kv.put(statsKey, JSON.stringify(stats));
-  return stats;
-}
-__name(updateInquiryStats, "updateInquiryStats");
 
 // src/api-inquiries.ts
 function verifyApiKey(ctx, env) {
@@ -4749,6 +6529,38 @@ route("GET", "/api/inquiries/:id", async (ctx) => {
     return jsonResponse({ error: "Internal server error", message: String(error) }, 500);
   }
 });
+var updateInquiryStatusHandler = /* @__PURE__ */ __name(async (ctx) => {
+  const { env, params, request } = ctx;
+  if (!verifyAdminToken(ctx, env)) {
+    return jsonResponse({ error: "Unauthorized" }, 401);
+  }
+  const id = parseInt(params.id);
+  if (isNaN(id)) {
+    return jsonResponse({ error: "Bad request", message: "Invalid inquiry ID" }, 400);
+  }
+  try {
+    const body = await request.json();
+    const allowed = ["pending", "replied", "closed"];
+    if (!body?.status || !allowed.includes(body.status)) {
+      return jsonResponse({ error: "Bad request", message: "status must be one of: pending, replied, closed" }, 400);
+    }
+    const updates = {
+      status: body.status
+    };
+    if (body.status === "replied") {
+      updates.replied_at = (/* @__PURE__ */ new Date()).toISOString();
+    }
+    const inquiry = await updateInquiry(env.INQUIRIES, id, updates);
+    if (!inquiry) {
+      return jsonResponse({ error: "Not found", message: "Inquiry not found" }, 404);
+    }
+    return jsonResponse(inquiry);
+  } catch (error) {
+    return jsonResponse({ error: "Internal server error", message: String(error) }, 500);
+  }
+}, "updateInquiryStatusHandler");
+route("PUT", "/api/inquiries/:id", updateInquiryStatusHandler);
+route("PATCH", "/api/inquiries/:id", updateInquiryStatusHandler);
 route("DELETE", "/api/inquiries/:id", async (ctx) => {
   const { env, params } = ctx;
   if (!verifyAdminToken(ctx, env)) {
@@ -4854,6 +6666,17 @@ var index_default = {
         status: 200
       });
     }
+    if (url.pathname === "/llms.txt") {
+      const { renderLlmsTxt: renderLlmsTxt2 } = await Promise.resolve().then(() => (init_llms(), llms_exports));
+      const text = await renderLlmsTxt2(env);
+      return new Response(text, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "public, max-age=3600, must-revalidate"
+        },
+        status: 200
+      });
+    }
     if (url.pathname.endsWith(".txt")) {
       const { getIndexNowKey: getIndexNowKey2 } = await Promise.resolve().then(() => (init_indexnow(), indexnow_exports));
       const key = await getIndexNowKey2(env);
@@ -4930,7 +6753,15 @@ var index_default = {
       return new Response(response.body, { headers, status: response.status, statusText: response.statusText });
     }
     const html = await response.text();
-    const enhanced = await injectSeoTags(html, url.pathname, env);
+    let enhanced = await injectSeoTags(html, url.pathname, env);
+    if (url.pathname === "/faq.html" || url.pathname === "/faq") {
+      try {
+        const { injectFaqIntoHtml: injectFaqIntoHtml2 } = await Promise.resolve().then(() => (init_faq(), faq_exports));
+        enhanced = await injectFaqIntoHtml2(enhanced, env);
+      } catch (err) {
+        console.error("[faq] Runtime injection failed:", err);
+      }
+    }
     headers.set("Cache-Control", "public, max-age=300, must-revalidate");
     return new Response(enhanced, {
       headers,
@@ -4951,10 +6782,11 @@ var index_default = {
             await gscSync2(env);
           });
           break;
-        // 每日 04:00 UTC+8，仅周一真正执行 — AI 内容生成
+        // 每日 04:00 UTC+8 — AI 内容生成（每天 1 个产品组 = 1 篇文章）
         case "0 20 * * *":
           await runCronTask("generate", env, async () => {
-            if (!isBeijingWeekday(1)) return `\u8DF3\u8FC7\uFF1A\u4ECA\u5929\u4E0D\u662F\u5468\u4E00\uFF08\u5317\u4EAC\u5468 ${beijingDay()}\uFF09`;
+            const paused = await checkContentPipelinePaused(env);
+            if (paused) return paused;
             const { default: generate2 } = await Promise.resolve().then(() => (init_generate(), generate_exports));
             await generate2(env);
           });
@@ -4962,6 +6794,8 @@ var index_default = {
         // 每日 05:00 UTC+8 — SEO 评分 + 发布（有草稿才处理，空转开销极低）
         case "0 21 * * *":
           await runCronTask("score", env, async () => {
+            const paused = await checkContentPipelinePaused(env);
+            if (paused) return paused;
             const { default: score2 } = await Promise.resolve().then(() => (init_score(), score_exports));
             await score2(env);
           });
@@ -4973,6 +6807,10 @@ var index_default = {
             const { default: monthlyReport2 } = await Promise.resolve().then(() => (init_monthly_report(), monthly_report_exports));
             await monthlyReport2(env);
           });
+          await runCronTask("geo-audit", env, async () => {
+            const { default: geoAudit2 } = await Promise.resolve().then(() => (init_geo_audit(), geo_audit_exports));
+            return (await geoAudit2(env)).summary;
+          });
           break;
         // 每日 06:00 UTC+8，仅周日真正执行 — 效果追踪
         case "0 22 * * *":
@@ -4980,6 +6818,30 @@ var index_default = {
             if (!isBeijingWeekday(0)) return `\u8DF3\u8FC7\uFF1A\u4ECA\u5929\u4E0D\u662F\u5468\u65E5\uFF08\u5317\u4EAC\u5468 ${beijingDay()}\uFF09`;
             const { default: track2 } = await Promise.resolve().then(() => (init_track(), track_exports));
             await track2(env);
+          });
+          await runCronTask("geo-faq", env, async () => {
+            if (!isBeijingWeekday(0)) return `\u8DF3\u8FC7\uFF1A\u4ECA\u5929\u4E0D\u662F\u5468\u65E5\uFF08\u5317\u4EAC\u5468 ${beijingDay()}\uFF09`;
+            const { getJSON: getJSON2 } = await Promise.resolve().then(() => (init_kv(), kv_exports));
+            const last = await getJSON2(env.SEO_DATA, "cron:last_run:geo-faq");
+            if (last && Date.now() - new Date(last.timestamp).getTime() < 20 * 36e5) {
+              return `\u8DF3\u8FC7\uFF1A20 \u5C0F\u65F6\u5185\u5DF2\u751F\u6210\u8FC7(\u4E0A\u6B21 ${last.timestamp})`;
+            }
+            const { default: geoFaq2 } = await Promise.resolve().then(() => (init_geo_faq(), geo_faq_exports));
+            await geoFaq2(env);
+          });
+          break;
+        // 备用直达 slot(若未来 trigger 被正确调度则由此触发;当前 Git 集成部署不调度新表达式)
+        case "0 23 * * *":
+          await runCronTask("geo-faq", env, async () => {
+            if (!isBeijingWeekday(0)) return `\u8DF3\u8FC7\uFF1A\u4ECA\u5929\u4E0D\u662F\u5468\u65E5\uFF08\u5317\u4EAC\u5468 ${beijingDay()}\uFF09`;
+            const { default: geoFaq2 } = await Promise.resolve().then(() => (init_geo_faq(), geo_faq_exports));
+            await geoFaq2(env);
+          });
+          break;
+        case "0 1 * * *":
+          await runCronTask("geo-audit", env, async () => {
+            const { default: geoAudit2 } = await Promise.resolve().then(() => (init_geo_audit(), geo_audit_exports));
+            return (await geoAudit2(env)).summary;
           });
           break;
         default:
@@ -5006,6 +6868,12 @@ function isBeijingWeekday(day) {
   return beijingDay() === day;
 }
 __name(isBeijingWeekday, "isBeijingWeekday");
+async function checkContentPipelinePaused(env) {
+  const reason = await env.SEO_DATA.get("automation:pause-content-pipeline");
+  if (!reason) return null;
+  return `\u8DF3\u8FC7\uFF1A\u5185\u5BB9\u7BA1\u7EBF\u5DF2\u4EBA\u5DE5\u6682\u505C\uFF08${reason}\uFF09\u3002\u6062\u590D\uFF1APOST /api/settings/content-pipeline {"paused":false} \u6216\u5220\u9664 KV \u952E automation:pause-content-pipeline`;
+}
+__name(checkContentPipelinePaused, "checkContentPipelinePaused");
 async function runCronTask(name, env, fn) {
   const start = Date.now();
   console.log(`[Cron:${name}] Starting...`);

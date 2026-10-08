@@ -1,1 +1,1 @@
-This folder contains the built output assets for the worker "kestrel-metal-web" generated at 2026-09-21T02:19:47.258Z.
+This folder contains the built output assets for the worker "kestrel-metal-web" generated at 2026-10-08T01:51:17.989Z.
