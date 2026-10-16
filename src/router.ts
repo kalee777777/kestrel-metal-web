@@ -1087,6 +1087,22 @@ route('POST', '/api/trigger/:cron', async ({ env, params, request }) => {
   });
 });
 
+// ─── URL 索引状态检查（只读 URL Inspection API，ADMIN_TOKEN） ───
+route('GET', '/api/gsc/inspect', async ({ env, request, url }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const target = url.searchParams.get('url');
+  if (!target) return jsonResponse({ error: 'Missing ?url=' }, 400);
+  try {
+    const { inspectUrl } = await import('./lib/gsc');
+    const result = await inspectUrl(env, target);
+    return jsonResponse({ url: target, ...result });
+  } catch (err) {
+    return jsonResponse({ error: err instanceof Error ? err.message : String(err) }, 500);
+  }
+});
+
 // ─── 内容管线暂停开关（generate + score cron 的人工闸门） ───
 //
 // 背景：2026-09-24 Google spam update 推送期间暂停新增 AI 内容，

@@ -276,3 +276,52 @@ export async function verifyConnection(env: GscEnv): Promise<{
     };
   }
 }
+
+/**
+ * URL Inspection API（只读）：查单个 URL 的索引状态/最近抓取时间
+ * scope 要求 webmasters 或 webmasters.readonly —— 现有授权即可使用
+ */
+export async function inspectUrl(
+  env: GscEnv,
+  inspectionUrl: string,
+): Promise<{
+  verdict?: string;
+  coverageState?: string;
+  lastCrawlTime?: string;
+  crawledAs?: string;
+  googleCanonical?: string;
+  userCanonical?: string;
+  robotsTest?: string;
+  indexingStates?: string;
+  pageFetchState?: string;
+  raw?: unknown;
+}> {
+  const accessToken = await getAccessToken(env);
+  const resp = await fetch('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      inspectionUrl,
+      siteUrl: env.GSC_SITE_URL,
+      languageCode: 'en',
+    }),
+  });
+  const data = (await resp.json()) as { inspectionResult?: Record<string, unknown>; error?: unknown };
+  if (!resp.ok) {
+    throw new Error(`URL inspection failed (${resp.status}): ${JSON.stringify(data?.error ?? data)}`);
+  }
+  const r = (data.inspectionResult ?? {}) as any;
+  const idx = r.indexStatusResult ?? {};
+  return {
+    verdict: idx.verdict,
+    coverageState: idx.coverageState,
+    lastCrawlTime: idx.lastCrawlTime,
+    crawledAs: idx.crawledAs,
+    googleCanonical: idx.googleCanonical,
+    userCanonical: idx.userCanonical,
+    robotsTest: idx.robotsTestResult?.verdict,
+    indexingStates: (idx.indexingState ?? []).join ? (idx.indexingState ?? []).join(', ') : idx.indexingState,
+    pageFetchState: (r.pageFetchResult ?? {}).fetchState,
+    raw: undefined,
+  };
+}
