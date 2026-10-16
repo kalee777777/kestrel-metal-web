@@ -44,7 +44,7 @@ Security Fencing, Wire Mesh, Chain Link Fence, Gabion Boxes, Razor Wire, Barbed 
 ### 1.4 About 简介文案（可直接粘贴，~1400 字符）
 
 ```text
-Kestrel Metal Products Co., Ltd. (安平县凯瑞尔金属制品有限公司) is a China-based manufacturer of security fences, wire mesh, gabions, and razor wire, headquartered in Anping County, Hebei — China's wire mesh industrial hub — since 2014.
+Kestrel Metal Products Co., Ltd. (安平县伦科金属制品有限公司) is a China-based manufacturer of security fences, wire mesh, gabions, and razor wire, headquartered in Anping County, Hebei — China's wire mesh industrial hub — since 2014.
 
 WHAT WE MANUFACTURE
 • Security fence systems: 358 anti-climb mesh, 3D welded panels (1.73–2.4 m), Y-post systems

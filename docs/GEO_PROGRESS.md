@@ -2,7 +2,7 @@
 
 > **文档性质**: 滚动更新（活文档），每次 GEO 相关工作完成后更新本文件
 > **创建日期**: 2026-08-30
-> **最后更新**: 2026-10-07
+> **最后更新**: 2026-10-09
 > **定位**: GEO 工作进度总览与维护入口。单轮工作的详细实施与验证记录见《GEO 优化报告》，本文件回答"现在到哪了、接下来做什么"
 
 ---
@@ -262,7 +262,7 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 2. 若页面自带静态 JSON-LD，运行时 JS 不会重复注入（无需处理）；若依赖运行时注入，确认 `js/seo-enhance.js` 分类关键词覆盖
 3. **修改 Schema 结构时需同步三处**：`perf-scripts/static-jsonld.js`（静态层）、`js/seo-enhance.js`（运行时层）、存量 HTML（重跑生成器）
 4. 新页面加入 `sitemap.xml`（现 217 条），确认 canonical 为 `.html` 形态;**流水线文章无需此步**(动态 sitemap 自动合并)
-5. 全站公司名使用规范：品牌名 **Kestrel Metal**（Schema `name` 字段），法律全称 **Kestrel Metal Products Co., Ltd.**（正文/法务/证书），中文 **安平县凯瑞尔金属制品有限公司**（实体关联场景）
+5. 全站公司名使用规范：品牌名 **Kestrel Metal**（Schema `name` 字段），法律全称 **Kestrel Metal Products Co., Ltd.**（正文/法务/证书），中文 **安平县伦科金属制品有限公司**（实体关联场景）
 
 ### 5.3 关键配置速查
 
@@ -306,4 +306,5 @@ GEO 建设按"开门 → 自我介绍 → 让 AI 敢引用 → 知道谁来 → 
 | 2026-09-23 | GA4 ai_referral 首查：28 天 7 次事件/3 用户（ChatGPT 6 次、/fence-3d.html 独占 4 次；Gemini 1；Perplexity 0）；「AI Referral 月度报告」探索定型，GEO-03 关闭 |
 | 2026-09-25 | 第六轮：GEO 自动化流水线三段式——A) 生成即 GEO（prompt 定义句/faq-item/服务端 FAQPage schema/GEO≥70 门禁+失分反馈重生成）；B) llms.txt 动态化 + FAQ 服务端化（KV 单一数据源、faq.html 运行时注入、周日 geo-faq cron 扩容待审）；C) 月度 geo-audit 全站评分 + 低分页补丁 → GitHub PR 人工合并；月报附 GEO 段；tsc/dry-run/冒烟全通过 |
 | 2026-09-26 | 第七轮：上线 24 小时全链路验证——修复自域 fetch 失败与 50 子请求上限(审计分片续跑,215/215 页均分 64);cron 新表达式不被调度 → 挂老 slot(留痕验证);PR 通道弃 PAT 改 GitHub Actions(零 token,workflow-report 可观测),PR #1/#2 自动生成合并,20 页 44→52、4 处 AI 幻觉修正;FAQ 服务端化收尾(28 条/schema 28,筛选 Tab + 双向 E2E,用户亲手走通);流水线连续两天自跑发文(SEO 81-82/GEO 75-82)+ llms.txt 自动 2 条;**GEO-01 基线:Perplexity 0/10(自动化)**,衍生 ENT-07 目录页建档 P0 |
-| 2026-10-07 | 第八轮:ENT-07 made-in-china 建档完成——公司信息 + 84 产品按 fact sheet 录入(免费会员:纯文本描述);资料包(mic-company-info-helper.html,本地 127.0.0.1:8791)两度升级:⑩ MIC 13 产品属性速查卡 + 84 卡片逐产品预填(按产品线映射,保修期 ⏳ 待业务确认)、MIC 纯文本版描述(实体符修复/紧凑排版/全量验证零联系方式);10-02 顺带:FAQ 6 条数字口径统一(锌层 40-270 g/m²、MOQ 50 rolls、竞品名清零)+ 产出《GEO流程全景-不发文章如何被AI引用.html》。**下一步**:URL 回填 → sameAs/llms.txt(ENT-05)→ 10-09 基线复测 |
+| 2026-10-07 | 第八轮:ENT-07 made-in-china 建档完成——公司信息 + 84 产品按 fact sheet 录入(免费会员:纯文本描述);资料包(mic-company-info-helper.html,本地 127.0.0.1:8791)两度升级:⑩ MIC 13 产品属性速查卡 + 84 卡片逐产品预填(按产品线映射,保修期 ⏳ 待业务确认)、MIC 纯文本版描述(实体符修复/紧凑排版/全量验证零联系方式);10-02 顺带:FAQ 6 条数字口径统一(锌层 40-270 g/m²、MOQ 50 rolls、竞品名清零)+ 产出《GEO流程全景-不发文章如何被AI引用.html》。**封口性质疑**:次日(10-09)确认免费会员无公开 showroom URL,该渠道验收受阻(见第九轮) |
+| 2026-10-09 | 第九轮:全链路运行健康核查(实时取数)——7 个 cron 任务今日全部正常唤起且 success:true(gsc-sync 真执行,其余按周期跳过,无 error;generate/score 仍按 09-30 决定暂停发文);FAQ 在线 31 条 faq-item(含 schema)、llms.txt 在线 81 行(Latest Guides 5 条)结构完整。**实体口径决策**:外部实体统一用英文品牌 kestrelmetal,不涉及中文→llms.txt Company Identity 删除中文法名行(纯英文)。**ENT-07 受阻确认**:made-in-china 免费会员无公开 showroom URL→「URL 回填→sameAs/llms 补行」闭环做不了,该渠道降级为不可验收;替代走 GBP+Wikidata(填写包 gbp-wikidata-fill-pack.html 已备)。**改后待办**:push 部署 llms.txt + 10-09 到期基线复测 |

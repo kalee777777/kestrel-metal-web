@@ -16,7 +16,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 | 字段 | 标准值 |
 |------|--------|
 | 公司名称 | Kestrel Metal |
-| 中文名称 | 安平县凯瑞尔金属制品有限公司 |
+| 中文名称 | 安平县伦科金属制品有限公司 |
 | 成立时间 | 2014 |
 | 总部地址 | No. 888 Industrial Road, Anping County, Hengshui, Hebei Province, China |
 | 员工规模 | 60+ |
@@ -41,7 +41,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 
 **操作步骤**:
 1. 注册 Europages 供应商账户（免费）
-2. 搜索 "Kestrel Metal" 或 "安平县凯瑞尔金属制品有限公司"，检查是否已有公司页面
+2. 搜索 "Kestrel Metal" 或 "安平县伦科金属制品有限公司"，检查是否已有公司页面
 3. 如果没有，点击 "Claim your company" 创建公司页面
 4. 填写以下字段（必须与站内一致）：
    - Company name: Kestrel Metal
@@ -123,7 +123,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 
 **操作步骤**:
 1. 登录 Google Business Profile
-2. 搜索 "Kestrel Metal" 或 "安平县凯瑞尔金属制品有限公司"
+2. 搜索 "Kestrel Metal" 或 "安平县伦科金属制品有限公司"
 3. 如果已有页面但未认领，点击 "Claim this business"
 4. 完善以下信息：
    - Business name: Kestrel Metal

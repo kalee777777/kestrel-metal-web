@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>实体建档填写内容包 — GBP + Wikidata</title>
+<style>
+  :root{
+    --black:#0a0a0a; --orange:#ff6b35; --line:#e6e3de; --bg:#faf9f7; --muted:#6b665f; --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--black);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.65;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
+  header.hero{
+    background:linear-gradient(135deg,#0a0a0a,#1f1f1f); color:#fff; border-radius:14px;
+    padding:28px 28px; margin-bottom:28px; position:relative; overflow:hidden;
+  }
+  header.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,107,53,.35),transparent 70%);}
+  header.hero h1{margin:0 0 6px;font-size:24px;letter-spacing:.5px;}
+  header.hero p{margin:0;color:#cfcfcf;font-size:14px;}
+  header.hero .tag{display:inline-block;margin-top:12px;background:var(--orange);color:#fff;font-size:12px;
+    font-weight:600;padding:4px 10px;border-radius:999px;}
+  .alert{
+    display:flex;gap:10px;align-items:flex-start;background:#fff4ec;border:1px solid #f6cdb6;
+    border-left:4px solid var(--orange);border-radius:10px;padding:12px 14px;margin-bottom:24px;font-size:14px;
+  }
+  .alert b{color:#c7460f;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden;}
+  .card h2{margin:0;padding:14px 20px;background:#f3f1ee;font-size:17px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .step-num{background:var(--black);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;
+    align-items:center;justify-content:center;font-size:13px;margin-right:8px;}
+  .card .body{padding:18px 20px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #efece8;vertical-align:top;}
+  th{background:#f7f5f3;font-weight:600;white-space:nowrap;}
+  tr:last-child td{border-bottom:none;}
+  td.k{white-space:nowrap;font-weight:600;color:#403c37;width:30%;}
+  td.c{width:70%;}
+  .val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:#f4f2ef;
+    padding:1px 6px;border-radius:5px;word-break:break-all;}
+  .lbl{color:var(--muted);font-size:12px;margin-bottom:2px;}
+  .copybox{position:relative;background:#faf9f7;border:1px dashed #cfcac3;border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;}
+  .copybtn{float:right;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;
+    padding:5px 12px;cursor:pointer;}
+  .copybtn:hover{filter:brightness(1.05);}
+  code, .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;}
+  ul,ol{margin:6px 0 6px 4px;padding-left:20px;}
+  li{margin:5px 0;}
+  .done{border-radius:8px;padding:2px 8px;font-size:12px;font-weight:600;}
+  .done.on{background:#e7f5e9;color:#17732a;}
+  .pv{background:#fff8eb;border:1px solid #f0e3c0;border-radius:8px;padding:2px 8px;font-size:13px;color:#8a6d1a;}
+  .note{font-size:13px;color:var(--muted);}
+  .small{font-size:13px;}
+  footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center;}
+  .pill{display:inline-block;background:#f3f1ee;border:1px solid var(--line);border-radius:999px;
+    padding:2px 10px;font-size:12px;margin:2px 4px 2px 0;}
+  @media(max-width:600px){
+    td.k{width:38%;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>实体建档 · 填写内容包</h1>
+  <p>Google Business Profile(GBP) + Wikidata —— 免费、Google 强关联、必收录的站外权威源</p>
+  <span class="tag">来源:entity-fact-sheet.md(唯一事实源) · 日期 2026-10-08</span>
+</header>
+
+<div class="alert">
+  <span>⛔</span>
+  <div><b>一致性提醒:</b>公司中文法定名为<b>安平县伦科金属制品有限公司</b>。所有平台「公司名/地址/电话/网址」必须与本文档(事实源)完全一致,一致性才能触发 Google 实体识别。</div>
+</div>
+
+<!-- ===================== GBP ===================== -->
+<div class="card">
+  <h2><span><span class="step-num">1</span>Google Business Profile(GBP)</span><span class="done on">目的:地图 + AI 引用</span></h2>
+  <div class="body">
+    <p class="small">入口:用 Google 账号打开 <span class="val">google.com/business</span> → <b>添加商家</b>。以下为各字段的直接填法:</p>
+
+    <table>
+      <tr><th style="width:30%">字段</th><th>填写值</th></tr>
+      <tr><td class="k">商家名称</td><td class="c">Kestrel Metal Products Co., Ltd.<br><span class="note">可选填中文别名:安平县伦科金属制品有限公司</span></td></tr>
+      <tr><td class="k">类别(主)</td><td class="c"><b>Fencing supplier</b> → 搜不到选 <b>Manufacturer</b> → 再不行选 <b>Metal products wholesaler</b></td></tr>
+      <tr><td class="k">地址</td><td class="c">Anping Industrial Zone, Anping County, Hengshui, Hebei 053600, China</td></tr>
+      <tr><td class="k">是否展示门牌</td><td class="c">优先选【<b>服务区域商家、不展示实体地址</b>】→ 避免寄明信片验证卡住;<br>若你能电话/视频验证,可填完整地址。</td></tr>
+      <tr><td class="k">网站</td><td class="c"><span class="val">https://www.kestrelmetal.com</span></td></tr>
+      <tr><td class="k">电话</td><td class="c">+86 17832383339</td></tr>
+      <tr><td class="k">营业状态</td><td class="c">全球业务,服务 50+ 国家(填「联系预约」,勿写具体营业时段)</td></tr>
+    </table>
+
+    <p class="lbl" style="margin-top:16px">简介(中版,~150 词)—— 直接粘贴</p>
+    <div class="copybox" id="gbp-desc" style="font-size:13.5px">
+      Kestrel Metal Products Co., Ltd. is a China-based manufacturer of security fencing and wire mesh products, headquartered in Anping Industrial Zone, Hebei — China's wire mesh manufacturing hub. Since 2014 we have delivered 200+ projects in 50+ countries, including a 500MW solar farm perimeter in Australia and a 10,000-acre cattle ranch fencing project. Product lines include security fences (Y-post anti-climb, 358 mesh, 3D welded panels), chain link, welded wire mesh, gabions, razor wire and barbed wire. ISO 9001:2015, CE (EN 10223/10244), UKCA and REACH. FOB Tianjin/Shanghai, MOQ from 100 panels or 50 rolls.
+    </div>
+
+    <p style="margin-top:14px"><b>属性设置:</b>
+      <span class="pill">员工 51–100</span>
+      <span class="pill">成立 2014</span>
+      <span class="pill">认证 ISO 9001:2015 / CE / UKCA / REACH</span>
+    </p>
+
+    <div class="pv" style="margin-top:14px">✅ <b>完成后要做什么:</b>上线后,把公开地址 URL(<span class="mono">google.com/maps/place/…</span> 或 <span class="mono">business.google.com/…</span>)发给助手 → 加入全站 sameAs。</div>
+  </div>
+</div>
+
+<!-- ===================== Wikidata ===================== -->
+<div class="card">
+  <h2><span><span class="step-num">2</span>Wikidata</span><span class="done on">目的:结构化实体锚点</span></h2>
+  <div class="body">
+    <p class="small">入口:<span class="val">wikidata.org</span> 登录 → 点 <b>Create a new Item</b>(需先邮箱验证)。</p>
+
+    <p class="lbl" style="margin-top:4px">基本信息</p>
+    <table>
+      <tr><th style="width:30%">字段</th><th>填写值</th></tr>
+      <tr><td class="k">Label</td><td class="c">Kestrel Metal Products</td></tr>
+      <tr><td class="k">Description</td><td class="c">Chinese manufacturer of security fencing and wire mesh</td></tr>
+      <tr><td class="k">Aliases(逐行)</td><td class="c">Kestrel Metal<br>Kestrel Metal Products Co., Ltd.<br>KESTREL METAL<br>安平县伦科金属制品有限公司</td></tr>
+    </table>
+
+    <p class="lbl" style="margin-top:16px;margin-bottom:0">Add statements(属性按此加,★为必须)</p>
+    <table style="margin-top:6px">
+      <tr><th>属性</th><th>属性号</th><th>值</th></tr>
+      <tr><td>★ 官网</td><td class="mono">P856</td><td><span class="val">https://www.kestrelmetal.com</span></td></tr>
+      <tr><td>★ 类属</td><td class="mono">P31</td><td>business(或 company)</td></tr>
+      <tr><td>★ 国家</td><td class="mono">P17</td><td>China(Q148)</td></tr>
+      <tr><td>★ 成立时间</td><td class="mono">P571</td><td>2014</td></tr>
+      <tr><td>行业</td><td class="mono">P452</td><td>manufacturing(Q1620571)</td></tr>
+      <tr><td>总部</td><td class="mono">P159</td><td>Anping County(可选)</td></tr>
+      <tr><td>员工数</td><td class="mono">P1128</td><td>51–100(约数)</td></tr>
+      <tr><td>LinkedIn</td><td class="mono">P4264</td><td>kestrelmetal(可选)</td></tr>
+    </table>
+
+    <p class="note" style="margin-top:12px">核心只需:官网 + 国家 + 成立 + 类属。员工/行业/总部可后补。</p>
+    <div class="pv" style="margin-top:12px">✅ <b>完成后要做什么:</b>保存拿到 Q 号页面 URL(<span class="mono">wikidata.org/wiki/Q…</span>)发给助手 → 加入 sameAs。</div>
+  </div>
+</div>
+
+<!-- ===================== 顺序 ===================== -->
+<div class="card">
+  <h2><span><span class="step-num">3</span>建议顺序</span></h2>
+  <div class="body">
+    <ol>
+      <li>先做 <b>GBP</b>(Google 自家源,最直接触发地图 + AI 引用)</li>
+      <li>再做 <b>Wikidata</b>(结构性锚点,让知识图谱对上号)</li>
+      <li>填完把两个公开 URL 发助手 → 助手做 <b>sameAs 回填收尾</b>(全站 Organization JSON-LD + llms.txt + fact-sheet 登记)</li>
+    </ol>
+  </div>
+</div>
+
+<footer>数据源 Kestrel entity-fact-sheet.md(2026-09-20 定稿) · 台账 ENT-07 · 相关中国政府站外权威工作</footer>
+</div>
+</body>
+</html>

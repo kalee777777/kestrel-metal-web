@@ -14,7 +14,7 @@
 | 品牌名 | Kestrel Metal | 各平台 Company name 统一用这个 |
 | 标准 Tagline | Security Fencing & Perimeter Solutions \| Wire Mesh, Gabions & Razor Wire Manufacturer | 与 LinkedIn 线上一致,各平台标语统一 |
 | 英文法定名 | Kestrel Metal Products Co., Ltd. | LinkedIn 页面名已用此 |
-| 中文法定名 | 安平县凯瑞尔金属制品有限公司 | |
+| 中文法定名 | 安平县伦科金属制品有限公司 | 用户 2026-10-08 更正(此前误记为「凯瑞尔」,已改) |
 | 成立年份 | 2014(12+ years) | |
 | 地址(英文,统一) | Anping Industrial Zone, Anping County, Hengshui, Hebei 053600, China | **DEC-2 已定稿 2026-09-20**;与站内 schema 一致 |
 | 电话(统一) | +86 17832383339 | **用户定稿 2026-09-20**;站内 schema 现为 `+86-17832383339`(数字相同,仅分隔符差异,见 SITE-01) |
@@ -58,7 +58,7 @@
 
 ### 长版(500+ 字,LinkedIn / GBP 公司简介)
 
-> Kestrel Metal Products Co., Ltd. (安平县凯瑞尔金属制品有限公司) is a China-based manufacturer of security fencing and wire mesh products, headquartered in Anping Industrial Zone, Hebei Province — the heart of China's wire mesh industry. Founded in 2014, the company has grown into a group of 4 manufacturing subsidiaries operating a 200,000 m² production facility with 3,000+ tons of monthly capacity.
+> Kestrel Metal Products Co., Ltd. (安平县伦科金属制品有限公司) is a China-based manufacturer of security fencing and wire mesh products, headquartered in Anping Industrial Zone, Hebei Province — the heart of China's wire mesh industry. Founded in 2014, the company has grown into a group of 4 manufacturing subsidiaries operating a 200,000 m² production facility with 3,000+ tons of monthly capacity.
 >
 > Over the past 12+ years, Kestrel Metal has delivered more than 200 projects across 50+ countries. Representative projects include a 500MW solar farm perimeter security project in Australia, a 10,000-acre cattle ranch fencing project, and gabion levee works for flood control infrastructure.
 >
@@ -72,13 +72,13 @@
 
 | 字段 | 值 |
 |------|-----|
-| 中文法定名 | 安平县凯瑞尔金属制品有限公司 |
+| 中文法定名 | 安平县伦科金属制品有限公司 |
 | 中文地址(县级) | 河北省衡水市安平县 |
 | 中文详细街道地址 | ⏳ 待补充(用户提供后填入,勿臆写) |
 
 **中文简介(短版)**:
 
-> 安平县凯瑞尔金属制品有限公司(Kestrel Metal)是中国专业的安全围栏与金属丝网制造商,总部位于"中国丝网之乡"河北安平。自 2014 年成立,已在全球 50 多个国家交付 200+ 项目,通过 ISO 9001:2015 认证,月产能 3000+ 吨。产品涵盖安全围栏、勾花网、电焊网、石笼网、刀片刺网(NATO-22)、刺绳等,支持 CE / UKCA / REACH 出口合规。
+> 安平县伦科金属制品有限公司(Kestrel Metal)是中国专业的安全围栏与金属丝网制造商,总部位于"中国丝网之乡"河北安平。自 2014 年成立,已在全球 50 多个国家交付 200+ 项目,通过 ISO 9001:2015 认证,月产能 3000+ 吨。产品涵盖安全围栏、勾花网、电焊网、石笼网、刀片刺网(NATO-22)、刺绳等,支持 CE / UKCA / REACH 出口合规。
 
 ## 五、媒体资产(平台上传从这里选)
 
@@ -94,7 +94,7 @@
 | 平台 | 档案 URL | 状态 | 日期 |
 |------|---------|------|------|
 | LinkedIn | https://www.linkedin.com/company/kestrelmetal | ✅ 已上线(slug 定稿 2026-09-20;页面待补全,见 ENT-06) | 2026-08-30 |
-| Made-in-China | ⏳ 待回填(免费会员档) | 🔄 2026-10-07 建档完成:公司信息按本表逐字录入 + 84 产品上传(纯文本描述 + 13 项产品属性)。URL 拿到后:更新本表 → sameAs 回加(ENT-05)→ llms.txt Company Identity 段补行 | 2026-10-07 |
+| Made-in-China | ⏳ 待回填(免费会员档,无公开主页) | 🔄 2026-10-07 建档完成:公司信息逐字录入 + 84 产品上传。⛔ 2026-10-08:确认免费档**无独立公开展厅 URL**(候选域名均返回 showroom doesn't exist)→ **sameAs 回填暂缓**,待开通展厅拿到有效 URL 后再做(届时更新本表 → sameAs 回加 ENT-05 → llms.txt Company Identity 段补行)。 | 2026-10-07 |
 | Europages | — | ☐ 未建 | |
 | Thomasnet | — | ☐ 未建 | |
 | Google Business Profile | — | ☐ 未建 | |
