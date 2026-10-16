@@ -222,3 +222,17 @@ curl -X POST https://www.kestrelmetal.com/api/settings/content-pipeline \
 **结论：9-21 的 canonical/重定向统一改造技术执行无瑕疵，不是崩塌原因**（Google 侧"备用网页（有适当的规范标记）127 页"也印证 canonical 被正确理解）。崩塌归因回到 spam update × 站点画像本身。
 
 ⚠️ 方法论教训：首轮脚本 4 线程共用一个临时 body 文件，产生 38 个"canonical 错配"假阳性（并发竞态把 A 页的 canonical 记到 B 页头上）；串行逐个复核后全部澄清。并发抓取页面内容做比对时，临时文件必须按线程隔离。
+
+### 7.5 逐 URL 索引状态核查（2026-10-16，新增 /api/gsc/inspect 端点，commit `a922a6a`）
+
+用 URL Inspection API（readonly scope 即可用）核查"请求编入索引"候选清单：
+
+| URL | 状态 | 最近抓取 |
+|----|------|----------|
+| 首页 / | ✅ 已索引 | **09-19（之后未再抓）** |
+| welded-wire-mesh / fence-products / gabion-mattresses / 358-security-fence（10-16 增厚） | ✅ 已索引 | 10-09 / 10-13 / 09-18 / 09-18（均在增厚之前） |
+| gabion-boxes / chain-link / wire-razor / products | ✅ 已索引 | 09-18 / 09-11 / **10-15** / 10-12 |
+| how-to-choose-wire-mesh-manufacturer-china（09-30 新文） | ❌ **URL is unknown to Google，从未抓取** | — |
+| 对照：blog-hexagonal / stainless-steel-filtration(KV) | ✅ 已索引 | 10-12 / 09-22 |
+
+结论：①"请求编入索引"仅 how-to-choose 一条是真正必需；②对 4 个增厚页 + 首页，请求索引的价值是**强制重抓新内容**（增厚后 Google 尚未见过）；③压制期内爬取通道完全正常（10-12/10-15 仍有抓取），再次印证 indexed-but-not-served 定性。修订版操作单：how-to-choose + 首页 + 4 个增厚页，共 6 条。
