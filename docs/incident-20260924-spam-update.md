@@ -208,3 +208,17 @@ curl -X POST https://www.kestrelmetal.com/api/settings/content-pipeline \
 - 已执行/进行中的外部动作：ENT-07 made-in-china 建档完成（`2205c8b`，10-07）
 - 新增动作：GSC 网址检查 → 对首页 + 核心产品页"请求编入索引"（每日配额约 8-10 条，优先产品页而非文章页），主动触发 Google 重抓重评
 - 发文暂停继续维持；索引数跌破 200 触发内容瘦身预案的判定线不变
+
+### 7.4 全量重定向/canonical 审计（2026-10-16 执行，排除 9-21 部署嫌疑）
+
+对 sitemap 全部 212 个 URL 逐个验证 + 各类重定向抽样：
+
+| 检查项 | 结果 |
+|--------|------|
+| sitemap 212 URL | ✅ 全部 HTTP 200、零重定向、canonical 全部自指 |
+| apex→www / workers.dev→www | ✅ 单跳 301 |
+| 无扩展名→.html（抽 8）/ .htm→.html（抽 5）/ 合并文章 301（抽 3） | ✅ 全部单跳 |
+
+**结论：9-21 的 canonical/重定向统一改造技术执行无瑕疵，不是崩塌原因**（Google 侧"备用网页（有适当的规范标记）127 页"也印证 canonical 被正确理解）。崩塌归因回到 spam update × 站点画像本身。
+
+⚠️ 方法论教训：首轮脚本 4 线程共用一个临时 body 文件，产生 38 个"canonical 错配"假阳性（并发竞态把 A 页的 canonical 记到 B 页头上）；串行逐个复核后全部澄清。并发抓取页面内容做比对时，临时文件必须按线程隔离。
