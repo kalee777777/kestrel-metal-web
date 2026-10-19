@@ -429,8 +429,8 @@
           <div class="feature-stat-label">Weave Types<br>Plain / Twill / Dutch</div>
         </div>
         <div class="feature-stat">
-          <div class="feature-stat-num">800&deg;C</div>
-          <div class="feature-stat-label">Heat<br>Resistance</div>
+          <div class="feature-stat-num">870&deg;C</div>
+          <div class="feature-stat-label">Max Heat<br>Resistance (304)</div>
         </div>
         <div class="feature-stat">
           <div class="feature-stat-num">2</div>
@@ -568,7 +568,7 @@
             </div>
             <div class="spec-sim-stat">
               <div class="spec-sim-stat-label">Opening</div>
-              <div class="spec-sim-stat-value" id="sim-stat-open">0.002"</div>
+              <div class="spec-sim-stat-value" id="sim-stat-open">0.0015"</div>
             </div>
             <div class="spec-sim-stat">
               <div class="spec-sim-stat-label">Weave</div>
@@ -587,7 +587,7 @@
             </svg>
             <div class="spec-sim-center">
               <div class="spec-sim-center-line"></div>
-              <div class="spec-sim-center-circle"><span id="sim-center-label">0.002"</span></div>
+              <div class="spec-sim-center-circle"><span id="sim-center-label">0.0015"</span></div>
             </div>
           </div>
 
@@ -595,7 +595,7 @@
             <div class="spec-sim-sliders">
               <div class="spec-sim-slider-group">
                 <label>Mesh Count <span id="sim-val-mesh">400 Mesh</span></label>
-                <input type="range" id="sim-input-mesh" min="1" max="45" step="1" value="16">
+                <input type="range" id="sim-input-mesh" min="0" max="17" step="1" value="16">
               </div>
               <div class="spec-sim-slider-group">
                 <label>Wire Diameter <span id="sim-val-wire">0.001"</span></label>
@@ -603,8 +603,6 @@
                   <option value="0.192">0.192"</option>
                   <option value="0.135">0.135"</option>
                   <option value="0.120">0.120"</option>
-                  <option value="0.105">0.105"</option>
-                  <option value="0.080">0.080"</option>
                   <option value="0.063">0.063"</option>
                   <option value="0.047">0.047"</option>
                   <option value="0.028">0.028"</option>
@@ -659,11 +657,11 @@
             </thead>
             <tbody>
               <tr><td>Material Grade</td><td>AISI 304 / AISI 316 stainless steel</td></tr>
-              <tr><td>Wire Diameter</td><td>0.1 mm &ndash; 3.0 mm</td></tr>
-              <tr><td>Mesh Count</td><td>2 &times; 2 to 100 &times; 100 (up to 500 for ultra-fine)</td></tr>
+              <tr><td>Wire Diameter</td><td>0.025 mm &ndash; 4.9 mm (0.001" &ndash; 0.192")</td></tr>
+              <tr><td>Mesh Count</td><td>1 &times; 1 to 100 &times; 100 (up to 500 for ultra-fine)</td></tr>
               <tr><td>Weave Types</td><td>Plain weave, twill weave, Dutch weave</td></tr>
               <tr><td>Aperture Tolerance</td><td>&plusmn; 5% (finer control available)</td></tr>
-              <tr><td>Temperature Range</td><td>Up to 800&deg;C continuous service</td></tr>
+              <tr><td>Temperature Range</td><td>Up to 870&deg;C (304) / 825&deg;C (316) continuous service</td></tr>
               <tr><td>Surface Finish</td><td>Plain, polished, electropolished</td></tr>
               <tr><td>Standards</td><td>ISO, ASTM, FDA / food-grade compliant</td></tr>
             </tbody>
@@ -761,7 +759,7 @@
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
             </div>
             <h3>High Temperature Tolerance</h3>
-            <p>Maintains structural integrity at temperatures up to 800&deg;C, suitable for high-heat industrial processes.</p>
+            <p>Maintains structural integrity in continuous service up to 870&deg;C (304) / 825&deg;C (316), suitable for high-heat industrial processes.</p>
           </div>
           <div class="feature-card" data-reveal>
             <div class="feature-card-icon">
@@ -1015,7 +1013,7 @@
   <script>
     (function () {
       var groups = [
-        { m: '1"x1"', a: '0.808"', w: '0.192"', p: '2.540 mm', item: 'KMWM1"x1"316.192' },
+        { m: '1"x1"', a: '0.808"', w: '0.192"', p: '20.52 mm', item: 'KMWM1"x1"316.192' },
         { m: '2 Mesh', a: '0.365"', w: '0.135"', p: '9.27 mm', item: 'KMWM2316.135' },
         { m: '4 Mesh', a: '0.130"', w: '0.120"', p: '3.30 mm', item: 'KMWM4316.120' },
         { m: '8 Mesh', a: '0.062"', w: '0.063"', p: '1.57 mm', item: 'KMWM8316.063' },
@@ -1031,7 +1029,8 @@
         { m: '80 Mesh', a: '0.006"', w: '0.007"', p: '0.15 mm', item: 'KMWM80316.007' },
         { m: '100 Mesh', a: '0.0055"', w: '0.0045"', p: '0.14 mm', item: 'KMWM100316.0045' },
         { m: '200 Mesh', a: '0.003"', w: '0.0021"', p: '0.076 mm', item: 'KMWM200316.0021' },
-        { m: '400 Mesh', a: '0.002"', w: '0.001"', p: '0.051 mm', item: 'KMWM400316.001' }
+        { m: '400 Mesh', a: '0.0015"', w: '0.001"', p: '0.038 mm', item: 'KMWM400316.001' },
+        { m: '500 Mesh', a: '0.001"', w: '0.001"', p: '0.025 mm', item: 'KMWM500316.001' }
       ];
 
       var meshEl = document.getElementById('sim-input-mesh');
@@ -1049,23 +1048,19 @@
       var body = document.getElementById('sim-spec-body');
       if (!meshEl) return;
 
-      function findGroupByWire(wireDia) {
+      function wireToIndex(wireDia) {
         for (var i = 0; i < groups.length; i++) {
-          if (groups[i].w === wireDia + '"' || groups[i].w === wireDia) return groups[i];
+          if (groups[i].w === wireDia + '"' || groups[i].w === wireDia) return i;
         }
-        return null;
+        return -1;
       }
 
       function refresh() {
         var idx = parseInt(meshEl.value, 10);
-        var g = groups[Math.min(idx, groups.length - 1)];
+        if (isNaN(idx)) idx = 0;
+        idx = Math.max(0, Math.min(idx, groups.length - 1));
+        var g = groups[idx];
         var color = colorEl ? colorEl.value : '#111827';
-
-        if (wireEl) {
-          var wireVal = wireEl.value;
-          var matched = findGroupByWire(wireVal);
-          if (matched) g = matched;
-        }
 
         elStatMesh.textContent = g.m;
         elValMesh.textContent = g.m;
@@ -1104,7 +1099,11 @@
       }
 
       meshEl.addEventListener('input', refresh);
-      if (wireEl) wireEl.addEventListener('change', refresh);
+      if (wireEl) wireEl.addEventListener('change', function () {
+        var i = wireToIndex(wireEl.value);
+        if (i >= 0) meshEl.value = i;
+        refresh();
+      });
       if (colorEl) colorEl.addEventListener('change', refresh);
       refresh();
     })();
