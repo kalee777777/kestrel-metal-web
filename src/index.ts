@@ -193,7 +193,9 @@ export default {
         const published = await env.CONTENT_QUEUE.get(`published:${slug}`, 'json') as { html?: string } | null;
         if (published && published.html) {
           if (needsCanonical) return redirectToCanonical(url);
-          return new Response(published.html, {
+          // KV 文章不走静态资源路径，须在此处补齐 og/twitter 等缺失 meta
+          const enhancedArticle = await injectSeoTags(published.html, url.pathname, env);
+          return new Response(enhancedArticle, {
             headers: {
               'Content-Type': 'text/html; charset=utf-8',
               'Cache-Control': 'public, max-age=3600, must-revalidate',

@@ -244,31 +244,8 @@ function extractSeoMeta(html: string, pathname: string): SeoMeta | null {
     ogTitle: title,
     ogDescription: description,
     ogImage: DEFAULT_IMAGE,
-    ogType: pathname.includes('blog-') ? 'article' : 'website',
+    ogType: pathname.includes('blog-') || /"@type":\s*"Article"/.test(html) ? 'article' : 'website',
   };
-}
-
-function buildSeoHead(meta: SeoMeta): string {
-  const lines: string[] = [];
-
-  if (meta.keywords) {
-    lines.push(`    <meta name="keywords" content="${meta.keywords}">`);
-  }
-  lines.push(`    <link rel="canonical" href="${meta.canonical}">`);
-  lines.push(`    <meta property="og:title" content="${meta.ogTitle}">`);
-  lines.push(`    <meta property="og:description" content="${meta.ogDescription}">`);
-  lines.push(`    <meta property="og:url" content="${meta.canonical}">`);
-  lines.push(`    <meta property="og:type" content="${meta.ogType}">`);
-  lines.push(`    <meta property="og:image" content="${meta.ogImage}">`);
-  lines.push(`    <meta property="og:site_name" content="Kestrel Metal">`);
-  lines.push(`    <meta property="og:locale" content="en_US">`);
-  lines.push(`    <meta name="twitter:card" content="summary_large_image">`);
-  lines.push(`    <meta name="twitter:title" content="${meta.ogTitle}">`);
-  lines.push(`    <meta name="twitter:description" content="${meta.ogDescription}">`);
-  lines.push(`    <meta name="twitter:image" content="${meta.ogImage}">`);
-  lines.push(`    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">`);
-
-  return lines.join('\n');
 }
 
 function escapeAttr(value: string): string {
@@ -365,7 +342,6 @@ export async function injectSeoTags(
   const resolvedPath = resolvePathname(pathname);
   if (!resolvedPath.endsWith('.html') && resolvedPath !== '/') return html;
   if (resolvedPath.startsWith('/admin/')) return html;
-  if (resolvedPath.startsWith('/blog.html')) return html;
 
   // Admin 后台配置的 override 优先级最高，且不受"已有 canonical 跳过"限制
   if (env) {
@@ -383,11 +359,47 @@ export async function injectSeoTags(
   const meta = extractSeoMeta(html, resolvedPath);
   if (!meta) return html;
 
-  if (html.includes('rel="canonical"') || html.includes("rel='canonical'")) return html;
+  // 只补缺失的标签，已有的 canonical/title/description 一律不动。
+  // 旧逻辑在页面已有 canonical 时整体跳过，og/twitter 只能靠
+  // js/seo-enhance.js 客户端注入——社媒与 AI 爬虫不执行 JS，
+  // 分享预览与 AI 读取全部拿不到这些标签，故改为逐项兜底。
+  const attr = (v: string) => v.replace(/"/g, '&quot;');
+  const blocks: string[] = [];
 
-  const seoHead = buildSeoHead(meta);
+  if (meta.keywords && !/<meta\s+name=["']keywords["']/i.test(html)) {
+    blocks.push(`    <meta name="keywords" content="${attr(meta.keywords)}">`);
+  }
+  if (!/<meta\s+property=["']og:title["']/i.test(html)) {
+    // og:url 优先复用页面自身的 canonical（全站规范形态带 .html）
+    const selfCanonical = html.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i)?.[1];
+    const ogUrl = selfCanonical || `${DOMAIN}${resolvedPath === '/' ? '/' : resolvedPath}`;
+    blocks.push(
+      `    <meta property="og:title" content="${attr(meta.ogTitle)}">`,
+      `    <meta property="og:description" content="${attr(meta.ogDescription)}">`,
+      `    <meta property="og:url" content="${attr(ogUrl)}">`,
+      `    <meta property="og:type" content="${attr(meta.ogType)}">`,
+      `    <meta property="og:image" content="${attr(meta.ogImage)}">`,
+      `    <meta property="og:site_name" content="Kestrel Metal">`,
+      `    <meta property="og:locale" content="en_US">`,
+    );
+  }
+  if (!/<meta\s+name=["']twitter:card["']/i.test(html)) {
+    blocks.push(
+      `    <meta name="twitter:card" content="summary_large_image">`,
+      `    <meta name="twitter:title" content="${attr(meta.ogTitle)}">`,
+      `    <meta name="twitter:description" content="${attr(meta.ogDescription)}">`,
+      `    <meta name="twitter:image" content="${attr(meta.ogImage)}">`,
+    );
+  }
+  if (!/<meta\s+name=["']robots["']/i.test(html)) {
+    blocks.push(
+      `    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">`,
+    );
+  }
+
+  if (blocks.length === 0) return html;
   const headCloseIndex = html.indexOf('</head>');
   if (headCloseIndex === -1) return html;
 
-  return html.slice(0, headCloseIndex) + seoHead + '\n' + html.slice(headCloseIndex);
+  return html.slice(0, headCloseIndex) + blocks.join('\n') + '\n' + html.slice(headCloseIndex);
 }
