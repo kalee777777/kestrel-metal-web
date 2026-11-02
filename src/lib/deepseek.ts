@@ -506,7 +506,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
   const heroImage = aiHeroImage;
   const heroImageFallback = heroFallback;
   // faq-item：与站内静态页/seo-enhance.js/静态生成器三方约定一致（extractFaqItems 抓
-  // class="faq-item"，注入的 FAQPage schema 用 "text" 字段）——保留 faq-detail 以复用 article.css 样式
+  // class="faq-item"，注入的 FAQPage schema 的 Question 用 name+text 双字段）——保留 faq-detail 以复用 article.css 样式
   const faqHtml = outline.faq.map(f => `
       <details class="faq-item faq-detail">
         <summary>${f.question}</summary>
@@ -521,6 +521,7 @@ Output ONLY the HTML content for the article body (no <html>, <head>, <body> tag
     "@type": "FAQPage",
     "mainEntity": ${JSON.stringify(outline.faq.map(f => ({
       '@type': 'Question',
+      name: f.question,
       text: f.question,
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
     })), null, 2).replace(/</g, '\\u003c')}

@@ -7,7 +7,7 @@
  *
  * 消费方：
  * 1. Admin「FAQ 管理 / GEO 问答」—— /api/faq/* 路由
- * 2. faq.html 运行时注入 —— injectFaqIntoHtml（seo-inject 调用）
+ * 2. faq.html 运行时注入 —— injectFaqIntoHtml（seo-inject 调用），Question 用 name+text 双字段
  * 3. geo-faq cron —— 未覆盖选题判定
  */
 
@@ -194,6 +194,8 @@ ${itemsHtml}
 
   const schemaEntries = fresh.map((f) => ({
     '@type': 'Question',
+    // name 是 schema.org/Google 富结果的规范字段；text 保留兼容读 text 的解析器
+    name: f.question,
     text: f.question,
     acceptedAnswer: { '@type': 'Answer', text: f.answer },
   }));
