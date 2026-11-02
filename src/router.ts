@@ -455,6 +455,48 @@ route('GET', '/api/faq/all', async ({ env }) => {
   return jsonResponse(faqs);
 });
 
+// 一次性迁移（需 ADMIN_TOKEN）：KV 已发布文章的 FAQPage Question 从 text-only 补成 name+text
+// （2026-11-02 静态页与生成模板已修复，此端点清存量；幂等，跑完保留无害）
+route('POST', '/api/faq/migrate-published-schema', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const publishedAll =
+    (await getJSON<Array<{ slug?: string }>>(env.CONTENT_QUEUE, 'published:all')) ?? [];
+  const slugs = publishedAll
+    .map((p) => p?.slug)
+    .filter((s): s is string => typeof s === 'string' && s.length > 0);
+  const fixed: string[] = [];
+  const skipped: string[] = [];
+  let questionsFixed = 0;
+  // 与静态页修复同款替换：@type Question 后紧跟 text 的，插入同值 name（保留 text）
+  const faqPat = /("@type"\s*:\s*"Question"\s*,)(\s*)"text"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
+  for (const slug of slugs) {
+    const rec = await getJSON<{ html?: string } & Record<string, unknown>>(
+      env.CONTENT_QUEUE,
+      `published:${slug}`,
+    );
+    if (!rec || typeof rec.html !== 'string') {
+      skipped.push(`${slug} (no html)`);
+      continue;
+    }
+    let count = 0;
+    const html = rec.html.replace(faqPat, (_m, pre: string, ws: string, text: string) => {
+      count++;
+      return `${pre}"name": "${text}",${ws}"text": "${text}"`;
+    });
+    if (count === 0) {
+      skipped.push(`${slug} (already ok)`);
+      continue;
+    }
+    await setJSON(env.CONTENT_QUEUE, `published:${slug}`, { ...rec, html });
+    fixed.push(`${slug} (${count} questions)`);
+    questionsFixed += count;
+  }
+  return jsonResponse({ total: slugs.length, fixedCount: fixed.length, questionsFixed, fixed, skipped });
+});
+
 // 新增（需 ADMIN_TOKEN）
 route('POST', '/api/faq', async ({ env, request }) => {
   if (!isAdminAuthorized(request, env)) {
