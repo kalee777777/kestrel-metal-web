@@ -125,4 +125,59 @@ Kestrel Metal fence manufacturer reviews
 
 ## 本轮结果(测完填这里)
 
-*(待填)*
+### 2026-11-02 · Perplexity 复测(AI 代跑,未登录会话)
+
+> 执行: AI 浏览器自动化(与 2026-09 首轮同方式;P1-P2 用 incognito,P3 起普通未登录——incognito 匿名配额约 3 问)
+> 判定口径: 同 9 月——正文提及 "Kestrel Metal" 或引用列表出现 kestrelmetal.com
+
+#### 结果总表
+
+| # | 提及 | 被点名/推荐对象 | 来源池特征 |
+|---|------|----------------|-----------|
+| P1 | ❌ | **BDFENCE**(候选) | bd-fence×3 + zh-fence.en.made-in-china + wire-fencing.org + heslyfence + fence-global + seaforestpv |
+| P2 | ❌ | Anping Xinboyuan(9月复现) | made-in-china×2 + accio + tradeindia + chinax |
+| P3 | ❌ | Hebei Diefeng(帝峰) | **sohu 中文媒体** + made-in-china(复现) + accio + b2bdata.baidu + ensun.io + bd-fence |
+| P4 | ❌ | Profence(澳洲本地) | profence.com.au + bd-fence + rongtai(9月复现) + giant(9月复现) + bpwiremesh |
+| P5 | ❌ | **Qunkun Metal 对比文被引**(AI注明"无测试数据,属厂商宣称") | qunkunmetal + **apps.dtic.mil 军方技术库** + rongtai + leeter(9月复现) + wiresfence 等 9 源 |
+| P6 | ❌ | (学术式回答) | **scielo.br 期刊(Trusted domain) + 美国农业部技术指南** + civilsstore.co.uk + 竞品×4 |
+| P7 | ❌ | **Atkore(美国)被验证为 NATO-22 制造商**;中国工厂零提及 | store.astm.org(Trusted) + atkore.com + 军品零售生态×10+(ebay/gun shops) |
+| P8 | ❌ | (无点名) | hscodeatlas + tariffnumber(9月同款) + **hts.usitc.gov 官方** + accio + leeter |
+| P9 | ❌ | **"没有任何中国供应商合规性可被验证"**(AI原话) | **gov.uk(Trusted×3) + hse.gov.uk** + makeuk.org + amazon卖家中心 + findtheneedle.co.uk |
+| P10 | ❌ | (无点名) | **linkedin.com 第一来源**(同行 MOQ/交期帖) + gzshengcheng.en.made-in-china + seller.alibaba + accio |
+| 附加 | 引用列表含 ✅ kestrelmetal.com | **"找不到独立客户评价"**(零评价,非负面) | kestrelmetal.com + thenbs + trustpilot + bbb.org + birdeye + houzz 等评价平台 |
+
+**Perplexity 引用率: 0/10(与 9 月持平)**。ChatGPT 免登录通道不可用("Unable to connect"),待登录态人工补测。
+
+#### 与 9 月基线对比
+
+1. **引用率持平 0/10**,但性质有变化:品牌实体已被正确认知(附加题:官网进引用列表,身份描述准确"Anping 中国围栏/丝网制造商")
+2. **引用池三大升级信号**:
+   - 官方/学术源大量进入:gov.uk(P9)、hts.usitc.gov(P8)、USDA(P6)、scielo(P6)、ASTM(P7)、dtic.mil(P5)——合规/对比类问题 AI 越来越只信权威源
+   - **评价平台形成新引用类目**:trustpilot/bbb/birdeye/houzz(附加题)——客户评价第三方化(任务 t-mvyu0vfqrx2p)直接对应这个池
+   - **LinkedIn 帖子成为 P10 第一来源**——LINKEDIN_CONTENT_PLAN 执行是已验证的杠杆
+3. **9 月 P6"找不到对比数据的中国工厂"→ 11 月被 Qunkun Metal 占位**(其文被 AI 标注无测试数据)——我们带真实盐雾测试数据的对比页仍缺位,是可反超的空位
+4. **NATO-22 权威位被 Atkore(美国 Razor Ribbon)占据**,引用池全是军品零售+ASTM——中国工厂在此问题无信任链,差异化应转向 EN 10223 CE 声明与 500MW 案例事实
+5. MIC 目录页 4/10 条出现(全引竞品店:zh-fence/yongkunmetal/gzshengcheng)——**MIC 建档(ENT-07)收录仍是最大单一缺口**
+
+#### 引用域名频次 Top(跨 10 条,11 月实测)
+
+| 频次 | 域名 | 属性 |
+|------|------|------|
+| 4 | made-in-china 系(en.made-in-china.com 等) | B2B 目录——第一目录来源,我方建档进行中 |
+| 4 | accio.com | AI 采购目录(新兴) |
+| 3 | rongtaimetalgroup.com | 竞品(Rongtai,9月复现) |
+| 3 | bd-fence.com | 竞品(BDFENCE) |
+| 2 | leeter.cn / wire-fencing.org / wiresfence.com / bpwiremesh.com | 竞品/行业站 |
+| 1 | linkedin.com | 帖子被引(P10 第一来源) |
+| — | gov.uk / hts.usitc.gov / USDA / scielo / ASTM / dtic.mil | 官方学术(合规对比类引用池) |
+
+#### 下一轮补强清单(按杠杆排序)
+
+1. **MIC 建档完成并等收录**(ENT-07,已在办)——4/10 条出现的第一目录位
+2. **LinkedIn 内容计划执行**——P10 已证明该主题 LinkedIn 帖是第一来源;首帖建议 MOQ/lead time 主题(直接对标)
+3. **CE/UKCA 声明页 GEO 化**:download-ce-marking-declaration.html 增加可检索声明文本(EN 10223/EN 10244 标准号+签发信息),llms.txt 回链——P9 AI 正建议买家"向供应商索要符合性声明",我们是少数有公开声明页的
+4. **盐雾对比数据落地成页**(带测试条件/数值表格)——反超 Qunkun 的无数据对比文
+5. **客户评价征集**(t-mvyu0vfqrx2p)——附加题证明零独立评价,评价平台引用池已成型
+
+---
+

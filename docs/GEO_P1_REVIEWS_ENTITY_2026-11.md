@@ -12,14 +12,18 @@
 
 | 平台类型 | 域名/来源 | 9月出现(条) | 11月复测 | 我方布局状态 → 下一步 |
 |---------|----------|------------|---------|---------------------|
-| B2B 目录 | made-in-china.com | ~15 次提及(第一来源) | 待填 | **MIC 建档已启动(ENT-07)** → 上产品+等收录 |
-| B2B 目录 | alibaba.com | P4/P10 | 待填 | 未布局 → 若 11 月仍高频,评估国际站开店 |
-| B2B 目录 | europages.co.uk | 未出现 | 待填 | 待建(对齐指南 §2.1,主攻 EU) |
-| B2B 目录 | thomasnet.com | 未出现 | 待填 | 待建(对齐指南 §2.2,主攻北美——Commander/LCW 所在市场) |
-| 竞品官网/博客 | wodafence, muyuan, leeter, topsfence, rongtai 等 | P1×7家/P5/P6/P7 | 待填 | 内容层竞争——我方同型流水线已在对标,拼收录时间 |
-| LinkedIn | linkedin.com | P10(同行帖子被引) | 待填 | **公司页已上线,内容计划执行中** → 见第三节名员覆盖 |
-| 物流/关税工具站 | freightamigo, tariffnumber | P8 | 待填 | 低优先;可考虑给此类站投稿技术文 |
-| 知识图谱 | wikidata.org | 未出现 | 待填 | 待建(对齐指南 §2.4) |
+| B2B 目录 | made-in-china.com | ~15 次提及(第一来源) | **4/10 条**(P1/P2/P3/P10,全引竞品店) | **MIC 建档已启动(ENT-07)** → 上产品+等收录,仍是第一缺口 |
+| B2B 目录 | alibaba.com | P4/P10 | P10(seller.alibaba) | 未布局 → 11 月频次下降,暂缓 |
+| AI 采购目录 | accio.com | 未出现 | **4/10 条**(P2/P3/P8/P10,新晋) | 新平台——待调研建档价值(免费收录则做) |
+| B2B 目录 | europages.co.uk | 未出现 | 未出现 | 待建(对齐指南 §2.1,主攻 EU)——11 月未现身,优先级让位 MIC |
+| B2B 目录 | thomasnet.com | 未出现 | 未出现 | 待建(对齐指南 §2.2,主攻北美)——同上 |
+| 竞品官网/博客 | rongtai(3条), bd-fence(3条), qunkun(P5被点名), leeter(2条), giant 等 | P1×7家/P5/P6/P7 | 复现+集中化 | 内容层竞争——qunkun 占了"对比数据"位但**无测试数据被 AI 标注**,我方真数据页可反超 |
+| LinkedIn | linkedin.com | P10(同行帖子被引) | **P10 第一来源**(MOQ/交期帖) | **公司页已上线** → 内容计划执行=已验证杠杆,首帖选 MOQ/lead time 主题 |
+| 评价平台 | trustpilot / bbb.org / birdeye / houzz / thenbs | 未出现 | **附加题 5+ 个**(品牌评价检索池) | 零布局 → 客户评价第三方化(t-mvyu0vfqrx2p)直接对应 |
+| 官方/学术源 | gov.uk, hts.usitc.gov, USDA, scielo, ASTM, dtic.mil | 仅 P10 LinkedIn | **6/10 条大量进入**(P5/P6/P7/P8/P9) | 合规对比类问题引用池转向权威源 → CE 声明页 GEO 化+检测报告公开 URL |
+| 物流/关税工具 | freightamigo, tariffnumber | P8 | P8(tariffnumber 复现) | 低优先维持 |
+| 知识图谱 | wikidata.org | 未出现 | 未出现 | 待建(对齐指南 §2.4),不急 |
+| 本站 | kestrelmetal.com | 0 | **附加题进引用列表**(品牌实体识别正确) | 实体存在性 OK;推荐/对比候选池仍缺位 |
 
 **判读规则(数据回来后)**: 某平台 11 月频次 ≥ 9 月且我方未布局 → 进入建档队列;某平台降到 0 → 暂缓投入。9 月 P6 那句「找不到有对比数据的中国工厂」如果 11 月变成引用了我们——记录是哪条 Prompt,这是内容补强的直接证据。
 
