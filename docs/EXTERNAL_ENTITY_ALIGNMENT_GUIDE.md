@@ -27,8 +27,8 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 | 网站 | https://www.kestrelmetal.com |
 | 电话 | +86 178 3238 3339 |
 | 邮箱 | kalee@kestrelmetal.com |
-| LinkedIn | https://www.linkedin.com/company/kestrel-metal |
-| YouTube | https://www.youtube.com/@KestrelMetal |
+| LinkedIn | https://www.linkedin.com/company/kestrelmetal |
+| YouTube | 档案待建——建好并完善前**不得**写入 sameAs 或平台链接(见 2026-09-20 更新) |
 
 ---
 
