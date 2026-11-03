@@ -455,6 +455,41 @@ route('GET', '/api/faq/all', async ({ env }) => {
   return jsonResponse(faqs);
 });
 
+// 人工选题注入（需 ADMIN_TOKEN）：把成稿 HTML 写入 draft:{slug}，走周日 score cron 双门禁发布
+// 用于对比文矩阵等题库驱动的选题（QUESTION_BANK / COMPARISON_MATRIX_BATCH1）
+route('POST', '/api/content/draft', async ({ env, request }) => {
+  if (!isAdminAuthorized(request, env)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  const body = await request.json<{
+    slug: string; title: string; metaDescription: string; html: string;
+    keyword: string; groupId?: string; variants?: string[];
+  }>().catch(() => null);
+  if (!body?.slug || !body?.title || !body?.html || !body?.keyword) {
+    return jsonResponse({ error: 'slug, title, html, keyword are required' }, 400);
+  }
+  const { getJSON, setJSON } = await import('./lib/kv');
+  const existing = await getJSON(env.CONTENT_QUEUE, `draft:${body.slug}`);
+  const now = new Date().toISOString();
+  const draft = {
+    slug: body.slug,
+    title: body.title,
+    metaDescription: body.metaDescription ?? '',
+    html: body.html,
+    keyword: body.keyword,
+    groupId: body.groupId ?? 'comparison-matrix',
+    variants: body.variants ?? [],
+    status: existing?.status === 'published' ? 'published' : 'draft',
+    score: existing?.score,
+    geoScore: existing?.geoScore,
+    scoreRound: existing?.scoreRound,
+    createdAt: existing?.createdAt ?? now,
+    injectedAt: now,
+  };
+  await setJSON(env.CONTENT_QUEUE, `draft:${body.slug}`, draft);
+  return jsonResponse({ ok: true, slug: body.slug, note: 'queued for score-cron dual-gate publishing' }, 201);
+});
+
 // 一次性迁移（需 ADMIN_TOKEN）：KV 已发布文章的 FAQPage Question 从 text-only 补成 name+text
 // （2026-11-02 静态页与生成模板已修复，此端点清存量；幂等，跑完保留无害）
 route('POST', '/api/faq/migrate-published-schema', async ({ env, request }) => {
