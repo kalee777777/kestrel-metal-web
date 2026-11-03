@@ -1,8 +1,9 @@
-# 买家问题库 Question Bank · v1
+# 买家问题库 Question Bank · v2
 
-> 建立: 2026-11-03 · 维护: 每月基线复测时滚动入库(GEO 月度循环第 3 步)
+> v1: 2026-11-03(双引擎测试提炼) · v2: 2026-11-03(网络采集补量: Google 补全 121 条/Reddit 双轮/MIC 竞品 Q&A)
+> 维护: 每月基线复测时滚动入库(GEO 月度循环第 3 步)
 > 边界: 五大核心品类(3D panel / chain link / gabion / razor wire / 358)+合规验证类
-> 数据源状态: ①11 月双引擎测试产出(已提炼) ②竞品缺口 316 词(已并入种子池) ③GSC 真实查询词(⚠️ 同步拉 0 行待查) ④PAA/Reddit/MIC 买家 Q&A(第 2 步补采)
+> 数据源状态: ①双引擎测试(已提炼) ②竞品缺口 316 词 ③GSC(⚠️ 同步 0 行待查) ④网络采集(✅ v2 完成)
 
 ---
 
@@ -108,9 +109,62 @@
 
 ---
 
+## 分区 F · 网络采集(v2 新增,2026-11-03)
+
+### F1 · MIC 竞品产品页 FAQ 模板(8 问——竞品被 AI 引用的 Q&A 结构,Kalee 的 20 条 MIC 产品直接套用)
+
+| # | MIC 产品 FAQ 模板问题 | 我们的答案口径 |
+|---|---------------------|---------------|
+| F1-1 | What is the warranty period for the fence system? | 需定稿(质保年限,建议 10 年镀锌/见 Coating Guide) |
+| F1-2 | What are the standard panel dimensions? | 各产品线规格表 ✅ |
+| F1-3 | Is the fence color customizable? | RAL 色卡定制 ✅ |
+| F1-4 | What is the minimum order quantity? | 100 panels / 50 rolls ✅ |
+| F1-5 | What payment methods are accepted? | T/T · L/C at sight ✅ |
+| F1-6 | What is the lead time for production? | 15-25 days ✅ |
+| F1-7 | Can you provide OEM or ODM services? | ✅ OEM 经验(welded mesh 711-722 系即 OEM 体系) |
+| F1-8 | What certifications does the product have? | ISO 9001/CE/EN 10223/EN 10244-2 ✅(11-03 已公告) |
+
+加 MIC 平台标准四问(后台 Trade Assurance 模板): how do you guarantee quality / what can you buy from us / why buy from you not others / what services provided
+
+### F2 · Google 补全采集的高价值问题(121 条去噪后核心)
+
+**对比类(对比文矩阵直接选题,8+条):**
+- chain link vs wood fence cost / vs aluminum fence cost / vs wire mesh / **vs barbed wire** / **vs woven wire fence** / vs chicken wire / vs vinyl cost
+- **gabion mattress vs gabion basket**(产品变体对比,站内空白)
+
+**价格单位类(报价策略,razor wire 3 种计价口径):**
+- razor wire price **per meter / per kg / per roll**(三种单位买家都在搜——RFQ 回应包报价单按三单位并列)
+
+**地域采购信号(市场情报):**
+- wire mesh supplier in **UAE / Dammam / Sharjah / Abu Dhabi**(中东集群)/ **Malaysia**(LCW 客户印证!)/ Philippines / 印度三城
+
+**技术细节类(专业买家信号):**
+- solar farm fence **grounding**(光伏围栏接地)
+- gabion basket **hs code** / chain link fence **hs code**(HS 编码双品类确认)
+- welded wire mesh **for concrete** / **sizes**(规格类)
+
+### F3 · Reddit 社区共识(对比文素材,买家心智数据)
+
+| 认知 | 社区共识 | 对比文应对 |
+|------|---------|-----------|
+| chain link 寿命 | "60 年几乎零维护"(r/FenceBuilding 高赞) | 诚实呈现——chain link 长寿+地形适应强 vs welded panel 刚性美观+安装快 |
+| welded wire 风险 | "便宜焊接网易焊点失效"(共识) | 强调我方 heavy gauge+焊后热镀锌工艺差异 |
+| 斜坡地形 | chain link 可 hillside cut,welded 不行 | 与 Perplexity P6 判定一致(双信源印证)——安装指南覆盖地形章节 |
+| 长度经济性 | chain link 越长越省,welded 人工恒定 | 对比文加"周界长度×成本曲线"表 |
+| gabion 填石 | 石头是最大成本(DIY £700 案例);**石径须大于网孔**(80×100mm 网孔) | gabion 产品页加"填石规格指南"——B2B 增值内容空白 |
+| gabion 沉降 | 1-2 年沉降期,依赖排水与基础 | 安装指南强化(ENZAR 指南被 AI 引用的同款位置) |
+| gabion 围栏安全边界 | 挡不住车,不适合防撞场景 | 产品页诚实标注适用场景 |
+
+**来源**: [r/FenceBuilding welded vs chainlink](https://www.reddit.com/r/FenceBuilding/comments/1uymifb/welded_wire_vs_chainlink_on_wood) · [r/HomeImprovement dog-run](https://www.reddit.com/r/HomeImprovement/comments/1b9spak/welded_wire_or_chain_link_for_a_weekend_warrior) · [r/FenceBuilding 60年寿命](https://www.reddit.com/r/FenceBuilding/comments/1uw7edo/debating_fence_type_for_our_yard_black) · [r/AusRenovation gabion front fence](https://www.reddit.com/r/AusRenovation/comments/1hr1gmr/opinions_on_a_gabion_wall_as_a_front_fence) · [r/landscaping gabion fence](https://www.reddit.com/r/landscaping/comments/1lmn5b8/gabion_fence) · [r/DIYUK gabion 成本](https://www.reddit.com/r/DIYUK/comments/12cppcv/i_made_a_gabion_retaining_wall) · [r/landscaping 耐久](https://www.reddit.com/r/landscaping/comments/r2gxyj/i_like_the_rock_gabion_baskets_but_how_well_do)
+
+---
+
 ## 下一步
 
-- [ ] 第 2 步: PAA + Reddit + MIC 买家 Q&A 补采(v1→v2)
-- [ ] GSC 0 行异常排查(昨夜同步 rowCount=0)
+- [ ] F1 八问发给 Kalee → MIC 20 条产品后台逐条补 FAQ(质保年限一项需她定稿)
+- [ ] 对比文矩阵 v1 选题定稿: chain link vs barbed wire / vs woven wire / gabion mattress vs basket(产品线内对比,站内空白)
+- [ ] razor wire 报价三单位口径(meter/kg/roll)进 RFQ 回应包
+- [ ] gabion 填石规格指南(石径>网孔)列内容排期
+- [ ] GSC 0 行异常排查(11-04 看今夜同步)
 - [ ] B15/B16 对比文按"数据表+标准编号"标准升级(对标 ANJIA 教训)
 - [ ] C 区⏳/❌项随 Kalee 数据到位逐个转✅
