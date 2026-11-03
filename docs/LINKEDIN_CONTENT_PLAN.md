@@ -15,9 +15,7 @@
 | 素材 | 规格 | 现状 |
 |------|------|------|
 | Logo | 300×300 以上，方形 | 用官网 `images/kestrelmetal.png` / `logo.svg` 导出的 PNG |
-| 封面 | 1128×191（桌面展示区） | 本地 `linkedin-cover.jpg` / `linkedin-cover-v2.jpg` 为 2560×1440，直接上传会裁切上下；已生成中心裁切预览 `images/linkedin-banner-1128x191.jpg`，上传前先预览主体是否完整 |
-
-> 注意：16:9 原图的关键信息（logo/文字）若不在画面中央横条内，需要重排版。最稳妥做法是按 1128×191 重新设计一版：左侧放 Logo+公司名，右侧放 "ISO 9001 · 50+ Countries · Since 2014" 三个信任点。
+| 封面 | 1128×191（桌面展示区） | ✅ 2026-10-26 已按重设计方案产出 `images/linkedin-banner-1128x191.png`（另有 .jpg）：白底居中排版，左 Logo+KESTREL METAL，右 ISO 9001:2015 Certified · 50+ Countries · Since 2014，底部品牌橙饰条（#DE6121 取自 logo 本体），内容区 906px 居中、两侧各留 111px 移动端安全。旧的 2560×1440 原图与中心裁切预览版已清理，勿再引用 |
 
 ### 1.2 字段填写清单（管理后台 → Edit page）
 

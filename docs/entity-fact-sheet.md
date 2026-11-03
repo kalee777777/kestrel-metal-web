@@ -17,7 +17,7 @@
 | 中文法定名 | 安平县伦科金属制品有限公司 | 用户 2026-10-08 更正(此前误记为「凯瑞尔」,已改) |
 | 成立年份 | 2014(12+ years) | |
 | 地址(英文,统一) | No. 88 East Industrial Zone, Anping County, Hengshui, Hebei 053600, China | **2026-11-03 Kalee 定稿:以 CE/ISO 证书地址为准**(此前 888 Industrial Road 作废);站内 schema 已同步 |
-| 电话(统一) | +86 17832383339 | **用户定稿 2026-09-20**;站内 schema 现为 `+86-17832383339`(数字相同,仅分隔符差异,见 SITE-01) |
+| 电话(统一) | +86-17832383339 | **用户定稿 2026-09-20**;站内 schema 现为 `+86-17832383339`(数字相同,仅分隔符差异,见 SITE-01) |
 | 邮箱(统一) | kalee@kestrelmetal.com | **用户定稿 2026-09-20**;站内已于 2026-09-22 全量对齐(sales@/info@/privacy@ 均统一为 kalee@) |
 | 员工规模 | 51-100 | **DEC 已定 2026-09-20**;平台下拉选 51-100;站内 schema 为 60-100(数字区间不冲突,随 SITE-01 顺手对齐) |
 | 官网 | https://www.kestrelmetal.com | |
@@ -108,7 +108,7 @@
 | 日期 | 决策 |
 |------|------|
 | 2026-09-20 | DEC-2 地址统一为 "Anping Industrial Zone, Anping County, Hengshui, Hebei 053600, China" |
-| 2026-09-20 | 电话统一为 +86 17832383339;邮箱主用 kalee@kestrelmetal.com |
+| 2026-09-20 | 电话统一为 +86-17832383339;邮箱主用 kalee@kestrelmetal.com |
 | 2026-09-20 | 员工规模 51-100 |
 | 2026-09-20 | DEC-3 YouTube 暂保留(档案待建,建好前不进 sameAs) |
 | 2026-09-20 | DEC-1 LinkedIn slug 定稿为 **kestrelmetal**(https://www.linkedin.com/company/kestrelmetal,公开访问验证通过) |

@@ -3,7 +3,7 @@
 **目的**: 确保 Kestrel Metal 在所有主流 B2B 平台、目录网站和知识图谱中的实体信息一致，提升 AI 搜索引擎（ChatGPT、Perplexity、Claude）对公司实体的认知准确度。
 
 **执行日期**: 2026-08-21
-**⚠️ 2026-09-20 更新**: 所有字段的标准值以 **[entity-fact-sheet.md](entity-fact-sheet.md)(统一信息包)** 为准,本文仅保留操作步骤。已定稿:地址(Anping Industrial Zone)/电话(+86 17832383339)/主邮箱(kalee@kestrelmetal.com)/员工规模(51-100);**LinkedIn slug 定稿为 kestrelmetal**(本文旧写法 kestrel-metal 作废);YouTube 暂保留但档案待建(建好前不得写入平台链接或 sameAs)。
+**⚠️ 2026-09-20 更新**: 所有字段的标准值以 **[entity-fact-sheet.md](entity-fact-sheet.md)(统一信息包)** 为准,本文仅保留操作步骤。已定稿:地址(Anping Industrial Zone)/电话(+86-17832383339)/主邮箱(kalee@kestrelmetal.com)/员工规模(51-100);**LinkedIn slug 定稿为 kestrelmetal**(本文旧写法 kestrel-metal 作废);YouTube 暂保留但档案待建(建好前不得写入平台链接或 sameAs)。
 
 ---
 
@@ -25,7 +25,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 | 年产能 | 36,000+ metric tons |
 | 市场覆盖 | 50+ countries |
 | 网站 | https://www.kestrelmetal.com |
-| 电话 | +86 178 3238 3339 |
+| 电话 | +86-17832383339 |
 | 邮箱 | kalee@kestrelmetal.com |
 | LinkedIn | https://www.linkedin.com/company/kestrelmetal |
 | YouTube | 档案待建——建好并完善前**不得**写入 sameAs 或平台链接(见 2026-09-20 更新) |
@@ -129,7 +129,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
    - Business name: Kestrel Metal
    - Category: Manufacturer (主) / Wire Mesh Supplier (次) / Fencing Contractor (次)
    - Address: No. 88 East Industrial Zone, Anping County, Hengshui, Hebei Province, China
-   - Phone: +86 178 3238 3339
+   - Phone: +86-17832383339
    - Website: https://www.kestrelmetal.com
    - Business hours: Mon-Fri 8:00-18:00, Sat 8:00-12:00
    - Description: 500+ 字，包含所有产品线和认证
