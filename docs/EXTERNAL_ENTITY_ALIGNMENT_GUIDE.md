@@ -18,7 +18,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 | 公司名称 | Kestrel Metal |
 | 中文名称 | 安平县伦科金属制品有限公司 |
 | 成立时间 | 2014 |
-| 总部地址 | No. 888 Industrial Road, Anping County, Hengshui, Hebei Province, China |
+| 总部地址 | No. 88 East Industrial Zone, Anping County, Hengshui, Hebei Province, China |
 | 员工规模 | 60+ |
 | 主要产品 | Security fence, Chain link fence, Gabion boxes, Razor wire (NATO-22), Barbed wire, 3D wire panel, Epoxy coated wire mesh, Welded wire mesh |
 | 认证 | ISO 9001:2015, CE, UKCA, REACH |
@@ -45,7 +45,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 3. 如果没有，点击 "Claim your company" 创建公司页面
 4. 填写以下字段（必须与站内一致）：
    - Company name: Kestrel Metal
-   - Address: No. 888 Industrial Road, Anping County, Hengshui, Hebei Province, China
+   - Address: No. 88 East Industrial Zone, Anping County, Hengshui, Hebei Province, China
    - Year established: 2014
    - Number of employees: 11-50 或 51-100（根据实际选择）
    - Business type: Manufacturer, Exporter
@@ -128,7 +128,7 @@ GEO 优化不仅限于站内，AI 模型在回答用户问题时会交叉验证�
 4. 完善以下信息：
    - Business name: Kestrel Metal
    - Category: Manufacturer (主) / Wire Mesh Supplier (次) / Fencing Contractor (次)
-   - Address: No. 888 Industrial Road, Anping County, Hengshui, Hebei Province, China
+   - Address: No. 88 East Industrial Zone, Anping County, Hengshui, Hebei Province, China
    - Phone: +86 178 3238 3339
    - Website: https://www.kestrelmetal.com
    - Business hours: Mon-Fri 8:00-18:00, Sat 8:00-12:00

@@ -16,7 +16,7 @@
 | 英文法定名 | Kestrel Metal Products Co., Ltd. | LinkedIn 页面名已用此 |
 | 中文法定名 | 安平县伦科金属制品有限公司 | 用户 2026-10-08 更正(此前误记为「凯瑞尔」,已改) |
 | 成立年份 | 2014(12+ years) | |
-| 地址(英文,统一) | Anping Industrial Zone, Anping County, Hengshui, Hebei 053600, China | **DEC-2 已定稿 2026-09-20**;与站内 schema 一致 |
+| 地址(英文,统一) | No. 88 East Industrial Zone, Anping County, Hengshui, Hebei 053600, China | **2026-11-03 Kalee 定稿:以 CE/ISO 证书地址为准**(此前 888 Industrial Road 作废);站内 schema 已同步 |
 | 电话(统一) | +86 17832383339 | **用户定稿 2026-09-20**;站内 schema 现为 `+86-17832383339`(数字相同,仅分隔符差异,见 SITE-01) |
 | 邮箱(统一) | kalee@kestrelmetal.com | **用户定稿 2026-09-20**;站内已于 2026-09-22 全量对齐(sales@/info@/privacy@ 均统一为 kalee@) |
 | 员工规模 | 51-100 | **DEC 已定 2026-09-20**;平台下拉选 51-100;站内 schema 为 60-100(数字区间不冲突,随 SITE-01 顺手对齐) |
@@ -46,11 +46,11 @@
 
 ### 短版(~50 词,目录一句话简介)
 
-> Kestrel Metal Products Co., Ltd. is a China-based manufacturer of security fences, wire mesh, gabions, razor wire and barbed wire, operating from Anping Industrial Zone, Hebei since 2014. ISO 9001:2015 certified, with 3,000+ tons monthly capacity and 200+ projects delivered in 50+ countries.
+> Kestrel Metal Products Co., Ltd. is a China-based manufacturer of security fences, wire mesh, gabions, razor wire and barbed wire, operating from No. 88 East Industrial Zone, Anping, Hebei since 2014. ISO 9001:2015 certified, with 3,000+ tons monthly capacity and 200+ projects delivered in 50+ countries.
 
 ### 中版(~150 词,Europages / Thomasnet 公司描述)
 
-> Kestrel Metal Products Co., Ltd. is a China-based manufacturer of security fencing and wire mesh products, headquartered in Anping Industrial Zone, Hebei — China's wire mesh manufacturing hub. Since 2014 we have delivered 200+ projects in 50+ countries, including a 500MW solar farm perimeter in Australia and a 10,000-acre cattle ranch fencing project.
+> Kestrel Metal Products Co., Ltd. is a China-based manufacturer of security fencing and wire mesh products, headquartered in No. 88 East Industrial Zone, Anping, Hebei — China's wire mesh manufacturing hub. Since 2014 we have delivered 200+ projects in 50+ countries, including a 500MW solar farm perimeter in Australia and a 10,000-acre cattle ranch fencing project.
 >
 > Our product lines cover security fences (Y-post anti-climb panels, 358 mesh, 3D welded panels), galvanized and PVC-coated chain link fence, welded wire mesh panels (700 series), gabion boxes and mattresses, NATO-22 concertina razor wire, barbed wire, epoxy coated wire mesh and nickel mesh. All products are manufactured in our 200,000 m² facility with 3,000+ tons monthly capacity and 15-25 days lead time.
 >
@@ -58,7 +58,7 @@
 
 ### 长版(500+ 字,LinkedIn / GBP 公司简介)
 
-> Kestrel Metal Products Co., Ltd. (安平县伦科金属制品有限公司) is a China-based manufacturer of security fencing and wire mesh products, headquartered in Anping Industrial Zone, Hebei Province — the heart of China's wire mesh industry. Founded in 2014, the company has grown into a group of 4 manufacturing subsidiaries operating a 200,000 m² production facility with 3,000+ tons of monthly capacity.
+> Kestrel Metal Products Co., Ltd. (安平县伦科金属制品有限公司) is a China-based manufacturer of security fencing and wire mesh products, headquartered in No. 88 East Industrial Zone, Anping, Hebei Province — the heart of China's wire mesh industry. Founded in 2014, the company has grown into a group of 4 manufacturing subsidiaries operating a 200,000 m² production facility with 3,000+ tons of monthly capacity.
 >
 > Over the past 12+ years, Kestrel Metal has delivered more than 200 projects across 50+ countries. Representative projects include a 500MW solar farm perimeter security project in Australia, a 10,000-acre cattle ranch fencing project, and gabion levee works for flood control infrastructure.
 >
