@@ -125,6 +125,37 @@ Kestrel Metal fence manufacturer reviews
 
 ## 本轮结果(测完填这里)
 
+### 2026-11-03 · ChatGPT 补测(登录态, Kalee 人工执行 P1-P7)
+
+> P8-P10 因回答质量下降未测,择日补;判定口径同前
+
+#### 结果总表
+
+| # | 提及 | 位置 | 被点名第一 | 来源池特征 |
+|---|------|------|-----------|-----------|
+| P1 | ✅ | **正文第一推荐**("Best initial match"+档案卡) | —(我们) | kestrelmetal.com(500MW案例页+NATO-22产品页) + **UPC/AC Renewables 澳媒新闻(交叉验证我们的案例)** + 竞品 ANJIA/Lanfan/Rongtai 备选 |
+| P2 | ❌ | — | Hebei Nova(NOVA) | **ecer.com 企业目录×2** + metalgabions.com(NOVA自有站) + MIC——NOVA 赢在"2021年CE证书公告+EN 10223-3+SGS 全部公开可检索" |
+| P3 | ❌ | — | Hebei Baxin | 竞品供应商 listing——Baxin 的 listing 明示"ISO 9001+3000t/月"(与我们 llms.txt 同款数字,但写在目录 listing 里);AI 还质疑其39员工撑不起3000t |
+| P4 | ❌ | — | Anping Hanglei | **MIC×4**(hangleimetal/rong-zheng 公司档案+zh-fence 产品页)——Hanglei 第一因"MIC公司档案明示双产品线+ISO 9001+天津港" |
+| P5 | ❌ | — | ANJIA Group | anjiahardware.com 技术对比文×3(镀锌vs PVC带盐雾数据表) + MIC + trid.trb.gov——**AI 当场抓出 ANJIA 数据矛盾(65μm≠30-40g/m²)** |
+| P6 | ❌ | (R1/R2/R3 三跑一致) | 学术式,无固定第一 | USDA/TRL/ec.europa.eu 官方学术源 + 竞品轮换(ENZAR指南→ANJIA对比文→NOVA站)——**无垄断者,有进场窗口** |
+| P7 | ✅ | **正文第二推荐**("Good alternative") | Anping Yujun | **kestrelmetal.com(razor-wire-btc.html 被引为"BTC NATO-22 technical specifications")** + cn-razorwire.com(Yujun,赢在有NATO-22专属目录PDF) + ASTM + Atkore |
+
+**ChatGPT 引用率: 2/7 (28.6%)**——P1 第一推荐 + P7 第二推荐,P8-P10 待补。
+
+#### 双引擎对比结论(2026-11-03 时点)
+
+| 引擎 | 引用率 | 判读 |
+|------|--------|------|
+| Perplexity | 0/10 | RAG 池依赖目录页/权威源;MIC 档案 11-02 刚上线未收录,收录后是最大变量 |
+| ChatGPT | 2/7 | **OpenAI 索引已含我们三处内容**:500MW 案例页、fence-3d 系、razor-wire-btc.html——与 GA4 28天7次引用互证 |
+
+1. **双引擎分化是策略性信息**:同一 NATO-22 问题,Perplexity 中国工厂零提及(Atkore+军品零售垄断),ChatGPT 我们排第二——不必追求两引擎同步,ChatGPT 侧守住并扩大,Perplexity 靠 MIC 收录破局
+2. **七条败因全部指向同一类东西:公开可检索的文档形态**(证书公告/listing 数字/MIC 公司档案/对比文/专属目录)——不是内容缺口,是文档形态+入口缺口
+3. **AI 的选商逻辑已完全可预测**:公开声明(claimed)→交叉验证(cross-check)→索要独立文件(independent verification)——三层与我们视频方法论的三层信源模型完全吻合
+
+---
+
 ### 2026-11-02 · Perplexity 复测(AI 代跑,未登录会话)
 
 > 执行: AI 浏览器自动化(与 2026-09 首轮同方式;P1-P2 用 incognito,P3 起普通未登录——incognito 匿名配额约 3 问)
