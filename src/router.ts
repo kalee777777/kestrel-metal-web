@@ -469,7 +469,7 @@ route('POST', '/api/content/draft', async ({ env, request }) => {
     return jsonResponse({ error: 'slug, title, html, keyword are required' }, 400);
   }
   const { getJSON, setJSON } = await import('./lib/kv');
-  const existing = await getJSON(env.CONTENT_QUEUE, `draft:${body.slug}`);
+  const existing = await getJSON<Record<string, unknown>>(env.CONTENT_QUEUE, `draft:${body.slug}`);
   const now = new Date().toISOString();
   const draft = {
     slug: body.slug,
